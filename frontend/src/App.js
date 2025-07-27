@@ -283,8 +283,13 @@ const Header = () => {
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center">
-            <h1 className="text-2xl font-bold text-orange-600">CulinaryConnect</h1>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_completion-quest/artifacts/gpq5b6s8_Image%20%2821%29.png" 
+              alt="Lambalia Logo" 
+              className="w-10 h-10"
+            />
+            <h1 className="text-2xl font-bold text-orange-600">Lambalia</h1>
           </Link>
           
           <nav className="flex items-center space-x-4">
