@@ -148,8 +148,13 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">CulinaryConnect</h1>
-          <p className="text-gray-600 mt-2">Share traditional recipes from around the world</p>
+          <img 
+            src="https://customer-assets.emergentagent.com/job_completion-quest/artifacts/gpq5b6s8_Image%20%2821%29.png" 
+            alt="Lambalia Logo" 
+            className="w-32 h-32 mx-auto mb-4"
+          />
+          <h1 className="text-3xl font-bold text-gray-800">Lambalia</h1>
+          <p className="text-gray-600 mt-2">& pperian an · taf culiticly</p>
         </div>
 
         <div className="flex mb-6">
