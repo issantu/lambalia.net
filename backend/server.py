@@ -24,7 +24,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI(title="CulinaryConnect API", description="Social Media Platform for Recipe Sharing")
+app = FastAPI(title="Lambalia API", description="Social Media Platform for Recipe Sharing - Lambalia")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
