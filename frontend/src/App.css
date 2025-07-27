@@ -1,38 +1,254 @@
 .App {
-    text-align: center;
+  text-align: center;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Custom styles for the recipe sharing platform */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
+/* Loading animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Gradient backgrounds */
+.bg-gradient-to-br {
+  background: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.from-orange-50 {
+  --tw-gradient-from: #fff7ed;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 247, 237, 0));
+}
+
+.to-red-50 {
+  --tw-gradient-to: #fef2f2;
+}
+
+.from-orange-400 {
+  --tw-gradient-from: #fb923c;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(251, 146, 60, 0));
+}
+
+.to-red-500 {
+  --tw-gradient-to: #ef4444;
+}
+
+/* Custom card hover effects */
+.hover\:shadow-lg:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Recipe card styling */
+.recipe-card {
+  transition: all 0.3s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Form styling */
+.form-input {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus {
+  outline: 0;
+  border-color: #fb923c;
+  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: #fb923c;
+  border: 1px solid #fb923c;
+  color: #ffffff;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #ea580c;
+  border-color: #ea580c;
+}
+
+/* Navigation styling */
+.nav-link {
+  position: relative;
+  transition: color 0.15s ease-in-out;
+}
+
+.nav-link:hover::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #fb923c;
+}
+
+/* Responsive design helpers */
+@media (max-width: 640px) {
+  .recipe-card {
+    margin-bottom: 1rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Custom scrollbar for ingredients/steps lists */
+.recipe-list {
+  scrollbar-width: thin;
+  scrollbar-color: #fb923c #f3f4f6;
+}
+
+.recipe-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recipe-list::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.recipe-list::-webkit-scrollbar-thumb {
+  background-color: #fb923c;
+  border-radius: 3px;
+}
+
+/* Premium badge styling */
+.premium-badge {
+  background: linear-gradient(45deg, #fbbf24, #f59e0b);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* Success/Error message styling */
+.alert {
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+}
+
+.alert-success {
+  color: #065f46;
+  background-color: #d1fae5;
+  border-color: #a7f3d0;
+}
+
+.alert-error {
+  color: #991b1b;
+  background-color: #fee2e2;
+  border-color: #fecaca;
+}
+
+/* Loading state for images */
+.recipe-image {
+  background-color: #f3f4f6;
+  background-image: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Tag styling */
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: #f3f4f6;
+  color: #374151;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0.125rem;
+}
+
+.tag-dietary {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.tag-cuisine {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+/* Step counter styling */
+.step-counter {
+  background: linear-gradient(135deg, #fb923c, #ea580c);
+  box-shadow: 0 2px 4px rgba(251, 146, 60, 0.3);
+}
+
+/* Profile avatar styling */
+.profile-avatar {
+  background: linear-gradient(135deg, #fb923c, #ef4444);
+  box-shadow: 0 4px 8px rgba(251, 146, 60, 0.3);
+}
+
+/* Empty state styling */
+.empty-state {
+  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+}
+
+/* Social interaction buttons */
+.social-btn {
+  transition: all 0.15s ease-in-out;
+}
+
+.social-btn:hover {
+  transform: scale(1.05);
+}
+
+.social-btn.liked {
+  color: #dc2626;
+}
+
+.social-btn.commented {
+  color: #2563eb;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .mobile-stack {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
-
-.App-link {
-    color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    gap: 0.5rem;
+  }
+  
+  .mobile-full {
+    width: 100%;
+  }
+  
+  .mobile-text-sm {
+    font-size: 0.875rem;
+  }
 }
