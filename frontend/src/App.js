@@ -637,7 +637,7 @@ const CreateRecipePage = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">Share Your Traditional Recipe</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Share Your Traditional Recipe on Lambalia</h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Info */}
