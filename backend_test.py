@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-CulinaryConnect Backend API Test Suite
-Tests all backend endpoints for the recipe sharing platform
+Lambalia Backend API Test Suite
+Tests all backend endpoints for the traditional recipe sharing platform
 """
 
 import requests
