@@ -282,7 +282,7 @@ class CulinaryConnectAPITester:
 
     def run_all_tests(self):
         """Run all API tests in sequence"""
-        print("🚀 Starting CulinaryConnect Backend API Tests")
+        print("🚀 Starting Lambalia Backend API Tests")
         print("=" * 60)
         
         # Basic endpoint tests
