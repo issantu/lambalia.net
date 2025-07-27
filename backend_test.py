@@ -237,8 +237,8 @@ class CulinaryConnectAPITester:
                 {"name": "secret spice blend", "amount": "1", "unit": "tsp"}
             ],
             "steps": [
-                {"step_number": 1, "description": "Heat the pan"},
-                {"step_number": 2, "description": "Add rice and secret ingredients"}
+                {"step_number": "1", "description": "Heat the pan"},
+                {"step_number": "2", "description": "Add rice and secret ingredients"}
             ],
             "cooking_time_minutes": 45,
             "difficulty_level": 4,
