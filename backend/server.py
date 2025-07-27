@@ -326,7 +326,7 @@ async def get_recipes(
     country_id: Optional[str] = None,
     cuisine_type: Optional[str] = None,
     dietary_preference: Optional[str] = None,
-    current_user_id: Optional[str] = Depends(lambda: None)
+    current_user_id: str = None
 ):
     # Build query
     query = {"status": RecipeStatus.PUBLISHED}
