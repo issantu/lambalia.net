@@ -963,15 +963,35 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route 
-              path="/*" 
+              path="/" 
               element={
                 <ProtectedRoute>
-                  <Header />
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/create" element={<CreateRecipePage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                  </Routes>
+                  <>
+                    <Header />
+                    <HomePage />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/create" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <CreateRecipePage />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <ProfilePage />
+                  </>
                 </ProtectedRoute>
               } 
             />
