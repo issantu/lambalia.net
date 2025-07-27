@@ -482,6 +482,7 @@ const HomePage = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">Discover Traditional Recipes</h2>
+        <p className="text-gray-600 mb-6">Explore authentic culinary treasures from every corner of the world</p>
         
         {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-6">
