@@ -156,9 +156,9 @@ class CulinaryConnectAPITester:
                 {"name": "garlic", "amount": "3", "unit": "cloves"}
             ],
             "steps": [
-                {"step_number": 1, "description": "Boil water in a large pot"},
-                {"step_number": 2, "description": "Add pasta and cook for 10 minutes"},
-                {"step_number": 3, "description": "Prepare sauce with tomatoes and garlic"}
+                {"step_number": "1", "description": "Boil water in a large pot"},
+                {"step_number": "2", "description": "Add pasta and cook for 10 minutes"},
+                {"step_number": "3", "description": "Prepare sauce with tomatoes and garlic"}
             ],
             "cooking_time_minutes": 30,
             "difficulty_level": 2,
