@@ -368,7 +368,7 @@ async def get_recipes(
     return result
 
 @api_router.get("/recipes/{recipe_id}", response_model=RecipeResponse)
-async def get_recipe(recipe_id: str, current_user_id: Optional[str] = Depends(lambda: None)):
+async def get_recipe(recipe_id: str, current_user_id: str = None):
     recipe_doc = await db.recipes.find_one({"id": recipe_id})
     if not recipe_doc:
         raise HTTPException(status_code=404, detail="Recipe not found")
