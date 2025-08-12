@@ -1,4 +1,4 @@
-# Marketplace Models for Home Restaurant Vetting System
+# Marketplace Models for Home Restaurant and Traditional Restaurant Vetting System
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional, Dict, Any
 from datetime import datetime
