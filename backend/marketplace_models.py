@@ -578,8 +578,11 @@ class SpecialOrderResponse(BaseModel):
     saves_count: int
     expires_at: Optional[datetime] = None
     created_at: datetime
+
+class VendorApplicationResponse(BaseModel):
     id: str
     status: VendorStatus
+    vendor_type: VendorType
     application_date: datetime
     documents_required: List[str]
     next_steps: str
