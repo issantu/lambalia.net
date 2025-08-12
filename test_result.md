@@ -101,3 +101,73 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Expand Lambalia marketplace to include traditional restaurants with special order capabilities alongside existing home restaurants. Traditional restaurants can propose special orders through the platform, creating a broader ecosystem with commission-based monetization."
+
+backend:
+  - task: "Expand marketplace models for traditional restaurants"
+    implemented: false
+    working: "NA"
+    file: "marketplace_models.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Starting implementation of traditional restaurant support with special order functionality"
+
+  - task: "Add API endpoints for traditional restaurant management"
+    implemented: false
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to add endpoints for traditional restaurant registration, special order creation, and order management"
+
+frontend:
+  - task: "Create traditional restaurant registration UI"
+    implemented: false
+    working: "NA"
+    file: "App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to add UI for traditional restaurants to register and create special order proposals"
+
+  - task: "Implement special order browsing and booking"
+    implemented: false
+    working: "NA"
+    file: "App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to create interface for users to browse and book special orders from traditional restaurants"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Expand marketplace models for traditional restaurants"
+    - "Add API endpoints for traditional restaurant management"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Starting implementation of expanded marketplace system to include traditional restaurants with special order capabilities alongside existing home restaurants. This will create a comprehensive restaurant marketplace with multiple revenue streams."
