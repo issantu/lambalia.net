@@ -155,8 +155,7 @@ class TraditionalRestaurantProfile(BaseModel):
     
     # Location & Contact
     address: str
-    latitude: float
-    longitude: float
+    location: Dict[str, Any] = Field(default_factory=lambda: {"type": "Point", "coordinates": [0.0, 0.0]})  # GeoJSON format
     phone_number: str
     website: Optional[str] = None
     
