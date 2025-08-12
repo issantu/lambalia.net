@@ -1271,6 +1271,584 @@ const HomePage = () => {
 // Keep existing CreateSnippetPage and GroceryPage components (too long for single response)
 // Just need to add enhanced styling classes
 
+// Create Snippet Page with Enhanced Monetization
+const CreateSnippetPage = () => {
+  const [formData, setFormData] = useState({
+    title: '',
+    title_local: '',
+    local_language: '',
+    description: '',
+    snippet_type: 'quick_recipe',
+    ingredients: [{ name: '', amount: '', unit: '' }],
+    preparation_steps: [{ step_number: '1', description: '' }],
+    cooking_time_minutes: '',
+    difficulty_level: 3,
+    servings: '',
+    tags: [],
+    video_duration: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const addIngredient = () => {
+    setFormData(prev => ({
+      ...prev,
+      ingredients: [...prev.ingredients, { name: '', amount: '', unit: '' }]
+    }));
+  };
+
+  const updateIngredient = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      ingredients: prev.ingredients.map((ing, i) => 
+        i === index ? { ...ing, [field]: value } : ing
+      )
+    }));
+  };
+
+  const removeIngredient = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      ingredients: prev.ingredients.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addStep = () => {
+    setFormData(prev => ({
+      ...prev,
+      preparation_steps: [...prev.preparation_steps, { 
+        step_number: (prev.preparation_steps.length + 1).toString(), 
+        description: '' 
+      }]
+    }));
+  };
+
+  const updateStep = (index, value) => {
+    setFormData(prev => ({
+      ...prev,
+      preparation_steps: prev.preparation_steps.map((step, i) => 
+        i === index ? { ...step, description: value } : step
+      )
+    }));
+  };
+
+  const removeStep = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      preparation_steps: prev.preparation_steps.filter((_, i) => i !== index).map((step, i) => ({
+        ...step,
+        step_number: (i + 1).toString()
+      }))
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const submitData = {
+        ...formData,
+        cooking_time_minutes: parseInt(formData.cooking_time_minutes),
+        servings: parseInt(formData.servings),
+        video_duration: formData.video_duration ? parseInt(formData.video_duration) : null,
+        ingredients: formData.ingredients.filter(ing => ing.name.trim()),
+        preparation_steps: formData.preparation_steps.filter(step => step.description.trim())
+      };
+
+      await axios.post(`${API}/snippets`, submitData);
+      navigate('/profile');
+    } catch (error) {
+      console.error('Failed to create snippet:', error);
+      alert('Failed to create snippet. Please try again.');
+    }
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="glass p-8">
+        <h2 className="text-3xl font-bold heading-gradient mb-6">Create Recipe Snippet</h2>
+        
+        {/* Monetization Info */}
+        <div className="bg-gradient-to-r from-green-100 to-blue-100 p-4 rounded-lg mb-6">
+          <h3 className="font-semibold text-gray-800 mb-2">💰 Monetize This Snippet</h3>
+          <p className="text-sm text-gray-600">
+            Enable communication tools so other users can pay to learn from you! 
+            Earn $2.99-$12.99 per consultation.
+          </p>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Basic Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Recipe Title (English) *</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Local Name (Optional)</label>
+              <input
+                type="text"
+                name="title_local"
+                value={formData.title_local}
+                onChange={handleInputChange}
+                placeholder="e.g., Pasta alla Carbonara"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Local Language</label>
+              <input
+                type="text"
+                name="local_language"
+                value={formData.local_language}
+                onChange={handleInputChange}
+                placeholder="e.g., Italian, Spanish, Hindi"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Snippet Type</label>
+              <select
+                name="snippet_type"
+                value={formData.snippet_type}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+              >
+                <option value="quick_recipe">Quick Recipe</option>
+                <option value="cooking_tip">Cooking Tip</option>
+                <option value="ingredient_spotlight">Ingredient Spotlight</option>
+                <option value="traditional_method">Traditional Method</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows="3"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+              placeholder="Brief description of your recipe snippet..."
+              required
+            />
+          </div>
+
+          {/* Recipe Details */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Cooking Time (minutes) *</label>
+              <input
+                type="number"
+                name="cooking_time_minutes"
+                value={formData.cooking_time_minutes}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Servings *</label>
+              <input
+                type="number"
+                name="servings"
+                value={formData.servings}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Difficulty Level</label>
+              <select
+                name="difficulty_level"
+                value={formData.difficulty_level}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+              >
+                <option value={1}>⭐ Easy</option>
+                <option value={2}>⭐⭐ Medium</option>
+                <option value={3}>⭐⭐⭐ Hard</option>
+                <option value={4}>⭐⭐⭐⭐ Expert</option>
+                <option value={5}>⭐⭐⭐⭐⭐ Master Chef</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Video Info */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Video Duration (seconds)</label>
+            <input
+              type="number"
+              name="video_duration"
+              value={formData.video_duration}
+              onChange={handleInputChange}
+              max="60"
+              placeholder="Max 60 seconds for snippet videos"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+            />
+            <p className="text-sm text-gray-500 mt-1">Leave empty if no video. Max 60 seconds for snippets.</p>
+          </div>
+
+          {/* Ingredients */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <label className="block text-sm font-medium text-gray-700">Ingredients *</label>
+              <button
+                type="button"
+                onClick={addIngredient}
+                className="btn-primary text-sm px-4 py-2 rounded-lg"
+              >
+                + Add Ingredient
+              </button>
+            </div>
+            <div className="space-y-2">
+              {formData.ingredients.map((ingredient, index) => (
+                <div key={index} className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    placeholder="Ingredient name"
+                    value={ingredient.name}
+                    onChange={(e) => updateIngredient(index, 'name', e.target.value)}
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Amount"
+                    value={ingredient.amount}
+                    onChange={(e) => updateIngredient(index, 'amount', e.target.value)}
+                    className="w-24 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Unit"
+                    value={ingredient.unit}
+                    onChange={(e) => updateIngredient(index, 'unit', e.target.value)}
+                    className="w-24 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeIngredient(index)}
+                    className="text-red-500 hover:text-red-700 p-3 rounded-lg hover:bg-red-50"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Preparation Steps */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <label className="block text-sm font-medium text-gray-700">Preparation Steps *</label>
+              <button
+                type="button"
+                onClick={addStep}
+                className="btn-primary text-sm px-4 py-2 rounded-lg"
+              >
+                + Add Step
+              </button>
+            </div>
+            <div className="space-y-3">
+              {formData.preparation_steps.map((step, index) => (
+                <div key={index} className="flex gap-3 items-start">
+                  <span className="bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium mt-1">
+                    {step.step_number}
+                  </span>
+                  <textarea
+                    value={step.description}
+                    onChange={(e) => updateStep(index, e.target.value)}
+                    placeholder="Describe this preparation step..."
+                    rows="2"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeStep(index)}
+                    className="text-red-500 hover:text-red-700 p-3 rounded-lg hover:bg-red-50 mt-1"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit */}
+          <div className="flex justify-end pt-6">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="btn-primary font-medium py-3 px-8 rounded-lg text-lg disabled:opacity-50"
+            >
+              {submitting ? 'Creating Snippet... ⏳' : 'Create Snippet ✨'}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Ad Placement */}
+      <AdComponent placement="create-snippet" />
+    </div>
+  );
+};
+
+// Enhanced Grocery Page with Monetization
+const GroceryPage = () => {
+  const [ingredients, setIngredients] = useState(['']);
+  const [postalCode, setPostalCode] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user?.postal_code) {
+      setPostalCode(user.postal_code);
+    }
+  }, [user]);
+
+  const addIngredient = () => {
+    setIngredients([...ingredients, '']);
+  };
+
+  const updateIngredient = (index, value) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index] = value;
+    setIngredients(newIngredients);
+  };
+
+  const removeIngredient = (index) => {
+    setIngredients(ingredients.filter((_, i) => i !== index));
+  };
+
+  const searchGroceryStores = async () => {
+    if (!postalCode.trim()) {
+      alert('Please enter your postal code');
+      return;
+    }
+
+    const validIngredients = ingredients.filter(ing => ing.trim());
+    if (validIngredients.length === 0) {
+      alert('Please add at least one ingredient');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/grocery/search`, {
+        ingredients: validIngredients,
+        user_postal_code: postalCode,
+        max_distance_km: 15,
+        budget_preference: "medium",
+        delivery_preference: "either"
+      });
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error('Failed to search grocery stores:', error);
+      alert('Failed to search grocery stores. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold heading-gradient mb-4">Find Local Ingredients</h2>
+        <p className="text-gray-600">Search for ingredients at nearby grocery stores and get pricing information</p>
+      </div>
+
+      <div className="glass p-8 mb-8">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Ingredients</h3>
+        
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Your Postal Code</label>
+          <input
+            type="text"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            placeholder="Enter your postal code"
+            className="w-full md:w-64 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+          />
+        </div>
+
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <label className="block text-sm font-medium text-gray-700">Ingredients</label>
+            <button
+              type="button"
+              onClick={addIngredient}
+              className="btn-primary text-sm px-4 py-2 rounded-lg"
+            >
+              + Add Ingredient
+            </button>
+          </div>
+          <div className="space-y-2">
+            {ingredients.map((ingredient, index) => (
+              <div key={index} className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  value={ingredient}
+                  onChange={(e) => updateIngredient(index, e.target.value)}
+                  placeholder="Enter ingredient name"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                />
+                {ingredients.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeIngredient(index)}
+                    className="text-red-500 hover:text-red-700 p-3 rounded-lg hover:bg-red-50"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={searchGroceryStores}
+          disabled={loading}
+          className="btn-primary font-medium py-3 px-6 rounded-lg disabled:opacity-50"
+        >
+          {loading ? 'Searching... 🔍' : 'Find Stores & Prices 🛒'}
+        </button>
+      </div>
+
+      {/* Ad Placement */}
+      <AdComponent placement="grocery-search" />
+
+      {searchResults && (
+        <div className="space-y-6">
+          <div className="glass p-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">Nearby Grocery Stores</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {searchResults.stores.map((store, index) => (
+                <div key={index} className={`grocery-store ${store.id === searchResults.recommended_store_id ? 'border-green-500 bg-green-50' : 'border-gray-200'}`}>
+                  {store.id === searchResults.recommended_store_id && (
+                    <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full mb-2 inline-block">
+                      💰 Best Value
+                    </span>
+                  )}
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="store-logo">{store.name}</h4>
+                      <p className="text-sm text-gray-600">{store.chain}</p>
+                      <p className="store-distance">{store.address}</p>
+                      <p className="store-distance">{store.distance_km} km away</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="store-price text-xl">${store.estimated_total}</p>
+                      <p className="text-xs text-gray-500">Est. total</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center mt-3">
+                    {store.supports_delivery && (
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                        🚚 Delivery
+                      </span>
+                    )}
+                    <button className="btn-primary text-xs px-3 py-1 rounded">
+                      💰 Order & Earn
+                    </button>
+                  </div>
+                  
+                  <div className="mt-2 text-xs text-green-600">
+                    <p>Platform earns {(store.commission_rate * 100).toFixed(0)}% commission</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="glass p-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">Ingredient Availability & Pricing</h3>
+            <div className="space-y-4">
+              {Object.entries(searchResults.ingredient_availability).map(([ingredient, stores]) => (
+                <div key={ingredient} className="border-b border-gray-200 pb-4">
+                  <h4 className="font-medium text-gray-800 mb-2 capitalize">{ingredient}</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {stores.map((item, index) => (
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">{item.brand}</span>
+                          <span className="font-semibold text-green-600">${item.price}</span>
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {item.package_size} • {item.in_stock ? '✅ In Stock' : '❌ Out of Stock'}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="glass p-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">Order Options</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {searchResults.delivery_options.map((option, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-green-500 transition-colors cursor-pointer">
+                  <h4 className="font-semibold text-gray-800 capitalize flex items-center">
+                    {option.type === 'pickup' ? '🏪' : option.type === 'delivery' ? '🚚' : '⚡'} {option.type}
+                  </h4>
+                  <p className="text-gray-600 text-sm mt-1">{option.time_estimate}</p>
+                  <p className="font-semibold text-green-600 mt-2">
+                    {option.fee === 0 ? 'Free' : `$${option.fee} fee`}
+                  </p>
+                  <button className="w-full btn-primary mt-3 py-2 text-sm rounded-lg">
+                    Select {option.type}
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            {/* Monetization Explanation */}
+            <div className="grocery-integration">
+              <h4 className="text-lg font-semibold mb-3">💰 How Lambalia Monetizes Grocery Integration</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="bg-white bg-opacity-20 p-3 rounded">
+                  <strong>Store Partnerships:</strong> We earn 5-8% commission from partner stores when you shop through Lambalia
+                </div>
+                <div className="bg-white bg-opacity-20 p-3 rounded">
+                  <strong>Delivery Fees:</strong> Small service fee added to delivery orders for platform maintenance
+                </div>
+                <div className="bg-white bg-opacity-20 p-3 rounded">
+                  <strong>Premium Features:</strong> Advanced meal planning and bulk ordering for subscribers
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
