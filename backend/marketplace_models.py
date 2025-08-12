@@ -13,6 +13,10 @@ class VendorStatus(str, Enum):
     SUSPENDED = "suspended"
     DEACTIVATED = "deactivated"
 
+class VendorType(str, Enum):
+    HOME_RESTAURANT = "home_restaurant"
+    TRADITIONAL_RESTAURANT = "traditional_restaurant"
+
 class BookingStatus(str, Enum):
     PENDING = "pending"
     CONFIRMED = "confirmed"
@@ -20,6 +24,14 @@ class BookingStatus(str, Enum):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
     REFUNDED = "refunded"
+
+class OrderStatus(str, Enum):
+    DRAFT = "draft"
+    ACTIVE = "active"
+    PAUSED = "paused"
+    EXPIRED = "expired"
+    FULFILLED = "fulfilled" 
+    CANCELLED = "cancelled"
 
 class PaymentStatus(str, Enum):
     PENDING = "pending"
@@ -36,6 +48,8 @@ class DocumentType(str, Enum):
     ID_DOCUMENT = "id_document"
     HEALTH_CERTIFICATE = "health_certificate"
     INSURANCE_PROOF = "insurance_proof"
+    BUSINESS_LICENSE = "business_license"
+    RESTAURANT_PHOTOS = "restaurant_photos"
 
 class VendorApplication(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
