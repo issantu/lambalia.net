@@ -1,0 +1,93 @@
+<analysis>
+The previous AI engineer successfully transformed a basic status tracking application into a sophisticated social media platform for sharing recipes, called Lambalia. Initially, the user requested to complete an existing status app, but then pivoted entirely to a new, ambitious social media concept. The AI engineer adapted, conducting market research, proposing an MVP approach, and iteratively building core features. Key achievements include implementing user authentication, recipe posting, social interactions, a premium recipe system, and country/region categorization. The platform was rebranded to Lambalia with an integrated logo and a dynamic landing page. Significant monetization features were added: paid communication tools (WhatsApp, audio, video), a revolutionary home restaurant concept, local grocery store integration with delivery, and automated ads. The latest work involved integrating a vetting and payment system for the home restaurant feature, with the backend implementation complete and the frontend integration currently underway.
+</analysis>
+
+<product_requirements>
+The core product is Lambalia, a social media platform for sharing recipes and traditional culinary specialties, emphasizing local ingredients and cultural diversity. It supports multilingual content.
+Key features include:
+1.  **User Profiles**: Username, profile photo, bio, location (country/region), language preferences.
+2.  **Recipe Posts**: Title, description, ingredients, steps, photos/videos. Tags for country, cuisine, dietary preferences (e.g., organic). Recipes organized by country/region.
+3.  **Multilingual Support**: UI language selection, potential recipe translations.
+4.  **Community Interaction**: Comments, likes/favorites, following users.
+5.  **Search & Filter**: By ingredient, country, cuisine, language, organic, dietary, popularity.
+6.  **Monetization**:
+    *   **Recipe Snippets**: Users post snippets; full ingredients hidden. Visitors pay credits to unlock (revenue split).
+    *   **Direct Messaging**: Monetized text, audio (with AI translation), and video calls between users and recipe owners with tiered fees.
+    *   **Local Grocery Integration**: Ingredient lists link to local stores (Walmart, Meijer, Kroger) via zip code. Shows availability, pricing. Users can pay through platform, order pickup/delivery (Uber/DoorDash). Commission-based.
+    *   **Automated Ads**: Embedded strategically for general revenue.
+    *   **Home Restaurant Platform**: Users transform dining rooms into restaurants. Vetting process (like Uber/Airbnb with kitchen/dining photos, reviews), platform-determined pricing, vendor payments, platform commission.
+7.  **Localization**: Show content relevant to user's region/language.
+8.  **Technical Foundation**: React frontend, FastAPI backend, MongoDB database.
+</product_requirements>
+
+<key_technical_concepts>
+-   **FastAPI**: Python backend framework for REST APIs.
+-   **React**: JavaScript library for building user interfaces.
+-   **MongoDB**: NoSQL database for flexible data storage.
+-   **JWT (JSON Web Tokens)**: For secure user authentication.
+-   **Pydantic**: For data validation and serialization in FastAPI.
+-   **UUIDs**: Used for IDs to avoid MongoDB ObjectID serialization issues.
+-   **Axios**: HTTP client for frontend API calls.
+-   **Tailwind CSS**: Utility-first CSS framework for styling.
+-   **React Router**: For client-side routing in the frontend.
+-   **Supervisor**: Process control system for managing background services.
+-   **CORS (Cross-Origin Resource Sharing)**: Enabled for frontend-backend communication.
+-   **Geospatial Queries**: For finding nearby grocery stores (planned/partially implemented).
+-   **Payment Gateway Integration**: (Planned for Stripe/PayPal, implicit in current work).
+-   **AI Translation APIs**: (Planned for Google Cloud/AWS, implicit in current work).
+</key_technical_concepts>
+
+<code_architecture>
+The application follows a full-stack architecture with a React frontend and a FastAPI backend, using MongoDB as the database.
+
+
+**Key Files and Changes:**
+
+-   :
+    -   **Importance**: The main FastAPI application entry point.
+    -   **Changes**: Initially contained basic status app logic. Completely rewritten to serve the Lambalia platform. Later, it was updated to import and use logic from  and . It handles CORS, database connection, and basic health checks.
+-   :
+    -   **Importance**: Defines Pydantic models for new features like , , , , , , , . It ensures data validation and serialization.
+    -   **Changes**: Newly created to support the complex data structures required for the recipe sharing platform.
+-   :
+    -   **Importance**: Contains extended API endpoints for user management, recipe snippets, and the initial integration of features beyond the core social functions, including reference recipes.
+    -   **Changes**: Newly created to modularize and extend the backend logic, allowing the main  to remain cleaner.
+-   :
+    -   **Importance**: Stores the extensive JSON data of native recipes categorized by country.
+    -   **Changes**: Newly created to hold the large dataset of traditional recipes provided by the user.
+-   :
+    -   **Importance**: Defines Pydantic models specifically for the home restaurant marketplace, including , , and .
+    -   **Changes**: Newly created to support the complex vetting and payment system for vendors.
+-   :
+    -   **Importance**: Implements the backend logic for the home restaurant marketplace, including vendor vetting, booking, and payment processing.
+    -   **Changes**: Newly created to handle the most recent advanced feature set.
+-   :
+    -   **Importance**: The main React component handling application routing, state management, and component rendering.
+    -   **Changes**: Completely revamped from a minimal status app UI to a full social media platform. It includes authentication forms, recipe display, user profiles, monetization UI (messaging options, grocery integration, home restaurant booking), and dynamic rendering based on user interaction. Rebranded to Lambalia and integrated the logo.
+-   :
+    -   **Importance**: Contains global and component-specific styling for the React application.
+    -   **Changes**: Significantly modified to implement the dynamic, green-themed landing page with fume effects, glassmorphism design, and mobile responsiveness. It also includes styling for new features.
+</code_architecture>
+
+<pending_tasks>
+-   Integrate the frontend components for the newly implemented marketplace system (vendor profiles, booking, payment flow, reviews).
+-   Full integration of external third-party APIs (WhatsApp, Uber/DoorDash for delivery, specific grocery inventory APIs) beyond conceptual setup.
+-   Implementing advanced ad automation algorithms.
+-   Comprehensive UI language selection and recipe translation features.
+-   Video snippet uploads (currently only photo of finished dish).
+</pending_tasks>
+
+<current_work>
+The most immediate work being done is the implementation of the dining room into a restaurant feature, which includes a comprehensive vetting process for affiliated vendors and a payment backend.
+
+The backend for this marketplace system is largely complete. This involves:
+-   ****: Defines new Pydantic models for , , , and  objects, detailing necessary fields like images for kitchen/dining room, location, pricing, and status.
+-   ****: Contains the API endpoints and logic for vendor registration, vetting, listing available restaurants, handling bookings, and processing payments. It is responsible for the platform's commission model.
+-   ****: The main FastAPI application has been updated to incorporate the routes and logic defined in , effectively making the marketplace APIs available.
+
+The last recorded action by the AI engineer was: Now let me replace the main server and add the comprehensive frontend for the marketplace system:. This indicates that the **frontend integration for the marketplace system** (user-facing vendor profiles, booking interface, payment flow, and review submission) is the precise current task.
+</current_work>
+
+<optional_next_step>
+Continue implementing the comprehensive frontend for the home restaurant marketplace system in .
+</optional_next_step>
