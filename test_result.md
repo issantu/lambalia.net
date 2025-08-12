@@ -106,7 +106,7 @@ user_problem_statement: "Expand Lambalia marketplace to include traditional rest
 
 backend:
   - task: "Expand marketplace models for traditional restaurants"
-    implemented: false
+    implemented: true
     working: "NA"
     file: "marketplace_models.py"
     stuck_count: 0
@@ -116,9 +116,12 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Starting implementation of traditional restaurant support with special order functionality"
+      - working: "NA"
+        agent: "main"
+        comment: "Completed expansion of marketplace models including VendorType enum, TraditionalRestaurantProfile, SpecialOrder models, and updated Booking model to handle both home and traditional restaurants"
 
   - task: "Add API endpoints for traditional restaurant management"
-    implemented: false
+    implemented: true
     working: "NA"
     file: "server.py"
     stuck_count: 0
@@ -128,6 +131,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Need to add endpoints for traditional restaurant registration, special order creation, and order management"
+      - working: "NA"
+        agent: "main"
+        comment: "Completed implementation of API endpoints for traditional restaurant creation, special order management, booking special orders, and added proper database indexing. Backend server is running successfully."
 
 frontend:
   - task: "Create traditional restaurant registration UI"
