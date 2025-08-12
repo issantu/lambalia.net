@@ -31,10 +31,12 @@ from expanded_reference_recipes import (
     get_native_recipes_json
 )
 from marketplace_models import (
-    VendorApplication, HomeRestaurant, MenuOffering, Booking, Payment, Review,
-    VendorPayout, VendorApplicationRequest, BookingRequest, ReviewRequest,
-    VendorApplicationResponse, HomeRestaurantResponse, BookingResponse,
-    PaymentIntentResponse, VendorStatus, BookingStatus, PaymentStatus, DocumentType
+    VendorApplication, HomeRestaurant, TraditionalRestaurantProfile, MenuOffering, 
+    SpecialOrder, Booking, Payment, Review, VendorPayout, VendorApplicationRequest, 
+    BookingRequest, ReviewRequest, SpecialOrderRequest, TraditionalRestaurantRequest,
+    VendorApplicationResponse, HomeRestaurantResponse, TraditionalRestaurantResponse,
+    SpecialOrderResponse, BookingResponse, PaymentIntentResponse, VendorStatus, 
+    VendorType, BookingStatus, OrderStatus, PaymentStatus, DocumentType
 )
 from payment_service import payment_service, pricing_engine
 
