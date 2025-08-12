@@ -291,13 +291,21 @@ class Booking(BaseModel):
     
     # Participants
     guest_id: str
-    restaurant_id: str
     vendor_id: str
+    
+    # Booking Type (discriminates between home restaurant and special order)
+    booking_type: str = "home_restaurant"  # "home_restaurant" or "special_order"
+    restaurant_id: Optional[str] = None  # For home restaurants
+    special_order_id: Optional[str] = None  # For special orders
     
     # Booking Details
     booking_date: datetime
     number_of_guests: int
-    menu_offering_id: str
+    menu_offering_id: Optional[str] = None  # For home restaurants
+    
+    # Service Type (for special orders)
+    service_type: Optional[str] = None  # "delivery", "pickup", "dine_in"
+    delivery_address: Optional[str] = None
     
     # Pricing
     price_per_person: float
