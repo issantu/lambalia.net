@@ -667,10 +667,13 @@ async def create_traditional_restaurant(
         raise HTTPException(status_code=404, detail="No approved traditional restaurant application found")
     
     # Create restaurant profile
+    location_data = {"type": "Point", "coordinates": [restaurant_data.longitude or 0.0, restaurant_data.latitude or 0.0]}
+    
     restaurant = TraditionalRestaurantProfile(
         vendor_id=current_user_id,
         application_id=application['id'],
         address=application['address'],
+        location=location_data,
         **restaurant_data.dict()
     )
     
