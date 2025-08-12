@@ -1003,11 +1003,21 @@ async def startup_event():
     # Create indexes for marketplace
     await db.vendor_applications.create_index("user_id")
     await db.vendor_applications.create_index("status")
+    await db.vendor_applications.create_index("vendor_type")
     await db.home_restaurants.create_index("vendor_id")
     await db.home_restaurants.create_index([("latitude", "2dsphere"), ("longitude", "2dsphere")])
+    await db.traditional_restaurants.create_index("vendor_id")
+    await db.traditional_restaurants.create_index([("latitude", "2dsphere"), ("longitude", "2dsphere")])
+    await db.traditional_restaurants.create_index("cuisine_type")
+    await db.special_orders.create_index("restaurant_id")
+    await db.special_orders.create_index("vendor_id")
+    await db.special_orders.create_index("status")
+    await db.special_orders.create_index("cuisine_style")
+    await db.special_orders.create_index("occasion_type")
     await db.bookings.create_index("guest_id")
     await db.bookings.create_index("vendor_id")
     await db.bookings.create_index("booking_date")
+    await db.bookings.create_index("booking_type")
     await db.reviews.create_index("restaurant_id")
     await db.payments.create_index("booking_id")
     
@@ -1018,7 +1028,7 @@ async def startup_event():
     await db.snippets.create_index("author_id")
     await db.snippet_interactions.create_index([("snippet_id", 1), ("user_id", 1)])
     
-    logger.info("Lambalia Marketplace API started with comprehensive vetting and payment system")
+    logger.info("Lambalia Marketplace API started with comprehensive vetting and payment system including traditional restaurants")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
