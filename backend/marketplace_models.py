@@ -413,6 +413,7 @@ class VendorPayout(BaseModel):
 # Request/Response Models
 
 class VendorApplicationRequest(BaseModel):
+    vendor_type: VendorType = VendorType.HOME_RESTAURANT
     legal_name: str
     phone_number: str
     address: str
@@ -420,8 +421,17 @@ class VendorApplicationRequest(BaseModel):
     state: str
     postal_code: str
     country: str
-    kitchen_description: str
-    dining_capacity: int = Field(ge=2, le=20)
+    
+    # For home restaurants
+    kitchen_description: Optional[str] = None
+    dining_capacity: Optional[int] = Field(default=None, ge=2, le=20)
+    
+    # For traditional restaurants
+    restaurant_name: Optional[str] = None
+    business_license_number: Optional[str] = None
+    years_in_business: Optional[int] = 0
+    
+    # Common fields
     cuisine_specialties: List[str] = []
     dietary_accommodations: List[str] = []
     background_check_consent: bool = True
@@ -434,13 +444,66 @@ class VendorApplicationRequest(BaseModel):
     privacy_policy_accepted: bool = True
 
 class BookingRequest(BaseModel):
-    restaurant_id: str
+    booking_type: str = "home_restaurant"  # "home_restaurant" or "special_order"
+    restaurant_id: Optional[str] = None
+    special_order_id: Optional[str] = None
     booking_date: str  # ISO format
-    number_of_guests: int = Field(ge=1, le=20)
-    menu_offering_id: str
+    number_of_guests: int = Field(ge=1, le=50)
+    menu_offering_id: Optional[str] = None
+    service_type: Optional[str] = None  # "delivery", "pickup", "dine_in"
+    delivery_address: Optional[str] = None
     dietary_restrictions: List[str] = []
     special_requests: str = ""
     guest_message: str = ""
+
+class SpecialOrderRequest(BaseModel):
+    title: str
+    description: str
+    cuisine_style: str
+    occasion_type: Optional[str] = None
+    proposed_menu_items: List[Dict[str, Any]] = []
+    includes_appetizers: bool = False
+    includes_main_course: bool = True
+    includes_dessert: bool = False
+    includes_beverages: bool = False
+    price_per_person: float = Field(ge=15.0, le=200.0)
+    minimum_people: int = Field(default=4, ge=2)
+    maximum_people: int = Field(default=20, le=50)
+    vegetarian_options: bool = False
+    vegan_options: bool = False
+    gluten_free_options: bool = False
+    allergen_info: List[str] = []
+    special_accommodations: str = ""
+    available_dates: List[str] = []
+    preparation_time_hours: int = Field(default=2, ge=1, le=8)
+    advance_notice_hours: int = Field(default=48, ge=24)
+    delivery_available: bool = True
+    pickup_available: bool = True
+    dine_in_available: bool = False
+    expires_at: Optional[str] = None  # ISO format
+
+class TraditionalRestaurantRequest(BaseModel):
+    restaurant_name: str
+    business_name: str
+    description: str
+    cuisine_type: List[str] = []
+    specialty_dishes: List[str] = []
+    phone_number: str
+    website: Optional[str] = None
+    business_license_number: str
+    years_in_business: int
+    seating_capacity: int
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    operating_days: List[str] = []
+    operating_hours: Dict[str, Dict[str, str]] = {}
+    minimum_order_value: float = Field(default=50.0, ge=25.0)
+    maximum_order_value: float = Field(default=500.0, le=1000.0)
+    advance_order_days: int = 3
+    offers_delivery: bool = True
+    offers_pickup: bool = True
+    delivery_radius_km: float = Field(default=10.0, le=25.0)
+    photos: List[Dict[str, str]] = []
 
 class ReviewRequest(BaseModel):
     overall_rating: int = Field(ge=1, le=5)
