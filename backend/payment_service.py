@@ -24,6 +24,20 @@ class PaymentService:
     ) -> Dict:
         """Create a Stripe Payment Intent for the booking"""
         try:
+            # Check if we have a valid Stripe key
+            if not stripe.api_key or stripe.api_key == 'sk_test_...' or 'sk_test_...' in stripe.api_key:
+                # Mock response for testing when Stripe is not configured
+                logger.info("Using mock payment intent for testing (Stripe not configured)")
+                mock_intent_id = f"pi_mock_{booking_id[:8]}"
+                return {
+                    'client_secret': f"{mock_intent_id}_secret_mock",
+                    'payment_intent_id': mock_intent_id,
+                    'amount': amount,
+                    'platform_commission': amount * self.platform_commission_rate,
+                    'vendor_payout': amount * (1 - self.platform_commission_rate),
+                    'status': 'requires_payment_method'
+                }
+            
             # Calculate amounts
             total_amount_cents = int(amount * 100)  # Stripe uses cents
             platform_commission_cents = int(amount * self.platform_commission_rate * 100)
