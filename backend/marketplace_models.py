@@ -517,7 +517,67 @@ class ReviewRequest(BaseModel):
     cons: List[str] = []
     would_recommend: bool = True
 
-class VendorApplicationResponse(BaseModel):
+class TraditionalRestaurantResponse(BaseModel):
+    id: str
+    restaurant_name: str
+    business_name: str
+    description: str
+    cuisine_type: List[str]
+    specialty_dishes: List[str]
+    address: str
+    phone_number: str
+    website: Optional[str] = None
+    photos: List[Dict[str, str]]
+    years_in_business: int
+    seating_capacity: int
+    minimum_order_value: float
+    maximum_order_value: float
+    advance_order_days: int
+    offers_delivery: bool
+    offers_pickup: bool
+    delivery_radius_km: float
+    average_rating: float
+    total_reviews: int
+    total_orders: int
+    fulfillment_rate: float
+    is_accepting_orders: bool
+    operating_days: List[str]
+    operating_hours: Dict[str, Dict[str, str]]
+
+class SpecialOrderResponse(BaseModel):
+    id: str
+    restaurant_id: str
+    vendor_id: str
+    restaurant_name: str
+    title: str
+    description: str
+    cuisine_style: str
+    occasion_type: Optional[str] = None
+    proposed_menu_items: List[Dict[str, Any]]
+    includes_appetizers: bool
+    includes_main_course: bool
+    includes_dessert: bool
+    includes_beverages: bool
+    price_per_person: float
+    minimum_people: int
+    maximum_people: int
+    vegetarian_options: bool
+    vegan_options: bool
+    gluten_free_options: bool
+    allergen_info: List[str]
+    special_accommodations: str
+    available_dates: List[str]
+    preparation_time_hours: int
+    advance_notice_hours: int
+    delivery_available: bool
+    pickup_available: bool
+    dine_in_available: bool
+    status: OrderStatus
+    total_bookings: int
+    views_count: int
+    saves_count: int
+    expires_at: Optional[datetime] = None
+    created_at: datetime
     id: str
     status: VendorStatus
     application_date: datetime
