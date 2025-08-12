@@ -682,6 +682,22 @@ class LambaliaEnhancedAPITester:
         self.test_nearby_stores()
         self.test_grocery_preferences()
         
+        # Traditional Restaurant Marketplace tests
+        print("\n🏪 Testing Traditional Restaurant Marketplace...")
+        self.test_traditional_restaurant_vendor_application()
+        self.test_admin_approve_vendor_application()
+        self.test_create_traditional_restaurant_profile()
+        self.test_get_traditional_restaurants()
+        self.test_get_traditional_restaurants_with_filters()
+        
+        print("\n📋 Testing Special Orders...")
+        self.test_create_special_order()
+        self.test_get_special_orders()
+        self.test_get_special_orders_with_filters()
+        self.test_get_special_order_details()
+        self.test_book_special_order()
+        self.test_special_order_validation_scenarios()
+        
         # Print summary
         print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
