@@ -131,7 +131,7 @@ const LoginPage = () => {
     
     const result = await register(formData);
     if (result.success) {
-      navigate('/');
+      window.location.href = '/';
     } else {
       setError(result.error);
     }
