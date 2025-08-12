@@ -17,13 +17,18 @@ from enum import Enum
 import math
 import json
 
-# Import our extended models
+# Import our extended models and expanded recipes
 from models_extension import (
     ReferenceRecipe, RecipeSnippet, GroceryStore, IngredientAvailability,
     UserGroceryPreference, SnippetCreate, SnippetResponse, GrocerySearchRequest,
     GrocerySearchResponse, SnippetType, VideoQuality
 )
-from reference_recipes import REFERENCE_RECIPES, get_recipes_by_country, get_featured_recipes
+from expanded_reference_recipes import (
+    COMPREHENSIVE_REFERENCE_RECIPES, NATIVE_RECIPES_BY_COUNTRY,
+    get_recipes_by_country, get_featured_recipes, get_recipe_by_name,
+    get_all_countries_with_recipes, get_recipes_by_category, search_recipes,
+    get_native_recipes_json
+)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -34,7 +39,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app
-app = FastAPI(title="Lambalia API Enhanced", description="Advanced Recipe Sharing Platform with Snippets & Grocery Integration")
+app = FastAPI(title="Lambalia API Enhanced", description="Advanced Recipe Sharing Platform with Comprehensive Global Recipes")
 api_router = APIRouter(prefix="/api")
 
 # Security
@@ -68,6 +73,7 @@ class Country(BaseModel):
     code: str
     regions: List[Dict[str, str]] = []
     languages: List[str] = []
+    native_recipes: List[str] = []  # New field for native recipes list
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class UserProfile(BaseModel):
@@ -87,7 +93,7 @@ class UserProfile(BaseModel):
     followers_count: int = 0
     following_count: int = 0
     recipes_count: int = 0
-    snippets_count: int = 0  # New field
+    snippets_count: int = 0
     credits: float = 0.0
     is_verified: bool = False
     is_active: bool = True
@@ -206,7 +212,7 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> fl
     
     return distance
 
-# Authentication Routes (same as before)
+# Authentication Routes
 @api_router.post("/auth/register", response_model=TokenResponse)
 async def register_user(user_data: UserRegistration):
     existing_user = await db.users.find_one({"$or": [{"email": user_data.email}, {"username": user_data.username}]})
@@ -242,34 +248,56 @@ async def login_user(login_data: UserLogin):
         user=UserResponse(**user_doc)
     )
 
-# Reference Recipes Routes
+# Enhanced Reference Recipes Routes
 @api_router.get("/reference-recipes", response_model=List[ReferenceRecipe])
 async def get_reference_recipes(
     country_id: Optional[str] = None,
     featured_only: bool = False,
-    category: Optional[str] = None
+    category: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: int = 50
 ):
-    """Get reference recipes with optional filtering"""
-    recipes = REFERENCE_RECIPES.copy()
+    """Get reference recipes with advanced filtering"""
+    recipes = COMPREHENSIVE_REFERENCE_RECIPES.copy()
     
-    if country_id:
-        recipes = [r for r in recipes if r.country_id == country_id]
+    if search:
+        recipes = search_recipes(search)
+    elif country_id:
+        recipes = get_recipes_by_country(country_id)
+    elif category:
+        recipes = get_recipes_by_category(category)
     
     if featured_only:
         recipes = [r for r in recipes if r.is_featured]
     
-    if category:
-        recipes = [r for r in recipes if r.category == category]
-    
-    # Sort by popularity
+    # Sort by popularity and limit results
     recipes.sort(key=lambda x: x.popularity_score, reverse=True)
     
-    return recipes
+    return recipes[:limit]
+
+@api_router.get("/reference-recipes/search")
+async def search_reference_recipes(q: str, limit: int = 20):
+    """Search reference recipes by name or ingredients"""
+    results = search_recipes(q)
+    return results[:limit]
+
+@api_router.get("/reference-recipes/featured", response_model=List[ReferenceRecipe])
+async def get_featured_reference_recipes():
+    """Get featured reference recipes from all countries"""
+    return get_featured_recipes()
+
+@api_router.get("/reference-recipes/categories")
+async def get_recipe_categories():
+    """Get all available recipe categories"""
+    categories = set()
+    for recipe in COMPREHENSIVE_REFERENCE_RECIPES:
+        categories.add(recipe.category)
+    return {"categories": sorted(list(categories))}
 
 @api_router.get("/reference-recipes/{recipe_id}", response_model=ReferenceRecipe)
 async def get_reference_recipe(recipe_id: str):
     """Get a specific reference recipe"""
-    recipe = next((r for r in REFERENCE_RECIPES if r.id == recipe_id), None)
+    recipe = next((r for r in COMPREHENSIVE_REFERENCE_RECIPES if r.id == recipe_id), None)
     if not recipe:
         raise HTTPException(status_code=404, detail="Reference recipe not found")
     return recipe
@@ -280,7 +308,16 @@ async def get_country_reference_recipes(country_id: str):
     recipes = get_recipes_by_country(country_id)
     return sorted(recipes, key=lambda x: x.popularity_score, reverse=True)
 
-# Recipe Snippets Routes
+@api_router.get("/native-recipes")
+async def get_native_recipes_by_country():
+    """Get the native recipes organized by country"""
+    return {
+        "native_recipes": NATIVE_RECIPES_BY_COUNTRY,
+        "total_countries": len(NATIVE_RECIPES_BY_COUNTRY),
+        "total_recipes": sum(len(recipes) - 1 for recipes in NATIVE_RECIPES_BY_COUNTRY.values())  # -1 to exclude "Other"
+    }
+
+# Recipe Snippets Routes (same as before)
 @api_router.post("/snippets", response_model=SnippetResponse)
 async def create_snippet(
     snippet_data: SnippetCreate,
@@ -401,7 +438,7 @@ async def like_snippet(snippet_id: str, current_user_id: str = Depends(get_curre
         await db.snippets.update_one({"id": snippet_id}, {"$inc": {"likes_count": 1}})
         return {"liked": True}
 
-# Grocery Store Integration Routes
+# Grocery Store Integration Routes (same as before with minor enhancements)
 @api_router.post("/grocery/search", response_model=GrocerySearchResponse)
 async def search_grocery_stores(
     search_request: GrocerySearchRequest,
@@ -409,16 +446,13 @@ async def search_grocery_stores(
 ):
     """Search for grocery stores and ingredient availability based on user location"""
     
-    # This is a mock implementation - in production, you'd integrate with actual grocery APIs
-    # like Instacart, Amazon Fresh, or regional grocery chains
-    
-    # Mock grocery stores data
+    # Enhanced mock stores with more variety
     mock_stores = [
         {
             "id": "store_1",
             "name": "Fresh Market",
             "chain": "Independent",
-            "address": "123 Main St",
+            "address": f"123 Main St, {search_request.user_postal_code}",
             "distance_km": 2.5,
             "supports_delivery": True,
             "estimated_total": 25.99,
@@ -428,7 +462,7 @@ async def search_grocery_stores(
             "id": "store_2", 
             "name": "Whole Foods",
             "chain": "Whole Foods Market",
-            "address": "456 Oak Ave",
+            "address": f"456 Oak Ave, {search_request.user_postal_code}",
             "distance_km": 4.2,
             "supports_delivery": True,
             "estimated_total": 32.50,
@@ -436,9 +470,9 @@ async def search_grocery_stores(
         },
         {
             "id": "store_3",
-            "name": "Kroger",
+            "name": "Local Grocery",
             "chain": "Kroger",
-            "address": "789 Pine St",
+            "address": f"789 Pine St, {search_request.user_postal_code}",
             "distance_km": 3.1,
             "supports_delivery": True,
             "estimated_total": 22.75,
@@ -446,27 +480,33 @@ async def search_grocery_stores(
         }
     ]
     
-    # Mock ingredient availability
+    # Enhanced ingredient availability with more realistic data
     mock_availability = {}
     for ingredient in search_request.ingredients:
         mock_availability[ingredient] = [
             {
                 "store_id": "store_1",
-                "brand": "Generic",
+                "brand": "Fresh Local",
                 "price": 2.99,
                 "in_stock": True,
                 "package_size": "1 lb"
             },
             {
                 "store_id": "store_2",
-                "brand": "Organic",
+                "brand": "Organic Choice",
                 "price": 4.99,
+                "in_stock": True,
+                "package_size": "1 lb"
+            },
+            {
+                "store_id": "store_3",
+                "brand": "Value Brand",
+                "price": 1.99,
                 "in_stock": True,
                 "package_size": "1 lb"
             }
         ]
     
-    # Mock delivery options
     delivery_options = [
         {
             "type": "pickup",
@@ -477,6 +517,11 @@ async def search_grocery_stores(
             "type": "delivery",
             "fee": 5.99,
             "time_estimate": "Delivered in 1-2 hours"
+        },
+        {
+            "type": "express_delivery",
+            "fee": 12.99,
+            "time_estimate": "Delivered in 30-60 minutes"
         }
     ]
     
@@ -488,69 +533,22 @@ async def search_grocery_stores(
         recommended_store_id="store_1"
     )
 
-@api_router.get("/grocery/stores/nearby")
-async def get_nearby_stores(
-    postal_code: str,
-    radius_km: float = 10.0,
-    current_user_id: str = Depends(get_current_user)
-):
-    """Get grocery stores near a postal code"""
+# Enhanced Countries endpoint with native recipes
+@api_router.get("/countries", response_model=List[Country])
+async def get_countries():
+    """Get all countries with their native recipes"""
+    countries = await db.countries.find().to_list(1000)
     
-    # Mock nearby stores - in production, use geospatial queries
-    nearby_stores = [
-        {
-            "id": "store_1",
-            "name": "Fresh Market",
-            "address": "123 Main St",
-            "distance_km": 2.5,
-            "phone": "(555) 123-4567",
-            "supports_delivery": True,
-            "is_partner": True
-        },
-        {
-            "id": "store_2",
-            "name": "Whole Foods",
-            "address": "456 Oak Ave", 
-            "distance_km": 4.2,
-            "phone": "(555) 987-6543",
-            "supports_delivery": True,
-            "is_partner": True
-        }
-    ]
+    # Enhance countries with native recipes data
+    enhanced_countries = []
+    for country in countries:
+        country_name = country.get('name', '')
+        native_recipes = NATIVE_RECIPES_BY_COUNTRY.get(country_name, [])
+        country['native_recipes'] = native_recipes
+        enhanced_countries.append(Country(**country))
     
-    return {"stores": nearby_stores, "search_radius_km": radius_km}
+    return enhanced_countries
 
-# User preferences for grocery shopping
-@api_router.post("/users/grocery-preferences")
-async def update_grocery_preferences(
-    preferences: UserGroceryPreference,
-    current_user_id: str = Depends(get_current_user)
-):
-    """Update user's grocery shopping preferences"""
-    preferences.user_id = current_user_id
-    preferences.updated_at = datetime.utcnow()
-    
-    # Upsert preferences
-    await db.user_grocery_preferences.update_one(
-        {"user_id": current_user_id},
-        {"$set": preferences.dict()},
-        upsert=True
-    )
-    
-    return {"message": "Grocery preferences updated successfully"}
-
-@api_router.get("/users/me/grocery-preferences", response_model=UserGroceryPreference)
-async def get_grocery_preferences(current_user_id: str = Depends(get_current_user)):
-    """Get user's grocery shopping preferences"""
-    preferences = await db.user_grocery_preferences.find_one({"user_id": current_user_id})
-    
-    if not preferences:
-        # Return default preferences
-        return UserGroceryPreference(user_id=current_user_id)
-    
-    return UserGroceryPreference(**preferences)
-
-# Enhanced user profile
 @api_router.get("/users/me", response_model=UserResponse)
 async def get_current_user_profile(current_user_id: str = Depends(get_current_user)):
     user_doc = await db.users.find_one({"id": current_user_id})
@@ -559,16 +557,22 @@ async def get_current_user_profile(current_user_id: str = Depends(get_current_us
     
     return UserResponse(**user_doc)
 
-# Countries endpoint (same as before)
-@api_router.get("/countries", response_model=List[Country])
-async def get_countries():
-    countries = await db.countries.find().to_list(1000)
-    return [Country(**country) for country in countries]
-
-# Health check
+# Health check with enhanced stats
 @api_router.get("/health")
 async def health_check():
-    return {"status": "healthy", "timestamp": datetime.utcnow(), "version": "2.0-enhanced"}
+    total_recipes = len(COMPREHENSIVE_REFERENCE_RECIPES)
+    total_countries = len(NATIVE_RECIPES_BY_COUNTRY)
+    
+    return {
+        "status": "healthy",
+        "timestamp": datetime.utcnow(),
+        "version": "3.0-comprehensive",
+        "stats": {
+            "total_reference_recipes": total_recipes,
+            "total_countries": total_countries,
+            "featured_recipes": len(get_featured_recipes())
+        }
+    }
 
 # Include router
 app.include_router(api_router)
@@ -599,59 +603,25 @@ async def startup_event():
     await db.snippets.create_index([("author_id", 1), ("playlist_order", 1)])
     await db.snippet_interactions.create_index([("snippet_id", 1), ("user_id", 1)])
     
-    # Insert sample countries if none exist
+    # Insert enhanced countries with native recipes if none exist
     countries_count = await db.countries.count_documents({})
     if countries_count == 0:
-        sample_countries = [
-            Country(
-                name="United States", code="US",
-                regions=[
-                    {"id": str(uuid.uuid4()), "name": "California"},
-                    {"id": str(uuid.uuid4()), "name": "Texas"},
-                    {"id": str(uuid.uuid4()), "name": "New York"}
-                ],
-                languages=["en", "es"]
-            ),
-            Country(
-                name="Italy", code="IT",
-                regions=[
-                    {"id": str(uuid.uuid4()), "name": "Tuscany"},
-                    {"id": str(uuid.uuid4()), "name": "Sicily"},
-                    {"id": str(uuid.uuid4()), "name": "Lombardy"}
-                ],
-                languages=["it"]
-            ),
-            Country(
-                name="Mexico", code="MX", 
-                regions=[
-                    {"id": str(uuid.uuid4()), "name": "Oaxaca"},
-                    {"id": str(uuid.uuid4()), "name": "Yucatan"},
-                    {"id": str(uuid.uuid4()), "name": "Mexico City"}
-                ],
-                languages=["es"]
-            ),
-            Country(
-                name="Japan", code="JP",
-                regions=[
-                    {"id": str(uuid.uuid4()), "name": "Tokyo"},
-                    {"id": str(uuid.uuid4()), "name": "Osaka"},
-                    {"id": str(uuid.uuid4()), "name": "Kyoto"}
-                ],
-                languages=["ja"]
-            ),
-            Country(
-                name="India", code="IN",
-                regions=[
-                    {"id": str(uuid.uuid4()), "name": "Punjab"},
-                    {"id": str(uuid.uuid4()), "name": "Kerala"},
-                    {"id": str(uuid.uuid4()), "name": "Rajasthan"}
-                ],
-                languages=["hi", "en"]
-            )
-        ]
+        enhanced_countries = []
         
-        for country in sample_countries:
-            await db.countries.insert_one(country.dict())
+        for country_name, recipes in NATIVE_RECIPES_BY_COUNTRY.items():
+            country = Country(
+                name=country_name,
+                code=country_name[:2].upper(),
+                native_recipes=recipes,
+                languages=["en"],  # Default to English, can be enhanced
+                regions=[]  # Can be populated later
+            )
+            enhanced_countries.append(country.dict())
+        
+        if enhanced_countries:
+            await db.countries.insert_many(enhanced_countries)
+    
+    logger.info(f"Lambalia API started with {len(COMPREHENSIVE_REFERENCE_RECIPES)} reference recipes from {len(NATIVE_RECIPES_BY_COUNTRY)} countries")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
