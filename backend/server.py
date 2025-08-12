@@ -254,10 +254,14 @@ async def submit_vendor_application(
     return VendorApplicationResponse(
         id=application.id,
         status=application.status,
+        vendor_type=application.vendor_type,
         application_date=application.application_date,
         documents_required=[
             "Kitchen Photo", "Dining Room Photo", "Front Door Photo",
             "Government ID", "Health Certificate (if required)", "Insurance Proof"
+        ] if application.vendor_type == VendorType.HOME_RESTAURANT else [
+            "Restaurant Photos", "Business License", "Government ID",
+            "Health Certificate", "Insurance Proof", "Menu Photos"
         ],
         next_steps="Upload required documents and wait for review"
     )
