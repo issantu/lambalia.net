@@ -338,37 +338,55 @@ const Header = () => {
   );
 };
 
-// Recipe Templates Page
+// Recipe Templates Page with Enhanced Country Support
 const RecipeTemplatesPage = () => {
   const [referenceRecipes, setReferenceRecipes] = useState([]);
+  const [nativeRecipes, setNativeRecipes] = useState({});
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    fetchInitialData();
+  }, []);
+
+  useEffect(() => {
     fetchReferenceRecipes();
-    fetchCountries();
-  }, [selectedCountry]);
+  }, [selectedCountry, selectedCategory, searchQuery]);
+
+  const fetchInitialData = async () => {
+    try {
+      const [countriesResponse, nativeResponse] = await Promise.all([
+        axios.get(`${API}/countries`),
+        axios.get(`${API}/native-recipes`)
+      ]);
+      setCountries(countriesResponse.data);
+      setNativeRecipes(nativeResponse.data.native_recipes);
+    } catch (error) {
+      console.error('Failed to fetch initial data:', error);
+    }
+  };
 
   const fetchReferenceRecipes = async () => {
     setLoading(true);
     try {
-      const params = selectedCountry ? `?country_id=${selectedCountry}&featured_only=true` : '?featured_only=true';
-      const response = await axios.get(`${API}/reference-recipes${params}`);
+      let url = `${API}/reference-recipes?featured_only=true&limit=50`;
+      
+      if (searchQuery) {
+        url = `${API}/reference-recipes/search?q=${encodeURIComponent(searchQuery)}&limit=30`;
+      } else {
+        if (selectedCountry) url += `&country_id=${selectedCountry}`;
+        if (selectedCategory) url += `&category=${selectedCategory}`;
+      }
+      
+      const response = await axios.get(url);
       setReferenceRecipes(response.data);
     } catch (error) {
       console.error('Failed to fetch reference recipes:', error);
     }
     setLoading(false);
-  };
-
-  const fetchCountries = async () => {
-    try {
-      const response = await axios.get(`${API}/countries`);
-      setCountries(response.data);
-    } catch (error) {
-      console.error('Failed to fetch countries:', error);
-    }
   };
 
   const ReferenceRecipeCard = ({ recipe }) => (
@@ -380,10 +398,20 @@ const RecipeTemplatesPage = () => {
             {recipe.name_local !== recipe.name_english && (
               <p className="text-lg text-orange-600 font-medium">{recipe.name_local}</p>
             )}
+            {recipe.local_language && recipe.local_language !== 'English' && (
+              <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1">
+                {recipe.local_language}
+              </span>
+            )}
           </div>
-          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-            {recipe.category}
-          </span>
+          <div className="flex flex-col items-end space-y-1">
+            <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full capitalize">
+              {recipe.category}
+            </span>
+            <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+              {recipe.popularity_score}/100
+            </span>
+          </div>
         </div>
         
         <p className="text-gray-600 mb-3 line-clamp-3">{recipe.description}</p>
@@ -417,7 +445,14 @@ const RecipeTemplatesPage = () => {
         </div>
         
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500">Popularity: {recipe.popularity_score}/100</span>
+          <div className="text-sm text-gray-500">
+            <span className="capitalize">{recipe.country_id.replace('_', ' ')}</span>
+            {recipe.is_featured && (
+              <span className="ml-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                Featured
+              </span>
+            )}
+          </div>
           <Link
             to={`/create-snippet?template=${recipe.id}`}
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm transition-colors"
@@ -429,37 +464,125 @@ const RecipeTemplatesPage = () => {
     </div>
   );
 
+  const CountryRecipesList = ({ countryName, recipes }) => (
+    <div key={countryName} className="bg-white rounded-lg p-4 mb-4">
+      <h4 className="font-semibold text-gray-800 mb-2">{countryName} ({recipes.length - 1} recipes)</h4>
+      <div className="flex flex-wrap gap-2">
+        {recipes.filter(recipe => recipe !== 'Other').map((recipe, index) => (
+          <span 
+            key={index} 
+            className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
+            onClick={() => setSearchQuery(recipe)}
+          >
+            {recipe}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">Traditional Recipe Templates</h2>
-        <p className="text-gray-600 mb-6">Choose from authentic recipes around the world to create your own snippet</p>
+        <p className="text-gray-600 mb-6">Choose from {Object.keys(nativeRecipes).length} countries with hundreds of authentic recipes</p>
         
-        <div className="flex gap-4 mb-6">
+        {/* Search and Filters */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <input
+            type="text"
+            placeholder="Search recipes or ingredients..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          
           <select
             value={selectedCountry}
-            onChange={(e) => setSelectedCountry(e.target.value)}
+            onChange={(e) => {
+              setSelectedCountry(e.target.value);
+              setSearchQuery(''); // Clear search when selecting country
+            }}
             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
           >
-            <option value="">All Countries</option>
-            {countries.map(country => (
-              <option key={country.id} value={country.code.toLowerCase()}>
-                {country.name}
+            <option value="">All Countries ({Object.keys(nativeRecipes).length})</option>
+            {Object.keys(nativeRecipes).sort().map(country => (
+              <option key={country} value={country.toLowerCase().replace(' ', '_')}>
+                {country} ({nativeRecipes[country].length - 1} recipes)
               </option>
             ))}
           </select>
+          
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+          >
+            <option value="">All Categories</option>
+            <option value="main">Main Dishes</option>
+            <option value="appetizer">Appetizers</option>
+            <option value="dessert">Desserts</option>
+            <option value="soup">Soups</option>
+            <option value="breakfast">Breakfast</option>
+          </select>
         </div>
+
+        {/* Quick Clear Filters */}
+        {(selectedCountry || selectedCategory || searchQuery) && (
+          <div className="mb-6">
+            <button
+              onClick={() => {
+                setSelectedCountry('');
+                setSelectedCategory('');
+                setSearchQuery('');
+              }}
+              className="text-orange-600 text-sm hover:text-orange-700"
+            >
+              Clear all filters
+            </button>
+          </div>
+        )}
       </div>
 
+      {/* Native Recipes Overview */}
+      {!searchQuery && !selectedCountry && !selectedCategory && (
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Browse by Country</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+            {Object.entries(nativeRecipes).sort().map(([countryName, recipes]) => (
+              <CountryRecipesList key={countryName} countryName={countryName} recipes={recipes} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Reference Recipes Results */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {referenceRecipes.map(recipe => (
-            <ReferenceRecipeCard key={recipe.id} recipe={recipe} />
-          ))}
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-gray-800">
+              {searchQuery ? `Search Results for "${searchQuery}"` : 
+               selectedCountry ? `${selectedCountry.replace('_', ' ')} Recipes` : 
+               'Featured Traditional Recipes'} 
+              ({referenceRecipes.length})
+            </h3>
+          </div>
+          
+          {referenceRecipes.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No recipes found. Try adjusting your search or filters.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {referenceRecipes.map(recipe => (
+                <ReferenceRecipeCard key={recipe.id} recipe={recipe} />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
