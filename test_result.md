@@ -137,7 +137,7 @@ backend:
 
 frontend:
   - task: "Create traditional restaurant registration UI"
-    implemented: false
+    implemented: true
     working: "NA"
     file: "App.js"
     stuck_count: 0
@@ -147,9 +147,12 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Need to add UI for traditional restaurants to register and create special order proposals"
+      - working: "NA"
+        agent: "main"
+        comment: "Completed implementation of traditional restaurant registration UI with comprehensive application forms for both home restaurants and traditional restaurants. Added restaurant browsing interface."
 
   - task: "Implement special order browsing and booking"
-    implemented: false
+    implemented: true
     working: "NA"
     file: "App.js"
     stuck_count: 0
@@ -159,6 +162,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Need to create interface for users to browse and book special orders from traditional restaurants"
+      - working: "NA"
+        agent: "main"
+        comment: "Completed implementation of special order browsing cards with detailed information display, service type indicators, and booking functionality. Integrated with existing home restaurant marketplace."
 
 metadata:
   created_by: "main_agent"
