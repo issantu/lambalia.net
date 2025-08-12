@@ -310,8 +310,9 @@ class LambaliaEnhancedAPITester:
         if not self.token:
             return self.log_test("Grocery Preferences", False, "- No auth token available")
 
-        # Test updating preferences
+        # Test updating preferences - include user_id as required by the model
         preferences_data = {
+            "user_id": self.user_id,  # Required by UserGroceryPreference model
             "preferred_stores": ["store_1", "store_2"],
             "max_distance_km": 15.0,
             "budget_preference": "medium",
