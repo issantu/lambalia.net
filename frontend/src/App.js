@@ -520,94 +520,174 @@ const AdComponent = ({ placement = "feed" }) => {
 // Home Restaurant Feature Component
 const HomeRestaurantPage = () => {
   const { user } = useAuth();
-  const [isRestaurantMode, setIsRestaurantMode] = useState(false);
-  const [menuItems, setMenuItems] = useState([]);
-  const [bookings, setBookings] = useState([]);
+  const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'home-restaurant', 'traditional-restaurant'
+  const [restaurantType, setRestaurantType] = useState('home'); // 'home' or 'traditional'
+  const [homeRestaurants, setHomeRestaurants] = useState([]);
+  const [traditionalRestaurants, setTraditionalRestaurants] = useState([]);
+  const [specialOrders, setSpecialOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const toggleRestaurantMode = () => {
-    setIsRestaurantMode(!isRestaurantMode);
+  useEffect(() => {
+    if (activeTab === 'browse') {
+      fetchRestaurants();
+      fetchSpecialOrders();
+    }
+  }, [activeTab]);
+
+  const fetchRestaurants = async () => {
+    setLoading(true);
+    try {
+      const [homeResponse, traditionalResponse] = await Promise.all([
+        axios.get(`${API}/restaurants`),
+        axios.get(`${API}/traditional-restaurants`)
+      ]);
+      setHomeRestaurants(homeResponse.data);
+      setTraditionalRestaurants(traditionalResponse.data);
+    } catch (error) {
+      console.error('Failed to fetch restaurants:', error);
+    }
+    setLoading(false);
   };
 
-  return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="home-restaurant">
-        <h2 className="text-3xl font-bold mb-4">Transform Your Home Into a Restaurant</h2>
-        <p className="text-lg mb-6">
-          Turn your passion for cooking into a profitable business. Open your kitchen to food lovers 
-          in your community and share authentic, homemade meals.
-        </p>
+  const fetchSpecialOrders = async () => {
+    try {
+      const response = await axios.get(`${API}/special-orders`);
+      setSpecialOrders(response.data);
+    } catch (error) {
+      console.error('Failed to fetch special orders:', error);
+    }
+  };
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="glass p-6">
-            <h3 className="text-xl font-semibold mb-3">🏠 Home Dining Experience</h3>
-            <ul className="text-sm space-y-2">
-              <li>• Host 2-8 guests in your dining room</li>
-              <li>• Set your own menu and prices</li>
-              <li>• Share your cultural heritage through food</li>
-              <li>• Build a community of food lovers</li>
-            </ul>
+  const RestaurantBrowsingTab = () => (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold heading-gradient mb-4">Restaurant Marketplace</h2>
+        <p className="text-gray-600 mb-6">Discover home kitchens and traditional restaurants offering unique dining experiences</p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+          <div className="glass p-4 text-center">
+            <h3 className="font-semibold mb-2">🏠 Home Restaurants</h3>
+            <p className="text-sm text-gray-600">Intimate dining in local homes</p>
+            <p className="font-bold text-green-600">{homeRestaurants.length} available</p>
           </div>
-
-          <div className="glass p-6">
-            <h3 className="text-xl font-semibold mb-3">💰 Earning Potential</h3>
-            <ul className="text-sm space-y-2">
-              <li>• $30-80 per person per meal</li>
-              <li>• Host 1-3 dinners per week</li>
-              <li>• Monthly potential: $500-2000+</li>
-              <li>• Platform fee: only 15%</li>
-            </ul>
+          <div className="glass p-4 text-center">
+            <h3 className="font-semibold mb-2">🍽️ Traditional Restaurants</h3>
+            <p className="text-sm text-gray-600">Special orders & custom meals</p>
+            <p className="font-bold text-blue-600">{specialOrders.length} special orders</p>
           </div>
         </div>
+      </div>
 
-        <div className="text-center">
-          <button
-            onClick={toggleRestaurantMode}
-            className={`px-8 py-4 text-lg font-semibold rounded-xl transition-all ${
-              isRestaurantMode 
-                ? 'bg-red-500 hover:bg-red-600 text-white' 
-                : 'btn-primary'
-            }`}
-          >
-            {isRestaurantMode ? 'Close Restaurant 🔴' : 'Open My Kitchen 🟢'}
-          </button>
-        </div>
-
-        {isRestaurantMode && (
-          <div className="mt-8 p-6 bg-white rounded-xl text-gray-800">
-            <h3 className="text-xl font-semibold mb-4">Your Home Restaurant Dashboard</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-green-100 p-4 rounded-lg">
-                <h4 className="font-semibold text-green-800">Today's Bookings</h4>
-                <p className="text-2xl font-bold text-green-600">3</p>
-                <p className="text-sm text-green-700">6:00 PM - Italian Night</p>
-              </div>
-              
-              <div className="bg-blue-100 p-4 rounded-lg">
-                <h4 className="font-semibold text-blue-800">This Week's Revenue</h4>
-                <p className="text-2xl font-bold text-blue-600">$420</p>
-                <p className="text-sm text-blue-700">5 dinners hosted</p>
-              </div>
-              
-              <div className="bg-purple-100 p-4 rounded-lg">
-                <h4 className="font-semibold text-purple-800">Guest Rating</h4>
-                <p className="text-2xl font-bold text-purple-600">4.9 ⭐</p>
-                <p className="text-sm text-purple-700">47 reviews</p>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <h4 className="font-semibold mb-3">Quick Actions</h4>
-              <div className="flex flex-wrap gap-3">
-                <button className="btn-primary px-4 py-2 text-sm">📅 Schedule Dinner</button>
-                <button className="btn-secondary px-4 py-2 text-sm">🍽️ Update Menu</button>
-                <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded text-sm">💬 Message Guests</button>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded text-sm">📊 View Analytics</button>
-              </div>
-            </div>
+      {/* Home Restaurants Section */}
+      <div className="mb-8">
+        <h3 className="text-2xl font-bold text-gray-800 mb-4">🏠 Home Restaurants</h3>
+        {loading ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="loading text-4xl">⏳</div>
+          </div>
+        ) : homeRestaurants.length === 0 ? (
+          <div className="text-center py-8 glass">
+            <p className="text-gray-500">No home restaurants available yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {homeRestaurants.map((restaurant) => (
+              <HomeRestaurantCard key={restaurant.id} restaurant={restaurant} />
+            ))}
           </div>
         )}
       </div>
+
+      {/* Traditional Restaurants & Special Orders Section */}
+      <div>
+        <h3 className="text-2xl font-bold text-gray-800 mb-4">🍽️ Special Orders from Traditional Restaurants</h3>
+        {specialOrders.length === 0 ? (
+          <div className="text-center py-8 glass">
+            <p className="text-gray-500">No special orders available yet.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {specialOrders.map((order) => (
+              <SpecialOrderCard key={order.id} order={order} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const VendorApplicationTab = () => (
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8 text-center">
+        <h2 className="text-3xl font-bold heading-gradient mb-4">Become a Restaurant Partner</h2>
+        <p className="text-gray-600 mb-6">Choose your restaurant type and start earning with Lambalia</p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div 
+            className={`glass p-6 cursor-pointer transition-all ${restaurantType === 'home' ? 'ring-2 ring-green-500' : ''}`}
+            onClick={() => setRestaurantType('home')}
+          >
+            <h3 className="text-xl font-semibold mb-3">🏠 Home Restaurant</h3>
+            <ul className="text-sm space-y-2 text-left">
+              <li>• Host 2-8 guests in your dining room</li>
+              <li>• Share authentic home-cooked meals</li>
+              <li>• Flexible scheduling</li>
+              <li>• $30-80 per person</li>
+            </ul>
+            <div className="mt-4 text-green-600 font-semibold">Monthly potential: $500-2000+</div>
+          </div>
+
+          <div 
+            className={`glass p-6 cursor-pointer transition-all ${restaurantType === 'traditional' ? 'ring-2 ring-blue-500' : ''}`}
+            onClick={() => setRestaurantType('traditional')}
+          >
+            <h3 className="text-xl font-semibold mb-3">🍽️ Traditional Restaurant</h3>
+            <ul className="text-sm space-y-2 text-left">
+              <li>• Create special order proposals</li>
+              <li>• Showcase signature dishes</li>
+              <li>• Delivery & pickup options</li>
+              <li>• $50-200 per person</li>
+            </ul>
+            <div className="mt-4 text-blue-600 font-semibold">Additional revenue stream</div>
+          </div>
+        </div>
+      </div>
+
+      {restaurantType === 'home' ? <HomeRestaurantApplicationForm /> : <TraditionalRestaurantApplicationForm />}
+    </div>
+  );
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Tab Navigation */}
+      <div className="mb-8">
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg max-w-md mx-auto">
+          <button
+            onClick={() => setActiveTab('browse')}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+              activeTab === 'browse'
+                ? 'bg-white text-green-600 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            🍽️ Browse Restaurants
+          </button>
+          <button
+            onClick={() => setActiveTab('vendor')}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+              activeTab === 'vendor'
+                ? 'bg-white text-green-600 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            👩‍🍳 Become a Partner
+          </button>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'browse' ? <RestaurantBrowsingTab /> : <VendorApplicationTab />}
     </div>
   );
 };
