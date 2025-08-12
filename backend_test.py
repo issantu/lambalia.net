@@ -337,6 +337,312 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("Grocery Preferences", success, details)
 
+    # TRADITIONAL RESTAURANT MARKETPLACE TESTS
+
+    def test_traditional_restaurant_vendor_application(self):
+        """Test traditional restaurant vendor application"""
+        if not self.token:
+            return self.log_test("Traditional Restaurant Vendor Application", False, "- No auth token available")
+
+        application_data = {
+            "vendor_type": "traditional_restaurant",
+            "legal_name": "Maria Rossi",
+            "phone_number": "+1-555-0123",
+            "address": "123 Main Street",
+            "city": "New York",
+            "state": "NY",
+            "postal_code": "10001",
+            "country": "US",
+            "restaurant_name": "Nonna's Kitchen",
+            "business_license_number": "NYC-REST-2024-001",
+            "years_in_business": 5,
+            "cuisine_specialties": ["Italian", "Mediterranean"],
+            "dietary_accommodations": ["vegetarian", "gluten_free"],
+            "background_check_consent": True,
+            "has_food_handling_experience": True,
+            "years_cooking_experience": 15,
+            "has_liability_insurance": True,
+            "emergency_contact_name": "Giuseppe Rossi",
+            "emergency_contact_phone": "+1-555-0124",
+            "terms_accepted": True,
+            "privacy_policy_accepted": True
+        }
+
+        success, data = self.make_request('POST', 'vendor/apply', application_data, 200)
+        
+        if success:
+            self.vendor_application_id = data.get('id')
+            vendor_type = data.get('vendor_type', 'unknown')
+            status = data.get('status', 'unknown')
+            details = f"- Application ID: {self.vendor_application_id}, Type: {vendor_type}, Status: {status}"
+        else:
+            details = ""
+            
+        return self.log_test("Traditional Restaurant Vendor Application", success, details)
+
+    def test_admin_approve_vendor_application(self):
+        """Test admin approval of vendor application (simulated)"""
+        if not self.vendor_application_id:
+            return self.log_test("Admin Approve Vendor Application", False, "- No application ID available")
+
+        approval_data = {
+            "approval_notes": "Application approved after document review"
+        }
+
+        success, data = self.make_request('POST', f'admin/vendor/approve/{self.vendor_application_id}', approval_data, 200)
+        
+        if success:
+            status = data.get('status', 'unknown')
+            message = data.get('message', 'unknown')
+            details = f"- Status: {status}, Message: {message}"
+        else:
+            details = ""
+            
+        return self.log_test("Admin Approve Vendor Application", success, details)
+
+    def test_create_traditional_restaurant_profile(self):
+        """Test creating traditional restaurant profile after approval"""
+        if not self.token:
+            return self.log_test("Create Traditional Restaurant Profile", False, "- No auth token available")
+
+        restaurant_data = {
+            "restaurant_name": "Nonna's Kitchen",
+            "business_name": "Nonna's Kitchen LLC",
+            "description": "Authentic Italian cuisine with family recipes passed down through generations",
+            "cuisine_type": ["Italian", "Mediterranean"],
+            "specialty_dishes": ["Homemade Pasta", "Wood-fired Pizza", "Tiramisu"],
+            "phone_number": "+1-555-0123",
+            "website": "https://nonnas-kitchen.com",
+            "business_license_number": "NYC-REST-2024-001",
+            "years_in_business": 5,
+            "seating_capacity": 40,
+            "latitude": 40.7128,
+            "longitude": -74.0060,
+            "operating_days": ["tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+            "operating_hours": {
+                "tuesday": {"start": "17:00", "end": "22:00"},
+                "wednesday": {"start": "17:00", "end": "22:00"},
+                "thursday": {"start": "17:00", "end": "22:00"},
+                "friday": {"start": "17:00", "end": "23:00"},
+                "saturday": {"start": "16:00", "end": "23:00"},
+                "sunday": {"start": "16:00", "end": "21:00"}
+            },
+            "minimum_order_value": 75.0,
+            "maximum_order_value": 400.0,
+            "advance_order_days": 2,
+            "offers_delivery": True,
+            "offers_pickup": True,
+            "delivery_radius_km": 15.0,
+            "photos": [
+                {"type": "exterior", "url": "https://example.com/exterior.jpg", "caption": "Restaurant exterior"},
+                {"type": "interior", "url": "https://example.com/interior.jpg", "caption": "Dining room"}
+            ]
+        }
+
+        success, data = self.make_request('POST', 'vendor/traditional-restaurant/create', restaurant_data, 200)
+        
+        if success:
+            self.traditional_restaurant_id = data.get('id')
+            restaurant_name = data.get('restaurant_name', 'unknown')
+            cuisine_type = data.get('cuisine_type', [])
+            details = f"- Restaurant ID: {self.traditional_restaurant_id}, Name: {restaurant_name}, Cuisine: {cuisine_type}"
+        else:
+            details = ""
+            
+        return self.log_test("Create Traditional Restaurant Profile", success, details)
+
+    def test_get_traditional_restaurants(self):
+        """Test getting traditional restaurants with filtering"""
+        success, data = self.make_request('GET', 'traditional-restaurants')
+        
+        if success:
+            restaurants_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {restaurants_count} traditional restaurants"
+            if restaurants_count > 0:
+                first_restaurant = data[0]
+                details += f", First: {first_restaurant.get('restaurant_name', 'unknown')}"
+        else:
+            details = ""
+            
+        return self.log_test("Get Traditional Restaurants", success, details)
+
+    def test_get_traditional_restaurants_with_filters(self):
+        """Test getting traditional restaurants with various filters"""
+        # Test with cuisine filter
+        success, data = self.make_request('GET', 'traditional-restaurants?cuisine_type=Italian')
+        
+        if success:
+            italian_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {italian_count} Italian restaurants"
+        else:
+            details = ""
+            
+        return self.log_test("Get Traditional Restaurants with Filters", success, details)
+
+    def test_create_special_order(self):
+        """Test creating a special order proposal"""
+        if not self.token:
+            return self.log_test("Create Special Order", False, "- No auth token available")
+
+        from datetime import datetime, timedelta
+        
+        # Create available dates for the next week
+        available_dates = []
+        for i in range(1, 8):
+            date = (datetime.now() + timedelta(days=i)).strftime('%Y-%m-%d')
+            available_dates.append(date)
+
+        special_order_data = {
+            "title": "Romantic Italian Dinner for Two",
+            "description": "A carefully curated 4-course Italian dinner featuring seasonal ingredients and wine pairings",
+            "cuisine_style": "Italian",
+            "occasion_type": "romantic",
+            "proposed_menu_items": [
+                {"name": "Antipasto Misto", "description": "Selection of Italian cured meats and cheeses", "course": "appetizer"},
+                {"name": "Risotto ai Porcini", "description": "Creamy risotto with wild mushrooms", "course": "primo"},
+                {"name": "Osso Buco", "description": "Braised veal shanks with saffron risotto", "course": "secondo"},
+                {"name": "Tiramisu", "description": "Classic Italian dessert with espresso", "course": "dessert"}
+            ],
+            "includes_appetizers": True,
+            "includes_main_course": True,
+            "includes_dessert": True,
+            "includes_beverages": False,
+            "price_per_person": 85.0,
+            "minimum_people": 2,
+            "maximum_people": 8,
+            "vegetarian_options": True,
+            "vegan_options": False,
+            "gluten_free_options": True,
+            "allergen_info": ["dairy", "gluten", "eggs"],
+            "special_accommodations": "Can accommodate dietary restrictions with 24-hour notice",
+            "available_dates": available_dates,
+            "preparation_time_hours": 3,
+            "advance_notice_hours": 48,
+            "delivery_available": True,
+            "pickup_available": True,
+            "dine_in_available": False,
+            "expires_at": (datetime.now() + timedelta(days=30)).isoformat()
+        }
+
+        success, data = self.make_request('POST', 'special-orders/create', special_order_data, 200)
+        
+        if success:
+            self.special_order_id = data.get('id')
+            title = data.get('title', 'unknown')
+            price = data.get('price_per_person', 0)
+            details = f"- Order ID: {self.special_order_id}, Title: {title}, Price: ${price}/person"
+        else:
+            details = ""
+            
+        return self.log_test("Create Special Order", success, details)
+
+    def test_get_special_orders(self):
+        """Test getting all special orders"""
+        success, data = self.make_request('GET', 'special-orders')
+        
+        if success:
+            orders_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {orders_count} special orders"
+            if orders_count > 0:
+                first_order = data[0]
+                details += f", First: {first_order.get('title', 'unknown')}"
+        else:
+            details = ""
+            
+        return self.log_test("Get Special Orders", success, details)
+
+    def test_get_special_orders_with_filters(self):
+        """Test getting special orders with various filters"""
+        # Test with cuisine filter
+        success, data = self.make_request('GET', 'special-orders?cuisine_style=Italian&max_price=100')
+        
+        if success:
+            filtered_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {filtered_count} Italian orders under $100/person"
+        else:
+            details = ""
+            
+        return self.log_test("Get Special Orders with Filters", success, details)
+
+    def test_get_special_order_details(self):
+        """Test getting detailed information about a specific special order"""
+        if not self.special_order_id:
+            return self.log_test("Get Special Order Details", False, "- No special order ID available")
+
+        success, data = self.make_request('GET', f'special-orders/{self.special_order_id}')
+        
+        if success:
+            title = data.get('title', 'unknown')
+            restaurant_name = data.get('restaurant_name', 'unknown')
+            views_count = data.get('views_count', 0)
+            details = f"- Title: {title}, Restaurant: {restaurant_name}, Views: {views_count}"
+        else:
+            details = ""
+            
+        return self.log_test("Get Special Order Details", success, details)
+
+    def test_book_special_order(self):
+        """Test booking a special order"""
+        if not self.special_order_id or not self.token:
+            return self.log_test("Book Special Order", False, "- Missing special order ID or auth token")
+
+        from datetime import datetime, timedelta
+        
+        # Use tomorrow's date for booking
+        booking_date = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%dT18:00:00Z')
+
+        booking_data = {
+            "booking_type": "special_order",
+            "special_order_id": self.special_order_id,
+            "booking_date": booking_date,
+            "number_of_guests": 4,
+            "service_type": "delivery",
+            "delivery_address": "456 Oak Avenue, New York, NY 10002",
+            "dietary_restrictions": ["vegetarian"],
+            "special_requests": "Please include extra bread",
+            "guest_message": "Looking forward to this special dinner!"
+        }
+
+        success, data = self.make_request('POST', f'special-orders/{self.special_order_id}/book', booking_data, 200)
+        
+        if success:
+            self.special_order_booking_id = data.get('id')
+            total_amount = data.get('total_amount', 0)
+            confirmation_code = data.get('confirmation_code', 'unknown')
+            details = f"- Booking ID: {self.special_order_booking_id}, Total: ${total_amount}, Code: {confirmation_code}"
+        else:
+            details = ""
+            
+        return self.log_test("Book Special Order", success, details)
+
+    def test_special_order_validation_scenarios(self):
+        """Test validation scenarios for special orders"""
+        if not self.special_order_id or not self.token:
+            return self.log_test("Special Order Validation", False, "- Missing special order ID or auth token")
+
+        from datetime import datetime, timedelta
+        
+        # Test booking with invalid guest count (too few)
+        booking_date = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%dT18:00:00Z')
+        
+        invalid_booking_data = {
+            "booking_type": "special_order",
+            "special_order_id": self.special_order_id,
+            "booking_date": booking_date,
+            "number_of_guests": 1,  # Below minimum of 2
+            "service_type": "delivery",
+            "delivery_address": "456 Oak Avenue, New York, NY 10002"
+        }
+
+        success, data = self.make_request('POST', f'special-orders/{self.special_order_id}/book', invalid_booking_data, 400)
+        
+        if success:  # Success means we got the expected 400 error
+            details = "- Correctly rejected booking with invalid guest count"
+        else:
+            details = "- Failed to validate guest count properly"
+            
+        return self.log_test("Special Order Validation", success, details)
+
     def run_all_tests(self):
         """Run all API tests in sequence"""
         print("🚀 Starting Enhanced Lambalia Backend API Tests")
