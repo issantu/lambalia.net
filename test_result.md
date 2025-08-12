@@ -176,6 +176,8 @@ test_plan:
   current_focus:
     - "Expand marketplace models for traditional restaurants"
     - "Add API endpoints for traditional restaurant management"
+    - "Create traditional restaurant registration UI"
+    - "Implement special order browsing and booking"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
