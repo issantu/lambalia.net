@@ -28,6 +28,12 @@ class LambaliaEnhancedAPITester:
         self.tests_run = 0
         self.tests_passed = 0
         self.snippet_id = None
+        
+        # Traditional restaurant marketplace test data
+        self.vendor_application_id = None
+        self.traditional_restaurant_id = None
+        self.special_order_id = None
+        self.special_order_booking_id = None
 
     def log_test(self, name: str, success: bool, details: str = ""):
         """Log test results"""
