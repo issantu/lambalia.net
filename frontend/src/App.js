@@ -518,6 +518,607 @@ const AdComponent = ({ placement = "feed" }) => {
 };
 
 // Home Restaurant Feature Component
+// Home Restaurant Card Component
+const HomeRestaurantCard = ({ restaurant }) => (
+  <div className="recipe-card">
+    <div className="p-6">
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">{restaurant.restaurant_name}</h3>
+          <p className="text-sm text-gray-500">by Host • {restaurant.address}</p>
+        </div>
+        <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+          Home Kitchen
+        </span>
+      </div>
+      
+      <p className="text-gray-600 mb-3 line-clamp-2">{restaurant.description}</p>
+      
+      <div className="flex items-center text-sm text-gray-500 mb-3">
+        <span>👥 {restaurant.dining_capacity} guests max</span>
+        <span className="mx-2">•</span>
+        <span>💰 ${restaurant.base_price_per_person}/person</span>
+        <span className="mx-2">•</span>
+        <span>⭐ {restaurant.average_rating || 'New'}</span>
+      </div>
+
+      <div className="mb-3">
+        <div className="flex flex-wrap gap-1">
+          {restaurant.cuisine_type.slice(0, 3).map((cuisine, index) => (
+            <span key={index} className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
+              {cuisine}
+            </span>
+          ))}
+        </div>
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-gray-500">
+          {restaurant.is_accepting_bookings ? (
+            <span className="text-green-600">✅ Accepting bookings</span>
+          ) : (
+            <span className="text-red-600">❌ Fully booked</span>
+          )}
+        </div>
+        <button className="btn-primary px-4 py-2 rounded-lg text-sm">
+          Book Now
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+// Special Order Card Component
+const SpecialOrderCard = ({ order }) => (
+  <div className="recipe-card">
+    <div className="p-6">
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">{order.title}</h3>
+          <p className="text-sm text-gray-500">by {order.restaurant_name}</p>
+        </div>
+        <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+          Special Order
+        </span>
+      </div>
+      
+      <p className="text-gray-600 mb-3 line-clamp-2">{order.description}</p>
+      
+      <div className="flex items-center text-sm text-gray-500 mb-3">
+        <span>👥 {order.minimum_people}-{order.maximum_people} people</span>
+        <span className="mx-2">•</span>
+        <span>💰 ${order.price_per_person}/person</span>
+      </div>
+
+      <div className="mb-3">
+        <div className="flex flex-wrap gap-1">
+          <span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded">
+            {order.cuisine_style}
+          </span>
+          {order.occasion_type && (
+            <span className="bg-pink-100 text-pink-700 text-xs px-2 py-1 rounded">
+              {order.occasion_type}
+            </span>
+          )}
+          {order.vegetarian_options && (
+            <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">
+              Vegetarian
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="mb-3">
+        <p className="text-xs text-gray-500">Available services:</p>
+        <div className="flex space-x-2 text-xs mt-1">
+          {order.delivery_available && <span className="bg-gray-100 px-2 py-1 rounded">🚚 Delivery</span>}
+          {order.pickup_available && <span className="bg-gray-100 px-2 py-1 rounded">🏃 Pickup</span>}
+          {order.dine_in_available && <span className="bg-gray-100 px-2 py-1 rounded">🍽️ Dine-in</span>}
+        </div>
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-gray-500">
+          <span>⏰ {order.preparation_time_hours}h prep</span>
+        </div>
+        <button className="btn-primary px-4 py-2 rounded-lg text-sm">
+          View Details
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+// Home Restaurant Application Form
+const HomeRestaurantApplicationForm = () => {
+  const [formData, setFormData] = useState({
+    legal_name: '',
+    phone_number: '',
+    address: '',
+    city: '',
+    state: '',
+    postal_code: '',
+    country: 'US',
+    kitchen_description: '',
+    dining_capacity: 4,
+    cuisine_specialties: [],
+    dietary_accommodations: [],
+    has_food_handling_experience: false,
+    years_cooking_experience: 0,
+    has_liability_insurance: false,
+    emergency_contact_name: '',
+    emergency_contact_phone: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const submitData = {
+        ...formData,
+        vendor_type: 'home_restaurant',
+        dining_capacity: parseInt(formData.dining_capacity),
+        years_cooking_experience: parseInt(formData.years_cooking_experience),
+        background_check_consent: true,
+        terms_accepted: true,
+        privacy_policy_accepted: true
+      };
+
+      await axios.post(`${API}/vendor/apply`, submitData);
+      alert('Application submitted successfully! We will review it within 3-5 business days.');
+    } catch (error) {
+      console.error('Failed to submit application:', error);
+      alert('Failed to submit application. Please try again.');
+    }
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="glass p-8">
+      <h3 className="text-2xl font-bold heading-gradient mb-6">Home Restaurant Application</h3>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Personal Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Legal Name *</label>
+            <input
+              type="text"
+              name="legal_name"
+              value={formData.legal_name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+            <input
+              type="tel"
+              name="phone_number"
+              value={formData.phone_number}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Address */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Home Address *</label>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">State *</label>
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code *</label>
+            <input
+              type="text"
+              name="postal_code"
+              value={formData.postal_code}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Kitchen Information */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Kitchen Description *</label>
+          <textarea
+            name="kitchen_description"
+            value={formData.kitchen_description}
+            onChange={handleInputChange}
+            rows="3"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Describe your kitchen setup, equipment, and dining area..."
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Dining Capacity *</label>
+            <select
+              name="dining_capacity"
+              value={formData.dining_capacity}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              {[2,3,4,5,6,7,8,9,10,12,15,20].map(num => (
+                <option key={num} value={num}>{num} guests</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Cooking Experience (years)</label>
+            <input
+              type="number"
+              name="years_cooking_experience"
+              value={formData.years_cooking_experience}
+              onChange={handleInputChange}
+              min="0"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+        </div>
+
+        {/* Emergency Contact */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Name *</label>
+            <input
+              type="text"
+              name="emergency_contact_name"
+              value={formData.emergency_contact_name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Phone *</label>
+            <input
+              type="tel"
+              name="emergency_contact_phone"
+              value={formData.emergency_contact_phone}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Checkboxes */}
+        <div className="space-y-3">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="has_food_handling_experience"
+              checked={formData.has_food_handling_experience}
+              onChange={handleInputChange}
+              className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">I have food handling experience</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="has_liability_insurance"
+              checked={formData.has_liability_insurance}
+              onChange={handleInputChange}
+              className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">I have liability insurance</span>
+          </label>
+        </div>
+
+        <div className="flex justify-end pt-6">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="btn-primary font-medium py-3 px-8 rounded-lg text-lg disabled:opacity-50"
+          >
+            {submitting ? 'Submitting Application... ⏳' : 'Submit Application ✨'}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+// Traditional Restaurant Application Form
+const TraditionalRestaurantApplicationForm = () => {
+  const [formData, setFormData] = useState({
+    legal_name: '',
+    phone_number: '',
+    address: '',
+    city: '',
+    state: '',
+    postal_code: '',
+    country: 'US',
+    restaurant_name: '',
+    business_license_number: '',
+    years_in_business: 0,
+    cuisine_specialties: [],
+    dietary_accommodations: [],
+    has_food_handling_experience: true,
+    years_cooking_experience: 0,
+    has_liability_insurance: false,
+    emergency_contact_name: '',
+    emergency_contact_phone: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const submitData = {
+        ...formData,
+        vendor_type: 'traditional_restaurant',
+        years_in_business: parseInt(formData.years_in_business),
+        years_cooking_experience: parseInt(formData.years_cooking_experience),
+        background_check_consent: true,
+        terms_accepted: true,
+        privacy_policy_accepted: true
+      };
+
+      await axios.post(`${API}/vendor/apply`, submitData);
+      alert('Application submitted successfully! We will review it within 3-5 business days.');
+    } catch (error) {
+      console.error('Failed to submit application:', error);
+      alert('Failed to submit application. Please try again.');
+    }
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="glass p-8">
+      <h3 className="text-2xl font-bold heading-gradient mb-6">Traditional Restaurant Application</h3>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Personal Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Legal Name *</label>
+            <input
+              type="text"
+              name="legal_name"
+              value={formData.legal_name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+            <input
+              type="tel"
+              name="phone_number"
+              value={formData.phone_number}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Restaurant Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Restaurant Name *</label>
+            <input
+              type="text"
+              name="restaurant_name"
+              value={formData.restaurant_name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Business License Number *</label>
+            <input
+              type="text"
+              name="business_license_number"
+              value={formData.business_license_number}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Years in Business *</label>
+          <input
+            type="number"
+            name="years_in_business"
+            value={formData.years_in_business}
+            onChange={handleInputChange}
+            min="0"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
+        </div>
+
+        {/* Address */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Restaurant Address *</label>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">State *</label>
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Postal Code *</label>
+            <input
+              type="text"
+              name="postal_code"
+              value={formData.postal_code}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Experience */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Professional Cooking Experience (years)</label>
+          <input
+            type="number"
+            name="years_cooking_experience"
+            value={formData.years_cooking_experience}
+            onChange={handleInputChange}
+            min="0"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+
+        {/* Emergency Contact */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Name *</label>
+            <input
+              type="text"
+              name="emergency_contact_name"
+              value={formData.emergency_contact_name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Phone *</label>
+            <input
+              type="tel"
+              name="emergency_contact_phone"
+              value={formData.emergency_contact_phone}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Checkboxes */}
+        <div className="space-y-3">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="has_liability_insurance"
+              checked={formData.has_liability_insurance}
+              onChange={handleInputChange}
+              className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+            />
+            <span className="ml-2 text-sm text-gray-700">I have business liability insurance</span>
+          </label>
+        </div>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 className="font-semibold text-blue-800 mb-2">💼 Traditional Restaurant Benefits</h4>
+          <ul className="text-sm text-blue-700 space-y-1">
+            <li>• Create custom special order proposals</li>
+            <li>• Set your own pricing and menu offerings</li>
+            <li>• Reach customers beyond your normal service area</li>
+            <li>• Generate additional revenue stream with 15% platform fee</li>
+          </ul>
+        </div>
+
+        <div className="flex justify-end pt-6">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="btn-primary font-medium py-3 px-8 rounded-lg text-lg disabled:opacity-50"
+          >
+            {submitting ? 'Submitting Application... ⏳' : 'Submit Application ✨'}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
 const HomeRestaurantPage = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'home-restaurant', 'traditional-restaurant'
