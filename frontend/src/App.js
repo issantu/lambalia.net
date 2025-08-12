@@ -119,7 +119,7 @@ const LoginPage = () => {
     
     const result = await login(email, password);
     if (result.success) {
-      navigate('/');
+      window.location.href = '/';
     } else {
       setError(result.error);
     }
