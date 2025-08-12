@@ -1895,6 +1895,28 @@ function App() {
               } 
             />
             <Route 
+              path="/create-snippet" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <CreateSnippetPage />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/grocery" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <GroceryPage />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/home-restaurant" 
               element={
                 <ProtectedRoute>
