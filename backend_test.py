@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Lambalia Backend API Test Suite
-Tests all backend endpoints for the traditional recipe sharing platform
+Enhanced Lambalia Backend API Test Suite
+Tests all backend endpoints for the enhanced traditional recipe sharing platform
+with snippets, grocery integration, and reference recipes
 """
 
 import requests
@@ -10,7 +11,7 @@ import json
 from datetime import datetime
 from typing import Dict, Any, Optional
 
-class CulinaryConnectAPITester:
+class LambaliaEnhancedAPITester:
     def __init__(self, base_url="https://446b805d-9b3a-4c1a-9d2c-c093357a79b2.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
@@ -21,11 +22,12 @@ class CulinaryConnectAPITester:
             "email": f"test_{datetime.now().strftime('%H%M%S')}@example.com",
             "password": "testpass123",
             "full_name": "Test User",
+            "postal_code": "12345",
             "preferred_language": "en"
         }
         self.tests_run = 0
         self.tests_passed = 0
-        self.recipe_id = None
+        self.snippet_id = None
 
     def log_test(self, name: str, success: bool, details: str = ""):
         """Log test results"""
@@ -142,79 +144,119 @@ class CulinaryConnectAPITester:
             
         return self.log_test("Get Current User", success, details)
 
-    def test_create_recipe(self):
-        """Test creating a new recipe"""
-        if not self.token:
-            return self.log_test("Create Recipe", False, "- No auth token available")
+    # NEW ENHANCED FEATURES TESTS
 
-        recipe_data = {
-            "title": "Test Traditional Pasta",
-            "description": "A traditional Italian pasta recipe passed down through generations",
-            "ingredients": [
-                {"name": "pasta", "amount": "500", "unit": "g"},
-                {"name": "tomatoes", "amount": "4", "unit": "pcs"},
-                {"name": "garlic", "amount": "3", "unit": "cloves"}
-            ],
-            "steps": [
-                {"step_number": "1", "description": "Boil water in a large pot"},
-                {"step_number": "2", "description": "Add pasta and cook for 10 minutes"},
-                {"step_number": "3", "description": "Prepare sauce with tomatoes and garlic"}
-            ],
-            "cooking_time_minutes": 30,
-            "difficulty_level": 2,
-            "servings": 4,
-            "cuisine_type": "Italian",
-            "dietary_preferences": ["vegetarian"],
-            "tags": ["traditional", "pasta", "italian"],
-            "is_premium": False,
-            "premium_price": 0.0
-        }
-
-        success, data = self.make_request('POST', 'recipes', recipe_data, 200)
-        
-        if success:
-            self.recipe_id = data.get('id')
-            title = data.get('title', 'unknown')
-            details = f"- Recipe ID: {self.recipe_id}, Title: {title}"
-        else:
-            details = ""
-            
-        return self.log_test("Create Recipe", success, details)
-
-    def test_get_recipes(self):
-        """Test getting all recipes"""
-        success, data = self.make_request('GET', 'recipes')
+    def test_get_reference_recipes(self):
+        """Test getting reference recipes"""
+        success, data = self.make_request('GET', 'reference-recipes')
         
         if success:
             recipes_count = len(data) if isinstance(data, list) else 0
-            details = f"- Found {recipes_count} recipes"
+            details = f"- Found {recipes_count} reference recipes"
+            if recipes_count > 0:
+                first_recipe = data[0]
+                details += f", First: {first_recipe.get('name_english', 'unknown')}"
         else:
             details = ""
             
-        return self.log_test("Get All Recipes", success, details)
+        return self.log_test("Get Reference Recipes", success, details)
 
-    def test_get_single_recipe(self):
-        """Test getting a single recipe by ID"""
-        if not self.recipe_id:
-            return self.log_test("Get Single Recipe", False, "- No recipe ID available")
-
-        success, data = self.make_request('GET', f'recipes/{self.recipe_id}')
+    def test_get_featured_reference_recipes(self):
+        """Test getting featured reference recipes"""
+        success, data = self.make_request('GET', 'reference-recipes?featured_only=true')
         
         if success:
-            title = data.get('title', 'unknown')
-            author = data.get('author_username', 'unknown')
-            details = f"- Title: {title}, Author: {author}"
+            recipes_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {recipes_count} featured recipes"
         else:
             details = ""
             
-        return self.log_test("Get Single Recipe", success, details)
+        return self.log_test("Get Featured Reference Recipes", success, details)
 
-    def test_like_recipe(self):
-        """Test liking a recipe"""
-        if not self.recipe_id or not self.token:
-            return self.log_test("Like Recipe", False, "- Missing recipe ID or auth token")
+    def test_get_country_reference_recipes(self):
+        """Test getting reference recipes by country"""
+        success, data = self.make_request('GET', 'countries/italy/reference-recipes')
+        
+        if success:
+            recipes_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {recipes_count} Italian recipes"
+        else:
+            details = ""
+            
+        return self.log_test("Get Italian Reference Recipes", success, details)
 
-        success, data = self.make_request('POST', f'recipes/{self.recipe_id}/like')
+    def test_create_snippet(self):
+        """Test creating a recipe snippet"""
+        if not self.token:
+            return self.log_test("Create Snippet", False, "- No auth token available")
+
+        snippet_data = {
+            "title": "Quick Pasta Carbonara",
+            "title_local": "Carbonara Veloce",
+            "local_language": "Italian",
+            "description": "A quick version of the classic Roman pasta dish",
+            "snippet_type": "quick_recipe",
+            "ingredients": [
+                {"name": "spaghetti", "amount": "200", "unit": "g"},
+                {"name": "eggs", "amount": "2", "unit": "pcs"},
+                {"name": "pecorino romano", "amount": "50", "unit": "g"}
+            ],
+            "preparation_steps": [
+                {"step_number": "1", "description": "Boil pasta in salted water"},
+                {"step_number": "2", "description": "Mix eggs and cheese"},
+                {"step_number": "3", "description": "Combine hot pasta with egg mixture"}
+            ],
+            "cooking_time_minutes": 15,
+            "difficulty_level": 2,
+            "servings": 2,
+            "tags": ["quick", "italian", "pasta"],
+            "video_duration": 45
+        }
+
+        success, data = self.make_request('POST', 'snippets', snippet_data, 200)
+        
+        if success:
+            self.snippet_id = data.get('id')
+            title = data.get('title', 'unknown')
+            details = f"- Snippet ID: {self.snippet_id}, Title: {title}"
+        else:
+            details = ""
+            
+        return self.log_test("Create Snippet", success, details)
+
+    def test_get_snippets(self):
+        """Test getting all snippets"""
+        success, data = self.make_request('GET', 'snippets')
+        
+        if success:
+            snippets_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {snippets_count} snippets"
+        else:
+            details = ""
+            
+        return self.log_test("Get All Snippets", success, details)
+
+    def test_get_user_snippets_playlist(self):
+        """Test getting user's snippets playlist"""
+        if not self.user_id:
+            return self.log_test("Get User Snippets Playlist", False, "- No user ID available")
+            
+        success, data = self.make_request('GET', f'users/{self.user_id}/snippets/playlist')
+        
+        if success:
+            snippets_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {snippets_count} snippets in playlist"
+        else:
+            details = ""
+            
+        return self.log_test("Get User Snippets Playlist", success, details)
+
+    def test_like_snippet(self):
+        """Test liking a snippet"""
+        if not self.snippet_id or not self.token:
+            return self.log_test("Like Snippet", False, "- Missing snippet ID or auth token")
+
+        success, data = self.make_request('POST', f'snippets/{self.snippet_id}/like')
         
         if success:
             liked = data.get('liked', False)
@@ -222,68 +264,82 @@ class CulinaryConnectAPITester:
         else:
             details = ""
             
-        return self.log_test("Like Recipe", success, details)
+        return self.log_test("Like Snippet", success, details)
 
-    def test_create_premium_recipe(self):
-        """Test creating a premium recipe"""
+    def test_grocery_search(self):
+        """Test grocery store search functionality"""
         if not self.token:
-            return self.log_test("Create Premium Recipe", False, "- No auth token available")
+            return self.log_test("Grocery Search", False, "- No auth token available")
 
-        premium_recipe_data = {
-            "title": "Secret Family Risotto",
-            "description": "A premium family recipe with secret ingredients",
-            "ingredients": [
-                {"name": "arborio rice", "amount": "300", "unit": "g"},
-                {"name": "secret spice blend", "amount": "1", "unit": "tsp"}
-            ],
-            "steps": [
-                {"step_number": "1", "description": "Heat the pan"},
-                {"step_number": "2", "description": "Add rice and secret ingredients"}
-            ],
-            "cooking_time_minutes": 45,
-            "difficulty_level": 4,
-            "servings": 2,
-            "cuisine_type": "Italian",
-            "is_premium": True,
-            "premium_price": 5.0
+        search_data = {
+            "ingredients": ["tomatoes", "pasta", "cheese"],
+            "user_postal_code": "12345",
+            "max_distance_km": 10.0,
+            "budget_preference": "medium",
+            "delivery_preference": "either"
         }
 
-        success, data = self.make_request('POST', 'recipes', premium_recipe_data, 200)
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
         
         if success:
-            is_premium = data.get('is_premium', False)
-            price = data.get('premium_price', 0)
-            details = f"- Premium: {is_premium}, Price: {price} credits"
+            stores_count = len(data.get('stores', [])) if data else 0
+            total_cost = data.get('total_estimated_cost', 0) if data else 0
+            details = f"- Found {stores_count} stores, Est. cost: ${total_cost}"
         else:
             details = ""
             
-        return self.log_test("Create Premium Recipe", success, details)
+        return self.log_test("Grocery Search", success, details)
 
-    def test_existing_user_login(self):
-        """Test login with the pre-existing test user mentioned in requirements"""
-        existing_user_data = {
-            "email": "test@example.com",
-            "password": "testpass123"
-        }
-        
-        success, data = self.make_request('POST', 'auth/login', existing_user_data, 200)
+    def test_nearby_stores(self):
+        """Test getting nearby grocery stores"""
+        if not self.token:
+            return self.log_test("Get Nearby Stores", False, "- No auth token available")
+
+        success, data = self.make_request('GET', 'grocery/stores/nearby?postal_code=12345&radius_km=10')
         
         if success:
-            token = data.get('access_token')
-            user_data = data.get('user', {})
-            username = user_data.get('username', 'unknown')
-            details = f"- User: {username}, Token: {'✓' if token else '✗'}"
+            stores_count = len(data.get('stores', [])) if data else 0
+            details = f"- Found {stores_count} nearby stores"
         else:
-            # This might fail if user doesn't exist, which is expected
-            details = "- Pre-existing test user not found (expected)"
-            success = True  # Don't count this as a failure
+            details = ""
             
-        return self.log_test("Existing Test User Login", success, details)
+        return self.log_test("Get Nearby Stores", success, details)
+
+    def test_grocery_preferences(self):
+        """Test updating and getting grocery preferences"""
+        if not self.token:
+            return self.log_test("Grocery Preferences", False, "- No auth token available")
+
+        # Test updating preferences
+        preferences_data = {
+            "preferred_stores": ["store_1", "store_2"],
+            "max_distance_km": 15.0,
+            "budget_preference": "medium",
+            "dietary_restrictions": ["vegetarian"],
+            "delivery_preference": "pickup"
+        }
+
+        success, data = self.make_request('POST', 'users/grocery-preferences', preferences_data, 200)
+        
+        if not success:
+            return self.log_test("Update Grocery Preferences", success, "")
+
+        # Test getting preferences
+        success, data = self.make_request('GET', 'users/me/grocery-preferences')
+        
+        if success:
+            budget_pref = data.get('budget_preference', 'unknown')
+            delivery_pref = data.get('delivery_preference', 'unknown')
+            details = f"- Budget: {budget_pref}, Delivery: {delivery_pref}"
+        else:
+            details = ""
+            
+        return self.log_test("Grocery Preferences", success, details)
 
     def run_all_tests(self):
         """Run all API tests in sequence"""
-        print("🚀 Starting Lambalia Backend API Tests")
-        print("=" * 60)
+        print("🚀 Starting Enhanced Lambalia Backend API Tests")
+        print("=" * 70)
         
         # Basic endpoint tests
         self.test_health_check()
@@ -294,34 +350,44 @@ class CulinaryConnectAPITester:
         self.test_user_login()
         self.test_get_current_user()
         
-        # Recipe tests
-        self.test_create_recipe()
-        self.test_get_recipes()
-        self.test_get_single_recipe()
-        self.test_like_recipe()
-        self.test_create_premium_recipe()
+        # Reference recipes tests
+        print("\n📚 Testing Reference Recipes...")
+        self.test_get_reference_recipes()
+        self.test_get_featured_reference_recipes()
+        self.test_get_country_reference_recipes()
         
-        # Test existing user (mentioned in requirements)
-        self.test_existing_user_login()
+        # Snippets tests
+        print("\n🎬 Testing Recipe Snippets...")
+        self.test_create_snippet()
+        self.test_get_snippets()
+        self.test_get_user_snippets_playlist()
+        self.test_like_snippet()
+        
+        # Grocery integration tests
+        print("\n🛒 Testing Grocery Integration...")
+        self.test_grocery_search()
+        self.test_nearby_stores()
+        self.test_grocery_preferences()
         
         # Print summary
-        print("\n" + "=" * 60)
+        print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
         
         if self.tests_passed == self.tests_run:
-            print("🎉 All tests passed! Backend API is working correctly.")
+            print("🎉 All tests passed! Enhanced Lambalia Backend API is working correctly.")
             return 0
         else:
-            print(f"⚠️  {self.tests_run - self.tests_passed} tests failed. Check the issues above.")
+            failed_count = self.tests_run - self.tests_passed
+            print(f"⚠️  {failed_count} tests failed. Check the issues above.")
             return 1
 
 def main():
     """Main test runner"""
-    print("CulinaryConnect Backend API Test Suite")
+    print("Enhanced Lambalia Backend API Test Suite")
     print(f"Testing against: https://446b805d-9b3a-4c1a-9d2c-c093357a79b2.preview.emergentagent.com")
     print()
     
-    tester = CulinaryConnectAPITester()
+    tester = LambaliaEnhancedAPITester()
     return tester.run_all_tests()
 
 if __name__ == "__main__":
