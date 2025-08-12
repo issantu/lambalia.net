@@ -1005,7 +1005,7 @@ async def startup_event():
     await db.vendor_applications.create_index("status")
     await db.vendor_applications.create_index("vendor_type")
     await db.home_restaurants.create_index("vendor_id")
-    await db.home_restaurants.create_index([("latitude", "2dsphere"), ("longitude", "2dsphere")])
+    await db.home_restaurants.create_index([("location", "2dsphere")])
     await db.traditional_restaurants.create_index("vendor_id")
     await db.traditional_restaurants.create_index([("location", "2dsphere")])
     await db.traditional_restaurants.create_index("cuisine_type")
