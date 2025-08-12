@@ -189,6 +189,25 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(status_code=401, detail="Invalid token")
 
 # Authentication Routes (keeping existing ones)
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy", "service": "lambalia-api", "timestamp": datetime.utcnow()}
+
+@api_router.get("/countries")
+async def get_countries():
+    """Get all countries with native recipes"""
+    return get_all_countries_with_recipes()
+
+@api_router.get("/users/me")
+async def get_current_user_profile(current_user_id: str = Depends(get_current_user)):
+    """Get current user profile"""
+    user = await db.users.find_one({"id": current_user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return UserResponse(**user)
+
 @api_router.post("/auth/register", response_model=TokenResponse)
 async def register_user(user_data: UserRegistration):
     existing_user = await db.users.find_one({"$or": [{"email": user_data.email}, {"username": user_data.username}]})
