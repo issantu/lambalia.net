@@ -54,6 +54,7 @@ class DocumentType(str, Enum):
 class VendorApplication(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
+    vendor_type: VendorType = VendorType.HOME_RESTAURANT
     
     # Personal Information
     legal_name: str
@@ -64,9 +65,16 @@ class VendorApplication(BaseModel):
     postal_code: str
     country: str
     
-    # Kitchen Information
-    kitchen_description: str
-    dining_capacity: int = Field(ge=2, le=20)
+    # Kitchen Information (for home restaurants)
+    kitchen_description: Optional[str] = None
+    dining_capacity: Optional[int] = Field(default=None, ge=2, le=20)
+    
+    # Restaurant Information (for traditional restaurants)
+    restaurant_name: Optional[str] = None
+    business_license_number: Optional[str] = None
+    years_in_business: Optional[int] = 0
+    
+    # Common Information
     cuisine_specialties: List[str] = []
     dietary_accommodations: List[str] = []
     
