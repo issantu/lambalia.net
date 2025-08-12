@@ -642,6 +642,287 @@ async def update_restaurant_rating(restaurant_id: str):
             }
         )
 
+# TRADITIONAL RESTAURANT ROUTES
+
+@api_router.post("/vendor/traditional-restaurant/create", response_model=TraditionalRestaurantResponse)
+async def create_traditional_restaurant(
+    restaurant_data: TraditionalRestaurantRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create traditional restaurant profile after vendor approval"""
+    
+    # Verify user is approved vendor
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get('is_vendor'):
+        raise HTTPException(status_code=403, detail="User is not an approved vendor")
+    
+    # Get approved application
+    application = await db.vendor_applications.find_one({
+        "user_id": current_user_id,
+        "vendor_type": VendorType.TRADITIONAL_RESTAURANT,
+        "status": VendorStatus.APPROVED
+    })
+    if not application:
+        raise HTTPException(status_code=404, detail="No approved traditional restaurant application found")
+    
+    # Create restaurant profile
+    restaurant = TraditionalRestaurantProfile(
+        vendor_id=current_user_id,
+        application_id=application['id'],
+        address=application['address'],
+        **restaurant_data.dict()
+    )
+    
+    await db.traditional_restaurants.insert_one(restaurant.dict())
+    
+    return TraditionalRestaurantResponse(**restaurant.dict())
+
+@api_router.get("/traditional-restaurants", response_model=List[TraditionalRestaurantResponse])
+async def get_traditional_restaurants(
+    city: Optional[str] = None,
+    cuisine_type: Optional[str] = None,
+    min_rating: Optional[float] = None,
+    max_delivery_distance: Optional[float] = None,
+    latitude: Optional[float] = None,
+    longitude: Optional[float] = None
+):
+    """Get available traditional restaurants with filtering"""
+    
+    query = {"is_active": True, "is_accepting_orders": True}
+    
+    if city:
+        query["address"] = {"$regex": city, "$options": "i"}
+    
+    if cuisine_type:
+        query["cuisine_type"] = {"$in": [cuisine_type]}
+    
+    if min_rating:
+        query["average_rating"] = {"$gte": min_rating}
+    
+    # TODO: Add geospatial queries for latitude/longitude and delivery distance
+    
+    restaurants_cursor = db.traditional_restaurants.find(query).limit(50)
+    restaurants = await restaurants_cursor.to_list(length=50)
+    
+    return [TraditionalRestaurantResponse(**restaurant) for restaurant in restaurants]
+
+@api_router.post("/special-orders/create", response_model=SpecialOrderResponse)
+async def create_special_order(
+    order_data: SpecialOrderRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create a special order proposal for traditional restaurant"""
+    
+    # Verify user is approved traditional restaurant vendor
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get('is_vendor'):
+        raise HTTPException(status_code=403, detail="User is not an approved vendor")
+    
+    # Get traditional restaurant profile
+    restaurant = await db.traditional_restaurants.find_one({"vendor_id": current_user_id})
+    if not restaurant:
+        raise HTTPException(status_code=404, detail="Traditional restaurant profile not found")
+    
+    # Calculate platform pricing
+    base_price = order_data.price_per_person
+    platform_commission = base_price * 0.15  # 15% commission
+    vendor_payout = base_price - platform_commission
+    
+    # Create special order
+    order_dict = order_data.dict()
+    order_dict['restaurant_id'] = restaurant['id']
+    order_dict['vendor_id'] = current_user_id
+    order_dict['platform_commission'] = platform_commission
+    order_dict['vendor_payout_per_person'] = vendor_payout
+    order_dict['status'] = OrderStatus.ACTIVE
+    
+    # Parse expires_at if provided
+    if order_data.expires_at:
+        order_dict['expires_at'] = datetime.fromisoformat(order_data.expires_at.replace('Z', '+00:00'))
+    
+    special_order = SpecialOrder(**order_dict)
+    await db.special_orders.insert_one(special_order.dict())
+    
+    # Add restaurant name for response
+    response_data = special_order.dict()
+    response_data['restaurant_name'] = restaurant['restaurant_name']
+    
+    return SpecialOrderResponse(**response_data)
+
+@api_router.get("/special-orders", response_model=List[SpecialOrderResponse])
+async def get_special_orders(
+    city: Optional[str] = None,
+    cuisine_style: Optional[str] = None,
+    occasion_type: Optional[str] = None,
+    max_price: Optional[float] = None,
+    min_people: Optional[int] = None,
+    max_people: Optional[int] = None,
+    delivery_available: Optional[bool] = None,
+    pickup_available: Optional[bool] = None,
+    vegetarian_options: Optional[bool] = None,
+    vegan_options: Optional[bool] = None
+):
+    """Get available special orders with filtering"""
+    
+    query = {"status": OrderStatus.ACTIVE}
+    
+    if city:
+        # Join with traditional restaurants to filter by city
+        query["restaurant_id"] = {"$in": []}  # Will be populated by restaurant lookup
+    
+    if cuisine_style:
+        query["cuisine_style"] = {"$regex": cuisine_style, "$options": "i"}
+    
+    if occasion_type:
+        query["occasion_type"] = occasion_type
+    
+    if max_price:
+        query["price_per_person"] = {"$lte": max_price}
+    
+    if min_people:
+        query["maximum_people"] = {"$gte": min_people}
+    
+    if max_people:
+        query["minimum_people"] = {"$lte": max_people}
+    
+    if delivery_available is not None:
+        query["delivery_available"] = delivery_available
+    
+    if pickup_available is not None:
+        query["pickup_available"] = pickup_available
+    
+    if vegetarian_options is not None:
+        query["vegetarian_options"] = vegetarian_options
+    
+    if vegan_options is not None:
+        query["vegan_options"] = vegan_options
+    
+    orders_cursor = db.special_orders.find(query).limit(50).sort("created_at", -1)
+    orders = await orders_cursor.to_list(length=50)
+    
+    # Enrich with restaurant names
+    for order in orders:
+        restaurant = await db.traditional_restaurants.find_one({"id": order['restaurant_id']})
+        order['restaurant_name'] = restaurant['restaurant_name'] if restaurant else "Unknown Restaurant"
+    
+    return [SpecialOrderResponse(**order) for order in orders]
+
+@api_router.get("/special-orders/{order_id}", response_model=SpecialOrderResponse)
+async def get_special_order(order_id: str):
+    """Get detailed information about a special order"""
+    
+    order = await db.special_orders.find_one({"id": order_id, "status": OrderStatus.ACTIVE})
+    if not order:
+        raise HTTPException(status_code=404, detail="Special order not found")
+    
+    # Get restaurant info
+    restaurant = await db.traditional_restaurants.find_one({"id": order['restaurant_id']})
+    order['restaurant_name'] = restaurant['restaurant_name'] if restaurant else "Unknown Restaurant"
+    
+    # Increment views count
+    await db.special_orders.update_one(
+        {"id": order_id},
+        {"$inc": {"views_count": 1}}
+    )
+    
+    return SpecialOrderResponse(**order)
+
+@api_router.post("/special-orders/{order_id}/book", response_model=BookingResponse)
+async def book_special_order(
+    order_id: str,
+    booking_data: BookingRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Book a special order from traditional restaurant"""
+    
+    # Get special order details
+    special_order = await db.special_orders.find_one({"id": order_id, "status": OrderStatus.ACTIVE})
+    if not special_order:
+        raise HTTPException(status_code=404, detail="Special order not found")
+    
+    # Get restaurant details
+    restaurant = await db.traditional_restaurants.find_one({"id": special_order['restaurant_id']})
+    if not restaurant:
+        raise HTTPException(status_code=404, detail="Restaurant not found")
+    
+    # Validate number of guests
+    if booking_data.number_of_guests < special_order['minimum_people'] or booking_data.number_of_guests > special_order['maximum_people']:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Number of guests must be between {special_order['minimum_people']} and {special_order['maximum_people']}"
+        )
+    
+    # Parse booking date
+    booking_date = datetime.fromisoformat(booking_data.booking_date.replace('Z', '+00:00'))
+    
+    # Check if booking date is available
+    if booking_date.strftime('%Y-%m-%d') not in special_order['available_dates']:
+        raise HTTPException(status_code=400, detail="Selected date is not available for this special order")
+    
+    # Calculate pricing
+    price_per_person = special_order['price_per_person']
+    total_amount = price_per_person * booking_data.number_of_guests
+    platform_commission = special_order['platform_commission'] * booking_data.number_of_guests
+    vendor_payout = special_order['vendor_payout_per_person'] * booking_data.number_of_guests
+    
+    # Create payment intent
+    payment_intent = await payment_service.create_payment_intent(
+        booking_id=str(uuid.uuid4()),
+        amount=total_amount,
+        vendor_id=special_order['vendor_id']
+    )
+    
+    # Create booking
+    booking = Booking(
+        guest_id=current_user_id,
+        vendor_id=special_order['vendor_id'],
+        booking_type="special_order",
+        special_order_id=order_id,
+        booking_date=booking_date,
+        number_of_guests=booking_data.number_of_guests,
+        service_type=booking_data.service_type,
+        delivery_address=booking_data.delivery_address,
+        price_per_person=price_per_person,
+        total_amount=total_amount,
+        platform_commission=platform_commission,
+        vendor_payout=vendor_payout,
+        dietary_restrictions=booking_data.dietary_restrictions,
+        special_requests=booking_data.special_requests,
+        guest_message=booking_data.guest_message,
+        payment_id=payment_intent['payment_intent_id']
+    )
+    
+    await db.bookings.insert_one(booking.dict())
+    
+    # Create payment record
+    payment_record = Payment(
+        booking_id=booking.id,
+        amount=total_amount,
+        platform_commission=platform_commission,
+        vendor_payout=vendor_payout,
+        stripe_payment_intent_id=payment_intent['payment_intent_id']
+    )
+    
+    await db.payments.insert_one(payment_record.dict())
+    
+    # Update special order booking count
+    await db.special_orders.update_one(
+        {"id": order_id},
+        {"$inc": {"total_bookings": 1}}
+    )
+    
+    return BookingResponse(
+        id=booking.id,
+        booking_date=booking_date,
+        number_of_guests=booking_data.number_of_guests,
+        total_amount=total_amount,
+        status=booking.status,
+        restaurant_name=restaurant['restaurant_name'],
+        vendor_name="Chef",  # TODO: Get actual vendor name
+        payment_status=booking.payment_status,
+        confirmation_code=booking.id[:8].upper()
+    )
+
 # Webhook endpoint for Stripe
 @api_router.post("/webhooks/stripe")
 async def stripe_webhook(request: Request):
