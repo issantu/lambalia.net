@@ -116,8 +116,7 @@ class HomeRestaurant(BaseModel):
     
     # Location & Photos
     address: str
-    latitude: float
-    longitude: float
+    location: Dict[str, Any] = Field(default_factory=lambda: {"type": "Point", "coordinates": [0.0, 0.0]})  # GeoJSON format
     photos: List[Dict[str, str]] = []  # {"type": "kitchen", "url": "...", "caption": "..."}
     
     # Pricing & Availability
