@@ -142,6 +142,119 @@ class HomeRestaurant(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
+class TraditionalRestaurantProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    vendor_id: str
+    application_id: str
+    
+    # Restaurant Details
+    restaurant_name: str
+    business_name: str
+    description: str
+    cuisine_type: List[str] = []
+    specialty_dishes: List[str] = []
+    
+    # Location & Contact
+    address: str
+    latitude: float
+    longitude: float
+    phone_number: str
+    website: Optional[str] = None
+    
+    # Business Information
+    business_license_number: str
+    years_in_business: int
+    seating_capacity: int
+    
+    # Photos & Media
+    photos: List[Dict[str, str]] = []  # {"type": "exterior", "url": "...", "caption": "..."}
+    menu_photos: List[Dict[str, str]] = []
+    
+    # Operating Information
+    operating_days: List[str] = []  # ["monday", "friday", "saturday"]
+    operating_hours: Dict[str, Dict[str, str]] = {}  # {"monday": {"start": "11:00", "end": "22:00"}}
+    
+    # Special Order Settings
+    accepts_special_orders: bool = True
+    minimum_order_value: float = Field(default=50.0, ge=25.0)
+    maximum_order_value: float = Field(default=500.0, le=1000.0)
+    advance_order_days: int = 3  # How many days in advance orders need to be placed
+    
+    # Delivery & Pickup
+    offers_delivery: bool = True
+    offers_pickup: bool = True
+    delivery_radius_km: float = Field(default=10.0, le=25.0)
+    
+    # Reviews & Performance
+    average_rating: float = 0.0
+    total_reviews: int = 0
+    total_orders: int = 0
+    fulfillment_rate: float = 100.0  # Percentage of orders successfully fulfilled
+    
+    # Status
+    is_active: bool = True
+    is_accepting_orders: bool = True
+    last_active: datetime = Field(default_factory=datetime.utcnow)
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class SpecialOrder(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    restaurant_id: str
+    vendor_id: str
+    
+    # Order Details
+    title: str
+    description: str
+    cuisine_style: str
+    occasion_type: Optional[str] = None  # "birthday", "anniversary", "corporate", etc.
+    
+    # Menu Items
+    proposed_menu_items: List[Dict[str, Any]] = []  # [{"name": "Dish", "description": "...", "price": 15.99}]
+    includes_appetizers: bool = False
+    includes_main_course: bool = True
+    includes_dessert: bool = False
+    includes_beverages: bool = False
+    
+    # Pricing & Capacity
+    price_per_person: float = Field(ge=15.0, le=200.0)
+    minimum_people: int = Field(default=4, ge=2)
+    maximum_people: int = Field(default=20, le=50)
+    
+    # Dietary & Special Requirements
+    vegetarian_options: bool = False
+    vegan_options: bool = False
+    gluten_free_options: bool = False
+    allergen_info: List[str] = []
+    special_accommodations: str = ""
+    
+    # Timing & Availability
+    available_dates: List[str] = []  # ISO date strings when this order is available
+    preparation_time_hours: int = Field(default=2, ge=1, le=8)
+    advance_notice_hours: int = Field(default=48, ge=24)
+    
+    # Delivery Options
+    delivery_available: bool = True
+    pickup_available: bool = True
+    dine_in_available: bool = False  # For restaurants that allow special orders to be consumed on-premises
+    
+    # Platform Pricing (Calculated by platform)
+    platform_commission: float = 0.0
+    vendor_payout_per_person: float = 0.0
+    
+    # Status & Metrics
+    status: OrderStatus = OrderStatus.DRAFT
+    total_bookings: int = 0
+    views_count: int = 0
+    saves_count: int = 0
+    
+    # Expiry
+    expires_at: Optional[datetime] = None
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
 class MenuOffering(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     restaurant_id: str
