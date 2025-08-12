@@ -414,6 +414,8 @@ async def create_home_restaurant(
         raise HTTPException(status_code=404, detail="No approved vendor application found")
     
     # Create restaurant profile
+    location_data = {"type": "Point", "coordinates": [restaurant_data.get('longitude', 0.0), restaurant_data.get('latitude', 0.0)]}
+    
     restaurant = HomeRestaurant(
         vendor_id=current_user_id,
         application_id=application['id'],
@@ -422,8 +424,7 @@ async def create_home_restaurant(
         cuisine_type=restaurant_data.get('cuisine_type', []),
         dining_capacity=restaurant_data['dining_capacity'],
         address=application['address'],
-        latitude=restaurant_data.get('latitude', 0.0),
-        longitude=restaurant_data.get('longitude', 0.0),
+        location=location_data,
         base_price_per_person=restaurant_data['base_price_per_person'],
         operating_days=restaurant_data.get('operating_days', []),
         operating_hours=restaurant_data.get('operating_hours', {}),
