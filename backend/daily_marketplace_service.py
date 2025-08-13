@@ -414,7 +414,7 @@ class DailyMarketplaceService:
             "expires_at": {"$gt": datetime.utcnow()}
         }
         
-        requests_cursor = self.db.eating_requests.find(query).sort("created_at", -1).limit(50)
+        requests_cursor = self.db.eating_requests.find(query, {"_id": 0}).sort("created_at", -1).limit(50)
         requests = await requests_cursor.to_list(length=50)
         
         # Filter by location and add distance
