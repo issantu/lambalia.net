@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the newly implemented Enhanced Ad System & Monetization features (Phase 3) for Lambalia - the advanced revenue optimization system that maximizes platform profitability while maintaining excellent user experience through intelligent optimization."
+user_problem_statement: "Test the Enhanced Local Marketplace with Charity Program Integration system. Focus on charity program registration, activity submission, premium membership via charity, community impact metrics, local organizations, farm ecosystem integration with 15% commission rates, premium benefits, and impact calculator."
 
 backend:
   - task: "Expand marketplace models for traditional restaurants"
