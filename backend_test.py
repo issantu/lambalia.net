@@ -2233,6 +2233,22 @@ class LambaliaEnhancedAPITester:
         self.test_commission_surge_pricing()
         self.test_monetization_revenue_streams()
         
+        # Charity Program Integration tests - Social Impact System
+        print("\n🤝 Testing Charity Program Integration (Social Impact System)...")
+        self.test_charity_program_registration()
+        self.test_charity_activity_submission()
+        self.test_premium_membership_via_charity()
+        self.test_community_impact_metrics()
+        self.test_local_organizations()
+        self.test_farm_ecosystem_integration_commission()
+        self.test_premium_benefits()
+        self.test_impact_calculator()
+        
+        print("\n🌟 Testing Social Impact Features...")
+        self.test_charity_commission_reduction_tiers()
+        self.test_social_impact_scoring_system()
+        self.test_integration_profit_and_social_impact()
+        
         # Print summary
         print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
