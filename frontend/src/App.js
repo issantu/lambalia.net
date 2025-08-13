@@ -4,6 +4,7 @@ import axios from 'axios';
 import './App.css';
 import RecipeExplorer from './RecipeExplorer';
 import LocalMarketplacePage from './LocalMarketplace';
+import CharityProgramPage from './CharityProgram';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
