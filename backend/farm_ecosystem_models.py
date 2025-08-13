@@ -21,6 +21,13 @@ class ProductCategory(str, Enum):
     ORGANIC_PRODUCE = "organic_produce"
     FRUITS = "fruits"
     HERBS_SPICES = "herbs_spices"
+    MICROGREENS = "microgreens"                # For small-scale growers
+    LEAFY_GREENS = "leafy_greens"             # Lettuce, spinach, kale
+    TOMATOES = "tomatoes"                      # Popular backyard crop
+    PEPPERS = "peppers"                        # Hot and sweet varieties
+    CUCUMBERS = "cucumbers"                    # Easy garden crop
+    SQUASH_ZUCCHINI = "squash_zucchini"       # High-yield crops
+    BERRIES = "berries"                        # Strawberries, raspberries
     DAIRY_PRODUCTS = "dairy_products"
     FRESH_MEAT = "fresh_meat"
     POULTRY = "poultry"
@@ -28,6 +35,10 @@ class ProductCategory(str, Enum):
     HONEY = "honey"
     GRAINS = "grains"
     NUTS = "nuts"
+    PRESERVED_FOODS = "preserved_foods"        # Jams, pickles, canned goods
+    BAKED_GOODS = "baked_goods"               # Using garden ingredients
+    STARTER_PLANTS = "starter_plants"          # Seedlings and plants
+    SEEDS = "seeds"                           # Heirloom and specialty seeds
     SPECIALTY_ITEMS = "specialty_items"
 
 class ProductAvailability(str, Enum):
