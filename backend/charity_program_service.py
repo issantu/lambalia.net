@@ -279,51 +279,79 @@ class CharityProgramService:
     async def get_community_impact_metrics(self) -> Dict[str, Any]:
         """Get platform-wide community impact metrics"""
         
-        # Aggregate metrics from all users
-        pipeline = [
-            {
-                "$match": {"verification_status": VerificationStatus.APPROVED}
-            },
-            {
-                "$group": {
-                    "_id": None,
-                    "total_food_donated": {"$sum": "$food_donated_lbs"},
-                    "total_meals_provided": {"$sum": "$meals_provided"},
-                    "total_people_helped": {"$sum": "$people_helped"},
-                    "total_volunteer_hours": {"$sum": "$volunteer_hours"},
-                    "total_activities": {"$sum": 1},
-                    "total_impact_score": {"$sum": "$calculated_impact_score"}
+        try:
+            # Aggregate metrics from all users
+            pipeline = [
+                {
+                    "$match": {"verification_status": VerificationStatus.APPROVED}
+                },
+                {
+                    "$group": {
+                        "_id": None,
+                        "total_food_donated": {"$sum": {"$ifNull": ["$food_donated_lbs", 0]}},
+                        "total_meals_provided": {"$sum": {"$ifNull": ["$meals_provided", 0]}},
+                        "total_people_helped": {"$sum": {"$ifNull": ["$people_helped", 0]}},
+                        "total_volunteer_hours": {"$sum": {"$ifNull": ["$volunteer_hours", 0]}},
+                        "total_activities": {"$sum": 1},
+                        "total_impact_score": {"$sum": {"$ifNull": ["$calculated_impact_score", 0]}}
+                    }
+                }
+            ]
+            
+            aggregate_result = await self.db.charity_activities.aggregate(pipeline).to_list(length=1)
+            metrics = aggregate_result[0] if aggregate_result else {
+                "total_food_donated": 0.0,
+                "total_meals_provided": 0,
+                "total_people_helped": 0,
+                "total_volunteer_hours": 0.0,
+                "total_activities": 0,
+                "total_impact_score": 0.0
+            }
+            
+            # Get additional stats
+            active_participants = await self.db.charity_programs.count_documents({"is_active": True})
+            premium_via_charity = await self.db.premium_memberships.count_documents({"earned_through": {"$in": ["charity_work", "both"]}})
+            
+            # Get top contributors (limit to prevent errors)
+            top_contributors = await self._get_top_community_contributors(limit=5)
+            
+            return {
+                "total_food_donated_lbs": float(metrics.get("total_food_donated", 0.0)),
+                "total_meals_provided": int(metrics.get("total_meals_provided", 0)),
+                "total_people_helped": int(metrics.get("total_people_helped", 0)),
+                "total_volunteer_hours": float(metrics.get("total_volunteer_hours", 0.0)),
+                "total_activities": int(metrics.get("total_activities", 0)),
+                "total_impact_score": float(metrics.get("total_impact_score", 0.0)),
+                "active_participants": active_participants,
+                "premium_members_via_charity": premium_via_charity,
+                "top_contributors": top_contributors,
+                "estimated_food_waste_diverted": float(metrics.get("total_food_donated", 0.0)),
+                "estimated_environmental_impact": {
+                    "co2_saved_lbs": float(metrics.get("total_food_donated", 0.0)) * 2.5,  # Rough estimate
+                    "water_saved_gallons": float(metrics.get("total_food_donated", 0.0)) * 10,
+                    "economic_value_created": float(metrics.get("total_meals_provided", 0)) * 3.50  # Average meal value
                 }
             }
-        ]
-        
-        aggregate_result = await self.db.charity_activities.aggregate(pipeline).to_list(length=1)
-        metrics = aggregate_result[0] if aggregate_result else {}
-        
-        # Get additional stats
-        active_participants = await self.db.charity_programs.count_documents({"is_active": True})
-        premium_via_charity = await self.db.premium_memberships.count_documents({"earned_through": {"$in": ["charity_work", "both"]}})
-        
-        # Get top contributors
-        top_contributors = await self._get_top_community_contributors()
-        
-        return {
-            "total_food_donated_lbs": metrics.get("total_food_donated", 0.0),
-            "total_meals_provided": metrics.get("total_meals_provided", 0),
-            "total_people_helped": metrics.get("total_people_helped", 0),
-            "total_volunteer_hours": metrics.get("total_volunteer_hours", 0.0),
-            "total_activities": metrics.get("total_activities", 0),
-            "total_impact_score": metrics.get("total_impact_score", 0.0),
-            "active_participants": active_participants,
-            "premium_members_via_charity": premium_via_charity,
-            "top_contributors": top_contributors,
-            "estimated_food_waste_diverted": metrics.get("total_food_donated", 0.0),
-            "estimated_environmental_impact": {
-                "co2_saved_lbs": metrics.get("total_food_donated", 0.0) * 2.5,  # Rough estimate
-                "water_saved_gallons": metrics.get("total_food_donated", 0.0) * 10,
-                "economic_value_created": metrics.get("total_meals_provided", 0) * 3.50  # Average meal value
+        except Exception as e:
+            self.logger.error(f"Error getting community impact metrics: {str(e)}")
+            # Return safe default values
+            return {
+                "total_food_donated_lbs": 0.0,
+                "total_meals_provided": 0,
+                "total_people_helped": 0,
+                "total_volunteer_hours": 0.0,
+                "total_activities": 0,
+                "total_impact_score": 0.0,
+                "active_participants": 0,
+                "premium_members_via_charity": 0,
+                "top_contributors": [],
+                "estimated_food_waste_diverted": 0.0,
+                "estimated_environmental_impact": {
+                    "co2_saved_lbs": 0.0,
+                    "water_saved_gallons": 0.0,
+                    "economic_value_created": 0.0
+                }
             }
-        }
     
     async def get_premium_membership_benefits(self, user_id: str) -> Dict[str, Any]:
         """Get detailed premium membership benefits for user"""
