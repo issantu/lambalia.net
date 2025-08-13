@@ -2635,6 +2635,17 @@ function App() {
               } 
             />
             <Route 
+              path="/charity-program" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <CharityProgramPage />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/profile" 
               element={
                 <ProtectedRoute>
