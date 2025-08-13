@@ -314,7 +314,7 @@ class FarmEcosystemService:
         
         # Calculate pricing
         subtotal = sum(item["total_price"] for item in order_data["items"])
-        platform_commission = subtotal * 0.10  # 10% commission for farm products
+        platform_commission = subtotal * 0.15  # 15% commission for farm products
         delivery_fee = order_data.get("delivery_fee", 0.0)
         total_amount = subtotal + delivery_fee
         farmer_payout = subtotal - platform_commission
