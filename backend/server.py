@@ -195,6 +195,25 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
+async def get_current_user_optional(credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))) -> Optional[str]:
+    """Optional authentication - returns user_id if authenticated, None otherwise"""
+    if not credentials:
+        return None
+    
+    try:
+        payload = jwt.decode(credentials.credentials, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        user_id = payload.get('user_id')
+        if user_id is None:
+            return None
+        
+        user = await db.users.find_one({"id": user_id})
+        if not user:
+            return None
+        
+        return user_id
+    except (jwt.ExpiredSignatureError, jwt.JWTError):
+        return None
+
 # Authentication Routes (keeping existing ones)
 @api_router.get("/health")
 async def health_check():
