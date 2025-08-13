@@ -1859,10 +1859,10 @@ class LambaliaEnhancedAPITester:
             return self.log_test("Premium Membership via Charity", False, "- No auth token available")
 
         upgrade_data = {
-            "desired_tier": "foodie_pro",
-            "use_charity_points": True,
-            "charity_points_to_use": 500,
-            "payment_method": "charity_earned"
+            "tier": "garden_supporter",
+            "payment_method": "charity_work",
+            "monthly_payment_amount": 0.0,
+            "charity_commitment": True
         }
 
         success, data = self.make_request('POST', 'charity/premium-upgrade', upgrade_data, 200)
