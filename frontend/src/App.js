@@ -2614,6 +2614,17 @@ function App() {
               } 
             />
             <Route 
+              path="/local-marketplace" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <LocalMarketplacePage />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/profile" 
               element={
                 <ProtectedRoute>
