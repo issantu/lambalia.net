@@ -343,6 +343,9 @@ const Header = () => {
             <Link to="/home-restaurant" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
               🏠👩‍🍳 Restaurant
             </Link>
+            <Link to="/local-marketplace" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+              🌱🛒 Local Market
+            </Link>
             <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
               👤 Profile
             </Link>
