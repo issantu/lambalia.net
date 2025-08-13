@@ -1038,7 +1038,7 @@ class LambaliaEnhancedAPITester:
 def main():
     """Main test runner"""
     print("Enhanced Lambalia Backend API Test Suite")
-    print(f"Testing against: https://foodie-share.preview.emergentagent.com")
+    print(f"Testing against: https://60782b34-2e04-483f-bfaa-6a39ebd6777d.preview.emergentagent.com")
     print()
     
     tester = LambaliaEnhancedAPITester()
