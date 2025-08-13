@@ -1056,7 +1056,7 @@ async def get_local_cooking_offers(
         # Enrich with cook information
         enriched_offers = []
         for offer in offers:
-            cook = await db.users.find_one({"id": offer["cook_id"]})
+            cook = await db.users.find_one({"id": offer["cook_id"]}, {"_id": 0})
             offer["cook_name"] = cook.get("full_name", "Chef") if cook else "Chef"
             offer["cook_rating"] = cook.get("rating", 0.0) if cook else 0.0
             enriched_offers.append(offer)
