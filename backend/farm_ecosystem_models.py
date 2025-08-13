@@ -142,8 +142,8 @@ class FarmVendorApplication(BaseModel):
     # Terms & Compliance
     terms_accepted: bool = False
     food_safety_training: bool = False
-    commission_rate_accepted: float = 0.10  # 10% platform fee for farm products
-    dining_commission_rate: float = 0.15  # 15% for farm dining experiences
+    commission_rate_accepted: float = 0.15  # 15% platform fee for farm products
+    dining_commission_rate: float = 0.15    # 15% for farm dining experiences
 
 class FarmProfile(BaseModel):
     """Approved farm vendor profile"""
