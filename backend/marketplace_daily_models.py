@@ -155,8 +155,8 @@ class EatingRequest(BaseModel):
     # Preferences
     preferred_date: Optional[datetime] = None
     flexible_dates: bool = True
-    preferred_time_start: Optional[str] = Field(None, regex=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
-    preferred_time_end: Optional[str] = Field(None, regex=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    preferred_time_start: Optional[str] = Field(None, pattern=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    preferred_time_end: Optional[str] = Field(None, pattern=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
     number_of_servings: int = Field(..., ge=1, le=8)
     
     # Location (for matching)
