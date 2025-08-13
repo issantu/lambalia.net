@@ -2287,6 +2287,466 @@ async def get_translation_stats():
         logger.error(f"Get translation stats error: {str(e)}")
         raise HTTPException(status_code=500, detail="Translation service error")
 
+# CHARITY PROGRAM & PREMIUM MEMBERSHIP ROUTES - Social Impact Integration
+
+@api_router.post("/charity/register", response_model=dict)
+async def register_for_charity_program(
+    registration_data: CharityProgramRegistrationRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Register user for charity program to earn premium membership"""
+    try:
+        program = await charity_program_service.register_charity_program(
+            registration_data.dict(), current_user_id
+        )
+        
+        return {
+            "success": True,
+            "program_id": program.id,
+            "message": "Successfully registered for charity program!",
+            "benefits": [
+                "Earn premium membership through community service",
+                "Reduce platform commission rates",
+                "Gain community recognition",
+                "Make positive local impact"
+            ],
+            "next_steps": [
+                "Start volunteering at local food banks",
+                "Submit charity activities for verification",
+                "Upload evidence of your community work",
+                "Build your impact score for premium benefits"
+            ],
+            "monthly_goal": program.monthly_impact_goal,
+            "premium_tier": "Community Helper",
+            "commission_reduction": "14% (1% reduction from standard 15%)"
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to register charity program: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/charity/submit-activity", response_model=dict)
+async def submit_charity_activity(
+    activity_data: CharityActivitySubmissionRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Submit charity activity for verification and impact scoring"""
+    try:
+        activity = await charity_program_service.submit_charity_activity(
+            activity_data.dict(), current_user_id
+        )
+        
+        return {
+            "success": True,
+            "activity_id": activity.id,
+            "message": "Charity activity submitted successfully!",
+            "impact_score": activity.calculated_impact_score,
+            "verification_status": activity.verification_status,
+            "review_process": {
+                "status": "Submitted for committee review",
+                "estimated_review_time": "2-5 business days",
+                "next_steps": [
+                    "Committee will verify your documents",
+                    "Impact score will be confirmed",
+                    "You'll receive email notification of results"
+                ]
+            },
+            "activity_summary": {
+                "type": activity.activity_type,
+                "organization": activity.charity_organization_name,
+                "date": activity.activity_date.isoformat(),
+                "food_donated_lbs": activity.food_donated_lbs,
+                "meals_provided": activity.meals_provided,
+                "people_helped": activity.people_helped,
+                "volunteer_hours": activity.volunteer_hours
+            }
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to submit charity activity: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/charity/dashboard", response_model=dict)
+async def get_charity_dashboard(current_user_id: str = Depends(get_current_user)):
+    """Get comprehensive charity dashboard for user"""
+    try:
+        dashboard = await charity_program_service.get_user_charity_dashboard(current_user_id)
+        
+        if "error" in dashboard:
+            return {
+                "success": False,
+                "error": dashboard["error"],
+                "registration_available": True,
+                "message": "Register for charity program to start earning premium benefits through community service"
+            }
+        
+        return {
+            "success": True,
+            **dashboard
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get charity dashboard: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/charity/community-impact", response_model=dict)
+async def get_community_impact_metrics():
+    """Get platform-wide community impact metrics"""
+    try:
+        metrics = await charity_program_service.get_community_impact_metrics()
+        
+        return {
+            "success": True,
+            "community_impact": metrics,
+            "message": "Lambalia community making a difference one meal at a time!"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get community impact metrics: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/charity/premium-upgrade", response_model=dict)
+async def upgrade_premium_via_charity(
+    upgrade_data: PremiumMembershipUpgradeRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Upgrade premium membership through charity work or payment"""
+    try:
+        membership = await charity_program_service.upgrade_premium_membership(
+            upgrade_data.dict(), current_user_id
+        )
+        
+        tier_names = {
+            PremiumTier.COMMUNITY_HELPER: "Community Helper",
+            PremiumTier.GARDEN_SUPPORTER: "Garden Supporter", 
+            PremiumTier.LOCAL_CHAMPION: "Local Champion"
+        }
+        
+        commission_rates = {
+            PremiumTier.COMMUNITY_HELPER: 14,  # 15% -> 14%
+            PremiumTier.GARDEN_SUPPORTER: 13,  # 15% -> 13%
+            PremiumTier.LOCAL_CHAMPION: 12    # 15% -> 12%
+        }
+        
+        tier = PremiumTier(membership["tier"])
+        
+        return {
+            "success": True,
+            "membership_id": membership["id"],
+            "tier": tier.value,
+            "tier_name": tier_names[tier],
+            "earned_through": membership["earned_through"],
+            "commission_rate": f"{commission_rates[tier]}%",
+            "monthly_payment": membership["monthly_payment"],
+            "benefits_active": True,
+            "message": f"Successfully upgraded to {tier_names[tier]}!",
+            "key_benefits": [
+                f"Commission reduced to {commission_rates[tier]}%",
+                "Priority customer support",
+                "Community recognition badge",
+                "Advanced analytics dashboard"
+            ]
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to upgrade premium via charity: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/charity/premium-benefits", response_model=dict)
+async def get_charity_premium_benefits(current_user_id: str = Depends(get_current_user)):
+    """Get detailed premium membership benefits earned through charity"""
+    try:
+        benefits = await charity_program_service.get_premium_membership_benefits(current_user_id)
+        
+        if "error" in benefits:
+            return {
+                "success": False,
+                "error": benefits["error"],
+                "available_tiers": [
+                    {
+                        "tier": "community_helper",
+                        "name": "Community Helper",
+                        "cost": "FREE through 4 hours monthly charity work",
+                        "commission_rate": "14% (1% savings)",
+                        "requirements": "2 charity activities, 5 lbs food donated monthly"
+                    },
+                    {
+                        "tier": "garden_supporter", 
+                        "name": "Garden Supporter",
+                        "cost": "$4.99/month OR 8 hours monthly charity work",
+                        "commission_rate": "13% (2% savings)",
+                        "requirements": "3 charity activities, 15 lbs food donated monthly"
+                    },
+                    {
+                        "tier": "local_champion",
+                        "name": "Local Champion", 
+                        "cost": "$9.99/month OR 12 hours monthly charity work",
+                        "commission_rate": "12% (3% savings)",
+                        "requirements": "5 charity activities, 30 lbs food donated monthly"
+                    }
+                ]
+            }
+        
+        return {
+            "success": True,
+            **benefits
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get charity premium benefits: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/charity/local-organizations", response_model=List[dict])
+async def get_local_charity_organizations(
+    postal_code: str = "10001",
+    charity_types: Optional[str] = None,
+    current_user_id: str = Depends(get_current_user_optional)
+):
+    """Get local charity organizations for users to volunteer with"""
+    try:
+        # Parse charity types filter
+        types_filter = []
+        if charity_types:
+            types_filter = charity_types.split(",")
+        
+        # Mock data for now - in production would query actual partner database
+        organizations = [
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Downtown Food Bank",
+                "type": "food_bank",
+                "description": "Providing food assistance to families in need since 1985",
+                "address": "123 Main St, Downtown",
+                "phone": "(555) 123-4567",
+                "email": "volunteer@downtownfoodbank.org",
+                "website": "https://downtownfoodbank.org",
+                "services": ["Food distribution", "Emergency meals", "Senior nutrition"],
+                "volunteer_opportunities": [
+                    "Food sorting and packing",
+                    "Distribution assistance", 
+                    "Delivery to seniors",
+                    "Special events"
+                ],
+                "operating_hours": {
+                    "monday": "9:00 AM - 5:00 PM",
+                    "tuesday": "9:00 AM - 5:00 PM", 
+                    "wednesday": "9:00 AM - 5:00 PM",
+                    "thursday": "9:00 AM - 5:00 PM",
+                    "friday": "9:00 AM - 5:00 PM",
+                    "saturday": "9:00 AM - 2:00 PM",
+                    "sunday": "Closed"
+                },
+                "current_needs": ["Volunteers for weekend distribution", "Food donations"],
+                "impact_last_month": {
+                    "people_served": 450,
+                    "meals_provided": 1800,
+                    "volunteer_hours": 320
+                }
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Community Shelter",
+                "type": "homeless_shelter",
+                "description": "Emergency shelter and support services for homeless individuals and families",
+                "address": "456 Oak Ave, Midtown",
+                "phone": "(555) 234-5678",
+                "email": "help@communityshelter.org",
+                "services": ["Emergency shelter", "Meals", "Case management", "Job training"],
+                "volunteer_opportunities": [
+                    "Meal preparation and serving",
+                    "Clothing donations organization",
+                    "Life skills workshops",
+                    "Transportation assistance"
+                ],
+                "operating_hours": {
+                    "daily": "24/7 Emergency Services"
+                },
+                "current_needs": ["Kitchen volunteers", "Meal donations", "Clothing donations"],
+                "impact_last_month": {
+                    "people_served": 125,
+                    "meals_provided": 2400,
+                    "volunteer_hours": 180
+                }
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Community Kitchen Network",
+                "type": "community_kitchen",
+                "description": "Community-operated kitchen providing free meals and cooking education",
+                "address": "789 Pine St, Westside",
+                "phone": "(555) 345-6789",
+                "email": "info@communitykitchen.org",
+                "services": ["Free community meals", "Cooking classes", "Nutrition education"],
+                "volunteer_opportunities": [
+                    "Cooking and meal prep",
+                    "Teaching cooking classes",
+                    "Garden maintenance",
+                    "Event coordination"
+                ],
+                "operating_hours": {
+                    "monday": "11:00 AM - 7:00 PM",
+                    "wednesday": "11:00 AM - 7:00 PM",
+                    "friday": "11:00 AM - 7:00 PM",
+                    "saturday": "10:00 AM - 3:00 PM"
+                },
+                "current_needs": ["Cooking instructors", "Fresh produce", "Kitchen equipment"],
+                "impact_last_month": {
+                    "people_served": 300,
+                    "meals_provided": 900,
+                    "volunteer_hours": 240
+                }
+            }
+        ]
+        
+        # Filter by charity types if specified
+        if types_filter:
+            organizations = [org for org in organizations if org["type"] in types_filter]
+        
+        return organizations
+        
+    except Exception as e:
+        logger.error(f"Failed to get local charity organizations: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/charity/activity-types", response_model=List[dict])
+async def get_charity_activity_types():
+    """Get available charity activity types for submissions"""
+    types = [
+        {
+            "value": "food_bank",
+            "label": "Food Bank",
+            "icon": "🏪",
+            "description": "Volunteering at local food banks",
+            "typical_activities": ["Food sorting", "Distribution", "Inventory management"],
+            "impact_multiplier": 1.2
+        },
+        {
+            "value": "homeless_shelter", 
+            "label": "Homeless Shelter",
+            "icon": "🏠",
+            "description": "Supporting homeless individuals and families",
+            "typical_activities": ["Meal service", "Shelter support", "Case management"],
+            "impact_multiplier": 1.3
+        },
+        {
+            "value": "community_kitchen",
+            "label": "Community Kitchen", 
+            "icon": "👩‍🍳",
+            "description": "Community meal preparation and service",
+            "typical_activities": ["Cooking", "Meal prep", "Teaching cooking skills"],
+            "impact_multiplier": 1.1
+        },
+        {
+            "value": "seniors_center",
+            "label": "Seniors Center",
+            "icon": "👵",
+            "description": "Supporting elderly community members",
+            "typical_activities": ["Meal delivery", "Social activities", "Transportation"],
+            "impact_multiplier": 1.1
+        },
+        {
+            "value": "school_program",
+            "label": "School Program",
+            "icon": "🏫", 
+            "description": "Supporting school nutrition programs",
+            "typical_activities": ["Breakfast programs", "After-school snacks", "Nutrition education"],
+            "impact_multiplier": 1.2
+        },
+        {
+            "value": "emergency_relief",
+            "label": "Emergency Relief",
+            "icon": "🚨",
+            "description": "Emergency disaster and crisis response",
+            "typical_activities": ["Emergency meals", "Disaster relief", "Crisis support"],
+            "impact_multiplier": 1.5
+        },
+        {
+            "value": "local_charity",
+            "label": "Local Charity",
+            "icon": "❤️",
+            "description": "Other local charitable organizations",
+            "typical_activities": ["Community events", "Fundraising", "General volunteering"],
+            "impact_multiplier": 1.0
+        }
+    ]
+    
+    return types
+
+@api_router.get("/charity/impact-calculator", response_model=dict)
+async def calculate_charity_impact(
+    activity_type: str,
+    food_donated_lbs: Optional[float] = None,
+    meals_provided: Optional[int] = None,
+    people_helped: Optional[int] = None,
+    volunteer_hours: Optional[float] = None
+):
+    """Calculate potential impact score for charity activity (preview)"""
+    try:
+        # Create a mock activity for calculation
+        from charity_program_models import CharityActivity
+        
+        mock_activity = CharityActivity(
+            id="preview",
+            user_id="preview",
+            charity_program_id="preview",
+            activity_type=CharityType(activity_type),
+            charity_organization_name="Preview",
+            activity_description="Impact calculation preview",
+            activity_date=datetime.utcnow(),
+            location_address="Preview",
+            city="Preview",
+            state="Preview", 
+            postal_code="00000",
+            food_donated_lbs=food_donated_lbs,
+            meals_provided=meals_provided,
+            people_helped=people_helped,
+            volunteer_hours=volunteer_hours
+        )
+        
+        impact_calculator = CharityImpactCalculator()
+        impact_score = impact_calculator.calculate_activity_impact_score(mock_activity)
+        
+        # Determine tier progress
+        tier_requirements = impact_calculator.calculate_tier_requirements()
+        
+        tier_progress = []
+        for tier, requirements in tier_requirements.items():
+            progress_percentage = min(100, (impact_score / requirements["monthly_impact_required"]) * 100)
+            tier_progress.append({
+                "tier": tier.value,
+                "tier_name": tier.value.replace("_", " ").title(),
+                "required_score": requirements["monthly_impact_required"],
+                "progress_percentage": round(progress_percentage, 1),
+                "this_activity_contribution": round(progress_percentage, 1)
+            })
+        
+        return {
+            "success": True,
+            "estimated_impact_score": impact_score,
+            "activity_breakdown": {
+                "base_score": 10.0,
+                "food_donation_points": (food_donated_lbs or 0) * 2.0,
+                "meals_provided_points": (meals_provided or 0) * 5.0,
+                "people_helped_points": (people_helped or 0) * 3.0,
+                "volunteer_hours_points": (volunteer_hours or 0) * 8.0
+            },
+            "tier_progress": tier_progress,
+            "next_tier_info": tier_progress[1] if len(tier_progress) > 1 else None,
+            "monthly_activities_needed": f"With this impact level, you'd need {max(1, int(30/max(1, impact_score)))} similar activities per month for Community Helper tier"
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid activity type: {activity_type}")
+    except Exception as e:
+        logger.error(f"Failed to calculate charity impact: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Webhook endpoint for Stripe
 @api_router.post("/webhooks/stripe")
 async def stripe_webhook(request: Request):
