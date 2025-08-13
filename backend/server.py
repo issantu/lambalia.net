@@ -1316,6 +1316,9 @@ async def get_daily_marketplace_stats():
 farm_ecosystem_service = FarmEcosystemService(db)
 farm_matching_service = LocalFarmMatchingService(db)
 
+# Initialize charity program service
+charity_program_service = CharityProgramService(db)
+
 @api_router.post("/farm-vendors/apply", response_model=dict)
 async def apply_as_farm_vendor(
     application_data: FarmVendorApplicationRequest,
