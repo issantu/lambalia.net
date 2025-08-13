@@ -1960,6 +1960,28 @@ async def startup_event():
     await db.cooking_appointments.create_index("status")
     await db.cooking_appointments.create_index("scheduled_date")
     
+    # Create indexes for enhanced monetization system
+    await db.advertisements.create_index("advertiser_id")
+    await db.advertisements.create_index("status")
+    await db.advertisements.create_index("ad_type")
+    await db.advertisements.create_index([("start_date", 1), ("end_date", 1)])
+    await db.advertisements.create_index("placement_types")
+    await db.user_engagement_profiles.create_index("user_id", unique=True)
+    await db.user_engagement_profiles.create_index("engagement_level")
+    await db.user_engagement_profiles.create_index("last_updated")
+    await db.premium_subscriptions.create_index("user_id", unique=True)
+    await db.premium_subscriptions.create_index("is_active")
+    await db.premium_subscriptions.create_index("tier")
+    await db.premium_subscriptions.create_index("next_billing_date")
+    await db.ad_impressions.create_index("ad_id")
+    await db.ad_impressions.create_index("user_id")
+    await db.ad_impressions.create_index("timestamp")
+    await db.ad_impressions.create_index("placement")
+    await db.surge_pricing.create_index("applies_to")
+    await db.surge_pricing.create_index("is_active")
+    await db.surge_pricing.create_index([("activated_at", 1), ("duration_minutes", 1)])
+    await db.revenue_analytics.create_index([("date", 1), ("period_type", 1)], unique=True)
+    
     # Existing indexes
     await db.users.create_index("email", unique=True)
     await db.users.create_index("username", unique=True)
