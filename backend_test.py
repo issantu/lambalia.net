@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 class LambaliaEnhancedAPITester:
-    def __init__(self, base_url="https://foodie-share.preview.emergentagent.com"):
+    def __init__(self, base_url="https://60782b34-2e04-483f-bfaa-6a39ebd6777d.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
