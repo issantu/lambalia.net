@@ -1162,8 +1162,8 @@ async def book_cooking_offer(
         appointment = await daily_marketplace.book_cooking_offer(appointment_dict, current_user_id)
         
         # Get cook and offer info for response
-        offer = await db.cooking_offers.find_one({"id": appointment_data.offer_id})
-        cook = await db.users.find_one({"id": appointment.cook_id})
+        offer = await db.cooking_offers.find_one({"id": appointment_data.offer_id}, {"_id": 0})
+        cook = await db.users.find_one({"id": appointment.cook_id}, {"_id": 0})
         
         return {
             "success": True,
