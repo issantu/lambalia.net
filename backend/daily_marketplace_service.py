@@ -475,5 +475,5 @@ class DailyMarketplaceService:
         """Get all appointments for a user (as cook or eater)"""
         appointments_cursor = self.db.cooking_appointments.find({
             "$or": [{"cook_id": user_id}, {"eater_id": user_id}]
-        }).sort("scheduled_date", -1)
+        }, {"_id": 0}).sort("scheduled_date", -1)
         return await appointments_cursor.to_list(length=100)
