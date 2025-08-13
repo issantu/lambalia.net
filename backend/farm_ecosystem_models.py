@@ -92,8 +92,9 @@ class FarmVendorApplication(BaseModel):
     country: str = "US"
     
     # Farm Specifications
-    total_acres: float = Field(..., ge=0.1, le=10000.0)
-    farming_methods: List[str] = []  # ["organic", "sustainable", "conventional", "permaculture"]
+    total_acres: float = Field(..., ge=0.01, le=10000.0)  # Allow smaller plots (0.01 acres = ~436 sq ft)
+    growing_area_type: str = "backyard"  # "backyard", "community_plot", "rooftop", "greenhouse", "farm_field"
+    farming_methods: List[str] = []  # ["organic", "sustainable", "conventional", "permaculture", "hydroponic"]
     primary_products: List[ProductCategory] = []
     
     # Certifications
