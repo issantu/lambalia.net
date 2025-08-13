@@ -333,6 +333,7 @@ class DailyMarketplaceService:
             total_amount=total_amount,
             platform_commission_amount=platform_commission,
             cook_payout_amount=cook_payout,
+            cook_address=offer.get("address", "Cook's location"),  # Add cook address
             **appointment_data
         )
         
