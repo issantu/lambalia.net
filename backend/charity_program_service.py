@@ -683,33 +683,50 @@ class CharityProgramService:
     async def _get_top_community_contributors(self, limit: int = 10) -> List[Dict]:
         """Get top community contributors"""
         
-        pipeline = [
-            {
-                "$match": {"is_active": True}
-            },
-            {
-                "$sort": {"total_impact_score": -1}
-            },
-            {
-                "$limit": limit
-            },
-            {
-                "$lookup": {
-                    "from": "users",
-                    "localField": "user_id",
-                    "foreignField": "id",
-                    "as": "user_info"
+        try:
+            pipeline = [
+                {
+                    "$match": {"is_active": True}
+                },
+                {
+                    "$sort": {"total_impact_score": -1}
+                },
+                {
+                    "$limit": limit
+                },
+                {
+                    "$project": {
+                        "user_id": 1,
+                        "total_impact_score": 1
+                    }
                 }
-            },
-            {
-                "$project": {
-                    "user_id": 1,
-                    "total_impact_score": 1,
-                    "username": {"$arrayElemAt": ["$user_info.username", 0]},
-                    "full_name": {"$arrayElemAt": ["$user_info.full_name", 0]}
-                }
-            }
-        ]
-        
-        contributors = await self.db.charity_programs.aggregate(pipeline).to_list(length=limit)
-        return contributors
+            ]
+            
+            contributors = await self.db.charity_programs.aggregate(pipeline).to_list(length=limit)
+            
+            # For each contributor, try to get user info but handle missing data gracefully
+            result = []
+            for contributor in contributors:
+                try:
+                    user_info = await self.db.users.find_one({"id": contributor["user_id"]}, {"_id": 0, "username": 1, "full_name": 1})
+                    
+                    result.append({
+                        "user_id": contributor["user_id"],
+                        "total_impact_score": contributor.get("total_impact_score", 0),
+                        "username": user_info.get("username", "Anonymous") if user_info else "Anonymous",
+                        "full_name": user_info.get("full_name", "") if user_info else ""
+                    })
+                except Exception as e:
+                    self.logger.warning(f"Could not get user info for contributor {contributor['user_id']}: {str(e)}")
+                    # Still include contributor with basic info
+                    result.append({
+                        "user_id": contributor["user_id"],
+                        "total_impact_score": contributor.get("total_impact_score", 0),
+                        "username": "Anonymous",
+                        "full_name": ""
+                    })
+            
+            return result
+        except Exception as e:
+            self.logger.error(f"Error getting top community contributors: {str(e)}")
+            return []
