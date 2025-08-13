@@ -463,7 +463,7 @@ class DailyMarketplaceService:
     
     async def get_user_cooking_offers(self, cook_id: str) -> List[Dict]:
         """Get all cooking offers for a specific cook"""
-        offers_cursor = self.db.cooking_offers.find({"cook_id": cook_id}).sort("created_at", -1)
+        offers_cursor = self.db.cooking_offers.find({"cook_id": cook_id}, {"_id": 0}).sort("created_at", -1)
         return await offers_cursor.to_list(length=100)
     
     async def get_user_eating_requests(self, eater_id: str) -> List[Dict]:
