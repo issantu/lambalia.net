@@ -985,7 +985,7 @@ async def create_cooking_offer(
     """Create a daily cooking offer"""
     try:
         # Get user info for cook name/rating
-        user = await db.users.find_one({"id": current_user_id})
+        user = await db.users.find_one({"id": current_user_id}, {"_id": 0})
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         
