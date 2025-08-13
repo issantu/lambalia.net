@@ -1821,28 +1821,23 @@ class LambaliaEnhancedAPITester:
         activity_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%dT10:00:00Z')
         
         activity_data = {
-            "charity_type": "food_donation",
-            "activity_title": "Weekly Food Bank Donation",
-            "description": "Donated 50 meals worth of fresh vegetables and prepared food to the local food bank",
+            "activity_type": "food_bank",
             "charity_organization_name": "Downtown Food Bank",
+            "activity_description": "Donated 50 meals worth of fresh vegetables and prepared food to the local food bank",
             "activity_date": activity_date,
-            "duration_hours": 3.0,
-            "number_of_people_served": 50,
-            "food_items_donated": [
-                {"item": "Fresh vegetables", "quantity": "20 lbs", "estimated_value": 40.0},
-                {"item": "Prepared meals", "quantity": "30 portions", "estimated_value": 150.0}
-            ],
+            "food_donated_lbs": 20.0,
+            "meals_provided": 50,
+            "people_helped": 50,
             "volunteer_hours": 3.0,
-            "photos": ["https://example.com/donation1.jpg", "https://example.com/donation2.jpg"],
-            "verification_contact": {
-                "name": "Sarah Johnson",
-                "title": "Volunteer Coordinator",
-                "phone": "+1-555-0188",
-                "email": "sarah@foodbank.org"
-            },
-            "location": "123 Community St, New York, NY 10001",
-            "recurring_activity": True,
-            "next_scheduled_date": (datetime.now() + timedelta(days=7)).strftime('%Y-%m-%dT10:00:00Z')
+            "location_address": "123 Community St",
+            "city": "New York",
+            "state": "NY",
+            "postal_code": "10001",
+            "photo_urls": ["https://example.com/donation1.jpg", "https://example.com/donation2.jpg"],
+            "video_urls": [],
+            "witness_contacts": [
+                {"name": "Sarah Johnson", "phone": "+1-555-0188", "role": "Volunteer Coordinator"}
+            ]
         }
 
         success, data = self.make_request('POST', 'charity/submit-activity', activity_data, 200)
