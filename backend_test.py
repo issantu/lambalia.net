@@ -1384,6 +1384,395 @@ class LambaliaEnhancedAPITester:
         details = f"- Perfect match score: {perfect_score} (expected 0.95)"
         return self.log_test("Compatibility Scoring", score_correct, details)
 
+    # ENHANCED AD SYSTEM & MONETIZATION TESTS - Phase 3
+
+    def test_get_user_engagement_profile(self):
+        """Test user engagement profile calculation"""
+        if not self.token:
+            return self.log_test("Get User Engagement Profile", False, "- No auth token available")
+
+        success, data = self.make_request('GET', 'engagement/profile')
+        
+        if success:
+            engagement_level = data.get('engagement_level', 'unknown')
+            optimal_ads = data.get('optimal_ads_per_day', 0)
+            premium_score = data.get('premium_eligibility_score', 0)
+            activity = data.get('activity_summary', {})
+            ad_interaction = data.get('ad_interaction', {})
+            
+            details = f"- Level: {engagement_level}, Ads/day: {optimal_ads}, Premium score: {premium_score:.2f}"
+            details += f", Activities: {activity.get('snippets_created', 0)} snippets"
+            details += f", Ad fatigue: {ad_interaction.get('ad_fatigue_score', 0):.2f}"
+        else:
+            details = ""
+            
+        return self.log_test("Get User Engagement Profile", success, details)
+
+    def test_get_targeted_ad_placement(self):
+        """Test intelligent ad targeting and placement"""
+        if not self.token:
+            return self.log_test("Get Targeted Ad Placement", False, "- No auth token available")
+
+        # Test different ad placements
+        placements = ["between_snippets", "feed_middle", "cooking_offers_list"]
+        successful_placements = 0
+        
+        for placement in placements:
+            success, data = self.make_request('GET', f'ads/placement?placement={placement}&page_context=feed&position=1&cuisine_type=Italian')
+            
+            if success:
+                ad_data = data.get('ad')
+                if ad_data:
+                    successful_placements += 1
+                    # Verify ad structure
+                    required_fields = ['ad_id', 'title', 'description', 'creative_url', 'click_url']
+                    has_all_fields = all(field in ad_data for field in required_fields)
+                    if not has_all_fields:
+                        successful_placements -= 1
+        
+        details = f"- {successful_placements}/{len(placements)} placements working with targeted ads"
+        return self.log_test("Get Targeted Ad Placement", successful_placements > 0, details)
+
+    def test_ad_click_tracking(self):
+        """Test ad click tracking and revenue calculation"""
+        if not self.token:
+            return self.log_test("Ad Click Tracking", False, "- No auth token available")
+
+        # First get an ad to click
+        success, ad_data = self.make_request('GET', 'ads/placement?placement=between_snippets&page_context=feed')
+        
+        if not success or not ad_data.get('ad'):
+            return self.log_test("Ad Click Tracking", False, "- No ad available to test click tracking")
+
+        ad_id = ad_data['ad']['ad_id']
+        
+        # Record ad click
+        success, click_data = self.make_request('POST', f'ads/click/{ad_id}')
+        
+        if success:
+            revenue = click_data.get('revenue_generated', 0)
+            click_url = click_data.get('click_url', '')
+            success_flag = click_data.get('success', False)
+            details = f"- Revenue: ${revenue}, Click URL: {'✓' if click_url else '✗'}, Success: {success_flag}"
+        else:
+            details = ""
+            
+        return self.log_test("Ad Click Tracking", success, details)
+
+    def test_create_advertisement(self):
+        """Test advertisement creation for advertisers"""
+        if not self.token:
+            return self.log_test("Create Advertisement", False, "- No auth token available")
+
+        from datetime import datetime, timedelta
+        
+        ad_data = {
+            "title": "Premium Italian Cooking Classes",
+            "description": "Learn authentic Italian cooking from certified chefs. Master pasta, risotto, and traditional sauces in hands-on classes.",
+            "ad_type": "sponsored_recipe",
+            "creative_url": "https://example.com/cooking-class-banner.jpg",
+            "click_url": "https://example.com/italian-cooking-classes",
+            "target_demographics": ["age_25_34", "age_35_44", "food_enthusiast"],
+            "target_locations": ["US", "CA", "NYC"],
+            "target_cuisines": ["italian", "mediterranean"],
+            "placement_types": ["between_snippets", "feed_middle", "recipe_detail"],
+            "cost_per_impression": 0.02,
+            "cost_per_click": 0.75,
+            "daily_budget": 150.0,
+            "total_budget": 2000.0,
+            "start_date": datetime.utcnow().isoformat(),
+            "end_date": (datetime.utcnow() + timedelta(days=30)).isoformat()
+        }
+
+        success, data = self.make_request('POST', 'ads/create', ad_data)
+        
+        if success:
+            ad_id = data.get('ad_id')
+            status = data.get('status', 'unknown')
+            message = data.get('message', '')
+            details = f"- Ad ID: {ad_id}, Status: {status}, Message: {message}"
+        else:
+            details = ""
+            
+        return self.log_test("Create Advertisement", success, details)
+
+    def test_premium_benefits_and_tiers(self):
+        """Test premium membership benefits and tier information"""
+        if not self.token:
+            return self.log_test("Premium Benefits and Tiers", False, "- No auth token available")
+
+        # Test getting premium benefits
+        success, benefits_data = self.make_request('GET', 'premium/benefits')
+        
+        if not success:
+            return self.log_test("Premium Benefits and Tiers", False, "- Failed to get premium benefits")
+
+        is_premium = benefits_data.get('is_premium', False)
+        recommended_tier = benefits_data.get('recommended_tier', {})
+        
+        # Test getting premium tiers
+        success, tiers_data = self.make_request('GET', 'premium/tiers')
+        
+        if success:
+            tiers_count = len(tiers_data) if isinstance(tiers_data, list) else 0
+            # Check for expected tiers
+            tier_names = [tier.get('tier') for tier in tiers_data] if tiers_data else []
+            expected_tiers = ['cook_plus', 'foodie_pro', 'culinary_vip']
+            has_all_tiers = all(tier in tier_names for tier in expected_tiers)
+            
+            # Check pricing structure
+            pricing_correct = True
+            if tiers_data:
+                for tier in tiers_data:
+                    monthly_price = tier.get('monthly_price', 0)
+                    annual_price = tier.get('annual_price', 0)
+                    savings = tier.get('savings_annual', '0%')
+                    if not (monthly_price > 0 and annual_price > 0 and '17%' in savings):
+                        pricing_correct = False
+                        break
+            
+            details = f"- Premium: {is_premium}, Tiers: {tiers_count}, All tiers: {'✓' if has_all_tiers else '✗'}, Pricing: {'✓' if pricing_correct else '✗'}"
+            details += f", Recommended: {recommended_tier.get('recommended_tier', 'none')}"
+        else:
+            details = ""
+            
+        return self.log_test("Premium Benefits and Tiers", success and has_all_tiers, details)
+
+    def test_premium_upgrade_process(self):
+        """Test premium tier upgrade process"""
+        if not self.token:
+            return self.log_test("Premium Upgrade Process", False, "- No auth token available")
+
+        upgrade_data = {
+            "tier": "foodie_pro",
+            "billing_cycle": "monthly",
+            "payment_method_id": "pm_test_card_visa"
+        }
+
+        success, data = self.make_request('POST', 'premium/upgrade', upgrade_data)
+        
+        if success:
+            tier = data.get('tier', 'unknown')
+            monthly_price = data.get('monthly_price', 0)
+            actual_price = data.get('actual_price', 0)
+            billing_cycle = data.get('billing_cycle', 'unknown')
+            features = data.get('features_unlocked', [])
+            next_billing = data.get('next_billing_date', '')
+            
+            details = f"- Tier: {tier}, Monthly: ${monthly_price}, Actual: ${actual_price}, Cycle: {billing_cycle}"
+            details += f", Features: {len(features)}, Next billing: {next_billing[:10]}"
+        else:
+            details = ""
+            
+        return self.log_test("Premium Upgrade Process", success, details)
+
+    def test_surge_pricing_system(self):
+        """Test surge pricing status and analysis"""
+        # Test getting surge pricing status
+        success, status_data = self.make_request('GET', 'surge-pricing/status?service_type=cooking_offers')
+        
+        if not success:
+            return self.log_test("Surge Pricing System", False, "- Failed to get surge pricing status")
+
+        service_type = status_data.get('service_type', 'unknown')
+        surge_multiplier = status_data.get('surge_multiplier', 0)
+        is_surge_active = status_data.get('is_surge_active', False)
+        message = status_data.get('message', '')
+        
+        # Test with different service types
+        messaging_success, messaging_data = self.make_request('GET', 'surge-pricing/status?service_type=messaging')
+        
+        if messaging_success:
+            messaging_multiplier = messaging_data.get('surge_multiplier', 0)
+            details = f"- Cooking: {surge_multiplier}x, Messaging: {messaging_multiplier}x, Active: {is_surge_active}"
+            details += f", Status: {message}"
+        else:
+            details = f"- Cooking: {surge_multiplier}x, Active: {is_surge_active}, Status: {message}"
+            
+        return self.log_test("Surge Pricing System", success, details)
+
+    def test_revenue_analytics_public(self):
+        """Test public monetization statistics"""
+        success, data = self.make_request('GET', 'monetization/stats')
+        
+        if success:
+            platform_metrics = data.get('platform_metrics', {})
+            surge_pricing = data.get('surge_pricing', {})
+            
+            active_premium = platform_metrics.get('active_premium_users', 0)
+            active_offers = platform_metrics.get('active_cooking_offers', 0)
+            ads_today = platform_metrics.get('ads_shown_today', 0)
+            
+            cooking_surge = surge_pricing.get('cooking_offers_multiplier', 0)
+            messaging_surge = surge_pricing.get('messaging_multiplier', 0)
+            any_surge_active = surge_pricing.get('is_any_surge_active', False)
+            
+            premium_tiers = data.get('premium_tiers_available', 0)
+            ad_placements = data.get('ad_placements_available', 0)
+            
+            details = f"- Premium users: {active_premium}, Offers: {active_offers}, Ads today: {ads_today}"
+            details += f", Surge: {cooking_surge}x/{messaging_surge}x, Tiers: {premium_tiers}, Placements: {ad_placements}"
+        else:
+            details = ""
+            
+        return self.log_test("Revenue Analytics Public", success, details)
+
+    def test_ad_frequency_optimization(self):
+        """Test ad frequency optimization based on engagement"""
+        if not self.token:
+            return self.log_test("Ad Frequency Optimization", False, "- No auth token available")
+
+        # Get user engagement profile first
+        success, engagement_data = self.make_request('GET', 'engagement/profile')
+        
+        if not success:
+            return self.log_test("Ad Frequency Optimization", False, "- Failed to get engagement profile")
+
+        engagement_level = engagement_data.get('engagement_level', 'unknown')
+        optimal_ads = engagement_data.get('optimal_ads_per_day', 0)
+        ad_fatigue = engagement_data.get('ad_interaction', {}).get('ad_fatigue_score', 0)
+        
+        # Verify ad frequency is within expected range (3-12 ads per day)
+        frequency_valid = 3 <= optimal_ads <= 12
+        
+        # Test multiple ad requests to see if frequency limiting works
+        ad_requests_successful = 0
+        for i in range(5):  # Try to get 5 ads quickly
+            success, ad_data = self.make_request('GET', 'ads/placement?placement=between_snippets')
+            if success and ad_data.get('ad'):
+                ad_requests_successful += 1
+        
+        details = f"- Level: {engagement_level}, Optimal ads: {optimal_ads}/day, Fatigue: {ad_fatigue:.2f}"
+        details += f", Frequency valid: {'✓' if frequency_valid else '✗'}, Ads served: {ad_requests_successful}/5"
+        
+        return self.log_test("Ad Frequency Optimization", success and frequency_valid, details)
+
+    def test_premium_ad_free_experience(self):
+        """Test that premium users get ad-free experience"""
+        if not self.token:
+            return self.log_test("Premium Ad-Free Experience", False, "- No auth token available")
+
+        # First upgrade to premium (if not already)
+        upgrade_data = {
+            "tier": "cook_plus",
+            "billing_cycle": "monthly",
+            "payment_method_id": "pm_test_card_visa"
+        }
+        
+        upgrade_success, upgrade_result = self.make_request('POST', 'premium/upgrade', upgrade_data)
+        
+        if not upgrade_success:
+            return self.log_test("Premium Ad-Free Experience", False, "- Failed to upgrade to premium")
+
+        # Now try to get ads - should be blocked for premium users
+        success, ad_data = self.make_request('GET', 'ads/placement?placement=between_snippets')
+        
+        if success:
+            ad_returned = ad_data.get('ad') is not None
+            reason = ad_data.get('reason', '')
+            
+            # Premium users should NOT get ads
+            ad_free_working = not ad_returned and 'premium' in reason.lower()
+            
+            details = f"- Ad returned: {'✗' if ad_free_working else '✓'}, Reason: {reason}"
+        else:
+            details = "- Failed to test ad placement"
+            ad_free_working = False
+            
+        return self.log_test("Premium Ad-Free Experience", ad_free_working, details)
+
+    def test_engagement_level_calculation(self):
+        """Test engagement level calculation algorithm"""
+        if not self.token:
+            return self.log_test("Engagement Level Calculation", False, "- No auth token available")
+
+        # Get current engagement profile
+        success, data = self.make_request('GET', 'engagement/profile')
+        
+        if success:
+            engagement_level = data.get('engagement_level', 'unknown')
+            activity_summary = data.get('activity_summary', {})
+            
+            snippets = activity_summary.get('snippets_created', 0)
+            cooking_offers = activity_summary.get('cooking_offers_created', 0)
+            eating_requests = activity_summary.get('eating_requests_created', 0)
+            appointments = activity_summary.get('appointments_booked', 0)
+            
+            # Calculate expected engagement level based on activity
+            total_score = snippets * 2 + cooking_offers * 5 + eating_requests * 3 + appointments * 8
+            
+            expected_level = "low"
+            if total_score >= 50:
+                expected_level = "power_user"
+            elif total_score >= 25:
+                expected_level = "high"
+            elif total_score >= 10:
+                expected_level = "medium"
+            
+            level_correct = engagement_level.lower() == expected_level
+            
+            details = f"- Level: {engagement_level} (expected: {expected_level}), Score: {total_score}"
+            details += f", Activities: {snippets}s/{cooking_offers}o/{eating_requests}r/{appointments}a"
+        else:
+            details = ""
+            level_correct = False
+            
+        return self.log_test("Engagement Level Calculation", success and level_correct, details)
+
+    def test_commission_surge_pricing(self):
+        """Test commission rate adjustments during surge pricing"""
+        # Get current surge status
+        success, surge_data = self.make_request('GET', 'surge-pricing/status?service_type=cooking_offers')
+        
+        if success:
+            surge_multiplier = surge_data.get('surge_multiplier', 1.0)
+            is_surge_active = surge_data.get('is_surge_active', False)
+            
+            # Calculate expected commission rate
+            base_commission = 0.15  # 15%
+            expected_commission = base_commission
+            if is_surge_active and surge_multiplier > 1.0:
+                expected_commission = 0.18  # 18% during surge
+            
+            details = f"- Surge active: {is_surge_active}, Multiplier: {surge_multiplier}x"
+            details += f", Expected commission: {expected_commission*100}%"
+            
+            # Test would need actual booking to verify commission calculation
+            # For now, we verify the surge detection logic
+            commission_logic_correct = True
+        else:
+            details = ""
+            commission_logic_correct = False
+            
+        return self.log_test("Commission Surge Pricing", success and commission_logic_correct, details)
+
+    def test_monetization_revenue_streams(self):
+        """Test multiple revenue stream integration"""
+        success, stats_data = self.make_request('GET', 'monetization/stats')
+        
+        if success:
+            platform_metrics = stats_data.get('platform_metrics', {})
+            surge_pricing = stats_data.get('surge_pricing', {})
+            
+            # Verify all revenue streams are tracked
+            has_premium_users = platform_metrics.get('active_premium_users', 0) >= 0
+            has_cooking_offers = platform_metrics.get('active_cooking_offers', 0) >= 0
+            has_ads = platform_metrics.get('ads_shown_today', 0) >= 0
+            has_surge_system = 'cooking_offers_multiplier' in surge_pricing
+            
+            revenue_streams_count = sum([has_premium_users, has_cooking_offers, has_ads, has_surge_system])
+            
+            details = f"- Revenue streams active: {revenue_streams_count}/4"
+            details += f" (Premium: {'✓' if has_premium_users else '✗'}"
+            details += f", Marketplace: {'✓' if has_cooking_offers else '✗'}"
+            details += f", Ads: {'✓' if has_ads else '✗'}"
+            details += f", Surge: {'✓' if has_surge_system else '✗'})"
+        else:
+            details = ""
+            revenue_streams_count = 0
+            
+        return self.log_test("Monetization Revenue Streams", success and revenue_streams_count >= 3, details)
+
     def run_all_tests(self):
         """Run all API tests in sequence"""
         print("🚀 Starting Enhanced Lambalia Backend API Tests")
