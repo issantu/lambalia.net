@@ -1009,6 +1009,20 @@ class LambaliaEnhancedAPITester:
         self.test_book_special_order()
         self.test_special_order_validation_scenarios()
         
+        # AI-Powered Translation System tests
+        print("\n🌐 Testing AI-Powered Translation System...")
+        self.test_single_text_translation()
+        self.test_cultural_preservation_translation()
+        self.test_batch_translation()
+        self.test_language_detection()
+        self.test_supported_languages()
+        self.test_translation_stats()
+        self.test_translation_caching()
+        self.test_translation_error_handling()
+        self.test_batch_translation_limits()
+        self.test_real_time_messaging_translation()
+        self.test_recipe_content_translation()
+        
         # Print summary
         print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
