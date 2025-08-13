@@ -947,6 +947,171 @@ async def book_special_order(
         confirmation_code=booking.id[:8].upper()
     )
 
+# TRANSLATION SERVICE ROUTES
+
+@api_router.post("/translate")
+async def translate_text(request: dict):
+    """
+    Translate text using AI-powered translation with cultural preservation
+    """
+    try:
+        translation_service = await get_translation_service()
+        
+        text = request.get('text', '').strip()
+        target_language = request.get('target_language', '').strip()
+        source_language = request.get('source_language')
+        preserve_cultural = request.get('preserve_cultural', True)
+        
+        if not text:
+            raise HTTPException(status_code=400, detail="Text is required")
+        
+        if not target_language:
+            raise HTTPException(status_code=400, detail="Target language is required")
+        
+        result = await translation_service.translate_text(
+            text=text,
+            target_language=target_language,
+            source_language=source_language,
+            preserve_cultural=preserve_cultural
+        )
+        
+        if result['success']:
+            return {
+                "success": True,
+                "translated_text": result['translated_text'],
+                "source_language": result.get('source_language') or result.get('detected_language'),
+                "target_language": result['target_language'],
+                "method": result['method'],
+                "character_count": result['character_count'],
+                "processing_time_ms": result['processing_time_ms'],
+                "cache_hit": result['cache_hit'],
+                "request_id": result['request_id']
+            }
+        else:
+            raise HTTPException(status_code=500, detail=result['error'])
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Translation endpoint error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Translation service error")
+
+@api_router.post("/translate/batch")
+async def batch_translate_texts(request: dict):
+    """
+    Translate multiple texts in batch
+    """
+    try:
+        translation_service = await get_translation_service()
+        
+        texts = request.get('texts', [])
+        target_language = request.get('target_language', '').strip()
+        source_language = request.get('source_language')
+        preserve_cultural = request.get('preserve_cultural', True)
+        
+        if not texts or not isinstance(texts, list):
+            raise HTTPException(status_code=400, detail="Texts array is required")
+        
+        if not target_language:
+            raise HTTPException(status_code=400, detail="Target language is required")
+        
+        if len(texts) > 100:
+            raise HTTPException(status_code=400, detail="Maximum 100 texts allowed per batch")
+        
+        result = await translation_service.batch_translate(
+            texts=texts,
+            target_language=target_language,
+            source_language=source_language,
+            preserve_cultural=preserve_cultural
+        )
+        
+        return {
+            "success": result['success'],
+            "translations": result['translations'],
+            "total_characters": result['total_characters'],
+            "total_texts": result['total_texts'],
+            "successful_translations": result['successful_translations'],
+            "errors": result['errors']
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Batch translation endpoint error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Translation service error")
+
+@api_router.post("/translate/detect-language")
+async def detect_text_language(request: dict):
+    """
+    Detect the language of provided text
+    """
+    try:
+        translation_service = await get_translation_service()
+        
+        text = request.get('text', '').strip()
+        
+        if not text:
+            raise HTTPException(status_code=400, detail="Text is required")
+        
+        result = await translation_service.detect_language(text)
+        
+        if result['success']:
+            return {
+                "success": True,
+                "detected_language": result['detected_language'],
+                "language_name": translation_service.supported_languages.get(result['detected_language'], result['detected_language']),
+                "confidence": result['confidence'],
+                "method": result['method']
+            }
+        else:
+            raise HTTPException(status_code=500, detail=result['error'])
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Language detection endpoint error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Language detection service error")
+
+@api_router.get("/translate/supported-languages")
+async def get_supported_languages():
+    """
+    Get list of supported languages for translation
+    """
+    try:
+        translation_service = await get_translation_service()
+        supported_languages = translation_service.get_supported_languages()
+        
+        return {
+            "success": True,
+            "languages": [
+                {"code": code, "name": name}
+                for code, name in supported_languages.items()
+            ],
+            "total_languages": len(supported_languages)
+        }
+        
+    except Exception as e:
+        logger.error(f"Get supported languages error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Translation service error")
+
+@api_router.get("/translate/stats")
+async def get_translation_stats():
+    """
+    Get translation service usage statistics
+    """
+    try:
+        translation_service = await get_translation_service()
+        stats = translation_service.get_usage_stats()
+        
+        return {
+            "success": True,
+            "stats": stats
+        }
+        
+    except Exception as e:
+        logger.error(f"Get translation stats error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Translation service error")
+
 # Webhook endpoint for Stripe
 @api_router.post("/webhooks/stripe")
 async def stripe_webhook(request: Request):
