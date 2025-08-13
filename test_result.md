@@ -546,12 +546,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhanced Ad System & Dynamic Ad Placement - COMPLETED ✅"
-    - "Premium Membership System - COMPLETED ✅"
-    - "User Engagement Analytics & Ad Frequency Optimization - COMPLETED ✅"
-    - "Surge Pricing System - COMPLETED ✅"
-    - "Revenue Analytics Dashboard - COMPLETED ✅"
-    - "General Monetization Integration & Multi-Stream Revenue - COMPLETED ✅"
+    - "Charity Program Registration"
+    - "Charity Activity Submission"
+    - "Premium Membership via Charity"
+    - "Community Impact Metrics"
+    - "Local Organizations"
+    - "Farm Ecosystem Integration with 15% Commission"
+    - "Premium Benefits"
+    - "Impact Calculator"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
