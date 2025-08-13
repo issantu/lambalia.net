@@ -377,7 +377,7 @@ class DailyMarketplaceService:
             if filters.get("is_gluten_free"):
                 query["is_gluten_free"] = True
         
-        offers_cursor = self.db.cooking_offers.find(query).sort("created_at", -1).limit(50)
+        offers_cursor = self.db.cooking_offers.find(query, {"_id": 0}).sort("created_at", -1).limit(50)
         offers = await offers_cursor.to_list(length=50)
         
         # Filter by location and add distance
