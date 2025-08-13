@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Expand Lambalia marketplace to include traditional restaurants with special order capabilities alongside existing home restaurants. Traditional restaurants can propose special orders through the platform, creating a broader ecosystem with commission-based monetization."
+user_problem_statement: "Test the newly implemented AI-powered translation system for Lambalia. This is a critical feature that enables zero language barriers while preserving cultural authenticity."
 
 backend:
   - task: "Expand marketplace models for traditional restaurants"
