@@ -2000,7 +2000,7 @@ class LambaliaEnhancedAPITester:
     def test_impact_calculator(self):
         """Test impact calculator for previewing activity impact scores"""
         # Use GET request with query parameters
-        query_params = "charity_type=food_bank&duration_hours=4.0&people_served=75&food_value=200.0&volunteer_hours=4.0&recurring=weekly"
+        query_params = "activity_type=food_bank&duration_hours=4.0&people_served=75&food_value=200.0&volunteer_hours=4.0&recurring=weekly"
         
         success, data = self.make_request('GET', f'charity/impact-calculator?{query_params}', None, 200)
         
