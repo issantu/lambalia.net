@@ -1863,6 +1863,28 @@ class LambaliaEnhancedAPITester:
         self.test_distance_calculation()
         self.test_compatibility_scoring()
         
+        # Enhanced Ad System & Monetization tests - Phase 3
+        print("\n💰 Testing Enhanced Ad System & Monetization (Phase 3)...")
+        self.test_get_user_engagement_profile()
+        self.test_get_targeted_ad_placement()
+        self.test_ad_click_tracking()
+        self.test_create_advertisement()
+        
+        print("\n👑 Testing Premium Membership System...")
+        self.test_premium_benefits_and_tiers()
+        self.test_premium_upgrade_process()
+        self.test_premium_ad_free_experience()
+        
+        print("\n📈 Testing Surge Pricing & Revenue Analytics...")
+        self.test_surge_pricing_system()
+        self.test_revenue_analytics_public()
+        
+        print("\n🎯 Testing Advanced Monetization Features...")
+        self.test_ad_frequency_optimization()
+        self.test_engagement_level_calculation()
+        self.test_commission_surge_pricing()
+        self.test_monetization_revenue_streams()
+        
         # Print summary
         print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
