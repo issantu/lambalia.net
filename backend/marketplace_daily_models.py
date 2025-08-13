@@ -277,8 +277,8 @@ class CookingOfferRequest(BaseModel):
     cuisine_type: str
     category: MealCategory
     cooking_date: str  # ISO format
-    available_time_start: str = Field(..., regex=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
-    available_time_end: str = Field(..., regex=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    available_time_start: str = Field(..., pattern=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    available_time_end: str = Field(..., pattern=r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
     max_servings: int = Field(..., ge=1, le=20)
     postal_code: str
     city: str
