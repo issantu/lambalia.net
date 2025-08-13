@@ -1892,7 +1892,7 @@ const HomePage = () => {
         <h2 className="text-3xl font-bold heading-gradient mb-4">Discover Traditional Recipes</h2>
         <p className="text-gray-600 mb-6">Explore authentic culinary treasures from every corner of the world</p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
           <Link
             to="/templates"
             className="btn-primary text-center p-4 rounded-lg no-underline text-white"
@@ -1922,6 +1922,12 @@ const HomePage = () => {
             className="bg-green-500 hover:bg-green-600 text-center p-4 rounded-lg no-underline text-white transition-all"
           >
             🌱🛒 Local Market
+          </Link>
+          <Link
+            to="/charity-program"
+            className="bg-red-500 hover:bg-red-600 text-center p-4 rounded-lg no-underline text-white transition-all"
+          >
+            🤝❤️ Give Back
           </Link>
         </div>
       </div>
