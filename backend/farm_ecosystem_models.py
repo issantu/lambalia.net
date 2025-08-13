@@ -7,9 +7,13 @@ import uuid
 
 class FarmVendorType(str, Enum):
     LOCAL_FARM = "local_farm"
+    BACKYARD_GARDENER = "backyard_gardener"     # Home gardeners with excess produce
     ORGANIC_GROWER = "organic_grower" 
+    HOBBY_FARMER = "hobby_farmer"               # Small-scale enthusiasts
     LIVESTOCK_RANCH = "livestock_ranch"
-    SPECIALTY_PRODUCER = "specialty_producer"  # honey, cheese, etc.
+    SPECIALTY_PRODUCER = "specialty_producer"   # honey, cheese, herbs, etc.
+    COMMUNITY_GARDEN = "community_garden"       # Community garden participants
+    URBAN_FARMER = "urban_farmer"               # Urban farming specialists
     FARMERS_MARKET = "farmers_market"
 
 class ProductCategory(str, Enum):
