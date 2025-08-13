@@ -46,6 +46,14 @@ from marketplace_daily_models import (
     CookingOfferResponse, EatingRequestResponse, AppointmentResponse,
     MealCategory, CookingOfferStatus, EatingRequestStatus
 )
+from ad_monetization_service import (
+    AdPlacementService, PremiumMembershipService, SurgePricingService, 
+    RevenueAnalyticsService, EngagementAnalysisService
+)
+from ad_monetization_models import (
+    AdCreationRequest, PremiumUpgradeRequest, AdPlacementResponse,
+    RevenueReportResponse, PremiumTier, AdPlacement, AdType
+)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
