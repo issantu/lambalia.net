@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the newly implemented Dynamic Offer & Demand System (Phase 2) for Lambalia - the revolutionary daily cooking marketplace that empowers home cooks to monetize their kitchens."
+user_problem_statement: "Test the newly implemented Enhanced Ad System & Monetization features (Phase 3) for Lambalia - the advanced revenue optimization system that maximizes platform profitability while maintaining excellent user experience through intelligent optimization."
 
 backend:
   - task: "Expand marketplace models for traditional restaurants"
