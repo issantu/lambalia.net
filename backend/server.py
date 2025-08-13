@@ -1298,6 +1298,380 @@ async def get_daily_marketplace_stats():
         logger.error(f"Failed to get marketplace stats: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# ENHANCED AD SYSTEM & MONETIZATION ROUTES - Phase 3
+
+# Initialize monetization services
+ad_placement_service = AdPlacementService(db)
+premium_service = PremiumMembershipService(db)
+surge_pricing_service = SurgePricingService(db)
+revenue_analytics_service = RevenueAnalyticsService(db)
+engagement_service = EngagementAnalysisService(db)
+
+@api_router.get("/ads/placement", response_model=dict)
+async def get_targeted_ad(
+    placement: str = "between_snippets",
+    page_context: str = "feed",
+    position: int = 1,
+    cuisine_type: Optional[str] = None,
+    current_user_id: str = Depends(get_current_user_optional)
+):
+    """Get targeted ad for specific placement"""
+    try:
+        if not current_user_id:
+            return {"ad": None, "reason": "No user context"}
+        
+        # Convert placement string to enum
+        try:
+            placement_enum = AdPlacement(placement)
+        except ValueError:
+            placement_enum = AdPlacement.BETWEEN_SNIPPETS
+        
+        context = {
+            "page_context": page_context,
+            "position": position,
+            "cuisine_type": cuisine_type,
+            "device_type": "web"
+        }
+        
+        ad_data = await ad_placement_service.get_targeted_ad(
+            current_user_id, placement_enum, context
+        )
+        
+        if ad_data:
+            return {
+                "success": True,
+                "ad": ad_data,
+                "placement": placement,
+                "context": context
+            }
+        else:
+            return {
+                "success": True,
+                "ad": None,
+                "reason": "No suitable ads available or user limit reached"
+            }
+        
+    except Exception as e:
+        logger.error(f"Failed to get targeted ad: {str(e)}")
+        return {"success": False, "error": str(e)}
+
+@api_router.post("/ads/click/{ad_id}", response_model=dict)
+async def record_ad_click(
+    ad_id: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Record ad click and calculate revenue"""
+    try:
+        result = await ad_placement_service.record_ad_click(ad_id, current_user_id)
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to record ad click: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/ads/create", response_model=dict)
+async def create_advertisement(
+    ad_data: AdCreationRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create new advertisement (for advertisers)"""
+    try:
+        # Parse dates if provided
+        ad_dict = ad_data.dict()
+        if ad_data.start_date:
+            ad_dict['start_date'] = datetime.fromisoformat(ad_data.start_date.replace('Z', '+00:00'))
+        if ad_data.end_date:
+            ad_dict['end_date'] = datetime.fromisoformat(ad_data.end_date.replace('Z', '+00:00'))
+        
+        ad_dict['advertiser_id'] = current_user_id
+        ad_dict['id'] = str(uuid.uuid4())
+        
+        await db.advertisements.insert_one(ad_dict)
+        
+        return {
+            "success": True,
+            "ad_id": ad_dict['id'],
+            "message": "Advertisement created successfully",
+            "status": "pending_review"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to create advertisement: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/premium/benefits", response_model=dict)
+async def get_premium_benefits(current_user_id: str = Depends(get_current_user)):
+    """Get premium membership benefits and recommendations"""
+    try:
+        benefits = await premium_service.get_premium_benefits_summary(current_user_id)
+        return {
+            "success": True,
+            **benefits
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get premium benefits: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/premium/upgrade", response_model=dict)
+async def upgrade_to_premium(
+    upgrade_data: PremiumUpgradeRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Upgrade user to premium tier"""
+    try:
+        result = await premium_service.upgrade_to_premium(
+            current_user_id, 
+            upgrade_data.tier, 
+            upgrade_data.billing_cycle
+        )
+        
+        if result["success"]:
+            return {
+                "success": True,
+                "message": f"Successfully upgraded to {upgrade_data.tier.value}",
+                **result
+            }
+        else:
+            raise HTTPException(status_code=400, detail=result["error"])
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to upgrade to premium: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/premium/tiers", response_model=List[dict])
+async def get_premium_tiers():
+    """Get available premium tiers and pricing"""
+    tiers = [
+        {
+            "tier": "cook_plus",
+            "name": "Cook Plus",
+            "monthly_price": 4.99,
+            "annual_price": 49.99,
+            "savings_annual": "17%",
+            "description": "Enhanced features for home cooks",
+            "features": [
+                "Ad-free experience",
+                "Unlimited cooking offers",
+                "Enhanced profile customization",
+                "Priority customer support",
+                "Advanced cooking analytics"
+            ],
+            "target_audience": "Active home cooks",
+            "popular": False
+        },
+        {
+            "tier": "foodie_pro",
+            "name": "Foodie Pro",
+            "monthly_price": 7.99,
+            "annual_price": 79.99,
+            "savings_annual": "17%",
+            "description": "Premium experience for food lovers",
+            "features": [
+                "Ad-free experience",
+                "Priority booking for popular meals",
+                "Access to premium recipe collection",
+                "Custom dietary filters",
+                "Bulk translation capabilities",
+                "Priority customer support"
+            ],
+            "target_audience": "Food enthusiasts",
+            "popular": True
+        },
+        {
+            "tier": "culinary_vip",
+            "name": "Culinary VIP",
+            "monthly_price": 12.99,
+            "annual_price": 129.99,
+            "savings_annual": "17%",
+            "description": "Complete premium culinary experience",
+            "features": [
+                "All Cook Plus and Foodie Pro features",
+                "Video calling with chefs",
+                "Exclusive VIP events and tastings",
+                "Personal culinary concierge",
+                "Advanced recipe analytics",
+                "Beta access to new features"
+            ],
+            "target_audience": "Culinary professionals and enthusiasts",
+            "popular": False
+        }
+    ]
+    
+    return tiers
+
+@api_router.get("/engagement/profile", response_model=dict)
+async def get_user_engagement_profile(current_user_id: str = Depends(get_current_user)):
+    """Get user engagement profile and ad frequency optimization"""
+    try:
+        profile = await engagement_service.calculate_user_engagement_level(current_user_id)
+        
+        return {
+            "success": True,
+            "engagement_level": profile.engagement_level,
+            "optimal_ads_per_day": profile.optimal_ads_per_day,
+            "premium_eligibility_score": profile.premium_eligibility_score,
+            "activity_summary": {
+                "snippets_created": profile.snippets_created,
+                "cooking_offers_created": profile.cooking_offers_created,
+                "eating_requests_created": profile.eating_requests_created,
+                "appointments_booked": profile.appointments_booked
+            },
+            "ad_interaction": {
+                "ads_viewed_today": profile.ads_viewed_today,
+                "ads_clicked_today": profile.ads_clicked_today,
+                "ad_fatigue_score": profile.ad_fatigue_score
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get engagement profile: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/surge-pricing/status", response_model=dict)
+async def get_surge_pricing_status(
+    service_type: str = "cooking_offers",
+    category: Optional[str] = None
+):
+    """Get current surge pricing status"""
+    try:
+        multiplier = await surge_pricing_service.get_current_surge_multiplier(service_type, category)
+        
+        is_surge_active = multiplier > 1.0
+        
+        return {
+            "success": True,
+            "service_type": service_type,
+            "category": category,
+            "surge_multiplier": multiplier,
+            "is_surge_active": is_surge_active,
+            "message": f"{'Surge pricing active' if is_surge_active else 'Normal pricing'} - {multiplier}x multiplier"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get surge pricing status: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/surge-pricing/analyze", response_model=dict)
+async def analyze_surge_pricing(current_user_id: str = Depends(get_current_user)):
+    """Analyze demand and apply surge pricing (admin function)"""
+    try:
+        # Check if user has admin privileges (simplified)
+        user = await db.users.find_one({"id": current_user_id}, {"_id": 0})
+        if not user or not user.get("is_admin", False):
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        surge_results = await surge_pricing_service.analyze_and_apply_surge_pricing()
+        
+        return {
+            "success": True,
+            "surge_applications": surge_results,
+            "message": f"Applied surge pricing to {len(surge_results)} services"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to analyze surge pricing: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/revenue/daily-report", response_model=dict)
+async def get_daily_revenue_report(
+    date: Optional[str] = None,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get daily revenue report (admin function)"""
+    try:
+        # Check admin access
+        user = await db.users.find_one({"id": current_user_id}, {"_id": 0})
+        if not user or not user.get("is_admin", False):
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        report_date = None
+        if date:
+            report_date = datetime.fromisoformat(date.replace('Z', '+00:00'))
+        
+        report = await revenue_analytics_service.generate_daily_revenue_report(report_date)
+        
+        return {
+            "success": True,
+            "report": report
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get daily revenue report: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/revenue/trends", response_model=dict)
+async def get_revenue_trends(
+    days: int = 30,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get revenue trends over specified period (admin function)"""
+    try:
+        # Check admin access
+        user = await db.users.find_one({"id": current_user_id}, {"_id": 0})
+        if not user or not user.get("is_admin", False):
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        if days > 365:
+            raise HTTPException(status_code=400, detail="Maximum 365 days allowed")
+        
+        trends = await revenue_analytics_service.get_revenue_trends(days)
+        
+        return {
+            "success": True,
+            "trends": trends
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get revenue trends: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/monetization/stats", response_model=dict)
+async def get_monetization_stats():
+    """Get general monetization statistics"""
+    try:
+        # Get general stats that don't require admin access
+        today = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        yesterday = today - timedelta(days=1)
+        
+        # Public metrics
+        active_premium_users = await db.premium_subscriptions.count_documents({"is_active": True})
+        total_cooking_offers = await db.cooking_offers.count_documents({"status": "active"})
+        total_ads_today = await db.ad_impressions.count_documents({"timestamp": {"$gte": today}})
+        
+        # Current surge pricing status
+        cooking_surge = await surge_pricing_service.get_current_surge_multiplier("cooking_offers")
+        messaging_surge = await surge_pricing_service.get_current_surge_multiplier("messaging")
+        
+        return {
+            "success": True,
+            "platform_metrics": {
+                "active_premium_users": active_premium_users,
+                "active_cooking_offers": total_cooking_offers,
+                "ads_shown_today": total_ads_today
+            },
+            "surge_pricing": {
+                "cooking_offers_multiplier": cooking_surge,
+                "messaging_multiplier": messaging_surge,
+                "is_any_surge_active": max(cooking_surge, messaging_surge) > 1.0
+            },
+            "premium_tiers_available": 3,
+            "ad_placements_available": len(AdPlacement),
+            "message": "Lambalia monetization system active"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get monetization stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # TRANSLATION SERVICE ROUTES
 
 @api_router.post("/translate")
