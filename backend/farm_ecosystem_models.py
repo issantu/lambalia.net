@@ -398,7 +398,7 @@ class FarmVendorApplicationRequest(BaseModel):
     state: str
     postal_code: str
     country: str = "US"
-    total_acres: float = Field(..., ge=0.1, le=10000.0)
+    total_acres: float = Field(..., ge=0.01, le=10000.0)  # Allow smaller plots
     farming_methods: List[str] = []
     primary_products: List[ProductCategory] = []
     certifications: List[CertificationType] = []
