@@ -70,7 +70,7 @@ class LocalMatchingService:
         if eating_request.desired_cuisine:
             query["cuisine_type"] = {"$regex": eating_request.desired_cuisine, "$options": "i"}
         
-        offers_cursor = self.db.cooking_offers.find(query)
+        offers_cursor = self.db.cooking_offers.find(query, {"_id": 0})
         offers = await offers_cursor.to_list(length=100)
         
         for offer_doc in offers:
