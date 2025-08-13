@@ -387,7 +387,9 @@ class FarmVendorApplicationRequest(BaseModel):
     farm_name: str = Field(..., min_length=2, max_length=100)
     business_name: str = Field(..., min_length=2, max_length=100)
     farm_description: str = Field(..., min_length=50, max_length=1000)
-    established_year: int = Field(..., ge=1800, le=2025)
+    established_year: int = Field(..., ge=1990, le=2025)   # Updated for hobbyists
+    growing_experience_level: str = "hobbyist"
+    primary_motivation: str = "share_excess"
     legal_name: str
     phone_number: str
     email: str
