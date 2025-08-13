@@ -60,6 +60,12 @@ from farm_ecosystem_models import (
     FarmDiningBookingRequest, FarmProfileResponse, FarmProductResponse,
     FarmDiningVenueResponse, ProductCategory, CertificationType, FarmVendorType
 )
+from charity_program_service import CharityProgramService, CharityImpactCalculator
+from charity_program_models import (
+    CharityProgramRegistrationRequest, CharityActivitySubmissionRequest,
+    PremiumMembershipUpgradeRequest, CharityActivityResponse, CommunityImpactResponse,
+    PremiumBenefitsResponse, CharityType, VerificationStatus, PremiumTier
+)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
