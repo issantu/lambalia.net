@@ -1212,14 +1212,14 @@ async def get_my_appointments(current_user_id: str = Depends(get_current_user)):
         enriched_appointments = []
         for appointment in appointments:
             # Get offer info
-            offer = await db.cooking_offers.find_one({"id": appointment["offer_id"]})
+            offer = await db.cooking_offers.find_one({"id": appointment["offer_id"]}, {"_id": 0})
             if offer:
                 appointment["offer_title"] = offer["title"]
                 appointment["dish_name"] = offer["dish_name"]
             
             # Get cook and eater names
-            cook = await db.users.find_one({"id": appointment["cook_id"]})
-            eater = await db.users.find_one({"id": appointment["eater_id"]})
+            cook = await db.users.find_one({"id": appointment["cook_id"]}, {"_id": 0})
+            eater = await db.users.find_one({"id": appointment["eater_id"]}, {"_id": 0})
             
             appointment["cook_name"] = cook.get("full_name", "Chef") if cook else "Chef"
             appointment["eater_name"] = eater.get("full_name", "Food Lover") if eater else "Food Lover"
