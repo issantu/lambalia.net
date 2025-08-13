@@ -54,6 +54,12 @@ from ad_monetization_models import (
     AdCreationRequest, PremiumUpgradeRequest, AdPlacementResponse,
     RevenueReportResponse, PremiumTier, AdPlacement, AdType
 )
+from farm_ecosystem_service import FarmEcosystemService, LocalFarmMatchingService
+from farm_ecosystem_models import (
+    FarmVendorApplicationRequest, FarmProductRequest, FarmProductOrderRequest,
+    FarmDiningBookingRequest, FarmProfileResponse, FarmProductResponse,
+    FarmDiningVenueResponse, ProductCategory, CertificationType, FarmVendorType
+)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
