@@ -1553,6 +1553,23 @@ async def startup_event():
     await db.reviews.create_index("restaurant_id")
     await db.payments.create_index("booking_id")
     
+    # Daily marketplace indexes
+    await db.cooking_offers.create_index("cook_id")
+    await db.cooking_offers.create_index("status")
+    await db.cooking_offers.create_index("category")
+    await db.cooking_offers.create_index("cuisine_type")
+    await db.cooking_offers.create_index([("location", "2dsphere")])
+    await db.cooking_offers.create_index("cooking_date")
+    await db.eating_requests.create_index("eater_id")
+    await db.eating_requests.create_index("status")
+    await db.eating_requests.create_index([("location", "2dsphere")])
+    await db.eating_requests.create_index("preferred_date")
+    await db.cooking_appointments.create_index("cook_id")
+    await db.cooking_appointments.create_index("eater_id")
+    await db.cooking_appointments.create_index("offer_id")
+    await db.cooking_appointments.create_index("status")
+    await db.cooking_appointments.create_index("scheduled_date")
+    
     # Existing indexes
     await db.users.create_index("email", unique=True)
     await db.users.create_index("username", unique=True)
