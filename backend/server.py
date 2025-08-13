@@ -39,6 +39,7 @@ from marketplace_models import (
     VendorType, BookingStatus, OrderStatus, PaymentStatus, DocumentType
 )
 from payment_service import payment_service, pricing_engine
+from translation_service import get_translation_service
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
