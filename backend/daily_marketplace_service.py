@@ -315,7 +315,7 @@ class DailyMarketplaceService:
     
     async def book_cooking_offer(self, appointment_data: Dict[str, Any], eater_id: str) -> CookingAppointment:
         """Book a cooking offer directly"""
-        offer = await self.db.cooking_offers.find_one({"id": appointment_data["offer_id"]})
+        offer = await self.db.cooking_offers.find_one({"id": appointment_data["offer_id"]}, {"_id": 0})
         if not offer:
             raise ValueError("Cooking offer not found")
         
