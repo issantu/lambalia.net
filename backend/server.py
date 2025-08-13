@@ -1304,6 +1304,441 @@ async def get_daily_marketplace_stats():
         logger.error(f"Failed to get marketplace stats: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# LOCAL FARM ECOSYSTEM ROUTES - Phase 4: Community Rooting
+
+# Initialize farm ecosystem services
+farm_ecosystem_service = FarmEcosystemService(db)
+farm_matching_service = LocalFarmMatchingService(db)
+
+@api_router.post("/farm-vendors/apply", response_model=dict)
+async def apply_as_farm_vendor(
+    application_data: FarmVendorApplicationRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Apply to become a farm vendor"""
+    try:
+        application = await farm_ecosystem_service.create_farm_vendor_application(
+            application_data.dict(), current_user_id
+        )
+        
+        return {
+            "success": True,
+            "application_id": application.id,
+            "message": "Farm vendor application submitted successfully",
+            "next_steps": "Upload required documents and wait for review",
+            "estimated_review_time": "5-7 business days",
+            "required_documents": [
+                "Farm photos (fields, facilities, equipment)",
+                "Business license or registration",
+                "Certification documents (organic, etc.)",
+                "Insurance proof",
+                "Farm operation photos"
+            ]
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to submit farm vendor application: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/farms/local", response_model=List[dict])
+async def get_local_farms(
+    postal_code: str = "10001",
+    country: str = "US",
+    max_distance_km: float = 50.0,
+    vendor_type: Optional[str] = None,
+    certifications: Optional[str] = None,
+    farming_methods: Optional[str] = None,
+    has_farm_dining: Optional[bool] = None,
+    current_user_id: str = Depends(get_current_user_optional)
+):
+    """Get local farms based on location and preferences"""
+    try:
+        # Default location (would use geocoding in production)
+        user_location = {
+            "type": "Point",
+            "coordinates": [-73.935242, 40.730610]  # Default NYC
+        }
+        
+        filters = {}
+        if vendor_type:
+            filters["vendor_type"] = vendor_type
+        if certifications:
+            filters["certifications"] = certifications.split(",")
+        if farming_methods:
+            filters["farming_methods"] = farming_methods.split(",")
+        if has_farm_dining is not None:
+            filters["has_farm_dining"] = has_farm_dining
+        
+        farms = await farm_ecosystem_service.get_local_farms(
+            user_location, postal_code, country, max_distance_km, filters
+        )
+        
+        return farms
+        
+    except Exception as e:
+        logger.error(f"Failed to get local farms: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/farms/{farm_id}/products", response_model=List[dict])
+async def get_farm_products(
+    farm_id: str,
+    category: Optional[str] = None,
+    availability_type: Optional[str] = None,
+    in_season_only: bool = False
+):
+    """Get products from a specific farm"""
+    try:
+        query = {"farm_id": farm_id, "is_active": True}
+        
+        if category:
+            query["category"] = category
+        if availability_type:
+            query["availability_type"] = availability_type
+        
+        if in_season_only:
+            current_month = datetime.utcnow().strftime('%B')
+            query["$or"] = [
+                {"availability_type": "year_round"},
+                {"seasonal_months": {"$in": [current_month]}}
+            ]
+        
+        products_cursor = db.farm_products.find(query, {"_id": 0}).sort("product_name", 1)
+        products = await products_cursor.to_list(length=100)
+        
+        # Get farm info
+        farm = await db.farm_profiles.find_one({"id": farm_id}, {"_id": 0})
+        farm_name = farm["farm_name"] if farm else "Unknown Farm"
+        
+        # Enrich products with farm name
+        for product in products:
+            product["farm_name"] = farm_name
+        
+        return products
+        
+    except Exception as e:
+        logger.error(f"Failed to get farm products: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/farms/{farm_id}/products", response_model=dict)
+async def create_farm_product(
+    farm_id: str,
+    product_data: FarmProductRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create a new farm product (for farm vendors)"""
+    try:
+        # Verify user owns this farm
+        farm = await db.farm_profiles.find_one({"id": farm_id, "vendor_id": current_user_id}, {"_id": 0})
+        if not farm:
+            raise HTTPException(status_code=403, detail="You don't have permission to add products to this farm")
+        
+        product = await farm_ecosystem_service.create_farm_product(
+            product_data.dict(), current_user_id
+        )
+        
+        return {
+            "success": True,
+            "product_id": product.id,
+            "message": "Farm product created successfully",
+            "product_name": product.product_name,
+            "category": product.category.value,
+            "price_per_unit": product.price_per_unit
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to create farm product: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/farms/products/order", response_model=dict)
+async def order_farm_products(
+    order_data: FarmProductOrderRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Order products from local farms"""
+    try:
+        order = await farm_ecosystem_service.order_farm_products(
+            order_data.dict(), current_user_id
+        )
+        
+        # Get farm info
+        farm = await db.farm_profiles.find_one({"id": order_data.farm_id}, {"_id": 0})
+        farm_name = farm["farm_name"] if farm else "Unknown Farm"
+        
+        return {
+            "success": True,
+            "order_id": order.id,
+            "farm_name": farm_name,
+            "total_amount": order.total_amount,
+            "farmer_payout": order.farmer_payout,
+            "platform_commission": order.platform_commission,
+            "delivery_method": order.delivery_method,
+            "preferred_delivery_date": order.preferred_delivery_date.isoformat(),
+            "confirmation_code": order.id[:8].upper(),
+            "message": "Farm product order placed successfully!"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to order farm products: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/farms/seasonal-calendar", response_model=dict)
+async def get_seasonal_harvest_calendar(
+    postal_code: str = "10001",
+    country: str = "US",
+    max_distance_km: float = 50.0,
+    current_user_id: str = Depends(get_current_user_optional)
+):
+    """Get seasonal harvest calendar from local farms"""
+    try:
+        user_location = {
+            "type": "Point",
+            "coordinates": [-73.935242, 40.730610]
+        }
+        
+        calendar = await farm_ecosystem_service.get_seasonal_harvest_calendar(
+            user_location, postal_code, max_distance_km
+        )
+        
+        # Add current season information
+        current_month = datetime.utcnow().strftime('%B')
+        current_season = farm_ecosystem_service._month_to_season(current_month)
+        
+        return {
+            "success": True,
+            "current_season": current_season,
+            "current_month": current_month,
+            "seasonal_calendar": calendar,
+            "total_farms": len(set(item["farm_name"] for season_items in calendar.values() for item in season_items)),
+            "message": f"Seasonal harvest calendar for {max_distance_km}km radius"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get seasonal harvest calendar: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/farms/recipe-sourcing", response_model=dict)
+async def get_recipe_ingredient_sourcing(
+    request_data: dict,
+    current_user_id: str = Depends(get_current_user_optional)
+):
+    """Get local sourcing options for recipe ingredients"""
+    try:
+        ingredients = request_data.get("ingredients", [])
+        postal_code = request_data.get("postal_code", "10001")
+        max_distance_km = request_data.get("max_distance_km", 30.0)
+        
+        if not ingredients:
+            raise HTTPException(status_code=400, detail="Ingredients list is required")
+        
+        user_location = {
+            "type": "Point", 
+            "coordinates": [-73.935242, 40.730610]
+        }
+        
+        sourcing_info = await farm_ecosystem_service.get_recipe_ingredient_sourcing(
+            ingredients, user_location, postal_code, max_distance_km
+        )
+        
+        return {
+            "success": True,
+            "recipe_ingredients": ingredients,
+            **sourcing_info
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get recipe ingredient sourcing: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/farms/dining-venues", response_model=List[dict])
+async def get_farm_dining_venues(
+    postal_code: str = "10001",
+    country: str = "US",
+    max_distance_km: float = 50.0,
+    venue_type: Optional[str] = None,
+    max_capacity: Optional[int] = None,
+    current_user_id: str = Depends(get_current_user_optional)
+):
+    """Get farm dining venues for outdoor farm-to-table experiences"""
+    try:
+        user_location = {
+            "type": "Point",
+            "coordinates": [-73.935242, 40.730610]
+        }
+        
+        # Get local farms first
+        farms = await farm_matching_service.find_local_farms(
+            user_location, postal_code, country, max_distance_km, {"has_farm_dining": True}
+        )
+        
+        # Get dining venues for these farms
+        farm_ids = [farm["id"] for farm in farms]
+        
+        query = {
+            "farm_id": {"$in": farm_ids},
+            "is_active": True,
+            "is_accepting_bookings": True
+        }
+        
+        if venue_type:
+            query["venue_type"] = venue_type
+        if max_capacity:
+            query["max_capacity"] = {"$gte": max_capacity}
+        
+        venues_cursor = db.farm_dining_venues.find(query, {"_id": 0})
+        venues = await venues_cursor.to_list(length=50)
+        
+        # Enrich with farm information and distance
+        enriched_venues = []
+        for venue in venues:
+            farm = next((f for f in farms if f["id"] == venue["farm_id"]), None)
+            if farm:
+                venue["farm_name"] = farm["farm_name"]
+                venue["distance_km"] = farm["distance_km"]
+                venue["farm_certifications"] = farm.get("certifications", [])
+                enriched_venues.append(venue)
+        
+        # Sort by distance
+        enriched_venues.sort(key=lambda x: x["distance_km"])
+        
+        return enriched_venues
+        
+    except Exception as e:
+        logger.error(f"Failed to get farm dining venues: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/farms/dining/book", response_model=dict)
+async def book_farm_dining_experience(
+    booking_data: FarmDiningBookingRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Book a farm dining experience"""
+    try:
+        booking = await farm_ecosystem_service.book_farm_dining(
+            booking_data.dict(), current_user_id
+        )
+        
+        # Get venue and farm info
+        venue = await db.farm_dining_venues.find_one({"id": booking_data.venue_id}, {"_id": 0})
+        farm = await db.farm_profiles.find_one({"id": venue["farm_id"]}, {"_id": 0}) if venue else None
+        
+        return {
+            "success": True,
+            "booking_id": booking.id,
+            "confirmation_code": booking.confirmation_code,
+            "farm_name": farm["farm_name"] if farm else "Unknown Farm",
+            "venue_name": venue["venue_name"] if venue else "Farm Dining",
+            "dining_date": booking.dining_date.isoformat(),
+            "number_of_guests": booking.number_of_guests,
+            "total_amount": booking.total_amount,
+            "includes_farm_tour": booking.includes_farm_tour,
+            "farmer_payout": booking.farmer_payout,
+            "message": "Farm dining experience booked successfully!"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to book farm dining experience: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/farms/my-farm/analytics", response_model=dict)
+async def get_my_farm_analytics(current_user_id: str = Depends(get_current_user)):
+    """Get analytics for farm vendor"""
+    try:
+        analytics = await farm_ecosystem_service.get_farm_analytics(current_user_id)
+        return {
+            "success": True,
+            "analytics": analytics
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to get farm analytics: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/farms/categories", response_model=List[dict])
+async def get_farm_product_categories():
+    """Get available farm product categories"""
+    categories = [
+        {"value": "fresh_vegetables", "label": "Fresh Vegetables", "icon": "🥬"},
+        {"value": "organic_produce", "label": "Organic Produce", "icon": "🌱"},
+        {"value": "fruits", "label": "Fruits", "icon": "🍎"},
+        {"value": "herbs_spices", "label": "Herbs & Spices", "icon": "🌿"},
+        {"value": "dairy_products", "label": "Dairy Products", "icon": "🥛"},
+        {"value": "fresh_meat", "label": "Fresh Meat", "icon": "🥩"},
+        {"value": "poultry", "label": "Poultry", "icon": "🐔"},
+        {"value": "eggs", "label": "Fresh Eggs", "icon": "🥚"},
+        {"value": "honey", "label": "Honey", "icon": "🍯"},
+        {"value": "grains", "label": "Grains", "icon": "🌾"},
+        {"value": "nuts", "label": "Nuts", "icon": "🥜"},
+        {"value": "specialty_items", "label": "Specialty Items", "icon": "⭐"}
+    ]
+    
+    return categories
+
+@api_router.get("/farms/certifications", response_model=List[dict])
+async def get_farm_certifications():
+    """Get available farm certifications"""
+    certifications = [
+        {"value": "usda_organic", "label": "USDA Organic", "icon": "🌱"},
+        {"value": "non_gmo", "label": "Non-GMO", "icon": "🚫"},
+        {"value": "grass_fed", "label": "Grass Fed", "icon": "🌾"},
+        {"value": "free_range", "label": "Free Range", "icon": "🐓"},
+        {"value": "pasture_raised", "label": "Pasture Raised", "icon": "🌳"},
+        {"value": "sustainable", "label": "Sustainable", "icon": "♻️"},
+        {"value": "local_grown", "label": "Local Grown", "icon": "📍"},
+        {"value": "biodynamic", "label": "Biodynamic", "icon": "🌙"}
+    ]
+    
+    return certifications
+
+@api_router.get("/farms/stats", response_model=dict)
+async def get_farm_ecosystem_stats():
+    """Get general farm ecosystem statistics"""
+    try:
+        # Public metrics
+        total_farms = await db.farm_profiles.count_documents({"is_active": True})
+        total_products = await db.farm_products.count_documents({"is_active": True, "is_available": True})
+        total_dining_venues = await db.farm_dining_venues.count_documents({"is_active": True})
+        
+        # Recent activity (last 7 days)
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        recent_orders = await db.farm_product_orders.count_documents({"order_date": {"$gte": week_ago}})
+        recent_dining_bookings = await db.farm_dining_bookings.count_documents({"booking_date": {"$gte": week_ago}})
+        
+        # Certification distribution
+        cert_pipeline = [
+            {"$unwind": "$certifications"},
+            {"$group": {"_id": "$certifications", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 5}
+        ]
+        
+        cert_results = await db.farm_profiles.aggregate(cert_pipeline).to_list(length=5)
+        top_certifications = [{"certification": cert["_id"], "count": cert["count"]} for cert in cert_results]
+        
+        return {
+            "success": True,
+            "total_active_farms": total_farms,
+            "total_available_products": total_products,
+            "total_dining_venues": total_dining_venues,
+            "recent_orders_7_days": recent_orders,
+            "recent_dining_bookings_7_days": recent_dining_bookings,
+            "top_certifications": top_certifications,
+            "platform_commission_rates": {
+                "farm_products": "10%",
+                "farm_dining": "15%"
+            },
+            "message": "Lambalia Farm Ecosystem - Connecting communities through local agriculture"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get farm ecosystem stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # ENHANCED AD SYSTEM & MONETIZATION ROUTES - Phase 3
 
 # Initialize monetization services
