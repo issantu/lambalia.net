@@ -34,6 +34,11 @@ class LambaliaEnhancedAPITester:
         self.traditional_restaurant_id = None
         self.special_order_id = None
         self.special_order_booking_id = None
+        
+        # Daily marketplace test data
+        self.cooking_offer_id = None
+        self.eating_request_id = None
+        self.cooking_appointment_id = None
 
     def log_test(self, name: str, success: bool, details: str = ""):
         """Log test results"""
