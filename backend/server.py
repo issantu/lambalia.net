@@ -972,6 +972,324 @@ async def book_special_order(
         confirmation_code=booking.id[:8].upper()
     )
 
+# DAILY MARKETPLACE ROUTES - Dynamic Offer & Demand System
+
+# Initialize daily marketplace service
+daily_marketplace = DailyMarketplaceService(db)
+
+@api_router.post("/daily-marketplace/cooking-offers", response_model=dict)
+async def create_cooking_offer(
+    offer_data: CookingOfferRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create a daily cooking offer"""
+    try:
+        # Get user info for cook name/rating
+        user = await db.users.find_one({"id": current_user_id})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Parse cooking date
+        offer_dict = offer_data.dict()
+        offer_dict['cooking_date'] = datetime.fromisoformat(offer_data.cooking_date.replace('Z', '+00:00'))
+        
+        # Set location (simplified - in production would use geocoding)
+        offer_dict['location'] = {
+            "type": "Point",
+            "coordinates": [-73.935242, 40.730610]  # Default NYC coordinates
+        }
+        offer_dict['address'] = f"{offer_data.city}, {offer_data.country}"
+        
+        offer = await daily_marketplace.create_cooking_offer(offer_dict, current_user_id)
+        
+        return {
+            "success": True,
+            "offer_id": offer.id,
+            "message": "Cooking offer created successfully",
+            "expires_at": offer.expires_at.isoformat(),
+            "cook_payout_per_serving": offer.cook_payout_per_serving
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to create cooking offer: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/daily-marketplace/cooking-offers", response_model=List[dict])
+async def get_local_cooking_offers(
+    postal_code: str = "10001",
+    country: str = "US",
+    max_distance_km: float = 20.0,
+    category: Optional[str] = None,
+    cuisine_type: Optional[str] = None,
+    max_price: Optional[float] = None,
+    is_vegetarian: Optional[bool] = None,
+    is_vegan: Optional[bool] = None,
+    is_gluten_free: Optional[bool] = None,
+    current_user_id: str = Depends(get_current_user_optional)
+):
+    """Get local cooking offers based on location and preferences"""
+    try:
+        # Default location (NYC) - in production would get from user profile or geocoding
+        user_location = {
+            "type": "Point",
+            "coordinates": [-73.935242, 40.730610]
+        }
+        
+        filters = {}
+        if category:
+            filters["category"] = category
+        if cuisine_type:
+            filters["cuisine_type"] = cuisine_type
+        if max_price:
+            filters["max_price"] = max_price
+        if is_vegetarian:
+            filters["is_vegetarian"] = is_vegetarian
+        if is_vegan:
+            filters["is_vegan"] = is_vegan
+        if is_gluten_free:
+            filters["is_gluten_free"] = is_gluten_free
+        
+        offers = await daily_marketplace.get_local_cooking_offers(
+            user_location, postal_code, country, max_distance_km, filters
+        )
+        
+        # Enrich with cook information
+        enriched_offers = []
+        for offer in offers:
+            cook = await db.users.find_one({"id": offer["cook_id"]})
+            offer["cook_name"] = cook.get("full_name", "Chef") if cook else "Chef"
+            offer["cook_rating"] = cook.get("rating", 0.0) if cook else 0.0
+            enriched_offers.append(offer)
+        
+        return enriched_offers
+        
+    except Exception as e:
+        logger.error(f"Failed to get cooking offers: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/daily-marketplace/eating-requests", response_model=dict)
+async def create_eating_request(
+    request_data: EatingRequestRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create an eating request to find matching cooks"""
+    try:
+        # Get user info
+        user = await db.users.find_one({"id": current_user_id})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Parse preferred date if provided
+        request_dict = request_data.dict()
+        if request_data.preferred_date:
+            request_dict['preferred_date'] = datetime.fromisoformat(request_data.preferred_date.replace('Z', '+00:00'))
+        
+        # Set location (simplified)
+        request_dict['location'] = {
+            "type": "Point", 
+            "coordinates": [-73.935242, 40.730610]  # Default NYC coordinates
+        }
+        request_dict['address'] = f"{request_data.city}, {request_data.country}"
+        
+        eating_request = await daily_marketplace.create_eating_request(request_dict, current_user_id)
+        
+        return {
+            "success": True,
+            "request_id": eating_request.id,
+            "message": "Eating request created successfully",
+            "matches_found": eating_request.match_count,
+            "expires_at": eating_request.expires_at.isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to create eating request: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/daily-marketplace/eating-requests", response_model=List[dict])
+async def get_local_eating_requests(
+    postal_code: str = "10001",
+    country: str = "US",
+    max_distance_km: float = 20.0,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get local eating requests for cooks to see demand"""
+    try:
+        # Default location (NYC)
+        user_location = {
+            "type": "Point",
+            "coordinates": [-73.935242, 40.730610]
+        }
+        
+        requests = await daily_marketplace.get_local_eating_requests(
+            user_location, postal_code, country, max_distance_km
+        )
+        
+        # Enrich with eater information
+        enriched_requests = []
+        for request in requests:
+            eater = await db.users.find_one({"id": request["eater_id"]})
+            request["eater_name"] = eater.get("full_name", "Food Lover") if eater else "Food Lover"
+            
+            # Format service preferences for display
+            preferences = []
+            if request.get("pickup_preferred"):
+                preferences.append("Pickup")
+            if request.get("delivery_preferred"):
+                preferences.append("Delivery")
+            if request.get("dine_in_preferred"):
+                preferences.append("Dine-in")
+            request["service_preferences"] = preferences
+            
+            enriched_requests.append(request)
+        
+        return enriched_requests
+        
+    except Exception as e:
+        logger.error(f"Failed to get eating requests: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/daily-marketplace/book-offer", response_model=dict)
+async def book_cooking_offer(
+    appointment_data: AppointmentRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Book a cooking offer directly"""
+    try:
+        # Parse scheduled date
+        appointment_dict = appointment_data.dict()
+        appointment_dict['scheduled_date'] = datetime.fromisoformat(appointment_data.scheduled_date.replace('Z', '+00:00'))
+        
+        appointment = await daily_marketplace.book_cooking_offer(appointment_dict, current_user_id)
+        
+        # Get cook and offer info for response
+        offer = await db.cooking_offers.find_one({"id": appointment_data.offer_id})
+        cook = await db.users.find_one({"id": appointment.cook_id})
+        
+        return {
+            "success": True,
+            "appointment_id": appointment.id,
+            "confirmation_code": appointment.id[:8].upper(),
+            "total_amount": appointment.total_amount,
+            "cook_name": cook.get("full_name", "Chef") if cook else "Chef",
+            "dish_name": offer.get("dish_name", "Delicious meal") if offer else "Delicious meal",
+            "scheduled_date": appointment.scheduled_date.isoformat(),
+            "message": "Cooking appointment booked successfully!"
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to book cooking offer: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/daily-marketplace/my-offers", response_model=List[dict])
+async def get_my_cooking_offers(current_user_id: str = Depends(get_current_user)):
+    """Get current user's cooking offers"""
+    try:
+        offers = await daily_marketplace.get_user_cooking_offers(current_user_id)
+        return offers
+    except Exception as e:
+        logger.error(f"Failed to get user cooking offers: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/daily-marketplace/my-requests", response_model=List[dict])
+async def get_my_eating_requests(current_user_id: str = Depends(get_current_user)):
+    """Get current user's eating requests"""
+    try:
+        requests = await daily_marketplace.get_user_eating_requests(current_user_id)
+        return requests
+    except Exception as e:
+        logger.error(f"Failed to get user eating requests: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/daily-marketplace/my-appointments", response_model=List[dict])
+async def get_my_appointments(current_user_id: str = Depends(get_current_user)):
+    """Get current user's appointments (as cook or eater)"""
+    try:
+        appointments = await daily_marketplace.get_user_appointments(current_user_id)
+        
+        # Enrich with additional info
+        enriched_appointments = []
+        for appointment in appointments:
+            # Get offer info
+            offer = await db.cooking_offers.find_one({"id": appointment["offer_id"]})
+            if offer:
+                appointment["offer_title"] = offer["title"]
+                appointment["dish_name"] = offer["dish_name"]
+            
+            # Get cook and eater names
+            cook = await db.users.find_one({"id": appointment["cook_id"]})
+            eater = await db.users.find_one({"id": appointment["eater_id"]})
+            
+            appointment["cook_name"] = cook.get("full_name", "Chef") if cook else "Chef"
+            appointment["eater_name"] = eater.get("full_name", "Food Lover") if eater else "Food Lover"
+            appointment["confirmation_code"] = appointment["id"][:8].upper()
+            
+            enriched_appointments.append(appointment)
+        
+        return enriched_appointments
+        
+    except Exception as e:
+        logger.error(f"Failed to get user appointments: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/daily-marketplace/categories", response_model=List[dict])
+async def get_meal_categories():
+    """Get available meal categories"""
+    categories = [
+        {"value": "quick_meals", "label": "Quick Meals", "icon": "⚡"},
+        {"value": "family_dinner", "label": "Family Dinner", "icon": "👨‍👩‍👧‍👦"},
+        {"value": "cultural_specialties", "label": "Cultural Specialties", "icon": "🌍"},
+        {"value": "breakfast", "label": "Breakfast", "icon": "🌅"},
+        {"value": "lunch", "label": "Lunch", "icon": "🥪"},
+        {"value": "dinner", "label": "Dinner", "icon": "🍽️"},
+        {"value": "brunch", "label": "Brunch", "icon": "🥐"},
+        {"value": "desserts", "label": "Desserts", "icon": "🍰"},
+        {"value": "july_4th", "label": "July 4th", "icon": "🇺🇸"},
+        {"value": "cinco_de_mayo", "label": "Cinco de Mayo", "icon": "🇲🇽"},
+        {"value": "thanksgiving", "label": "Thanksgiving", "icon": "🦃"},
+        {"value": "christmas", "label": "Christmas", "icon": "🎄"},
+        {"value": "new_year", "label": "New Year", "icon": "🎊"},
+        {"value": "valentines_day", "label": "Valentine's Day", "icon": "💕"},
+        {"value": "mothers_day", "label": "Mother's Day", "icon": "👩"},
+        {"value": "fathers_day", "label": "Father's Day", "icon": "👨"},
+        {"value": "easter", "label": "Easter", "icon": "🐰"},
+        {"value": "halloween", "label": "Halloween", "icon": "🎃"},
+        {"value": "diwali", "label": "Diwali", "icon": "🪔"},
+        {"value": "chinese_new_year", "label": "Chinese New Year", "icon": "🐉"},
+        {"value": "ramadan", "label": "Ramadan", "icon": "🌙"},
+        {"value": "birthday", "label": "Birthday", "icon": "🎂"},
+        {"value": "anniversary", "label": "Anniversary", "icon": "💒"},
+        {"value": "comfort_food", "label": "Comfort Food", "icon": "🍲"},
+        {"value": "healthy", "label": "Healthy", "icon": "🥗"},
+        {"value": "vegan", "label": "Vegan", "icon": "🌱"},
+        {"value": "vegetarian", "label": "Vegetarian", "icon": "🥕"}
+    ]
+    
+    return categories
+
+@api_router.get("/daily-marketplace/stats", response_model=dict)
+async def get_daily_marketplace_stats():
+    """Get daily marketplace statistics"""
+    try:
+        # Count active offers and requests
+        active_offers = await db.cooking_offers.count_documents({"status": "active"})
+        active_requests = await db.eating_requests.count_documents({"status": "active"})
+        total_appointments = await db.cooking_appointments.count_documents({})
+        completed_appointments = await db.cooking_appointments.count_documents({"status": "completed"})
+        
+        return {
+            "active_cooking_offers": active_offers,
+            "active_eating_requests": active_requests,
+            "total_appointments": total_appointments,
+            "completed_appointments": completed_appointments,
+            "success_rate": round((completed_appointments / total_appointments * 100), 2) if total_appointments > 0 else 0
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get marketplace stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # TRANSLATION SERVICE ROUTES
 
 @api_router.post("/translate")
