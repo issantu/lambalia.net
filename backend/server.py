@@ -1127,7 +1127,7 @@ async def get_local_eating_requests(
         # Enrich with eater information
         enriched_requests = []
         for request in requests:
-            eater = await db.users.find_one({"id": request["eater_id"]})
+            eater = await db.users.find_one({"id": request["eater_id"]}, {"_id": 0})
             request["eater_name"] = eater.get("full_name", "Food Lover") if eater else "Food Lover"
             
             # Format service preferences for display
