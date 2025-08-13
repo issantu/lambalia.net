@@ -1442,6 +1442,33 @@ class LambaliaEnhancedAPITester:
         self.test_real_time_messaging_translation()
         self.test_recipe_content_translation()
         
+        # Daily Marketplace System tests - Dynamic Offer & Demand System (Phase 2)
+        print("\n🍽️ Testing Daily Marketplace System (Phase 2)...")
+        self.test_create_cooking_offer()
+        self.test_get_local_cooking_offers()
+        self.test_get_cooking_offers_with_filters()
+        self.test_create_eating_request()
+        self.test_get_local_eating_requests()
+        self.test_book_cooking_offer()
+        
+        print("\n👤 Testing Personal Management...")
+        self.test_get_my_cooking_offers()
+        self.test_get_my_eating_requests()
+        self.test_get_my_appointments()
+        
+        print("\n📊 Testing Categories & Analytics...")
+        self.test_get_meal_categories()
+        self.test_daily_marketplace_stats()
+        
+        print("\n🔧 Testing Core Algorithms...")
+        self.test_commission_calculation()
+        self.test_local_matching_algorithm()
+        self.test_expiration_system()
+        self.test_appointment_booking_validation()
+        self.test_dietary_filtering()
+        self.test_distance_calculation()
+        self.test_compatibility_scoring()
+        
         # Print summary
         print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
