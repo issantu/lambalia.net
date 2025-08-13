@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
 
 class TraditionalRestaurantTester:
-    def __init__(self, base_url="https://foodie-share.preview.emergentagent.com"):
+    def __init__(self, base_url="https://lambalia-social.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
@@ -642,7 +642,7 @@ class TraditionalRestaurantTester:
 def main():
     """Main test runner"""
     print("Comprehensive Traditional Restaurant Marketplace Test Suite")
-    print(f"Testing against: https://foodie-share.preview.emergentagent.com")
+    print(f"Testing against: https://lambalia-social.preview.emergentagent.com")
     print()
     
     tester = TraditionalRestaurantTester()

@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 
 class LambaliaSampleDataCreator:
-    def __init__(self, base_url="https://foodie-share.preview.emergentagent.com"):
+    def __init__(self, base_url="https://lambalia-social.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.users = []
