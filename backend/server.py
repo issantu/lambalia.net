@@ -2811,9 +2811,9 @@ async def stripe_webhook(request: Request):
 # Include main API router
 app.include_router(api_router)
 
-# Include Lambalia Eats router under /api prefix
+# Include Lambalia Eats router with proper prefix
 lambalia_eats_router = create_lambalia_eats_router(lambalia_eats_service, get_current_user, get_current_user_optional)
-api_router.include_router(lambalia_eats_router)
+app.include_router(lambalia_eats_router, prefix="/api")
 
 # CORS
 app.add_middleware(
