@@ -559,7 +559,7 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
     
     # SPECIALTY STORE CHAIN INTEGRATION
     
-    @router.get("/stores/chains", response_model=List[dict])
+    @router.get("/stores/chains", response_model=dict)
     async def get_supported_store_chains():
         """Get list of supported ethnic grocery store chains"""
         chains = [
