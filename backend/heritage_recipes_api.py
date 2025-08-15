@@ -272,7 +272,7 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     
-    @router.get("/ingredients/rare", response_model=List[dict])
+    @router.get("/ingredients/rare", response_model=dict)
     async def get_rare_ingredients(
         country: Optional[str] = None,
         rarity_level: Optional[str] = None
