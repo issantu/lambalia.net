@@ -536,8 +536,205 @@ class HeritageRecipesService:
                 if distance <= radius_km:
                     store["distance_km"] = round(distance, 1)
                     nearby_stores.append(store)
+    
+    # WEB SCRAPING & INTEGRATION WITH ETHNIC STORE CHAINS
+    
+    async def register_specialty_store_chain(self, chain_name: str, chain_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Register major ethnic grocery store chains (H-Mart, etc.) with locations and specialties"""
         
-        return sorted(nearby_stores, key=lambda x: x["distance_km"])
+        chain_mapping = {
+            "h_mart": {
+                "name": "H Mart",
+                "specialties": ["korea", "japan", "china", "vietnam", "thailand"],
+                "common_products": [
+                    "korean_chili_paste", "miso_paste", "rice_cakes", "asian_vegetables",
+                    "korean_soy_sauce", "kimchi", "seaweed", "tofu_varieties"
+                ],
+                "store_type": "asian_supermarket",
+                "website_integration": True
+            },
+            "patel_brothers": {
+                "name": "Patel Brothers", 
+                "specialties": ["india", "pakistan", "bangladesh", "sri_lanka"],
+                "common_products": [
+                    "basmati_rice", "lentils", "spices", "curry_leaves", "ghee",
+                    "indian_vegetables", "paneer", "frozen_indian_foods"
+                ],
+                "store_type": "indian_grocery",
+                "website_integration": True
+            },
+            "ranch_99": {
+                "name": "99 Ranch Market",
+                "specialties": ["china", "taiwan", "vietnam", "korea", "philippines"],
+                "common_products": [
+                    "chinese_vegetables", "fresh_noodles", "soy_sauces", "asian_fruits",
+                    "dim_sum", "hot_pot_ingredients", "tea_varieties"
+                ],
+                "store_type": "asian_supermarket", 
+                "website_integration": True
+            },
+            "fresh_thyme": {
+                "name": "Fresh Thyme International",
+                "specialties": ["mexico", "guatemala", "honduras", "el_salvador"],
+                "common_products": [
+                    "mexican_chiles", "hominy", "masa_harina", "mexican_cheeses",
+                    "plantains", "yuca", "tropical_fruits"
+                ],
+                "store_type": "latin_american_market",
+                "website_integration": False
+            },
+            "african_market": {
+                "name": "African Food Market",
+                "specialties": ["nigeria", "ghana", "ethiopia", "cameroon", "senegal"],
+                "common_products": [
+                    "cassava_flour", "plantain", "yams", "palm_oil", "african_spices",
+                    "dried_fish", "okra", "african_vegetables"
+                ],
+                "store_type": "african_grocery",
+                "website_integration": False
+            }
+        }
+        
+        if chain_name.lower() not in chain_mapping:
+            return {"error": f"Chain {chain_name} not supported yet"}
+        
+        chain_info = chain_mapping[chain_name.lower()]
+        
+        # Store chain information for future integration
+        await self.db.store_chains.update_one(
+            {"chain_id": chain_name.lower()},
+            {
+                "$set": {
+                    **chain_info,
+                    "integration_status": "registered",
+                    "last_updated": datetime.utcnow(),
+                    "locations_count": len(chain_data.get("locations", [])),
+                    "locations": chain_data.get("locations", [])
+                }
+            },
+            upsert=True
+        )
+        
+        return {
+            "success": True,
+            "chain_registered": chain_info["name"],
+            "specialties": len(chain_info["specialties"]),
+            "common_products": len(chain_info["common_products"]),
+            "integration_ready": chain_info["website_integration"]
+        }
+    
+    async def get_chain_store_availability(self, ingredient_name: str, user_location: Dict[str, float], 
+                                         radius_km: float = 50) -> Dict[str, Any]:
+        """Check ingredient availability at major ethnic grocery chains"""
+        
+        # Get registered chains
+        chains = await self.db.store_chains.find({"integration_status": "registered"}, {"_id": 0}).to_list(length=20)
+        
+        availability_results = {
+            "ingredient_name": ingredient_name,
+            "chain_availability": [],
+            "total_chains_checked": len(chains),
+            "likely_available_at": []
+        }
+        
+        # Check ingredient against chain specialties
+        for chain in chains:
+            chain_score = 0
+            specialties = chain.get("specialties", [])
+            common_products = chain.get("common_products", [])
+            
+            # Simple matching logic
+            ingredient_lower = ingredient_name.lower()
+            
+            # Check if ingredient matches common products
+            for product in common_products:
+                if any(word in ingredient_lower for word in product.replace("_", " ").split()):
+                    chain_score += 2
+            
+            # Check specialty region match
+            ingredient_data = await self.db.specialty_ingredients.find_one(
+                {"ingredient_name": {"$regex": ingredient_name, "$options": "i"}}, {"_id": 0}
+            )
+            
+            if ingredient_data:
+                ingredient_origins = ingredient_data.get("origin_countries", [])
+                specialty_match = any(origin in specialties for origin in ingredient_origins)
+                if specialty_match:
+                    chain_score += 3
+            
+            # Find nearby locations for this chain
+            chain_locations = chain.get("locations", [])
+            nearby_locations = []
+            
+            for location in chain_locations:
+                if location.get("location"):
+                    distance = self.preservation_engine.calculate_distance_km(
+                        user_location, location["location"]
+                    )
+                    if distance <= radius_km:
+                        nearby_locations.append({
+                            **location,
+                            "distance_km": round(distance, 1)
+                        })
+            
+            if chain_score > 0 or nearby_locations:
+                availability_results["chain_availability"].append({
+                    "chain_name": chain["name"],
+                    "likelihood_score": chain_score,
+                    "likelihood": "high" if chain_score >= 3 else "medium" if chain_score >= 1 else "low",
+                    "nearby_locations": len(nearby_locations),
+                    "closest_location": nearby_locations[0] if nearby_locations else None,
+                    "chain_specialties": specialties,
+                    "website_integration": chain.get("website_integration", False)
+                })
+                
+                if chain_score >= 2:
+                    availability_results["likely_available_at"].append(chain["name"])
+        
+        # Sort by likelihood score
+        availability_results["chain_availability"].sort(key=lambda x: x["likelihood_score"], reverse=True)
+        
+        return availability_results
+    
+    async def sync_store_chain_inventory(self, chain_name: str) -> Dict[str, Any]:
+        """Sync inventory data from store chain websites (future implementation)"""
+        
+        # This is a placeholder for future web scraping integration
+        # Each chain would need specific scraping logic
+        
+        chain_scrapers = {
+            "h_mart": self._scrape_hmart_inventory,
+            "patel_brothers": self._scrape_patel_inventory,
+            "ranch_99": self._scrape_ranch99_inventory
+        }
+        
+        if chain_name.lower() not in chain_scrapers:
+            return {"error": f"No scraper available for {chain_name}"}
+        
+        # For now, return placeholder data
+        return {
+            "success": True,
+            "chain": chain_name,
+            "last_sync": datetime.utcnow().isoformat(),
+            "items_synced": 0,
+            "status": "scraper_not_implemented",
+            "note": "Web scraping integration coming soon"
+        }
+    
+    async def _scrape_hmart_inventory(self) -> Dict[str, Any]:
+        """Scrape H-Mart website for Korean/Asian ingredient availability"""
+        # Placeholder for H-Mart specific scraping logic
+        return {"status": "not_implemented"}
+    
+    async def _scrape_patel_inventory(self) -> Dict[str, Any]:
+        """Scrape Patel Brothers website for Indian ingredient availability"""
+        # Placeholder for Patel Brothers specific scraping logic
+        return {"status": "not_implemented"}
+    
+    async def _scrape_ranch99_inventory(self) -> Dict[str, Any]:
+        """Scrape 99 Ranch Market website for Asian ingredient availability"""
+        # Placeholder for 99 Ranch specific scraping logic
+        return {"status": "not_implemented"}
     
     async def _compare_substitute_availability(self, substitutes: List[Dict[str, str]]) -> List[Dict[str, Any]]:
         """Compare availability of substitute ingredients"""
