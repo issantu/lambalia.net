@@ -218,7 +218,7 @@ class HeritageRecipesService:
     # SPECIALTY INGREDIENT MANAGEMENT
     
     async def add_specialty_ingredient(self, ingredient_data: Dict[str, Any], contributor_id: str) -> SpecialtyIngredient:
-        """Add a hard-to-find Afro-Caribbean ingredient to the database"""
+        """Add a hard-to-find heritage ingredient from any global community to the database"""
         
         ingredient = SpecialtyIngredient(
             added_by=contributor_id,
