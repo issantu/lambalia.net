@@ -294,7 +294,7 @@ class HeritageRecipesService:
     # ETHNIC GROCERY STORE MANAGEMENT
     
     async def register_ethnic_store(self, store_data: Dict[str, Any], contributor_id: str) -> EthnicGroceryStore:
-        """Register a specialty grocery store serving Afro-Caribbean communities"""
+        """Register a specialty grocery store serving global heritage communities (H-Mart, Indian stores, etc.)"""
         
         store = EthnicGroceryStore(
             added_by=contributor_id,
