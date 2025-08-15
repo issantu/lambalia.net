@@ -66,6 +66,8 @@ from charity_program_models import (
     PremiumMembershipUpgradeRequest, CharityActivityResponse, CommunityImpactResponse,
     PremiumBenefitsResponse, CharityType, VerificationStatus, PremiumTier
 )
+from lambalia_eats_service import LambaliaEatsService
+from lambalia_eats_api import create_lambalia_eats_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
