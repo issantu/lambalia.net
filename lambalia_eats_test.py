@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from typing import Dict, Any, Optional
 
 class LambaliaEatsAPITester:
-    def __init__(self, base_url="https://02ad0890-9c1d-4af4-810f-7e2d4a6e1a2a.preview.emergentagent.com"):
+    def __init__(self, base_url="https://lambalia-recipes.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
@@ -538,7 +538,7 @@ class LambaliaEatsAPITester:
 def main():
     """Main test runner"""
     print("Lambalia Eats Real-time Food Marketplace Test Suite")
-    print(f"Testing against: https://02ad0890-9c1d-4af4-810f-7e2d4a6e1a2a.preview.emergentagent.com")
+    print(f"Testing against: https://lambalia-recipes.preview.emergentagent.com")
     print()
     
     tester = LambaliaEatsAPITester()
