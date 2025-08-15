@@ -1911,51 +1911,51 @@ const HomePage = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold heading-gradient mb-4">Discover Traditional Recipes</h2>
-        <p className="text-gray-600 mb-6">Explore authentic culinary treasures from every corner of the world</p>
+        <h2 className="text-3xl font-bold heading-gradient mb-4">{t('home.title')}</h2>
+        <p className="text-gray-600 mb-6">{t('home.subtitle')}</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
           <Link
             to="/templates"
             className="btn-primary text-center p-4 rounded-lg no-underline text-white"
           >
-            📚 Browse Templates
+            {t('home.actions.browseName')}
           </Link>
           <Link
             to="/create-snippet"
             className="btn-secondary text-center p-4 rounded-lg no-underline text-white"
           >
-            ✨ Create Snippet
+            {t('home.actions.createName')}
           </Link>
           <Link
             to="/grocery"
             className="bg-blue-500 hover:bg-blue-600 text-center p-4 rounded-lg no-underline text-white transition-all"
           >
-            🛒 Find Ingredients
+            {t('home.actions.ingredientsName')}
           </Link>
           <Link
             to="/home-restaurant"
             className="bg-purple-500 hover:bg-purple-600 text-center p-4 rounded-lg no-underline text-white transition-all"
           >
-            🏠👩‍🍳 Open Kitchen
+            {t('home.actions.restaurantName')}
           </Link>
           <Link
             to="/local-marketplace"
             className="bg-green-500 hover:bg-green-600 text-center p-4 rounded-lg no-underline text-white transition-all"
           >
-            🌱🛒 Local Market
+            {t('home.actions.marketplaceName')}
           </Link>
           <Link
             to="/charity-program"
             className="bg-red-500 hover:bg-red-600 text-center p-4 rounded-lg no-underline text-white transition-all"
           >
-            🤝❤️ Give Back
+            {t('home.actions.charityName')}
           </Link>
           <Link
             to="/lambalia-eats"
             className="bg-orange-500 hover:bg-orange-600 text-center p-4 rounded-lg no-underline text-white transition-all"
           >
-            🚚🍽️ Quick Eats
+            {t('home.actions.eatsName')}
           </Link>
         </div>
       </div>
