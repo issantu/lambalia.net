@@ -350,7 +350,10 @@ const Header = () => {
               🌱🛒 Local Market
             </Link>
             <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              🤝❤️ Give Back
+              🤝❤️ Give Back  
+            </Link>
+            <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-3 py-2 rounded-md font-medium">
+              🚚🍽️ Quick Eats
             </Link>
             <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
               👤 Profile
