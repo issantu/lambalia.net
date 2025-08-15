@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends, WebSocket, WebSocketDisco
 from typing import List, Optional, Dict, Any
 import json
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from lambalia_eats_service import LambaliaEatsService, EatsMatchingEngine
 from lambalia_eats_models import (
