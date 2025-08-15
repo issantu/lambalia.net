@@ -1321,6 +1321,9 @@ farm_matching_service = LocalFarmMatchingService(db)
 # Initialize charity program service
 charity_program_service = CharityProgramService(db)
 
+# Initialize Lambalia Eats service
+lambalia_eats_service = LambaliaEatsService(db)
+
 @api_router.post("/farm-vendors/apply", response_model=dict)
 async def apply_as_farm_vendor(
     application_data: FarmVendorApplicationRequest,
