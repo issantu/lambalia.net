@@ -287,6 +287,11 @@ class LambaliaEatsService:
                 {"$inc": {"quantity_remaining": -order_data.get("quantity", 1)}}
             )
             
+            # Handle datetime parsing for ready_at
+            ready_at = offer["ready_at"]
+            if isinstance(ready_at, str):
+                ready_at = datetime.fromisoformat(ready_at.replace('Z', '+00:00'))
+            
             order = ActiveOrder(
                 eater_id=eater_id,
                 cook_id=offer["cook_id"],
@@ -297,7 +302,7 @@ class LambaliaEatsService:
                 eater_location=order_data.get("eater_location", {}),
                 cook_location=offer["cook_location"],
                 delivery_address=order_data.get("delivery_address"),
-                estimated_ready_time=datetime.fromisoformat(offer["ready_at"]),
+                estimated_ready_time=ready_at,
                 meal_price=offer["price_per_serving"] * order_data.get("quantity", 1),
                 delivery_fee=offer.get("delivery_fee", 0) if order_data["service_type"] == "delivery" else 0,
                 service_fee=self._calculate_service_fee(offer["price_per_serving"] * order_data.get("quantity", 1)),
