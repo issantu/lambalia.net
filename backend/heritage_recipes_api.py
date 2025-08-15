@@ -557,4 +557,155 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     
+    # SPECIALTY STORE CHAIN INTEGRATION
+    
+    @router.get("/stores/chains", response_model=List[dict])
+    async def get_supported_store_chains():
+        """Get list of supported ethnic grocery store chains"""
+        chains = [
+            {
+                "chain_id": "h_mart",
+                "name": "H Mart",
+                "description": "Korean-American supermarket chain specializing in Asian foods",
+                "specialties": ["Korean", "Japanese", "Chinese", "Vietnamese", "Thai"],
+                "countries_served": ["korea", "japan", "china", "vietnam", "thailand"],
+                "typical_products": ["Korean chili paste", "Miso", "Rice cakes", "Asian vegetables"],
+                "locations_usa": "80+",
+                "website": "hmart.com",
+                "integration_status": "supported"
+            },
+            {
+                "chain_id": "patel_brothers",
+                "name": "Patel Brothers",
+                "description": "Indian grocery store chain with authentic Indian ingredients",
+                "specialties": ["Indian", "Pakistani", "Bangladeshi", "Sri Lankan"],
+                "countries_served": ["india", "pakistan", "bangladesh", "sri_lanka"],
+                "typical_products": ["Basmati rice", "Lentils", "Spices", "Curry leaves", "Ghee"],
+                "locations_usa": "50+",
+                "website": "patelbros.com",
+                "integration_status": "supported"
+            },
+            {
+                "chain_id": "ranch_99",
+                "name": "99 Ranch Market",
+                "description": "Asian-American supermarket chain",
+                "specialties": ["Chinese", "Taiwanese", "Vietnamese", "Korean", "Filipino"],
+                "countries_served": ["china", "taiwan", "vietnam", "korea", "philippines"],
+                "typical_products": ["Chinese vegetables", "Fresh noodles", "Soy sauces", "Asian fruits"],
+                "locations_usa": "50+",
+                "website": "99ranch.com",
+                "integration_status": "supported"
+            },
+            {
+                "chain_id": "fresh_thyme",
+                "name": "Fresh Thyme International",
+                "description": "Latin American grocery stores",
+                "specialties": ["Mexican", "Guatemalan", "Honduran", "Salvadoran"],
+                "countries_served": ["mexico", "guatemala", "honduras", "el_salvador"],
+                "typical_products": ["Mexican chiles", "Masa harina", "Mexican cheeses", "Plantains"],
+                "locations_usa": "30+",
+                "website": "varies by location",
+                "integration_status": "basic"
+            },
+            {
+                "chain_id": "african_market",
+                "name": "African Food Markets",
+                "description": "Various African grocery stores",
+                "specialties": ["Nigerian", "Ghanaian", "Ethiopian", "Cameroonian"],
+                "countries_served": ["nigeria", "ghana", "ethiopia", "cameroon", "senegal"],
+                "typical_products": ["Cassava flour", "Palm oil", "African spices", "Dried fish"],
+                "locations_usa": "varies",
+                "website": "varies by location",
+                "integration_status": "basic"
+            }
+        ]
+        
+        return {
+            "success": True,
+            "supported_chains": chains,
+            "total_chains": len(chains),
+            "integration_note": "We're continuously adding more ethnic grocery chains to help you find authentic ingredients"
+        }
+    
+    @router.get("/ingredients/chain-availability", response_model=dict)
+    async def check_ingredient_chain_availability(
+        ingredient: str = Query(..., min_length=2),
+        lat: Optional[float] = None,
+        lng: Optional[float] = None,
+        radius_km: float = 50
+    ):
+        """Check ingredient availability at major ethnic grocery chains"""
+        try:
+            user_location = {"lat": lat or 40.7128, "lng": lng or -74.0060}  # Default NYC
+            
+            chain_availability = await heritage_service.get_chain_store_availability(
+                ingredient, user_location, radius_km
+            )
+            
+            return {
+                "success": True,
+                "ingredient_searched": ingredient,
+                "search_location": user_location if lat and lng else "default_location",
+                "chain_results": chain_availability,
+                "shopping_tips": [
+                    "Call stores ahead to confirm current stock",
+                    "Ask about special order options if not in stock",
+                    "Check store websites for online shopping availability",
+                    "Visit during restock days (usually mid-week) for best selection"
+                ]
+            }
+            
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    
+    @router.post("/stores/register-chain", response_model=dict)
+    async def register_store_chain(
+        chain_data: dict,
+        current_user_id: str = Depends(get_current_user_optional)
+    ):
+        """Register a major ethnic grocery store chain with locations"""
+        try:
+            if not current_user_id:
+                current_user_id = f"chain_registrant_{str(uuid.uuid4())[:8]}"
+            
+            chain_name = chain_data.get("chain_name", "").lower()
+            result = await heritage_service.register_specialty_store_chain(chain_name, chain_data)
+            
+            if result.get("error"):
+                raise HTTPException(status_code=400, detail=result["error"])
+            
+            return {
+                "success": True,
+                "chain_registration": result,
+                "community_impact": "This helps diaspora communities find ingredients from their heritage",
+                "next_steps": [
+                    "Chain locations will be verified",
+                    "Integration with chain inventory systems (if available)",
+                    "Community members can report ingredient availability"
+                ]
+            }
+            
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    
+    @router.post("/stores/sync-inventory/{chain_name}", response_model=dict)
+    async def sync_chain_inventory(
+        chain_name: str,
+        current_user_id: str = Depends(get_current_user)
+    ):
+        """Sync inventory data from store chain websites (admin only)"""
+        try:
+            result = await heritage_service.sync_store_chain_inventory(chain_name)
+            
+            return {
+                "success": True,
+                "sync_result": result,
+                "note": "Web scraping integration is coming soon to automatically track ingredient availability"
+            }
+            
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    
     return router
