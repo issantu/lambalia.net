@@ -2116,6 +2116,501 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("Integration Profit and Social Impact", success1 and success2 and integration_working, details)
 
+    # GLOBAL HERITAGE RECIPES & SPECIALTY INGREDIENTS SYSTEM TESTS
+
+    def test_heritage_countries_list(self):
+        """Test getting supported heritage countries and regions"""
+        success, data = self.make_request('GET', 'heritage/countries')
+        
+        if success:
+            countries_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {countries_count} supported countries/regions"
+            if countries_count > 0:
+                # Check for key regions
+                country_codes = [country.get('code') for country in data]
+                has_caribbean = any('jamaica' in code or 'trinidad' in code for code in country_codes if code)
+                has_asian = any('korea' in code or 'india' in code or 'china' in code for code in country_codes if code)
+                has_african = any('nigeria' in code or 'ghana' in code for code in country_codes if code)
+                has_latin = any('mexico' in code or 'colombia' in code for code in country_codes if code)
+                details += f", Caribbean: {'✓' if has_caribbean else '✗'}, Asian: {'✓' if has_asian else '✗'}, African: {'✓' if has_african else '✗'}, Latin: {'✓' if has_latin else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Heritage Countries List", success, details)
+
+    def test_heritage_recipe_submission(self):
+        """Test submitting a heritage recipe from Korean community"""
+        if not self.token:
+            return self.log_test("Heritage Recipe Submission", False, "- No auth token available")
+
+        korean_recipe_data = {
+            "recipe_name": "Traditional Kimchi",
+            "recipe_name_local": "김치",
+            "recipe_name_pronunciation": "kim-chi",
+            "country_region": "korea",
+            "cultural_significance": "everyday",
+            "authenticity_level": "traditional",
+            "description": "Traditional fermented cabbage dish that's a staple of Korean cuisine, passed down through generations",
+            "historical_context": "Kimchi has been a cornerstone of Korean cuisine for over 2000 years, originally developed as a way to preserve vegetables through harsh winters",
+            "family_story": "This recipe comes from my grandmother who learned it from her mother in Seoul",
+            "traditional_ingredients": [
+                {"name": "napa_cabbage", "amount": "1", "unit": "head", "notes": "Must be fresh and crisp"},
+                {"name": "korean_chili_flakes", "amount": "1", "unit": "cup", "notes": "Gochugaru - essential for authentic flavor"},
+                {"name": "fish_sauce", "amount": "3", "unit": "tbsp", "notes": "Korean fish sauce preferred"},
+                {"name": "garlic", "amount": "6", "unit": "cloves", "notes": "Fresh garlic only"},
+                {"name": "ginger", "amount": "1", "unit": "inch", "notes": "Fresh ginger root"},
+                {"name": "green_onions", "amount": "4", "unit": "stalks", "notes": "Korean green onions if available"},
+                {"name": "korean_pear", "amount": "1", "unit": "small", "notes": "Asian pear for sweetness"}
+            ],
+            "preparation_steps": [
+                "Salt the cabbage and let it drain for 2-4 hours",
+                "Rinse cabbage thoroughly and squeeze out excess water",
+                "Make paste with chili flakes, fish sauce, garlic, ginger, and grated pear",
+                "Mix cabbage with paste and green onions",
+                "Pack into clean jar, leaving 1 inch headspace",
+                "Ferment at room temperature for 3-5 days",
+                "Refrigerate once desired sourness is reached"
+            ],
+            "cooking_method": "fermentation",
+            "special_techniques": ["proper_salting", "anaerobic_fermentation", "temperature_control"],
+            "servings": 8,
+            "prep_time_minutes": 60,
+            "cook_time_minutes": 0,
+            "difficulty_level": 3,
+            "contributor_background": "Second-generation Korean-American, learned from grandmother in Seoul",
+            "traditional_occasion": "Daily meals, especially with rice and soup",
+            "regional_variations": ["Seoul-style with more garlic", "Busan-style with seafood additions"]
+        }
+
+        success, data = self.make_request('POST', 'heritage/recipes/submit', korean_recipe_data, 200)
+        
+        if success:
+            self.heritage_recipe_id = data.get('recipe_id')
+            recipe_name = data.get('recipe_name', 'unknown')
+            country = data.get('country_region', 'unknown')
+            specialty_ingredients = data.get('specialty_ingredients_identified', 0)
+            details = f"- Recipe ID: {self.heritage_recipe_id}, Name: {recipe_name}, Country: {country}, Specialty ingredients: {specialty_ingredients}"
+        else:
+            details = ""
+            
+        return self.log_test("Heritage Recipe Submission", success, details)
+
+    def test_heritage_recipes_by_country(self):
+        """Test getting heritage recipes from specific countries"""
+        # Test Korean recipes
+        success, data = self.make_request('GET', 'heritage/recipes/country/korea')
+        
+        if success:
+            korean_recipes = len(data.get('recipes', [])) if data else 0
+            details = f"- Found {korean_recipes} Korean heritage recipes"
+            
+            if korean_recipes > 0:
+                first_recipe = data['recipes'][0]
+                authenticity_score = first_recipe.get('authenticity_score', 0)
+                specialty_ingredients = len(first_recipe.get('specialty_ingredients', []))
+                details += f", First recipe authenticity: {authenticity_score:.1f}/5.0, Specialty ingredients: {specialty_ingredients}"
+        else:
+            details = ""
+            
+        return self.log_test("Heritage Recipes by Country (Korea)", success, details)
+
+    def test_heritage_recipes_search(self):
+        """Test searching heritage recipes with cultural context"""
+        search_params = {
+            "query": "kimchi",
+            "country_region": "korea",
+            "cultural_significance": "everyday"
+        }
+        
+        success, data = self.make_request('GET', 'heritage/recipes/search', search_params)
+        
+        if success:
+            search_results = len(data.get('recipes', [])) if data else 0
+            details = f"- Found {search_results} recipes matching 'kimchi' search"
+            
+            if search_results > 0:
+                first_result = data['recipes'][0]
+                relevance_score = first_result.get('authenticity_score', 0)
+                cultural_context = first_result.get('historical_context', '')
+                details += f", Top result authenticity: {relevance_score:.1f}/5.0, Has cultural context: {'✓' if cultural_context else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Heritage Recipes Search", success, details)
+
+    def test_specialty_ingredient_search(self):
+        """Test searching for specialty ingredients"""
+        success, data = self.make_request('GET', 'heritage/ingredients/search?ingredient=gochujang&origin_country=korea')
+        
+        if success:
+            ingredients_found = len(data.get('ingredients', [])) if data else 0
+            details = f"- Found {ingredients_found} specialty ingredients matching 'gochujang'"
+            
+            if ingredients_found > 0:
+                first_ingredient = data['ingredients'][0]
+                rarity_level = first_ingredient.get('rarity_level', 'unknown')
+                substitutes_count = len(first_ingredient.get('substitutes', []))
+                online_sources = len(first_ingredient.get('online_sources', []))
+                details += f", Rarity: {rarity_level}, Substitutes: {substitutes_count}, Online sources: {online_sources}"
+        else:
+            details = ""
+            
+        return self.log_test("Specialty Ingredient Search", success, details)
+
+    def test_rare_ingredients_list(self):
+        """Test getting list of rare/hard-to-find ingredients"""
+        success, data = self.make_request('GET', 'heritage/ingredients/rare?rarity_level=rare&limit=10')
+        
+        if success:
+            rare_ingredients = len(data.get('ingredients_by_rarity', [])) if data else 0
+            total_ingredients = data.get('total_ingredients', 0) if data else 0
+            details = f"- Found {rare_ingredients} rare ingredient categories, {total_ingredients} total ingredients"
+            
+            if rare_ingredients > 0:
+                # Check for different rarity levels
+                rarity_levels = [item.get('rarity_level') for item in data['ingredients_by_rarity']]
+                has_rare = 'rare' in rarity_levels
+                has_specialty = 'specialty' in rarity_levels
+                has_imported = 'imported_only' in rarity_levels
+                details += f", Rare: {'✓' if has_rare else '✗'}, Specialty: {'✓' if has_specialty else '✗'}, Imported: {'✓' if has_imported else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Rare Ingredients List", success, details)
+
+    def test_add_specialty_ingredient(self):
+        """Test adding a specialty ingredient to the community database"""
+        ingredient_data = {
+            "ingredient_name": "Korean Chili Paste",
+            "ingredient_name_local": "고추장",
+            "scientific_name": "Capsicum annuum paste",
+            "alternative_names": ["Gochujang", "Korean Hot Pepper Paste", "Red Pepper Paste"],
+            "origin_countries": ["korea"],
+            "cultural_uses": [
+                "Essential condiment for Korean cuisine",
+                "Used in bibimbap, bulgogi, and stews",
+                "Traditional fermentation ingredient"
+            ],
+            "traditional_preparation": [
+                "Fermented for months in traditional clay pots",
+                "Made from red chili powder, glutinous rice, fermented soybeans",
+                "Aged in cool, dark places"
+            ],
+            "rarity_level": "specialty",
+            "typical_price_range": {"usa": 8.99, "canada": 12.99},
+            "seasonal_availability": {"all_year": "available"},
+            "shelf_life": "2 years unopened, 1 year opened in refrigerator",
+            "storage_requirements": ["refrigerate_after_opening", "airtight_container", "avoid_direct_sunlight"],
+            "common_substitutes": [
+                {"substitute": "sriracha_mixed_with_miso", "ratio": "1:1", "flavor_note": "Less complex flavor"},
+                {"substitute": "chili_garlic_sauce", "ratio": "3:4", "flavor_note": "Missing fermented depth"}
+            ],
+            "flavor_profile": ["spicy", "sweet", "umami", "fermented", "complex"],
+            "nutritional_benefits": ["probiotics", "vitamin_c", "antioxidants"],
+            "allergen_information": ["soy", "gluten"]
+        }
+
+        success, data = self.make_request('POST', 'heritage/ingredients/add', ingredient_data, 200)
+        
+        if success:
+            self.specialty_ingredient_id = data.get('ingredient_id')
+            ingredient_name = data.get('ingredient_name', 'unknown')
+            rarity_level = data.get('rarity_level', 'unknown')
+            community_benefit = data.get('community_benefit', '')
+            details = f"- Ingredient ID: {self.specialty_ingredient_id}, Name: {ingredient_name}, Rarity: {rarity_level}, Community benefit: {'✓' if community_benefit else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Add Specialty Ingredient", success, details)
+
+    def test_nearby_ethnic_stores(self):
+        """Test finding nearby ethnic grocery stores"""
+        # Test with NYC coordinates
+        success, data = self.make_request('GET', 'heritage/stores/nearby?lat=40.7128&lng=-74.0060&radius_km=25&country_specialty=korea')
+        
+        if success:
+            stores_found = len(data.get('stores', [])) if data else 0
+            total_stores = data.get('total_stores', 0) if data else 0
+            search_area = data.get('search_area', '') if data else ''
+            details = f"- Found {stores_found} Korean specialty stores, Total: {total_stores}, Area: {search_area}"
+            
+            if stores_found > 0:
+                first_store = data['stores'][0]
+                store_name = first_store.get('store_name', 'unknown')
+                distance = first_store.get('distance_km', 0)
+                specialties = len(first_store.get('specialties', []))
+                details += f", First: {store_name} ({distance}km), Specialties: {specialties}"
+        else:
+            details = ""
+            
+        return self.log_test("Nearby Ethnic Stores", success, details)
+
+    def test_register_ethnic_store(self):
+        """Test registering an ethnic grocery store"""
+        store_data = {
+            "store_name": "Seoul Market NYC",
+            "store_type": "korean_grocery",
+            "specialties": ["korea", "japan"],
+            "address": "123 Korea Way",
+            "city": "New York",
+            "state_province": "NY",
+            "country": "USA",
+            "postal_code": "10001",
+            "phone_number": "+1-555-SEOUL",
+            "website": "https://seoulmarketnyc.com",
+            "location": {"lat": 40.7128, "lng": -74.0060},
+            "service_radius_km": 30.0,
+            "operating_hours": {
+                "monday": "9:00-21:00",
+                "tuesday": "9:00-21:00",
+                "wednesday": "9:00-21:00",
+                "thursday": "9:00-21:00",
+                "friday": "9:00-22:00",
+                "saturday": "8:00-22:00",
+                "sunday": "9:00-20:00"
+            },
+            "languages_spoken": ["english", "korean", "japanese"],
+            "payment_methods": ["cash", "credit_card", "debit_card", "mobile_pay"],
+            "specialty_ingredients": [],
+            "special_orders": True,
+            "shipping_available": True,
+            "community_events": [
+                {"event": "Korean New Year Celebration", "frequency": "annual"},
+                {"event": "Kimchi Making Workshop", "frequency": "monthly"}
+            ],
+            "cooking_classes": True,
+            "recipe_consultations": True,
+            "owner_background": "Korean immigrant family, 3rd generation grocers",
+            "years_in_business": 15,
+            "family_owned": True,
+            "community_involvement": ["korean_cultural_center", "local_food_festivals"]
+        }
+
+        success, data = self.make_request('POST', 'heritage/stores/register', store_data, 200)
+        
+        if success:
+            self.ethnic_store_id = data.get('store_id')
+            store_name = data.get('store_name', 'unknown')
+            specialties = len(data.get('specialties', []))
+            community_impact = data.get('community_impact', '')
+            next_steps = len(data.get('next_steps', []))
+            details = f"- Store ID: {self.ethnic_store_id}, Name: {store_name}, Specialties: {specialties}, Impact: {'✓' if community_impact else '✗'}, Next steps: {next_steps}"
+        else:
+            details = ""
+            
+        return self.log_test("Register Ethnic Store", success, details)
+
+    def test_featured_heritage_collections(self):
+        """Test getting featured heritage recipe collections"""
+        success, data = self.make_request('GET', 'heritage/collections/featured')
+        
+        if success:
+            collections_count = len(data.get('featured_collections', [])) if data else 0
+            collection_themes = len(data.get('collection_themes', [])) if data else 0
+            details = f"- Found {collections_count} featured collections, {collection_themes} collection themes"
+            
+            if collections_count > 0:
+                first_collection = data['featured_collections'][0]
+                collection_name = first_collection.get('collection_name', 'unknown')
+                recipe_count = len(first_collection.get('recipe_ids', []))
+                sample_recipes = len(first_collection.get('sample_recipes', []))
+                details += f", First: {collection_name} ({recipe_count} recipes, {sample_recipes} samples)"
+        else:
+            details = ""
+            
+        return self.log_test("Featured Heritage Collections", success, details)
+
+    def test_diaspora_recommendations(self):
+        """Test getting personalized diaspora recommendations"""
+        success, data = self.make_request('GET', 'heritage/diaspora/recommendations?heritage_countries=korea,vietnam&lat=40.7128&lng=-74.0060')
+        
+        if success:
+            recommendations = data.get('personalized_recommendations', {}) if data else {}
+            heritage_countries = len(data.get('heritage_countries', [])) if data else 0
+            comfort_recipes = len(recommendations.get('comfort_recipes', []))
+            nearby_stores = len(recommendations.get('nearby_stores', []))
+            rare_ingredients = len(recommendations.get('rare_ingredients_available', []))
+            details = f"- Heritage countries: {heritage_countries}, Comfort recipes: {comfort_recipes}, Nearby stores: {nearby_stores}, Rare ingredients: {rare_ingredients}"
+            
+            cultural_connection = data.get('cultural_connection', '') if data else ''
+            community_message = data.get('community_message', '') if data else ''
+            details += f", Cultural connection: {'✓' if cultural_connection else '✗'}, Community message: {'✓' if community_message else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Diaspora Recommendations", success, details)
+
+    def test_cultural_preservation_insights(self):
+        """Test getting cultural preservation insights and analytics"""
+        success, data = self.make_request('GET', 'heritage/preservation/insights')
+        
+        if success:
+            insights = data.get('preservation_insights', {}) if data else {}
+            total_recipes = insights.get('total_recipes_preserved', 0)
+            recipes_by_country = len(insights.get('recipes_by_country', []))
+            active_contributors = insights.get('active_cultural_contributors', 0)
+            store_coverage = len(insights.get('store_coverage_by_country', []))
+            details = f"- Total recipes: {total_recipes}, Countries: {recipes_by_country}, Contributors: {active_contributors}, Store coverage: {store_coverage}"
+            
+            mission_statement = data.get('mission_statement', '') if data else ''
+            how_to_help = len(data.get('how_to_help', [])) if data else 0
+            details += f", Mission: {'✓' if mission_statement else '✗'}, Help ways: {how_to_help}"
+        else:
+            details = ""
+            
+        return self.log_test("Cultural Preservation Insights", success, details)
+
+    def test_supported_store_chains(self):
+        """Test getting supported ethnic grocery store chains"""
+        success, data = self.make_request('GET', 'heritage/stores/chains')
+        
+        if success:
+            chains_count = len(data.get('supported_chains', [])) if data else 0
+            total_chains = data.get('total_chains', 0) if data else 0
+            details = f"- Found {chains_count} supported chains, Total: {total_chains}"
+            
+            if chains_count > 0:
+                chains = data['supported_chains']
+                # Check for major chains
+                chain_names = [chain.get('name', '') for chain in chains]
+                has_hmart = any('H Mart' in name for name in chain_names)
+                has_patel = any('Patel' in name for name in chain_names)
+                has_ranch99 = any('99 Ranch' in name for name in chain_names)
+                has_african = any('African' in name for name in chain_names)
+                details += f", H-Mart: {'✓' if has_hmart else '✗'}, Patel Bros: {'✓' if has_patel else '✗'}, 99 Ranch: {'✓' if has_ranch99 else '✗'}, African: {'✓' if has_african else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Supported Store Chains", success, details)
+
+    def test_ingredient_chain_availability(self):
+        """Test checking ingredient availability at major chains"""
+        success, data = self.make_request('GET', 'heritage/ingredients/chain-availability?ingredient=gochujang&lat=40.7128&lng=-74.0060&radius_km=50')
+        
+        if success:
+            ingredient_searched = data.get('ingredient_searched', '') if data else ''
+            chain_results = data.get('chain_results', {}) if data else {}
+            chain_availability = len(chain_results.get('chain_availability', []))
+            likely_available = len(chain_results.get('likely_available_at', []))
+            shopping_tips = len(data.get('shopping_tips', [])) if data else 0
+            details = f"- Ingredient: {ingredient_searched}, Chain results: {chain_availability}, Likely available: {likely_available}, Tips: {shopping_tips}"
+            
+            if chain_availability > 0:
+                first_chain = chain_results['chain_availability'][0]
+                chain_name = first_chain.get('chain_name', 'unknown')
+                likelihood = first_chain.get('likelihood', 'unknown')
+                nearby_locations = first_chain.get('nearby_locations', 0)
+                details += f", Top chain: {chain_name} ({likelihood} likelihood, {nearby_locations} locations)"
+        else:
+            details = ""
+            
+        return self.log_test("Ingredient Chain Availability", success, details)
+
+    def test_register_store_chain(self):
+        """Test registering a major ethnic grocery store chain"""
+        chain_data = {
+            "chain_name": "h_mart",
+            "locations": [
+                {
+                    "store_id": "hmart_manhattan",
+                    "address": "25 W 32nd St, New York, NY 10001",
+                    "location": {"lat": 40.7484, "lng": -73.9857},
+                    "phone": "+1-212-695-3283",
+                    "hours": "8:00-22:00"
+                },
+                {
+                    "store_id": "hmart_queens",
+                    "address": "141-40 Northern Blvd, Flushing, NY 11354",
+                    "location": {"lat": 40.7614, "lng": -73.8370},
+                    "phone": "+1-718-358-0700",
+                    "hours": "8:00-23:00"
+                }
+            ],
+            "integration_priority": "high",
+            "website_scraping_enabled": True
+        }
+
+        success, data = self.make_request('POST', 'heritage/stores/register-chain', chain_data, 200)
+        
+        if success:
+            chain_registration = data.get('chain_registration', {}) if data else {}
+            chain_registered = chain_registration.get('chain_registered', 'unknown')
+            specialties = chain_registration.get('specialties', 0)
+            integration_ready = chain_registration.get('integration_ready', False)
+            community_impact = data.get('community_impact', '') if data else ''
+            next_steps = len(data.get('next_steps', [])) if data else 0
+            details = f"- Chain: {chain_registered}, Specialties: {specialties}, Integration: {'✓' if integration_ready else '✗'}, Impact: {'✓' if community_impact else '✗'}, Steps: {next_steps}"
+        else:
+            details = ""
+            
+        return self.log_test("Register Store Chain", success, details)
+
+    def test_heritage_recipe_details(self):
+        """Test getting detailed information about a specific heritage recipe"""
+        if not hasattr(self, 'heritage_recipe_id') or not self.heritage_recipe_id:
+            return self.log_test("Heritage Recipe Details", False, "- No heritage recipe ID available")
+
+        success, data = self.make_request('GET', f'heritage/recipes/{self.heritage_recipe_id}')
+        
+        if success:
+            recipe = data.get('recipe', {}) if data else {}
+            ingredient_sourcing = data.get('ingredient_sourcing', {}) if data else {}
+            recipe_name = recipe.get('recipe_name', 'unknown')
+            country_region = recipe.get('country_region', 'unknown')
+            authenticity_note = data.get('authenticity_note', '') if data else ''
+            preservation_importance = data.get('preservation_importance', '') if data else ''
+            sourcing_ingredients = len(ingredient_sourcing)
+            details = f"- Recipe: {recipe_name}, Country: {country_region}, Sourcing info: {sourcing_ingredients} ingredients, Authenticity note: {'✓' if authenticity_note else '✗'}, Preservation: {'✓' if preservation_importance else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Heritage Recipe Details", success, details)
+
+    def test_cultural_significance_types(self):
+        """Test getting types of cultural significance for recipes"""
+        success, data = self.make_request('GET', 'heritage/cultural/significance')
+        
+        if success:
+            significance_types = len(data) if isinstance(data, list) else 0
+            details = f"- Found {significance_types} cultural significance types"
+            
+            if significance_types > 0:
+                # Check for key significance types
+                type_codes = [sig_type.get('code') for sig_type in data]
+                has_everyday = 'everyday' in type_codes
+                has_celebration = 'celebration' in type_codes
+                has_ceremonial = 'ceremonial' in type_codes
+                has_heritage = 'heritage' in type_codes
+                has_diaspora = 'diaspora' in type_codes
+                details += f", Everyday: {'✓' if has_everyday else '✗'}, Celebration: {'✓' if has_celebration else '✗'}, Ceremonial: {'✓' if has_ceremonial else '✗'}, Heritage: {'✓' if has_heritage else '✗'}, Diaspora: {'✓' if has_diaspora else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Cultural Significance Types", success, details)
+
+    def test_heritage_system_integration(self):
+        """Test overall heritage system integration and data consistency"""
+        # Test multiple endpoints to ensure system integration
+        endpoints_to_test = [
+            ('heritage/countries', 'Countries list'),
+            ('heritage/stores/chains', 'Store chains'),
+            ('heritage/cultural/significance', 'Cultural significance'),
+            ('heritage/collections/featured', 'Featured collections')
+        ]
+        
+        successful_endpoints = 0
+        total_endpoints = len(endpoints_to_test)
+        
+        for endpoint, description in endpoints_to_test:
+            success, data = self.make_request('GET', endpoint)
+            if success and data:
+                successful_endpoints += 1
+        
+        integration_score = (successful_endpoints / total_endpoints) * 100
+        details = f"- {successful_endpoints}/{total_endpoints} core endpoints working ({integration_score:.0f}% integration)"
+        
+        return self.log_test("Heritage System Integration", successful_endpoints == total_endpoints, details)
+
     # LAMBALIA EATS REAL-TIME FOOD MARKETPLACE TESTS
 
     def test_create_food_request(self):
