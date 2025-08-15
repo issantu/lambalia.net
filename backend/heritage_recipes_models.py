@@ -173,7 +173,7 @@ class AuthenticityLevel(str, Enum):
 # HERITAGE RECIPE MODELS
 
 class HeritageRecipe(BaseModel):
-    """Traditional Afro-Caribbean recipes with cultural context"""
+    """Traditional heritage recipes from all global communities with cultural context"""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     
     # Recipe Identity
