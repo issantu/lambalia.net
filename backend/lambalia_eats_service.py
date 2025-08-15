@@ -257,7 +257,10 @@ class LambaliaEatsService:
             distance = self.matching_engine.calculate_distance_km(cook_location, request["eater_location"])
             if distance <= radius_km:
                 request["distance_km"] = round(distance, 1)
-                request["time_until_expires"] = int((datetime.fromisoformat(request["expires_at"]) - datetime.utcnow()).total_seconds() / 60)
+                expires_at = request["expires_at"]
+                if isinstance(expires_at, str):
+                    expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+                request["time_until_expires"] = int((expires_at - datetime.utcnow()).total_seconds() / 60)
                 matching_requests.append(request)
         
         # Sort by urgency (expiration time)
