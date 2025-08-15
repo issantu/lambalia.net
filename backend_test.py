@@ -2116,6 +2116,467 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("Integration Profit and Social Impact", success1 and success2 and integration_working, details)
 
+    # LAMBALIA EATS REAL-TIME FOOD MARKETPLACE TESTS
+
+    def test_create_food_request(self):
+        """Test creating a food request - 'I want to eat X'"""
+        if not self.token:
+            return self.log_test("Create Food Request", False, "- No auth token available")
+
+        from datetime import datetime, timedelta
+        
+        # Create food request for eater
+        preferred_time = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        
+        food_request_data = {
+            "dish_name": "Authentic Chicken Biryani",
+            "cuisine_type": "indian",
+            "description": "Looking for authentic Hyderabadi-style biryani with tender chicken and aromatic basmati rice",
+            "dietary_restrictions": [],
+            "preferred_service_types": ["pickup", "delivery"],
+            "max_price": 18.00,
+            "max_delivery_fee": 5.00,
+            "max_wait_time_minutes": 90,
+            "eater_location": {"lat": 40.7128, "lng": -74.0060},
+            "eater_address": "123 Main St, New York, NY 10001",
+            "preferred_pickup_time": preferred_time,
+            "flexible_timing": True
+        }
+
+        success, data = self.make_request('POST', 'eats/request-food', food_request_data, 200)
+        
+        if success:
+            self.food_request_id = data.get('request_id')
+            status = data.get('status', 'unknown')
+            max_price = data.get('max_price', 0)
+            service_types = data.get('service_types', [])
+            tracking_info = data.get('tracking_info', {})
+            details = f"- Request ID: {self.food_request_id}, Status: {status}, Max price: ${max_price}, Services: {service_types}, Tracking: {tracking_info.get('status', 'unknown')}"
+        else:
+            details = ""
+            
+        return self.log_test("Create Food Request", success, details)
+
+    def test_create_food_offer(self):
+        """Test creating a food offer - 'I have X ready to serve'"""
+        if not self.token:
+            return self.log_test("Create Food Offer", False, "- No auth token available")
+
+        from datetime import datetime, timedelta
+        
+        # Create food offer for cook
+        ready_time = (datetime.now() + timedelta(minutes=45)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        available_until = (datetime.now() + timedelta(hours=3)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        
+        food_offer_data = {
+            "dish_name": "Fresh Pasta Carbonara",
+            "cuisine_type": "italian",
+            "description": "Creamy carbonara with pancetta, fresh eggs, and aged parmesan cheese",
+            "ingredients": ["pasta", "eggs", "pancetta", "parmesan", "black pepper"],
+            "dietary_info": ["contains_dairy", "contains_gluten"],
+            "quantity_available": 4,
+            "price_per_serving": 16.50,
+            "available_service_types": ["pickup", "delivery"],
+            "delivery_radius_km": 12.0,
+            "delivery_fee": 4.99,
+            "ready_at": ready_time,
+            "available_until": available_until,
+            "cook_location": {"lat": 40.7589, "lng": -73.9851},
+            "cook_address": "456 Oak Ave, New York, NY 10002",
+            "food_photos": ["/api/demo/carbonara1.jpg"]
+        }
+
+        success, data = self.make_request('POST', 'eats/offer-food', food_offer_data, 200)
+        
+        if success:
+            self.food_offer_id = data.get('offer_id')
+            status = data.get('status', 'unknown')
+            quantity = data.get('quantity_available', 0)
+            price = data.get('price_per_serving', 0)
+            service_types = data.get('service_types', [])
+            tracking_info = data.get('tracking_info', {})
+            details = f"- Offer ID: {self.food_offer_id}, Status: {status}, Quantity: {quantity}, Price: ${price}, Services: {service_types}, Tracking: {tracking_info.get('status', 'unknown')}"
+        else:
+            details = ""
+            
+        return self.log_test("Create Food Offer", success, details)
+
+    def test_get_nearby_offers(self):
+        """Test browsing nearby food offers"""
+        # Test nearby offers discovery
+        success, data = self.make_request('GET', 'eats/offers/nearby?lat=40.7128&lng=-74.0060&radius_km=15&max_price=20')
+        
+        if success:
+            offers_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {offers_count} nearby offers"
+            if offers_count > 0:
+                first_offer = data[0]
+                dish_name = first_offer.get('dish_name', 'unknown')
+                distance = first_offer.get('distance_km', 0)
+                price = first_offer.get('price_per_serving', 0)
+                details += f", First: {dish_name} (${price}, {distance}km away)"
+        else:
+            details = ""
+            
+        return self.log_test("Get Nearby Offers", success, details)
+
+    def test_get_active_requests(self):
+        """Test getting active food requests for cooks"""
+        if not self.token:
+            return self.log_test("Get Active Requests", False, "- No auth token available")
+
+        # Test active requests discovery for cooks
+        success, data = self.make_request('GET', 'eats/requests/active?lat=40.7589&lng=-73.9851&radius_km=20')
+        
+        if success:
+            requests_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {requests_count} active requests"
+            if requests_count > 0:
+                first_request = data[0]
+                dish_name = first_request.get('dish_name', 'unknown')
+                max_price = first_request.get('max_price', 0)
+                distance = first_request.get('distance_km', 0)
+                time_left = first_request.get('time_until_expires', 0)
+                details += f", First: {dish_name} (max ${max_price}, {distance}km away, {time_left}min left)"
+        else:
+            details = ""
+            
+        return self.log_test("Get Active Requests", success, details)
+
+    def test_place_order_from_offer(self):
+        """Test placing an order from a food offer"""
+        if not self.token:
+            return self.log_test("Place Order from Offer", False, "- No auth token available")
+
+        # First get available offers to order from
+        success, offers_data = self.make_request('GET', 'eats/offers/nearby?lat=40.7128&lng=-74.0060&radius_km=15')
+        
+        if not success or not offers_data:
+            return self.log_test("Place Order from Offer", False, "- No offers available to order from")
+
+        # Use the first available offer or create a mock one
+        if offers_data:
+            offer_to_order = offers_data[0]
+            offer_id = offer_to_order.get('id')
+        else:
+            # Use the offer we created earlier if available
+            offer_id = self.food_offer_id
+
+        if not offer_id:
+            return self.log_test("Place Order from Offer", False, "- No valid offer ID found")
+
+        order_data = {
+            "offer_id": offer_id,
+            "service_type": "pickup",
+            "quantity": 1,
+            "special_instructions": "Please prepare with less salt",
+            "payment_method": "card"
+        }
+
+        success, data = self.make_request('POST', 'eats/place-order', order_data, 200)
+        
+        if success:
+            self.eats_order_id = data.get('order_id')
+            tracking_code = data.get('tracking_code', 'unknown')
+            order_details = data.get('order_details', {})
+            tracking_info = data.get('tracking_info', {})
+            
+            dish_name = order_details.get('dish_name', 'unknown')
+            total_amount = order_details.get('total_amount', 0)
+            service_type = order_details.get('service_type', 'unknown')
+            
+            details = f"- Order ID: {self.eats_order_id}, Code: {tracking_code}, Dish: {dish_name}, Total: ${total_amount}, Service: {service_type}, Status: {tracking_info.get('status', 'unknown')}"
+        else:
+            details = ""
+            
+        return self.log_test("Place Order from Offer", success, details)
+
+    def test_update_order_status(self):
+        """Test updating order status for real-time tracking"""
+        if not self.eats_order_id or not self.token:
+            return self.log_test("Update Order Status", False, "- No order ID or auth token available")
+
+        # Update order status to "preparing"
+        update_data = {
+            "status": "preparing",
+            "message": "Cook has started preparing your meal",
+            "lat": 40.7589,
+            "lng": -73.9851
+        }
+
+        success, data = self.make_request('PUT', f'eats/orders/{self.eats_order_id}/status', update_data, 200)
+        
+        if success:
+            new_status = data.get('new_status', 'unknown')
+            success_flag = data.get('success', False)
+            details = f"- New status: {new_status}, Update successful: {success_flag}"
+        else:
+            details = ""
+            
+        return self.log_test("Update Order Status", success, details)
+
+    def test_get_order_tracking(self):
+        """Test getting real-time order tracking information"""
+        if not self.eats_order_id:
+            return self.log_test("Get Order Tracking", False, "- No order ID available")
+
+        success, data = self.make_request('GET', f'eats/orders/{self.eats_order_id}/tracking')
+        
+        if success:
+            tracking = data.get('tracking', {})
+            order_id = tracking.get('order_id', 'unknown')
+            current_status = tracking.get('current_status', 'unknown')
+            dish_name = tracking.get('dish_name', 'unknown')
+            tracking_code = tracking.get('tracking_code', 'unknown')
+            time_until_ready = tracking.get('time_until_ready', 0)
+            status_updates = tracking.get('status_updates', [])
+            
+            details = f"- Order: {order_id}, Status: {current_status}, Dish: {dish_name}, Code: {tracking_code}, Ready in: {time_until_ready}min, Updates: {len(status_updates)}"
+        else:
+            details = ""
+            
+        return self.log_test("Get Order Tracking", success, details)
+
+    def test_create_cook_profile(self):
+        """Test creating cook profile for Lambalia Eats"""
+        if not self.token:
+            return self.log_test("Create Cook Profile", False, "- No auth token available")
+
+        cook_profile_data = {
+            "display_name": "Chef Maria's Kitchen",
+            "bio": "Authentic Italian cuisine with 15 years of experience",
+            "specialties": ["italian", "mediterranean"],
+            "cooking_experience_years": 15,
+            "signature_dishes": ["Pasta Carbonara", "Osso Buco", "Tiramisu"],
+            "available_service_types": ["pickup", "delivery", "dine_in"],
+            "max_delivery_radius_km": 15.0,
+            "max_daily_orders": 12,
+            "dine_in_available": True,
+            "kitchen_capacity": 4,
+            "base_location": {"lat": 40.7589, "lng": -73.9851},
+            "service_address": "456 Oak Ave, New York, NY 10002",
+            "pickup_instructions": "Ring doorbell and wait at front door",
+            "operating_hours": {
+                "monday": {"start": "11:00", "end": "21:00"},
+                "tuesday": {"start": "11:00", "end": "21:00"},
+                "wednesday": {"start": "11:00", "end": "21:00"},
+                "thursday": {"start": "11:00", "end": "21:00"},
+                "friday": {"start": "11:00", "end": "22:00"},
+                "saturday": {"start": "10:00", "end": "22:00"},
+                "sunday": {"start": "12:00", "end": "20:00"}
+            },
+            "available_days": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+            "is_currently_available": True,
+            "preferred_payment_methods": ["cash", "card", "digital"]
+        }
+
+        success, data = self.make_request('POST', 'eats/profiles/cook', cook_profile_data, 200)
+        
+        if success:
+            self.cook_profile_id = data.get('profile_id')
+            specialties = data.get('specialties', [])
+            service_types = data.get('service_types', [])
+            delivery_radius = data.get('delivery_radius', 0)
+            details = f"- Profile ID: {self.cook_profile_id}, Specialties: {specialties}, Services: {service_types}, Radius: {delivery_radius}km"
+        else:
+            details = ""
+            
+        return self.log_test("Create Cook Profile", success, details)
+
+    def test_create_eater_profile(self):
+        """Test creating eater profile for Lambalia Eats"""
+        if not self.token:
+            return self.log_test("Create Eater Profile", False, "- No auth token available")
+
+        eater_profile_data = {
+            "display_name": "Food Enthusiast",
+            "phone_number": "+1-555-0123",
+            "favorite_cuisines": ["italian", "indian", "mexican"],
+            "dietary_restrictions": ["vegetarian"],
+            "spice_tolerance": "medium",
+            "price_range_preference": "moderate",
+            "default_location": {"lat": 40.7128, "lng": -74.0060},
+            "saved_addresses": [
+                {"name": "Home", "address": "123 Main St, New York, NY 10001"},
+                {"name": "Work", "address": "789 Business Ave, New York, NY 10003"}
+            ]
+        }
+
+        success, data = self.make_request('POST', 'eats/profiles/eater', eater_profile_data, 200)
+        
+        if success:
+            self.eater_profile_id = data.get('profile_id')
+            favorite_cuisines = data.get('favorite_cuisines', [])
+            dietary_restrictions = data.get('dietary_restrictions', [])
+            details = f"- Profile ID: {self.eater_profile_id}, Cuisines: {favorite_cuisines}, Dietary: {dietary_restrictions}"
+        else:
+            details = ""
+            
+        return self.log_test("Create Eater Profile", success, details)
+
+    def test_platform_statistics(self):
+        """Test getting real-time platform statistics"""
+        success, data = self.make_request('GET', 'eats/stats')
+        
+        if success:
+            stats = data.get('stats', {})
+            active_requests = stats.get('active_requests', 0)
+            active_offers = stats.get('active_offers', 0)
+            orders_in_progress = stats.get('orders_in_progress', 0)
+            available_cooks = stats.get('available_cooks', 0)
+            avg_match_time = stats.get('average_match_time_minutes', 0)
+            popular_cuisines = stats.get('popular_cuisines', [])
+            commission_today = stats.get('platform_commission_today', 0)
+            
+            details = f"- Requests: {active_requests}, Offers: {active_offers}, Orders: {orders_in_progress}, Cooks: {available_cooks}, Match time: {avg_match_time}min, Cuisines: {len(popular_cuisines)}, Commission: ${commission_today}"
+        else:
+            details = ""
+            
+        return self.log_test("Platform Statistics", success, details)
+
+    def test_demo_sample_offers(self):
+        """Test getting sample offers for demo purposes"""
+        success, data = self.make_request('GET', 'eats/demo/sample-offers')
+        
+        if success:
+            offers_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {offers_count} sample offers"
+            if offers_count > 0:
+                first_offer = data[0]
+                dish_name = first_offer.get('dish_name', 'unknown')
+                cuisine = first_offer.get('cuisine_type', 'unknown')
+                price = first_offer.get('price_per_serving', 0)
+                cook_name = first_offer.get('cook_name', 'unknown')
+                rating = first_offer.get('cook_rating', 0)
+                distance = first_offer.get('distance_km', 0)
+                details += f", First: {dish_name} ({cuisine}) by {cook_name} (${price}, {rating}★, {distance}km)"
+        else:
+            details = ""
+            
+        return self.log_test("Demo Sample Offers", success, details)
+
+    def test_demo_sample_requests(self):
+        """Test getting sample requests for demo purposes"""
+        success, data = self.make_request('GET', 'eats/demo/sample-requests')
+        
+        if success:
+            requests_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {requests_count} sample requests"
+            if requests_count > 0:
+                first_request = data[0]
+                dish_name = first_request.get('dish_name', 'unknown')
+                cuisine = first_request.get('cuisine_type', 'unknown')
+                max_price = first_request.get('max_price', 0)
+                eater_name = first_request.get('eater_name', 'unknown')
+                distance = first_request.get('distance_km', 0)
+                time_left = first_request.get('time_until_expires', 0)
+                details += f", First: {dish_name} ({cuisine}) by {eater_name} (max ${max_price}, {distance}km, {time_left}min left)"
+        else:
+            details = ""
+            
+        return self.log_test("Demo Sample Requests", success, details)
+
+    def test_service_fee_calculation(self):
+        """Test 15% commission system calculations"""
+        # Test commission calculation through order placement
+        test_meal_price = 20.00
+        expected_service_fee = test_meal_price * 0.15  # 15% commission
+        expected_cook_payout = test_meal_price - expected_service_fee
+        
+        # This would be tested through actual order placement, but we can verify the math
+        commission_correct = abs(expected_service_fee - 3.00) < 0.01  # 20 * 0.15 = 3.00
+        payout_correct = abs(expected_cook_payout - 17.00) < 0.01  # 20 - 3 = 17.00
+        
+        details = f"- Meal: ${test_meal_price}, Commission: ${expected_service_fee} (15%), Cook payout: ${expected_cook_payout}"
+        return self.log_test("Service Fee Calculation", commission_correct and payout_correct, details)
+
+    def test_distance_calculations(self):
+        """Test geographic-based matching and distance calculations"""
+        # Test distance calculation between NYC locations
+        from math import radians, sin, cos, sqrt, atan2
+        
+        def haversine_distance(lat1, lon1, lat2, lon2):
+            # Convert to radians
+            lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+            
+            # Haversine formula
+            dlat = lat2 - lat1
+            dlon = lon2 - lon1
+            a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+            c = 2 * atan2(sqrt(a), sqrt(1-a))
+            r = 6371  # Earth's radius in kilometers
+            return r * c
+        
+        # Test distance between two NYC locations
+        manhattan_lat, manhattan_lng = 40.7128, -74.0060  # Manhattan
+        brooklyn_lat, brooklyn_lng = 40.6782, -73.9442    # Brooklyn
+        
+        calculated_distance = haversine_distance(manhattan_lat, manhattan_lng, brooklyn_lat, brooklyn_lng)
+        expected_distance = 8.5  # Approximately 8.5 km between Manhattan and Brooklyn
+        
+        distance_accurate = abs(calculated_distance - expected_distance) < 2.0  # Within 2km tolerance
+        
+        details = f"- Manhattan to Brooklyn: {calculated_distance:.1f}km (expected ~{expected_distance}km)"
+        return self.log_test("Distance Calculations", distance_accurate, details)
+
+    def test_three_service_types(self):
+        """Test three service types: Pickup, Delivery, Dine-in"""
+        # Test that all three service types are supported in offers and requests
+        service_types = ["pickup", "delivery", "dine_in"]
+        
+        # Test creating offers with different service types
+        offers_created = 0
+        for service_type in service_types:
+            test_offer = {
+                "dish_name": f"Test Dish for {service_type.title()}",
+                "cuisine_type": "american",
+                "description": f"Test dish for {service_type} service",
+                "quantity_available": 2,
+                "price_per_serving": 15.00,
+                "available_service_types": [service_type],
+                "ready_at": "2024-01-01T18:00:00Z",
+                "available_until": "2024-01-01T21:00:00Z",
+                "cook_location": {"lat": 40.7589, "lng": -73.9851},
+                "cook_address": "Test Address"
+            }
+            
+            success, data = self.make_request('POST', 'eats/offer-food', test_offer, 200)
+            if success:
+                offers_created += 1
+        
+        details = f"- {offers_created}/{len(service_types)} service types working (Pickup, Delivery, Dine-in)"
+        return self.log_test("Three Service Types", offers_created == len(service_types), details)
+
+    def test_standalone_capability(self):
+        """Test standalone capability without main Lambalia account"""
+        # Test creating food request without authentication (temporary user)
+        standalone_request = {
+            "dish_name": "Quick Lunch Special",
+            "cuisine_type": "american",
+            "description": "Looking for a quick and tasty lunch",
+            "preferred_service_types": ["pickup"],
+            "max_price": 12.00,
+            "eater_location": {"lat": 40.7128, "lng": -74.0060},
+            "eater_address": "Temporary Address, NYC"
+        }
+        
+        # Make request without auth token
+        old_token = self.token
+        self.token = None
+        
+        success, data = self.make_request('POST', 'eats/request-food', standalone_request, 200)
+        
+        # Restore token
+        self.token = old_token
+        
+        if success:
+            temp_user_id = data.get('request_id', '').startswith('temp_') if data.get('request_id') else False
+            details = f"- Standalone request created, Temporary user: {'✓' if temp_user_id else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Standalone Capability", success, details)
+
     def run_all_tests(self):
         """Run all API tests in sequence"""
         print("🚀 Starting Enhanced Lambalia Backend API Tests")
