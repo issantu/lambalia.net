@@ -2820,6 +2820,10 @@ app.include_router(api_router)
 lambalia_eats_router = create_lambalia_eats_router(lambalia_eats_service, get_current_user, get_current_user_optional)
 app.include_router(lambalia_eats_router, prefix="/api")
 
+# Include Heritage Recipes router with proper prefix
+heritage_recipes_router = create_heritage_recipes_router(heritage_recipes_service, get_current_user, get_current_user_optional)
+app.include_router(heritage_recipes_router, prefix="/api")
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
