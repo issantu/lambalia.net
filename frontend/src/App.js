@@ -319,62 +319,77 @@ const LoginPage = () => {
 // Enhanced Navigation Header
 const Header = () => {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <header className="nav-header shadow-lg border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-3 group">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_completion-quest/artifacts/gpq5b6s8_Image%20%2821%29.png" 
-              alt="Lambalia Logo" 
-              className="w-10 h-10 transition-transform group-hover:scale-110"
-            />
-            <h1 className="text-2xl font-bold heading-gradient">Lambalia</h1>
-          </Link>
-          
-          <nav className="flex items-center space-x-6">
-            <Link to="/" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              🏠 Home
+          {/* Logo and Navigation */}
+          <div className="flex items-center space-x-8">
+            <Link to="/" className="flex items-center space-x-3 group">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_completion-quest/artifacts/gpq5b6s8_Image%20%2821%29.png" 
+                alt="Lambalia Logo" 
+                className="w-10 h-10 transition-transform group-hover:scale-110"
+              />
+              <h1 className="text-2xl font-bold heading-gradient">Lambalia</h1>
             </Link>
-            <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              📚 Templates
-            </Link>
-            <Link to="/create-snippet" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              ✨ Create
-            </Link>
-            <Link to="/grocery" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              🛒 Shop
-            </Link>
-            <Link to="/home-restaurant" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              🏠👩‍🍳 Restaurant
-            </Link>
-            <Link to="/local-marketplace" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              🌱🛒 Local Market
-            </Link>
-            <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              🤝❤️ Give Back  
-            </Link>
-            <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-3 py-2 rounded-md font-medium">
-              🚚🍽️ Quick Eats
-            </Link>
-            <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-              👤 Profile
-            </Link>
+            <nav className="hidden md:flex space-x-1">
+              <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.browse')}
+              </Link>
+              <Link to="/create-snippet" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.create')}
+              </Link>
+              <Link to="/grocery" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.ingredients')}
+              </Link>
+              <Link to="/home-restaurant" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.restaurant')}
+              </Link>
+              <Link to="/local-marketplace" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.marketplace')}
+              </Link>
+              <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.charity')}
+              </Link>
+              <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.eats')}
+              </Link>
+              <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
+                {t('nav.profile')}
+              </Link>
+            </nav>
+          </div>
+
+          {/* User actions and Language Switcher */}
+          <div className="flex items-center space-x-4">
+            <LanguageSwitcher />
             
-            <div className="flex items-center space-x-3 ml-6 pl-6 border-l border-gray-200">
-              <div className="text-sm">
-                <p className="font-medium text-gray-800">{user?.username}</p>
-                <p className="text-green-600 font-semibold">${user?.credits || 0} credits</p>
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-700">
+                  {t('common.welcome', { name: user.username || user.full_name })}
+                </span>
+                <button 
+                  onClick={logout}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                >
+                  {t('auth.logout')}
+                </button>
               </div>
-              <button
-                onClick={logout}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm transition-all font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </nav>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Link to="/login" className="text-sm text-gray-700 hover:text-green-600">
+                  {t('auth.login')}
+                </Link>
+                <Link to="/register" className="btn-primary px-4 py-2 rounded-md text-sm">
+                  {t('auth.joinLambalia')}
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>
