@@ -14,7 +14,7 @@ from heritage_recipes_models import (
 def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get_current_user, get_current_user_optional):
     """Create Heritage Recipes API router with dependency injection"""
     
-    router = APIRouter(prefix="/heritage", tags=["Heritage Recipes & Cultural Preservation"])
+    router = APIRouter(prefix="/heritage", tags=["Heritage Recipes & Global Cultural Preservation"])
     
     # HERITAGE RECIPE DISCOVERY
     
