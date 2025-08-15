@@ -126,7 +126,7 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     
-    @router.get("/recipes/search", response_model=List[dict])
+    @router.get("/recipes/search", response_model=dict)
     async def search_heritage_recipes(
         q: str = Query(..., min_length=2, description="Search query"),
         country: Optional[str] = None,
