@@ -2808,8 +2808,12 @@ async def stripe_webhook(request: Request):
 # Keep all existing routes from previous implementation
 # (Reference recipes, snippets, grocery, etc.)
 
-# Include router
+# Include main API router
 app.include_router(api_router)
+
+# Include Lambalia Eats router
+lambalia_eats_router = create_lambalia_eats_router(lambalia_eats_service, get_current_user, get_current_user_optional)
+app.include_router(lambalia_eats_router)
 
 # CORS
 app.add_middleware(
