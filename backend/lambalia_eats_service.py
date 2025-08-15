@@ -234,7 +234,14 @@ class LambaliaEatsService:
             distance = self.matching_engine.calculate_distance_km(eater_location, offer["cook_location"])
             if distance <= radius_km:
                 offer["distance_km"] = round(distance, 1)
-                offer["estimated_delivery_time"] = self._calculate_delivery_time(distance, offer.get("ready_at"))
+                
+                # Handle datetime parsing for ready_at
+                ready_at = offer.get("ready_at")
+                if ready_at:
+                    if isinstance(ready_at, str):
+                        ready_at = datetime.fromisoformat(ready_at.replace('Z', '+00:00'))
+                    offer["estimated_delivery_time"] = self._calculate_delivery_time(distance, ready_at)
+                
                 nearby_offers.append(offer)
         
         # Sort by distance
