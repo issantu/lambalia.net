@@ -427,6 +427,7 @@ class HeritageRecipeSubmission(BaseModel):
     recipe_name_local: Optional[str] = None
     country_region: str
     cultural_significance: str
+    authenticity_level: str = "traditional"  # Default to traditional
     description: str = Field(..., max_length=1000)
     traditional_ingredients: List[Dict[str, Any]] = []
     preparation_steps: List[str] = []
