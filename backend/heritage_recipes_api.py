@@ -338,7 +338,7 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
     
     # ETHNIC GROCERY STORE NETWORK
     
-    @router.get("/stores/nearby", response_model=List[dict])
+    @router.get("/stores/nearby", response_model=dict)
     async def find_nearby_ethnic_stores(
         lat: float,
         lng: float,
