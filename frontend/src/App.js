@@ -1,6 +1,9 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import './i18n'; // Initialize i18n
+import LanguageSwitcher from './LanguageSwitcher';
 import './App.css';
 import LocalMarketplacePage from './LocalMarketplace';
 import CharityProgramPage from './CharityProgram';
