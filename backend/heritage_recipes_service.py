@@ -94,7 +94,7 @@ class HeritageRecipesService:
     # HERITAGE RECIPE MANAGEMENT
     
     async def submit_heritage_recipe(self, recipe_data: Dict[str, Any], contributor_id: str) -> HeritageRecipe:
-        """Submit a traditional Afro-Caribbean recipe for preservation"""
+        """Submit a traditional heritage recipe from any global community for preservation"""
         
         # Validate cultural contributor
         contributor = await self.db.cultural_contributors.find_one({"user_id": contributor_id}, {"_id": 0})
