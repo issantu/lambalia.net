@@ -3030,7 +3030,7 @@ async def startup_event():
     await db.snippets.create_index("author_id")
     await db.snippet_interactions.create_index([("snippet_id", 1), ("user_id", 1)])
     
-    logger.info("Lambalia Marketplace API started with comprehensive vetting and payment system including traditional restaurants, daily marketplace, enhanced monetization system, and local farm ecosystem")
+    logger.info("Lambalia Marketplace API started with comprehensive vetting and payment system including traditional restaurants, daily marketplace, enhanced monetization system, local farm ecosystem, charity program, Lambalia Eats real-time food marketplace, and global heritage recipes preservation system")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
