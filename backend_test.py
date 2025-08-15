@@ -2705,6 +2705,27 @@ class LambaliaEnhancedAPITester:
         self.test_social_impact_scoring_system()
         self.test_integration_profit_and_social_impact()
         
+        # Global Heritage Recipes & Specialty Ingredients System Tests
+        print("\n🌍 Testing Global Heritage Recipes & Specialty Ingredients System...")
+        self.test_heritage_countries_list()
+        self.test_heritage_recipe_submission()
+        self.test_heritage_recipes_by_country()
+        self.test_heritage_recipes_search()
+        self.test_specialty_ingredient_search()
+        self.test_rare_ingredients_list()
+        self.test_add_specialty_ingredient()
+        self.test_nearby_ethnic_stores()
+        self.test_register_ethnic_store()
+        self.test_featured_heritage_collections()
+        self.test_diaspora_recommendations()
+        self.test_cultural_preservation_insights()
+        self.test_supported_store_chains()
+        self.test_ingredient_chain_availability()
+        self.test_register_store_chain()
+        self.test_heritage_recipe_details()
+        self.test_cultural_significance_types()
+        self.test_heritage_system_integration()
+        
         # Lambalia Eats Real-time Food Marketplace Tests
         print("\n🍽️ Testing Lambalia Eats Real-time Food Marketplace...")
         self.test_create_food_request()
