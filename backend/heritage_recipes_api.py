@@ -399,7 +399,7 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
     
     # CULTURAL COLLECTIONS & DIASPORA FEATURES
     
-    @router.get("/collections/featured", response_model=List[dict])
+    @router.get("/collections/featured", response_model=dict)
     async def get_featured_collections():
         """Get curated collections of heritage recipes"""
         try:
