@@ -392,7 +392,9 @@ class LambaliaEatsService:
         
         # Calculate estimated times
         now = datetime.utcnow()
-        estimated_ready = datetime.fromisoformat(order["estimated_ready_time"])
+        estimated_ready = order["estimated_ready_time"]
+        if isinstance(estimated_ready, str):
+            estimated_ready = datetime.fromisoformat(estimated_ready.replace('Z', '+00:00'))
         
         tracking_info = {
             "order_id": order_id,
