@@ -1820,6 +1820,7 @@ const RecipeTemplatesPage = () => {
 const HomePage = () => {
   const [snippets, setSnippets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchSnippets();
