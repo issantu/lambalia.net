@@ -531,6 +531,54 @@ backend:
         agent: "testing"
         comment: "Minor: Impact calculator endpoint accessible but returns zero values for all calculations (estimated points: 0, base points: 0, bonuses: 0). The endpoint responds correctly but calculation logic may need adjustment to return meaningful impact score previews."
 
+  - task: "Global Heritage Recipes System Integration"
+    implemented: true
+    working: "NA"
+    file: "heritage_recipes_models.py, heritage_recipes_service.py, heritage_recipes_api.py, server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented comprehensive Global Heritage Recipes & Specialty Ingredients system supporting all global communities (Indian, Korean, Vietnamese, Cambodian, Thai, Mexican, African, Caribbean, Middle Eastern, European, etc.). Expanded from Afro-Caribbean only to include 80+ countries/regions. Added ethnic grocery store chain integration (H-Mart, Patel Brothers, 99 Ranch Market, Fresh Thyme, African Markets). Integrated all models, services, and APIs into main server.py with proper database indexing."
+
+  - task: "Heritage Recipe Submission & Discovery"
+    implemented: true
+    working: "NA"
+    file: "heritage_recipes_api.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main" 
+        comment: "Implemented recipe submission, country-based discovery, cultural search, authenticity verification endpoints. Support for traditional recipes from 80+ countries with cultural context preservation."
+
+  - task: "Specialty Ingredient Sourcing & Chain Integration"
+    implemented: true
+    working: "NA"
+    file: "heritage_recipes_service.py, heritage_recipes_api.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented specialty ingredient search, availability checking, ethnic grocery store integration including major chains (H-Mart, Patel Brothers, 99 Ranch, etc.). Added chain store availability checking and registration system."
+
+  - task: "Ethnic Grocery Store Network & Web Integration"
+    implemented: true
+    working: "NA"
+    file: "heritage_recipes_service.py, heritage_recipes_api.py"
+    stuck_count: 0
+    priority: "high" 
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented ethnic grocery store registration, nearby store finding, specialty store chain support, and placeholder web scraping integration for H-Mart and other chain websites."
+
 frontend:
   - task: "Create traditional restaurant registration UI"
     implemented: true
