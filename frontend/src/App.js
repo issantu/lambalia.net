@@ -2655,6 +2655,14 @@ function App() {
               } 
             />
             <Route 
+              path="/lambalia-eats" 
+              element={
+                <>
+                  <LambaliaEatsApp />
+                </>
+              } 
+            />
+            <Route 
               path="/profile" 
               element={
                 <ProtectedRoute>
