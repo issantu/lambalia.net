@@ -295,7 +295,7 @@ class SpecialtyIngredient(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class EthnicGroceryStore(BaseModel):
-    """Specialty grocery stores serving Afro-Caribbean communities"""
+    """Specialty grocery stores serving diverse global heritage communities"""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     
     # Store Information
