@@ -1,4 +1,4 @@
-# Heritage Recipes Service - Afro-Caribbean Cultural Preservation & Specialty Ingredients
+# Heritage Recipes Service - Global Cultural Preservation & Specialty Ingredients
 import asyncio
 import math
 from datetime import datetime, timedelta
