@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the Enhanced Local Marketplace with Charity Program Integration system. Focus on charity program registration, activity submission, premium membership via charity, community impact metrics, local organizations, farm ecosystem integration with 15% commission rates, premium benefits, and impact calculator."
+user_problem_statement: "Test the Enhanced Local Marketplace with Charity Program Integration system and the new Global Heritage Recipes & Specialty Ingredients system. Focus on charity program registration, activity submission, premium membership via charity, community impact metrics, local organizations, farm ecosystem integration with 15% commission rates, premium benefits, impact calculator, and the comprehensive heritage recipes system supporting all global communities (Indian, Korean, Vietnamese, Cambodian, Thai, Mexican, African, etc.) with specialty ingredient sourcing and ethnic grocery store integration including H-Mart and other major chains."
 
 backend:
   - task: "Expand marketplace models for traditional restaurants"
