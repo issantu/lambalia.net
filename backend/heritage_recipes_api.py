@@ -20,7 +20,7 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
     
     @router.get("/countries", response_model=List[dict])
     async def get_supported_countries():
-        """Get list of supported Afro-Caribbean countries and regions"""
+        """Get list of supported global heritage countries and regions"""
         countries = [
             # Caribbean Islands
             {"code": "jamaica", "name": "Jamaica", "flag": "🇯🇲", "type": "caribbean"},
@@ -30,10 +30,22 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
             {"code": "dominican_republic", "name": "Dominican Republic", "flag": "🇩🇴", "type": "caribbean"},
             {"code": "puerto_rico", "name": "Puerto Rico", "flag": "🇵🇷", "type": "caribbean"},
             {"code": "cuba", "name": "Cuba", "flag": "🇨🇺", "type": "caribbean"},
-            {"code": "grenada", "name": "Grenada", "flag": "🇬🇩", "type": "caribbean"},
-            {"code": "st_lucia", "name": "Saint Lucia", "flag": "🇱🇨", "type": "caribbean"},
-            {"code": "martinique", "name": "Martinique", "flag": "🇲🇶", "type": "caribbean"},
-            {"code": "guadeloupe", "name": "Guadeloupe", "flag": "🇬🇵", "type": "caribbean"},
+            
+            # Asian Heritage
+            {"code": "china", "name": "China", "flag": "🇨🇳", "type": "asian"},
+            {"code": "japan", "name": "Japan", "flag": "🇯🇵", "type": "asian"},
+            {"code": "korea", "name": "Korea", "flag": "🇰🇷", "type": "asian"},
+            {"code": "vietnam", "name": "Vietnam", "flag": "🇻🇳", "type": "asian"},
+            {"code": "thailand", "name": "Thailand", "flag": "🇹🇭", "type": "asian"},
+            {"code": "cambodia", "name": "Cambodia", "flag": "🇰🇭", "type": "asian"},
+            {"code": "laos", "name": "Laos", "flag": "🇱🇦", "type": "asian"},
+            {"code": "philippines", "name": "Philippines", "flag": "🇵🇭", "type": "asian"},
+            {"code": "indonesia", "name": "Indonesia", "flag": "🇮🇩", "type": "asian"},
+            {"code": "malaysia", "name": "Malaysia", "flag": "🇲🇾", "type": "asian"},
+            {"code": "india", "name": "India", "flag": "🇮🇳", "type": "asian"},
+            {"code": "pakistan", "name": "Pakistan", "flag": "🇵🇰", "type": "asian"},
+            {"code": "bangladesh", "name": "Bangladesh", "flag": "🇧🇩", "type": "asian"},
+            {"code": "sri_lanka", "name": "Sri Lanka", "flag": "🇱🇰", "type": "asian"},
             
             # African Heritage
             {"code": "nigeria", "name": "Nigeria", "flag": "🇳🇬", "type": "african"},
@@ -44,13 +56,45 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
             {"code": "cameroon", "name": "Cameroon", "flag": "🇨🇲", "type": "african"},
             {"code": "congo", "name": "Congo", "flag": "🇨🇬", "type": "african"},
             {"code": "ethiopia", "name": "Ethiopia", "flag": "🇪🇹", "type": "african"},
+            {"code": "kenya", "name": "Kenya", "flag": "🇰🇪", "type": "african"},
+            
+            # Latin American
+            {"code": "mexico", "name": "Mexico", "flag": "🇲🇽", "type": "latin_american"},
+            {"code": "guatemala", "name": "Guatemala", "flag": "🇬🇹", "type": "latin_american"},
+            {"code": "honduras", "name": "Honduras", "flag": "🇭🇳", "type": "latin_american"},
+            {"code": "el_salvador", "name": "El Salvador", "flag": "🇸🇻", "type": "latin_american"},
+            {"code": "colombia", "name": "Colombia", "flag": "🇨🇴", "type": "latin_american"},
+            {"code": "venezuela", "name": "Venezuela", "flag": "🇻🇪", "type": "latin_american"},
+            {"code": "peru", "name": "Peru", "flag": "🇵🇪", "type": "latin_american"},
+            {"code": "ecuador", "name": "Ecuador", "flag": "🇪🇨", "type": "latin_american"},
+            {"code": "bolivia", "name": "Bolivia", "flag": "🇧🇴", "type": "latin_american"},
+            {"code": "chile", "name": "Chile", "flag": "🇨🇱", "type": "latin_american"},
+            {"code": "argentina", "name": "Argentina", "flag": "🇦🇷", "type": "latin_american"},
+            {"code": "brazil", "name": "Brazil", "flag": "🇧🇷", "type": "latin_american"},
+            
+            # Middle Eastern
+            {"code": "turkey", "name": "Turkey", "flag": "🇹🇷", "type": "middle_eastern"},
+            {"code": "iran", "name": "Iran", "flag": "🇮🇷", "type": "middle_eastern"},
+            {"code": "lebanon", "name": "Lebanon", "flag": "🇱🇧", "type": "middle_eastern"},
+            {"code": "syria", "name": "Syria", "flag": "🇸🇾", "type": "middle_eastern"},
+            {"code": "jordan", "name": "Jordan", "flag": "🇯🇴", "type": "middle_eastern"},
+            {"code": "afghanistan", "name": "Afghanistan", "flag": "🇦🇫", "type": "middle_eastern"},
+            
+            # European Heritage
+            {"code": "italy", "name": "Italy", "flag": "🇮🇹", "type": "european"},
+            {"code": "spain", "name": "Spain", "flag": "🇪🇸", "type": "european"},
+            {"code": "portugal", "name": "Portugal", "flag": "🇵🇹", "type": "european"},
+            {"code": "france", "name": "France", "flag": "🇫🇷", "type": "european"},
+            {"code": "germany", "name": "Germany", "flag": "🇩🇪", "type": "european"},
+            {"code": "poland", "name": "Poland", "flag": "🇵🇱", "type": "european"},
+            {"code": "russia", "name": "Russia", "flag": "🇷🇺", "type": "european"},
+            {"code": "ukraine", "name": "Ukraine", "flag": "🇺🇦", "type": "european"},
+            {"code": "greece", "name": "Greece", "flag": "🇬🇷", "type": "european"},
             
             # Diaspora Communities
             {"code": "usa_south", "name": "Southern United States", "flag": "🇺🇸", "type": "diaspora"},
             {"code": "canada", "name": "Canada", "flag": "🇨🇦", "type": "diaspora"},
-            {"code": "uk", "name": "United Kingdom", "flag": "🇬🇧", "type": "diaspora"},
-            {"code": "france", "name": "France", "flag": "🇫🇷", "type": "diaspora"},
-            {"code": "brazil", "name": "Brazil", "flag": "🇧🇷", "type": "diaspora"}
+            {"code": "uk", "name": "United Kingdom", "flag": "🇬🇧", "type": "diaspora"}
         ]
         
         return countries
