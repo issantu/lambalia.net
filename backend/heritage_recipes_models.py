@@ -243,7 +243,7 @@ class HeritageRecipe(BaseModel):
     preservation_priority: int = Field(default=3, ge=1, le=5)  # How important to preserve
 
 class SpecialtyIngredient(BaseModel):
-    """Database of hard-to-find Afro-Caribbean ingredients"""
+    """Database of hard-to-find heritage ingredients from all global communities"""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     
     # Ingredient Identity
