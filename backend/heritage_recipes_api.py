@@ -1,4 +1,4 @@
-# Heritage Recipes API - Afro-Caribbean Cultural Preservation & Specialty Ingredients
+# Heritage Recipes API - Global Cultural Preservation & Specialty Ingredients
 from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List, Optional, Dict, Any
 import uuid
