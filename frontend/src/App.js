@@ -2,7 +2,6 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
-import RecipeExplorer from './RecipeExplorer';
 import LocalMarketplacePage from './LocalMarketplace';
 import CharityProgramPage from './CharityProgram';
 
