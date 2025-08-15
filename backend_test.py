@@ -2217,9 +2217,9 @@ class LambaliaEnhancedAPITester:
     def test_heritage_recipes_search(self):
         """Test searching heritage recipes with cultural context"""
         search_params = {
-            "query": "kimchi",
-            "country_region": "korea",
-            "cultural_significance": "everyday"
+            "q": "kimchi",
+            "country": "korea",
+            "significance": "everyday"
         }
         
         success, data = self.make_request('GET', 'heritage/recipes/search', search_params)
