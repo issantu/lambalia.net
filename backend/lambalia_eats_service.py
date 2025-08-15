@@ -5,7 +5,32 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Tuple, Any
 from motor.motor_asyncio import AsyncIOMotorDatabase
 import logging
-from geopy.distance import geodesic
+
+# Simple distance calculation without geopy for now
+def calculate_distance_km(loc1: Dict[str, float], loc2: Dict[str, float]) -> float:
+    """Calculate approximate distance between two locations in kilometers"""
+    try:
+        # Simple Haversine formula approximation
+        lat1, lng1 = loc1["lat"], loc1["lng"]
+        lat2, lng2 = loc2["lat"], loc2["lng"]
+        
+        # Convert to radians
+        lat1_rad = math.radians(lat1)
+        lng1_rad = math.radians(lng1)
+        lat2_rad = math.radians(lat2)
+        lng2_rad = math.radians(lng2)
+        
+        # Haversine formula
+        dlat = lat2_rad - lat1_rad
+        dlng = lng2_rad - lng1_rad
+        a = math.sin(dlat/2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlng/2)**2
+        c = 2 * math.asin(math.sqrt(a))
+        
+        # Radius of Earth in kilometers
+        r = 6371
+        return c * r
+    except:
+        return float('inf')
 
 from lambalia_eats_models import (
     FoodRequest, FoodOffer, ActiveOrder, EatsCookProfile, EatsEaterProfile,
@@ -19,10 +44,7 @@ class EatsMatchingEngine:
     @staticmethod
     def calculate_distance_km(loc1: Dict[str, float], loc2: Dict[str, float]) -> float:
         """Calculate distance between two locations in kilometers"""
-        try:
-            return geodesic((loc1["lat"], loc1["lng"]), (loc2["lat"], loc2["lng"])).kilometers
-        except:
-            return float('inf')
+        return calculate_distance_km(loc1, loc2)
     
     @staticmethod
     def calculate_match_score(request: FoodRequest, offer: FoodOffer) -> Tuple[float, List[str]]:
