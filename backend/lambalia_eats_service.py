@@ -412,7 +412,9 @@ class LambaliaEatsService:
         
         # Add delivery-specific info
         if order["service_type"] == "delivery" and order.get("estimated_delivery_time"):
-            estimated_delivery = datetime.fromisoformat(order["estimated_delivery_time"])
+            estimated_delivery = order["estimated_delivery_time"]
+            if isinstance(estimated_delivery, str):
+                estimated_delivery = datetime.fromisoformat(estimated_delivery.replace('Z', '+00:00'))
             tracking_info.update({
                 "estimated_delivery_time": order["estimated_delivery_time"],
                 "time_until_delivery": max(0, int((estimated_delivery - now).total_seconds() / 60))
