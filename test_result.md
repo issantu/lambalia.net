@@ -620,14 +620,16 @@ test_plan:
   current_focus:
     - "Charity Program Registration - COMPLETED ✅"
     - "Charity Activity Submission - COMPLETED ✅"
-    - "Premium Membership via Charity - NEEDS INVESTIGATION ⚠️"
-    - "Community Impact Metrics - NEEDS INVESTIGATION ⚠️"
     - "Local Organizations - COMPLETED ✅"
     - "Farm Ecosystem Integration with 15% Commission - COMPLETED ✅"
     - "Premium Benefits - COMPLETED ✅"
-    - "Impact Calculator - MINOR ISSUE ⚠️"
+    - "Global Heritage Recipes System Integration - NEEDS TESTING 🧪"
+    - "Heritage Recipe Submission & Discovery - NEEDS TESTING 🧪"
+    - "Specialty Ingredient Sourcing & Chain Integration - NEEDS TESTING 🧪"
+    - "Ethnic Grocery Store Network & Web Integration - NEEDS TESTING 🧪"
   stuck_tasks: 
     - "Community Impact Metrics - 500 Internal Server Error"
+    - "Premium Membership via Charity - requires more charity activities"
   test_all: false
   test_priority: "high_first"
 
