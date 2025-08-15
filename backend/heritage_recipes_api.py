@@ -99,7 +99,7 @@ def create_heritage_recipes_router(heritage_service: HeritageRecipesService, get
         
         return countries
     
-    @router.get("/recipes/country/{country_code}", response_model=List[dict])
+    @router.get("/recipes/country/{country_code}", response_model=dict)
     async def get_recipes_by_country(
         country_code: str,
         limit: int = Query(20, ge=1, le=50),
