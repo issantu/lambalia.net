@@ -84,7 +84,7 @@ class CulturalPreservationEngine:
             return float('inf')
 
 class HeritageRecipesService:
-    """Main service for Afro-Caribbean heritage recipe preservation and specialty ingredient sourcing"""
+    """Main service for global heritage recipe preservation and specialty ingredient sourcing"""
     
     def __init__(self, db: AsyncIOMotorDatabase):
         self.db = db
