@@ -2705,6 +2705,27 @@ class LambaliaEnhancedAPITester:
         self.test_social_impact_scoring_system()
         self.test_integration_profit_and_social_impact()
         
+        # Lambalia Eats Real-time Food Marketplace Tests
+        print("\n🍽️ Testing Lambalia Eats Real-time Food Marketplace...")
+        self.test_create_food_request()
+        self.test_create_food_offer()
+        self.test_get_nearby_offers()
+        self.test_get_active_requests()
+        self.test_place_order_from_offer()
+        self.test_update_order_status()
+        self.test_get_order_tracking()
+        self.test_create_cook_profile()
+        self.test_create_eater_profile()
+        self.test_platform_statistics()
+        self.test_demo_sample_offers()
+        self.test_demo_sample_requests()
+        
+        print("\n🔧 Testing Lambalia Eats Core Features...")
+        self.test_service_fee_calculation()
+        self.test_distance_calculations()
+        self.test_three_service_types()
+        self.test_standalone_capability()
+        
         # Print summary
         print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
