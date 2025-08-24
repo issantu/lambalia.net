@@ -524,7 +524,7 @@ backend:
 
   - task: "Impact Calculator"
     implemented: true
-    working: false
+    working: true
     file: "server.py"
     stuck_count: 1
     priority: "high"
@@ -536,6 +536,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "Minor: Impact calculator endpoint accessible but returns zero values for all calculations (estimated points: 0, base points: 0, bonuses: 0). The endpoint responds correctly but calculation logic may need adjustment to return meaningful impact score previews."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING PASSED: Impact calculator endpoint working correctly. GET /api/charity/impact-calculator with query parameters (activity_type, food_donated_lbs, meals_provided, people_helped, volunteer_hours) returns proper impact score calculations. Example: 590.4 estimated score with breakdown including base_score: 10.0, food_donation_points, meals_provided_points, people_helped_points, volunteer_hours_points. Tier progress tracking functional with 3 tiers available."
 
   - task: "Global Heritage Recipes System Integration"
     implemented: true
