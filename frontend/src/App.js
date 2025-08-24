@@ -2141,6 +2141,579 @@ const HomePage = () => {
   );
 };
 
+// About Page Component
+const AboutPage = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="text-center mb-12">
+        <img 
+          src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
+          alt="Lambalia Heritage Logo" 
+          className="w-24 h-24 mx-auto mb-6"
+        />
+        <h1 className="text-4xl font-bold heading-gradient mb-4">About Lambalia</h1>
+        <p className="text-xl text-gray-600">Preserving Global Culinary Heritage Through Technology</p>
+      </div>
+
+      <div className="space-y-8">
+        <section className="bg-gradient-to-r from-orange-50 to-yellow-50 p-8 rounded-xl">
+          <h2 className="text-2xl font-bold text-orange-800 mb-4">🌍 Our Mission</h2>
+          <p className="text-gray-700 text-lg leading-relaxed">
+            Lambalia is the world's first comprehensive cultural culinary ecosystem, designed to preserve, share, and monetize global food heritage. 
+            We connect diaspora communities with authentic ingredients, traditional recipes, and cultural cooking wisdom while empowering home cooks to transform their kitchens into sources of income.
+          </p>
+        </section>
+
+        <section className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white p-6 rounded-xl shadow-lg">
+            <h3 className="text-xl font-semibold text-green-700 mb-3">🥄 Heritage Preservation</h3>
+            <p className="text-gray-600">
+              We preserve traditional recipes from 80+ global communities, ensuring cultural food knowledge passes to future generations. 
+              Our AI-powered translation maintains cultural authenticity while making recipes accessible worldwide.
+            </p>
+          </div>
+          
+          <div className="bg-white p-6 rounded-xl shadow-lg">
+            <h3 className="text-xl font-semibold text-blue-700 mb-3">💰 Economic Empowerment</h3>
+            <p className="text-gray-600">
+              Through our multi-marketplace ecosystem, home cooks earn $50-$200 per experience, recipe consultations generate $2.99-$12.99, 
+              and our 15% commission structure supports sustainable income generation.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">🚀 Our Platform Ecosystem</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center p-6 bg-purple-50 rounded-lg">
+              <div className="text-3xl mb-3">🏠</div>
+              <h4 className="font-semibold text-purple-800">Home Restaurants</h4>
+              <p className="text-sm text-gray-600">Transform kitchens into dining experiences</p>
+            </div>
+            
+            <div className="text-center p-6 bg-green-50 rounded-lg">
+              <div className="text-3xl mb-3">🍽️</div>
+              <h4 className="font-semibold text-green-800">Lambalia Eats</h4>
+              <p className="text-sm text-gray-600">Real-time food marketplace</p>
+            </div>
+            
+            <div className="text-center p-6 bg-blue-50 rounded-lg">
+              <div className="text-3xl mb-3">🌱</div>
+              <h4 className="font-semibold text-blue-800">Farm Ecosystem</h4>
+              <p className="text-sm text-gray-600">Direct farm-to-table connections</p>
+            </div>
+            
+            <div className="text-center p-6 bg-red-50 rounded-lg">
+              <div className="text-3xl mb-3">❤️</div>
+              <h4 className="font-semibold text-red-800">Charity Program</h4>
+              <p className="text-sm text-gray-600">Social impact through food sharing</p>
+            </div>
+            
+            <div className="text-center p-6 bg-orange-50 rounded-lg">
+              <div className="text-3xl mb-3">🛒</div>
+              <h4 className="font-semibold text-orange-800">Specialty Ingredients</h4>
+              <p className="text-sm text-gray-600">Ethnic grocery store network</p>
+            </div>
+            
+            <div className="text-center p-6 bg-indigo-50 rounded-lg">
+              <div className="text-3xl mb-3">🌍</div>
+              <h4 className="font-semibent text-indigo-800">Heritage Recipes</h4>
+              <p className="text-sm text-gray-600">Global cultural preservation</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-50 p-8 rounded-xl">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">📊 Our Impact</h2>
+          <div className="grid md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-3xl font-bold text-green-600">80+</div>
+              <div className="text-sm text-gray-600">Cultural Communities</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-blue-600">300+</div>
+              <div className="text-sm text-gray-600">Partner Stores</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-orange-600">15%</div>
+              <div className="text-sm text-gray-600">Platform Commission</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-purple-600">76+</div>
+              <div className="text-sm text-gray-600">Languages Supported</div>
+            </div>
+          </div>
+        </section>
+
+        <section className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">🤝 Join Our Mission</h2>
+          <p className="text-gray-600 mb-6">
+            Whether you're a home cook, cultural food expert, or someone passionate about preserving culinary heritage, 
+            Lambalia provides the platform to share your knowledge and earn from your skills.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <Link to="/register" className="btn-primary px-6 py-3 rounded-lg">
+              Join Lambalia
+            </Link>
+            <Link to="/careers" className="btn-secondary px-6 py-3 rounded-lg">
+              Work With Us
+            </Link>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+// Contact Page Component  
+const ContactPage = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold heading-gradient mb-4">Contact Lambalia</h1>
+        <p className="text-xl text-gray-600">Get in touch with our global culinary community</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-12">
+        <section>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">🏢 Company Information</h2>
+          
+          <div className="space-y-6">
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <h3 className="font-semibold text-green-700 mb-2">📍 Headquarters</h3>
+              <p className="text-gray-600">
+                Lambalia Global Inc.<br />
+                Digital Culinary Innovation Center<br />
+                San Francisco, CA, USA
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <h3 className="font-semibold text-blue-700 mb-2">🌐 Global Operations</h3>
+              <p className="text-gray-600">
+                Operating in 15+ countries<br />
+                Supporting 80+ cultural communities<br />
+                24/7 multilingual support
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <h3 className="font-semibold text-purple-700 mb-2">🏪 Partner Network</h3>
+              <p className="text-gray-600">
+                H-Mart • Patel Brothers<br />
+                99 Ranch Market • Fresh Thyme<br />
+                300+ specialty grocery stores
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">📞 Get In Touch</h2>
+          
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-green-800 mb-3">💼 Business Partnerships</h3>
+              <p className="text-sm text-gray-600 mb-2">Grocery chains, restaurant groups, cultural organizations</p>
+              <a href="mailto:partnerships@lambalia.com" className="text-green-600 font-medium">
+                partnerships@lambalia.com
+              </a>
+            </div>
+
+            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-orange-800 mb-3">🎯 Media & Press</h3>
+              <p className="text-sm text-gray-600 mb-2">Press inquiries, interviews, feature stories</p>
+              <a href="mailto:press@lambalia.com" className="text-orange-600 font-medium">
+                press@lambalia.com
+              </a>
+            </div>
+
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-purple-800 mb-3">🤝 Community Support</h3>
+              <p className="text-sm text-gray-600 mb-2">User support, cultural authenticity, recipe verification</p>
+              <a href="mailto:support@lambalia.com" className="text-purple-600 font-medium">
+                support@lambalia.com
+              </a>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl">
+              <h3 className="font-semibent text-blue-800 mb-3">💼 Careers</h3>
+              <p className="text-sm text-gray-600 mb-2">Join our mission to preserve global culinary heritage</p>
+              <Link to="/careers" className="text-blue-600 font-medium">
+                View Open Positions →
+              </Link>
+            </div>
+
+            <div className="bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-red-800 mb-3">🚨 Report Issues</h3>
+              <p className="text-sm text-gray-600 mb-2">Technical problems, content concerns, fraud prevention</p>
+              <a href="mailto:security@lambalia.com" className="text-red-600 font-medium">
+                security@lambalia.com
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section className="mt-12 text-center bg-gray-50 p-8 rounded-xl">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">🌍 Follow Our Global Journey</h2>
+        <p className="text-gray-600 mb-6">
+          Stay updated on new cultural communities, partner integrations, and platform developments
+        </p>
+        <div className="flex justify-center space-x-6">
+          <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">LinkedIn</a>
+          <a href="#" className="text-pink-600 hover:text-pink-800 font-medium">Instagram</a>
+          <a href="#" className="text-blue-500 hover:text-blue-700 font-medium">Twitter</a>
+          <a href="#" className="text-red-600 hover:text-red-800 font-medium">YouTube</a>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// Careers Page Component
+const CareersPage = () => {
+  const { t } = useTranslation();
+  
+  const jobOpenings = [
+    {
+      id: 1,
+      title: "Senior Full-Stack Engineer",
+      department: "Engineering",
+      location: "Remote/San Francisco",
+      type: "Full-time",
+      urgency: "Critical",
+      description: "Lead development of our multi-marketplace ecosystem. Backend expertise with FastAPI, MongoDB, real-time systems.",
+      requirements: ["5+ years full-stack development", "FastAPI/Python expertise", "MongoDB/NoSQL experience", "Real-time systems knowledge"],
+      whyCritical: "Platform scaling requires expert architectural decisions for 80+ country support and real-time food marketplace."
+    },
+    {
+      id: 2,
+      title: "Cultural Community Manager",
+      department: "Community",
+      location: "Global Remote",
+      type: "Full-time", 
+      urgency: "Critical",
+      description: "Build relationships with cultural communities globally. Ensure authentic recipe representation and cultural sensitivity.",
+      requirements: ["Multilingual capabilities", "Cultural sensitivity expertise", "Community management experience", "Heritage food knowledge"],
+      whyCritical: "Authenticity is our core value - improper cultural representation could damage trust with diaspora communities."
+    },
+    {
+      id: 3,
+      title: "DevOps/Platform Engineer", 
+      department: "Infrastructure",
+      location: "Remote",
+      type: "Full-time",
+      urgency: "High",
+      description: "Scale infrastructure for global usage. Manage containerized services, databases, and real-time systems.",
+      requirements: ["Kubernetes expertise", "CI/CD pipelines", "Database scaling", "Monitoring systems"],
+      whyCritical: "Platform downtime affects thousands of daily food transactions and cultural recipe sharing."
+    },
+    {
+      id: 4,
+      title: "Business Development Manager - Grocery Partnerships",
+      department: "Partnerships", 
+      location: "Remote/Travel",
+      type: "Full-time",
+      urgency: "High",
+      description: "Expand partnerships with ethnic grocery chains (H-Mart, Patel Brothers, etc.). Drive specialty ingredient sourcing.",
+      requirements: ["B2B partnership experience", "Retail/grocery industry knowledge", "Negotiation skills", "Travel flexibility"],
+      whyCritical: "Ingredient availability determines user satisfaction - partnerships drive 40% of platform value."
+    },
+    {
+      id: 5,
+      title: "Data Scientist - Matching Algorithms",
+      department: "Data Science",
+      location: "Remote/San Francisco", 
+      type: "Full-time",
+      urgency: "High",
+      description: "Optimize food matching algorithms, cultural preference analysis, and demand prediction for Lambalia Eats.",
+      requirements: ["ML/AI experience", "Python/scikit-learn", "Real-time recommendation systems", "Cultural data analysis"],
+      whyCritical: "Poor matching affects earnings potential for home cooks and user satisfaction for food requests."
+    },
+    {
+      id: 6,
+      title: "Product Manager - Marketplace Systems",
+      department: "Product",
+      location: "San Francisco/Remote",
+      type: "Full-time",
+      urgency: "High", 
+      description: "Coordinate development across 6 marketplace systems. Balance cultural preservation with commercial viability.",
+      requirements: ["5+ years product management", "Marketplace experience", "Cultural sensitivity", "Data-driven decisions"],
+      whyCritical: "Multiple complex systems require coordination - poor prioritization could fragment user experience."
+    },
+    {
+      id: 7,
+      title: "Frontend/UI Engineer - Mobile Experience",
+      department: "Engineering",
+      location: "Remote",
+      type: "Full-time",
+      urgency: "Medium",
+      description: "Optimize mobile experience for real-time food ordering and cultural recipe discovery.",
+      requirements: ["React/React Native", "Mobile-first design", "Performance optimization", "Multilingual UI"],
+      whyCritical: "70% of food orders happen on mobile - poor mobile experience directly impacts revenue."
+    },
+    {
+      id: 8,
+      title: "Customer Success Manager - Multilingual",
+      department: "Support",
+      location: "Global Remote",
+      type: "Full-time",
+      urgency: "Medium",
+      description: "Provide 24/7 support across 76+ languages. Handle cultural disputes and authenticity questions.",
+      requirements: ["3+ languages fluency", "Customer service excellence", "Cultural mediation skills", "Food industry knowledge"],
+      whyCritical: "Cultural food disputes require sensitive handling - poor support could damage community relationships."
+    },
+    {
+      id: 9,
+      title: "Content Moderator - Recipe Authenticity",
+      department: "Community",
+      location: "Remote",
+      type: "Part-time/Contract",
+      urgency: "Medium", 
+      description: "Verify cultural authenticity of submitted recipes. Prevent cultural appropriation while encouraging sharing.",
+      requirements: ["Deep cultural food knowledge", "Multiple heritage backgrounds preferred", "Diplomatic communication", "Research skills"],
+      whyCritical: "Recipe authenticity maintains platform credibility - incorrect cultural representation damages trust."
+    },
+    {
+      id: 10,
+      title: "Marketing Manager - Global Expansion",
+      department: "Marketing",
+      location: "Remote/Travel",
+      type: "Full-time",
+      urgency: "Medium",
+      description: "Drive user acquisition in new cultural communities. Understand diaspora marketing and cultural sensitivity.",
+      requirements: ["Global marketing experience", "Cultural community knowledge", "Digital marketing expertise", "Diaspora outreach"],
+      whyCritical: "Growth depends on authentic cultural community adoption - generic marketing approaches fail with heritage communities."
+    }
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold heading-gradient mb-4">Join the Lambalia Team</h1>
+        <p className="text-xl text-gray-600 mb-6">Help us preserve global culinary heritage while building the future of food commerce</p>
+        
+        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl max-w-2xl mx-auto">
+          <h2 className="text-lg font-semibold text-orange-800 mb-2">🚀 We're Growing Fast!</h2>
+          <p className="text-gray-700">
+            Lambalia serves 80+ cultural communities, processes thousands of daily food transactions, 
+            and partners with 300+ specialty grocery stores. Join us in scaling globally while preserving cultural authenticity.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-8 mb-12">
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-red-50 p-6 rounded-xl text-center">
+            <div className="text-3xl mb-2">🔥</div>
+            <h3 className="font-semibold text-red-800">Critical Positions</h3>
+            <p className="text-sm text-gray-600">Platform survival depends on these roles</p>
+            <div className="text-2xl font-bold text-red-600 mt-2">
+              {jobOpenings.filter(job => job.urgency === 'Critical').length}
+            </div>
+          </div>
+          
+          <div className="bg-yellow-50 p-6 rounded-xl text-center">
+            <div className="text-3xl mb-2">⚡</div>
+            <h3 className="font-semibold text-yellow-800">High Priority</h3>
+            <p className="text-sm text-gray-600">Growth acceleration positions</p>
+            <div className="text-2xl font-bold text-yellow-600 mt-2">
+              {jobOpenings.filter(job => job.urgency === 'High').length}
+            </div>
+          </div>
+          
+          <div className="bg-green-50 p-6 rounded-xl text-center">
+            <div className="text-3xl mb-2">📈</div>
+            <h3 className="font-semibold text-green-800">Scale & Polish</h3>
+            <p className="text-sm text-gray-600">Enhancement and optimization roles</p>
+            <div className="text-2xl font-bold text-green-600 mt-2">
+              {jobOpenings.filter(job => job.urgency === 'Medium').length}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section>
+        <h2 className="text-2xl font-bold text-gray-800 mb-8">🎯 Open Positions</h2>
+        
+        <div className="space-y-6">
+          {jobOpenings.map((job) => (
+            <div key={job.id} className={`bg-white p-6 rounded-xl shadow-lg border-l-4 ${
+              job.urgency === 'Critical' ? 'border-red-500' :
+              job.urgency === 'High' ? 'border-yellow-500' : 'border-green-500'
+            }`}>
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800">{job.title}</h3>
+                  <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                    <span>🏢 {job.department}</span>
+                    <span>📍 {job.location}</span>
+                    <span>⏰ {job.type}</span>
+                  </div>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  job.urgency === 'Critical' ? 'bg-red-100 text-red-800' :
+                  job.urgency === 'High' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                }`}>
+                  {job.urgency} Priority
+                </span>
+              </div>
+              
+              <p className="text-gray-700 mb-4">{job.description}</p>
+              
+              <div className="grid md:grid-cols-2 gap-6 mb-4">
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">📋 Requirements:</h4>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    {job.requirements.map((req, idx) => (
+                      <li key={idx}>• {req}</li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-orange-800 mb-2">🚨 Why Critical:</h4>
+                  <p className="text-sm text-gray-700">{job.whyCritical}</p>
+                </div>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <div className="text-sm text-gray-600">
+                  💰 Competitive salary + equity + cultural food stipend
+                </div>
+                <button className="btn-primary px-6 py-2 rounded-lg text-sm">
+                  Apply Now
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-16 text-center bg-gradient-to-r from-green-50 to-blue-50 p-8 rounded-xl">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">🌍 Why Work at Lambalia?</h2>
+        
+        <div className="grid md:grid-cols-2 gap-8 mt-8">
+          <div className="text-left">
+            <h3 className="font-semibold text-green-800 mb-3">🎯 Mission-Driven Work</h3>
+            <ul className="text-sm text-gray-700 space-y-2">
+              <li>• Preserve disappearing cultural food knowledge</li>
+              <li>• Empower home cooks to earn sustainable income</li>
+              <li>• Connect diaspora communities with heritage</li>
+              <li>• Support local ethnic businesses globally</li>
+            </ul>
+          </div>
+          
+          <div className="text-left">
+            <h3 className="font-semibold text-blue-800 mb-3">💼 Career Growth</h3>
+            <ul className="text-sm text-gray-700 space-y-2">
+              <li>• Rapid scaling company with global impact</li>
+              <li>• Work with cutting-edge food technology</li>
+              <li>• Cultural expertise valued and rewarded</li>
+              <li>• Remote-first with global team collaboration</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="mt-8">
+          <a href="mailto:careers@lambalia.com" className="btn-primary px-8 py-3 rounded-lg">
+            Start Your Application 🚀
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// Footer Component  
+const Footer = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <footer className="bg-gray-900 text-white mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div className="md:col-span-1">
+            <div className="flex items-center space-x-3 mb-4">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
+                alt="Lambalia" 
+                className="w-10 h-10"
+              />
+              <h3 className="text-xl font-bold">Lambalia</h3>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Preserving global culinary heritage through technology. 
+              Connecting 80+ cultural communities with authentic recipes and sustainable income opportunities.
+            </p>
+            <div className="flex space-x-4 mt-4">
+              <a href="#" className="text-gray-400 hover:text-white">LinkedIn</a>
+              <a href="#" className="text-gray-400 hover:text-white">Twitter</a>
+              <a href="#" className="text-gray-400 hover:text-white">Instagram</a>
+            </div>
+          </div>
+
+          {/* Platform Links */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Platform</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/templates" className="text-gray-400 hover:text-white">Heritage Recipes</Link></li>
+              <li><Link to="/lambalia-eats" className="text-gray-400 hover:text-white">Lambalia Eats</Link></li>
+              <li><Link to="/home-restaurant" className="text-gray-400 hover:text-white">Home Restaurants</Link></li>
+              <li><Link to="/local-marketplace" className="text-gray-400 hover:text-white">Local Marketplace</Link></li>
+              <li><Link to="/charity-program" className="text-gray-400 hover:text-white">Charity Program</Link></li>
+              <li><Link to="/grocery" className="text-gray-400 hover:text-white">Specialty Ingredients</Link></li>
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Company</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
+              <li><Link to="/careers" className="text-gray-400 hover:text-white">Careers</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
+              <li><a href="mailto:press@lambalia.com" className="text-gray-400 hover:text-white">Press</a></li>
+              <li><a href="mailto:partnerships@lambalia.com" className="text-gray-400 hover:text-white">Partnerships</a></li>
+            </ul>
+          </div>
+
+          {/* Support Links */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Support</h4>
+            <ul className="space-y-2 text-sm">
+              <li><a href="mailto:support@lambalia.com" className="text-gray-400 hover:text-white">Help Center</a></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white">Community Guidelines</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
+              <li><a href="mailto:security@lambalia.com" className="text-gray-400 hover:text-white">Report Issue</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">
+              © 2024 Lambalia Global Inc. All rights reserved. Preserving culinary heritage worldwide.
+            </p>
+            <div className="flex items-center space-x-6 mt-4 md:mt-0">
+              <span className="text-xs text-gray-500">🌍 Operating in 15+ countries</span>
+              <span className="text-xs text-gray-500">📞 24/7 Multilingual Support</span>
+              <span className="text-xs text-gray-500">🔒 SOC 2 Compliant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
 // Keep existing CreateSnippetPage and GroceryPage components (too long for single response)
 // Just need to add enhanced styling classes
 
