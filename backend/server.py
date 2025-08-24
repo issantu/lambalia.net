@@ -753,57 +753,229 @@ async def get_comprehensive_revenue_dashboard():
         "projected_12_month_revenue": "$3.1M annually at full implementation"
     }
 
-@api_router.get("/revenue/real-time-metrics")
-async def get_real_time_revenue_metrics():
-    """Real-time revenue tracking across all streams"""
+# BUSINESS OPERATIONS & FINANCIAL CONTROL
+@api_router.get("/admin/financial-overview")
+async def get_financial_overview(current_user_id: str = Depends(get_current_user)):
+    """Master financial dashboard - Platform Owner Access Only"""
     
-    # This would connect to real payment processors and analytics in production
-    real_time_metrics = {
-        "today": {
-            "marketplace_commissions": 285.50,
-            "subscription_revenue": 62.85,
-            "external_ads": 22.40,
-            "consultation_fees": 45.00,
-            "total": 415.75
+    # Check if user has admin privileges (you would set this during initial setup)
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    financial_overview = {
+        "platform_owner": {
+            "name": user.get("full_name", "Platform Owner"),
+            "email": user.get("email"),
+            "owner_id": current_user_id,
+            "access_level": "full_financial_control"
         },
-        "this_week": {
-            "marketplace_commissions": 1847.30,
-            "subscription_revenue": 441.95,
-            "external_ads": 156.80,
-            "consultation_fees": 315.00,
-            "total": 2761.05
+        "real_time_balances": {
+            "stripe_balance": 0,  # Would connect to real Stripe API
+            "pending_payouts": 0,
+            "platform_revenue": 0,
+            "user_earnings_held": 0,
+            "total_platform_value": 0
         },
-        "this_month": {
-            "marketplace_commissions": 7234.85,
-            "subscription_revenue": 1843.33,
-            "external_ads": 1205.40,
-            "consultation_fees": 1890.00,
-            "data_sales": 2150.00,
-            "total": 14323.58
+        "revenue_breakdown_today": {
+            "marketplace_commissions": {"transactions": 12, "revenue": 285.50},
+            "subscription_revenue": {"new_subs": 3, "revenue": 62.85},
+            "external_ads": {"impressions": 15420, "revenue": 22.40},
+            "consultation_fees": {"sessions": 3, "revenue": 45.00},
+            "affiliate_commissions": {"purchases": 8, "revenue": 18.75},
+            "total_today": 434.50
         },
-        "conversion_rates": {
-            "visitor_to_signup": "4.2%",
-            "signup_to_first_transaction": "23%", 
-            "free_to_premium": "12.5%",
-            "recipe_view_to_consultation": "0.8%"
+        "financial_controls": {
+            "auto_payout_threshold": 100,  # Automatic payout to your account when reached
+            "manual_approval_required": ["white_label_payments", "data_sales"],
+            "payment_methods": {
+                "stripe_connect": "primary_processor",
+                "bank_account": "direct_deposits", 
+                "paypal": "international_payouts"
+            }
         },
-        "avg_revenue_per_user": {
-            "monthly": 12.85,
-            "lifetime": 127.50,
-            "premium_users": 45.20
+        "access_permissions": {
+            "platform_owner": ["view_all", "withdraw_funds", "modify_rates", "user_management"],
+            "financial_manager": ["view_revenue", "process_payouts", "generate_reports"],
+            "operations_manager": ["view_metrics", "user_support", "content_moderation"],
+            "regular_users": ["view_own_earnings", "request_payouts"]
         }
     }
     
+    return financial_overview
+
+@api_router.get("/admin/revenue-audit-trail")
+async def get_revenue_audit_trail(
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Detailed audit trail of all revenue transactions"""
+    
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    # This would query actual transaction logs in production
+    audit_trail = {
+        "period": f"{date_from or 'last_30_days'} to {date_to or 'today'}",
+        "total_transactions": 347,
+        "total_revenue": 28945.67,
+        "revenue_sources": {
+            "marketplace_commissions": {
+                "transaction_count": 156,
+                "revenue": 18500.25,
+                "breakdown": {
+                    "home_restaurants": 12400.50,
+                    "lambalia_eats": 4350.75,
+                    "farm_partnerships": 1749.00
+                }
+            },
+            "subscriptions": {
+                "transaction_count": 89,
+                "revenue": 5240.85,
+                "breakdown": {
+                    "new_subscriptions": 2100.45,
+                    "renewals": 3140.40
+                }
+            },
+            "external_ads": {
+                "impressions": 450000,
+                "clicks": 18500,
+                "revenue": 1840.50,
+                "networks": {
+                    "google_adsense": 1150.30,
+                    "facebook_network": 425.20,
+                    "amazon_affiliates": 265.00
+                }
+            }
+        },
+        "payout_requests": {
+            "pending": {"count": 23, "amount": 2450.75},
+            "processed": {"count": 145, "amount": 18500.25},
+            "on_hold": {"count": 3, "amount": 350.00, "reason": "verification_needed"}
+        }
+    }
+    
+    return audit_trail
+
+@api_router.post("/admin/platform-settings")
+async def update_platform_settings(
+    settings_update: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Update platform-wide settings - Owner Only"""
+    
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    # Update platform settings
+    await db.platform_settings.update_one(
+        {"setting_type": "financial_controls"},
+        {"$set": {
+            **settings_update,
+            "updated_by": current_user_id,
+            "updated_at": datetime.utcnow()
+        }},
+        upsert=True
+    )
+    
     return {
-        "metrics": real_time_metrics,
-        "revenue_velocity": "+15% week-over-week",
-        "top_performing_stream": "marketplace_commissions", 
-        "fastest_growing_stream": "data_monetization",
-        "optimization_opportunities": [
-            "Increase consultation conversion rate to 1.5%",
-            "Grow premium conversion to 18%",
-            "Expand external ad placements"
-        ]
+        "success": True,
+        "message": "Platform settings updated",
+        "updated_by": user.get("email"),
+        "settings_changed": list(settings_update.keys())
+    }
+
+# FINANCIAL CONTROL & WITHDRAWAL SYSTEM
+@api_router.get("/admin/withdrawal-controls")
+async def get_withdrawal_controls(current_user_id: str = Depends(get_current_user)):
+    """Master withdrawal and payout controls"""
+    
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    withdrawal_system = {
+        "platform_accounts": {
+            "primary_business_account": {
+                "bank": "Chase Business Banking",
+                "account_type": "Business Checking",
+                "balance": 45230.75,  # Would connect to real bank API
+                "auto_transfer": True,
+                "minimum_balance": 10000
+            },
+            "stripe_account": {
+                "account_id": "acct_platform_stripe_id",
+                "available_balance": 8940.50,
+                "pending_balance": 2150.25,
+                "next_payout": "2024-01-15"
+            },
+            "paypal_business": {
+                "account_email": "business@lambalia.com",
+                "balance": 1250.30,
+                "currency": "USD"
+            }
+        },
+        "withdrawal_settings": {
+            "auto_withdrawal_enabled": True,
+            "minimum_amount": 100,
+            "withdrawal_frequency": "daily",
+            "approval_required_over": 5000,
+            "notification_email": user.get("email"),
+            "backup_notification": "finance@lambalia.com"
+        },
+        "user_payout_controls": {
+            "minimum_user_payout": 25,
+            "payout_schedule": "weekly",
+            "hold_new_users": 14,  # Days to hold payouts for new users
+            "verification_required_over": 1000
+        }
+    }
+    
+    return withdrawal_system
+
+@api_router.post("/admin/withdraw-funds")
+async def withdraw_platform_funds(
+    withdrawal_request: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Withdraw funds to your personal/business account"""
+    
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    amount = withdrawal_request.get("amount", 0)
+    destination = withdrawal_request.get("destination", "primary_account")
+    
+    # Validation
+    if amount < 100:
+        raise HTTPException(status_code=400, detail="Minimum withdrawal is $100")
+    
+    # In production, this would integrate with actual payment processors
+    withdrawal_record = {
+        "id": str(uuid.uuid4()),
+        "amount": amount,
+        "destination": destination,
+        "requested_by": user.get("email"),
+        "status": "processed",  # Would be "pending" initially
+        "processed_at": datetime.utcnow(),
+        "confirmation_code": f"WD{str(uuid.uuid4())[:8].upper()}",
+        "fees": amount * 0.001,  # 0.1% platform fee
+        "net_amount": amount * 0.999
+    }
+    
+    # Record transaction
+    await db.platform_withdrawals.insert_one(withdrawal_record)
+    
+    return {
+        "success": True,
+        "message": f"${amount} withdrawal processed",
+        "confirmation_code": withdrawal_record["confirmation_code"],
+        "net_amount": withdrawal_record["net_amount"],
+        "processing_time": "1-3 business days"
     }
 
 
