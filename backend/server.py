@@ -3496,6 +3496,173 @@ async def stripe_webhook(request: Request):
         logging.error(f"Webhook processing error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
+# USER MANAGEMENT & ROLE SYSTEM
+@api_router.post("/admin/setup-platform-owner")
+async def setup_platform_owner(
+    owner_data: Dict[str, Any]
+):
+    """One-time setup for platform owner - Call this first after deployment"""
+    
+    # Check if platform owner already exists
+    existing_owner = await db.users.find_one({"is_platform_owner": True})
+    if existing_owner:
+        raise HTTPException(status_code=400, detail="Platform owner already configured")
+    
+    owner_email = owner_data.get("email")
+    owner_phone = owner_data.get("phone")
+    
+    # Find user by email and upgrade to platform owner
+    user = await db.users.find_one({"email": owner_email})
+    if not user:
+        raise HTTPException(status_code=404, detail="User account not found - please register first")
+    
+    # Upgrade user to platform owner
+    await db.users.update_one(
+        {"email": owner_email},
+        {"$set": {
+            "is_platform_owner": True,
+            "phone_number": owner_phone,
+            "owner_setup_date": datetime.utcnow(),
+            "financial_access": "full",
+            "admin_permissions": ["all"]
+        }}
+    )
+    
+    # Create initial platform settings
+    await db.platform_settings.insert_one({
+        "setting_type": "owner_config",
+        "owner_email": owner_email,
+        "owner_phone": owner_phone,
+        "notification_preferences": {
+            "revenue_alerts": True,
+            "user_issues": True,
+            "partnership_inquiries": True,
+            "daily_reports": True
+        },
+        "financial_thresholds": {
+            "daily_revenue_alert": 1000,
+            "withdrawal_approval_needed": 5000,
+            "unusual_activity_alert": 500
+        },
+        "setup_completed": True,
+        "created_at": datetime.utcnow()
+    })
+    
+    return {
+        "success": True,
+        "message": "Platform owner configured successfully",
+        "owner_email": owner_email,
+        "access_granted": ["financial_dashboard", "user_management", "platform_settings", "withdrawal_controls"],
+        "next_steps": [
+            "Set up bank account connections",
+            "Configure notification preferences", 
+            "Review revenue tracking settings",
+            "Add team members if needed"
+        ]
+    }
+
+@api_router.get("/admin/team-management")
+async def get_team_management(current_user_id: str = Depends(get_current_user)):
+    """Manage team access and permissions"""
+    
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    team_structure = {
+        "platform_owner": {
+            "role": "Platform Owner",
+            "email": user.get("email"),
+            "permissions": ["full_access", "financial_control", "user_management", "platform_settings"],
+            "added_date": user.get("owner_setup_date", datetime.utcnow()).isoformat()
+        },
+        "available_roles": {
+            "financial_manager": {
+                "description": "Can view revenue, process payouts, generate financial reports",
+                "permissions": ["view_revenue", "process_payouts", "financial_reports"],
+                "salary_suggestion": "$4000-6000/month",
+                "when_to_hire": "When monthly revenue exceeds $50,000"
+            },
+            "operations_manager": {
+                "description": "Handles user support, content moderation, daily operations",
+                "permissions": ["user_support", "content_moderation", "basic_analytics"],
+                "salary_suggestion": "$3500-5000/month", 
+                "when_to_hire": "When user base exceeds 1,000 active users"
+            },
+            "partnership_manager": {
+                "description": "Manages grocery partnerships, brand deals, white-label clients",
+                "permissions": ["partnership_management", "client_communication", "deal_tracking"],
+                "salary_suggestion": "$5000-8000/month + commission",
+                "when_to_hire": "When partnership revenue exceeds $20,000/month"
+            },
+            "cultural_moderator": {
+                "description": "Ensures cultural authenticity, reviews recipe submissions",
+                "permissions": ["content_review", "cultural_verification", "community_management"],
+                "salary_suggestion": "$2500-4000/month",
+                "when_to_hire": "When recipe submissions exceed 100/month"
+            }
+        },
+        "current_team": [],  # Would show added team members
+        "hiring_recommendations": [
+            "Start with operations manager when you have 500+ daily active users",
+            "Add financial manager when processing $100,000+ monthly revenue",
+            "Cultural moderators can be part-time contractors initially"
+        ]
+    }
+    
+    return team_structure
+
+@api_router.post("/admin/add-team-member")
+async def add_team_member(
+    team_member_data: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Add team member with specific role and permissions"""
+    
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    member_email = team_member_data.get("email")
+    role = team_member_data.get("role")
+    
+    # Check if user exists
+    member_user = await db.users.find_one({"email": member_email})
+    if not member_user:
+        raise HTTPException(status_code=404, detail="User must register on platform first")
+    
+    # Define role permissions
+    role_permissions = {
+        "financial_manager": ["view_revenue", "process_payouts", "financial_reports", "user_earnings"],
+        "operations_manager": ["user_support", "content_moderation", "basic_analytics", "user_management"],
+        "partnership_manager": ["partnership_management", "client_communication", "deal_tracking"],
+        "cultural_moderator": ["content_review", "cultural_verification", "community_management"]
+    }
+    
+    if role not in role_permissions:
+        raise HTTPException(status_code=400, detail="Invalid role specified")
+    
+    # Update user with team role
+    await db.users.update_one(
+        {"email": member_email},
+        {"$set": {
+            "team_role": role,
+            "permissions": role_permissions[role],
+            "added_by": user.get("email"),
+            "team_join_date": datetime.utcnow(),
+            "is_team_member": True
+        }}
+    )
+    
+    return {
+        "success": True,
+        "message": f"Team member added successfully",
+        "member_email": member_email,
+        "role": role,
+        "permissions_granted": role_permissions[role],
+        "added_by": user.get("email")
+    }
+
 # Keep all existing routes from previous implementation
 # (Reference recipes, snippets, grocery, etc.)
 
