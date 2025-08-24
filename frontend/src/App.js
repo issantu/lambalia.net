@@ -2249,6 +2249,9 @@ const HomePage = () => {
         <h2 className="text-3xl font-bold heading-gradient mb-4">{t('home.title')}</h2>
         <p className="text-gray-600 mb-6">{t('home.subtitle')}</p>
         
+        {/* External Ad - Revenue Generation */}
+        <ExternalAdBanner placement="homepage_header" size="728x90" />
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
           <Link
             to="/templates"
