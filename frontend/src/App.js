@@ -170,9 +170,9 @@ const LoginPage = () => {
             />
           </div>
           <h1 className="text-4xl font-bold heading-gradient">Lambalia</h1>
-          <p className="text-gray-600 mt-2 font-medium">Transform Your Kitchen Into a Global Culinary Experience</p>
+          <p className="text-gray-600 mt-2 font-medium">Taste the World's Heritage</p>
           <div className="mt-4 text-sm text-gray-500">
-            <p>🌍 198+ Traditional Recipes • 💰 Monetize Your Cooking • 🏠 Home Restaurant Platform</p>
+            <p>🌍 80+ Cultural Communities • 🥄 Heritage Recipes • 🛒 Specialty Ingredients</p>
           </div>
         </div>
 
