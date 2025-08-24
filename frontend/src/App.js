@@ -412,6 +412,9 @@ const Header = () => {
               <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-3 py-2 rounded-md font-medium">
                 {t('nav.eats')}
               </Link>
+              <Link to="/about" className="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md font-medium">
+                About
+              </Link>
               <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
                 {t('nav.profile')}
               </Link>
