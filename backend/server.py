@@ -488,32 +488,180 @@ async def create_white_label_opportunity(licensing_request: Dict[str, Any]):
         "profit_margin": "70-85%"
     }
 
-@api_router.get("/heritage/dishes-by-culture/{cultural_background}")
-async def get_dishes_by_culture(cultural_background: str):
-    """Get native dishes from users of a specific cultural background"""
+@api_router.get("/heritage/user-contributions")
+async def get_user_heritage_contributions():
+    """Get aggregated data from user registrations about native dishes"""
     
-    users = await db.users.find({
-        "cultural_background": {"$regex": cultural_background, "$options": "i"},
-        "native_dishes": {"$exists": True, "$ne": ""}
-    }, {"_id": 0, "native_dishes": 1, "username": 1, "consultation_specialties": 1}).to_list(length=100)
+    users_with_heritage = await db.users.find({
+        "$or": [
+            {"native_dishes": {"$exists": True, "$ne": ""}},
+            {"consultation_specialties": {"$exists": True, "$ne": ""}},
+            {"cultural_background": {"$exists": True, "$ne": ""}}
+        ]
+    }, {"_id": 0, "native_dishes": 1, "consultation_specialties": 1, "cultural_background": 1, "username": 1}).to_list(length=1000)
     
-    dishes_data = []
-    for user in users:
+    # Aggregate data for insights
+    cultural_backgrounds = {}
+    native_dishes_list = []
+    consultation_specialties_list = []
+    
+    for user in users_with_heritage:
+        if user.get('cultural_background'):
+            bg = user['cultural_background'].lower()
+            cultural_backgrounds[bg] = cultural_backgrounds.get(bg, 0) + 1
+        
         if user.get('native_dishes'):
             dishes = [d.strip() for d in user['native_dishes'].split(',')]
-            for dish in dishes:
-                dishes_data.append({
-                    "dish_name": dish,
-                    "contributor": user['username'],
-                    "consultation_available": bool(user.get('consultation_specialties')),
-                    "specialties": user.get('consultation_specialties', '')
-                })
+            native_dishes_list.extend(dishes)
+        
+        if user.get('consultation_specialties'):
+            specialties = [s.strip() for s in user['consultation_specialties'].split(',')]
+            consultation_specialties_list.extend(specialties)
     
     return {
-        "cultural_background": cultural_background,
-        "total_contributors": len(users),
-        "dishes": dishes_data[:50],  # Limit to 50 for performance
-        "total_dishes": len(dishes_data)
+        "total_contributors": len(users_with_heritage),
+        "cultural_backgrounds": cultural_backgrounds,
+        "top_native_dishes": dict(sorted({dish: native_dishes_list.count(dish) for dish in set(native_dishes_list)}.items(), key=lambda x: x[1], reverse=True)[:20]),
+        "top_consultation_specialties": dict(sorted({spec: consultation_specialties_list.count(spec) for spec in set(consultation_specialties_list)}.items(), key=lambda x: x[1], reverse=True)[:15]),
+        "recent_contributors": users_with_heritage[:10]
+    }
+
+# COMPREHENSIVE REVENUE DASHBOARD
+@api_router.get("/revenue/comprehensive-dashboard")
+async def get_comprehensive_revenue_dashboard():
+    """Complete revenue analytics dashboard for all income streams"""
+    
+    # Simulate revenue calculations based on current platform metrics
+    current_date = datetime.utcnow()
+    
+    revenue_streams = {
+        "marketplace_commissions": {
+            "commission_rate": "15%",
+            "current_monthly": 8500,
+            "projected_monthly": 25000,
+            "sources": ["Home restaurants", "Lambalia Eats", "Farm partnerships", "Recipe consultations"],
+            "growth_rate": "35% month-over-month"
+        },
+        "premium_subscriptions": {
+            "tiers": {
+                "cook_plus": {"price": 4.99, "subscribers": 150, "monthly_revenue": 748.50},
+                "foodie_pro": {"price": 7.99, "subscribers": 85, "monthly_revenue": 679.15},
+                "culinary_vip": {"price": 12.99, "subscribers": 32, "monthly_revenue": 415.68}
+            },
+            "total_monthly": 1843.33,
+            "projected_monthly": 5200,
+            "retention_rate": "85%"
+        },
+        "external_advertising": {
+            "google_adsense": {"monthly_revenue": 650, "cpm": "$2.00"},
+            "facebook_network": {"monthly_revenue": 380, "cpm": "$1.50"},
+            "amazon_affiliates": {"monthly_revenue": 420, "commission_avg": "6%"},
+            "total_monthly": 1450,
+            "projected_monthly": 4200
+        },
+        "data_monetization": {
+            "cultural_trends": {"clients": 3, "monthly_revenue": 3600},
+            "ingredient_analytics": {"clients": 5, "monthly_revenue": 2800},
+            "diaspora_insights": {"clients": 2, "monthly_revenue": 2200},
+            "total_monthly": 8600,
+            "projected_monthly": 35000
+        },
+        "white_label_licensing": {
+            "grocery_integrations": {"clients": 1, "monthly_revenue": 3500},
+            "restaurant_groups": {"clients": 2, "monthly_revenue": 4000},
+            "corporate_programs": {"clients": 0, "monthly_revenue": 0},
+            "total_monthly": 7500,
+            "projected_monthly": 45000
+        },
+        "consultation_marketplace": {
+            "recipe_consultations": {"monthly_transactions": 120, "avg_price": 8.50, "revenue": 1020},
+            "cooking_classes": {"monthly_sessions": 25, "avg_price": 35, "revenue": 875},
+            "cultural_authenticity": {"monthly_verifications": 50, "avg_price": 15, "revenue": 750},
+            "total_monthly": 2645,
+            "projected_monthly": 8500
+        }
+    }
+    
+    # Calculate totals
+    current_total = sum([stream.get("total_monthly", stream.get("current_monthly", 0)) for stream in revenue_streams.values()])
+    projected_total = sum([stream.get("projected_monthly", 0) for stream in revenue_streams.values()])
+    
+    return {
+        "revenue_streams": revenue_streams,
+        "summary": {
+            "current_monthly_revenue": current_total,
+            "projected_monthly_revenue": projected_total,
+            "growth_potential": f"{((projected_total - current_total) / current_total * 100):.0f}%",
+            "diversification_score": len(revenue_streams),
+            "revenue_stability": "high_diversification"
+        },
+        "recommendations": [
+            "Accelerate external ad integration (+$2,750/month)",
+            "Expand data monetization clients (+$26,400/month)",  
+            "Close 2 white-label deals (+$37,500/month)",
+            "Grow premium subscriptions (+$3,357/month)",
+            "Scale consultation marketplace (+$5,855/month)"
+        ],
+        "next_30_days_action": [
+            "Implement Google AdSense integration",
+            "Launch Amazon affiliate program", 
+            "Contact 5 grocery chains for white-label licensing",
+            "Create data product sales materials",
+            "Launch premium membership marketing campaign"
+        ]
+    }
+
+@api_router.get("/revenue/real-time-metrics")
+async def get_real_time_revenue_metrics():
+    """Real-time revenue tracking across all streams"""
+    
+    # This would connect to real payment processors and analytics in production
+    real_time_metrics = {
+        "today": {
+            "marketplace_commissions": 285.50,
+            "subscription_revenue": 62.85,
+            "external_ads": 22.40,
+            "consultation_fees": 45.00,
+            "total": 415.75
+        },
+        "this_week": {
+            "marketplace_commissions": 1847.30,
+            "subscription_revenue": 441.95,
+            "external_ads": 156.80,
+            "consultation_fees": 315.00,
+            "total": 2761.05
+        },
+        "this_month": {
+            "marketplace_commissions": 7234.85,
+            "subscription_revenue": 1843.33,
+            "external_ads": 1205.40,
+            "consultation_fees": 1890.00,
+            "data_sales": 2150.00,
+            "total": 14323.58
+        },
+        "conversion_rates": {
+            "visitor_to_signup": "4.2%",
+            "signup_to_first_transaction": "23%", 
+            "free_to_premium": "12.5%",
+            "recipe_view_to_consultation": "0.8%"
+        },
+        "avg_revenue_per_user": {
+            "monthly": 12.85,
+            "lifetime": 127.50,
+            "premium_users": 45.20
+        }
+    }
+    
+    return {
+        "metrics": real_time_metrics,
+        "revenue_velocity": "+15% week-over-week",
+        "top_performing_stream": "marketplace_commissions", 
+        "fastest_growing_stream": "data_monetization",
+        "optimization_opportunities": [
+            "Increase consultation conversion rate to 1.5%",
+            "Grow premium conversion to 18%",
+            "Expand external ad placements"
+        ]
     }
 
 
