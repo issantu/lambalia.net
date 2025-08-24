@@ -146,11 +146,12 @@
   transition: all 0.3s ease;
 }
 
-/* Navigation Improvements */
+/* Navigation Improvements - Heritage Theme */
 .nav-header {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(218, 165, 32, 0.2);
+  box-shadow: 0 2px 8px rgba(218, 165, 32, 0.1);
 }
 
 .nav-link {
