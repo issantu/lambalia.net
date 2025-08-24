@@ -287,6 +287,20 @@ async def register_user(user_data: UserRegistration):
         user=UserResponse(**user.dict())
     )
 
+@api_router.post("/auth/login", response_model=TokenResponse)
+async def login_user(login_data: UserLogin):
+    user_doc = await db.users.find_one({"email": login_data.email})
+    if not user_doc or not verify_password(login_data.password, user_doc['password_hash']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    token = create_jwt_token(user_doc['id'])
+    
+    return TokenResponse(
+        access_token=token,
+        token_type="bearer",
+        user=UserResponse(**user_doc)
+    )
+
 # CULTURAL HERITAGE DATA COLLECTION
 @api_router.get("/heritage/user-contributions")
 async def get_user_heritage_contributions():
