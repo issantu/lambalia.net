@@ -2124,17 +2124,23 @@ const RecipeTemplatesPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {referenceRecipes.map((recipe, index) => (
-                <React.Fragment key={recipe.id}>
-                  <ReferenceRecipeCard recipe={recipe} />
-                  {/* Insert ad every 6 recipes */}
-                  {(index + 1) % 6 === 0 && (
-                    <div className="md:col-span-2 lg:col-span-3">
-                      <AdComponent placement="between-recipes" />
-                    </div>
-                  )}
-                </React.Fragment>
+              {/* External Ad - Revenue Generation */}
+              {referenceRecipes.length > 0 && (
+                <div className="md:col-span-2 lg:col-span-3">
+                  <ExternalAdBanner placement="recipe_header" size="728x90" />
+                </div>
+              )}
+              
+              {referenceRecipes.map((recipe) => (
+                <ReferenceRecipeCard key={recipe.id} recipe={recipe} />
               ))}
+              
+              {/* Sidebar Ad for larger screens */}
+              {referenceRecipes.length > 3 && (
+                <div className="hidden lg:block">
+                  <ExternalAdBanner placement="sidebar_recipes" size="300x250" />
+                </div>
+              )}
             </div>
           )}
         </div>
