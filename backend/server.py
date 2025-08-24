@@ -287,19 +287,73 @@ async def register_user(user_data: UserRegistration):
         user=UserResponse(**user.dict())
     )
 
-@api_router.post("/auth/login", response_model=TokenResponse)
-async def login_user(login_data: UserLogin):
-    user_doc = await db.users.find_one({"email": login_data.email})
-    if not user_doc or not verify_password(login_data.password, user_doc['password_hash']):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+# CULTURAL HERITAGE DATA COLLECTION
+@api_router.get("/heritage/user-contributions")
+async def get_user_heritage_contributions():
+    """Get aggregated data from user registrations about native dishes"""
     
-    token = create_jwt_token(user_doc['id'])
+    users_with_heritage = await db.users.find({
+        "$or": [
+            {"native_dishes": {"$exists": True, "$ne": ""}},
+            {"consultation_specialties": {"$exists": True, "$ne": ""}},
+            {"cultural_background": {"$exists": True, "$ne": ""}}
+        ]
+    }, {"_id": 0, "native_dishes": 1, "consultation_specialties": 1, "cultural_background": 1, "username": 1}).to_list(length=1000)
     
-    return TokenResponse(
-        access_token=token,
-        token_type="bearer",
-        user=UserResponse(**user_doc)
-    )
+    # Aggregate data for insights
+    cultural_backgrounds = {}
+    native_dishes_list = []
+    consultation_specialties_list = []
+    
+    for user in users_with_heritage:
+        if user.get('cultural_background'):
+            bg = user['cultural_background'].lower()
+            cultural_backgrounds[bg] = cultural_backgrounds.get(bg, 0) + 1
+        
+        if user.get('native_dishes'):
+            dishes = [d.strip() for d in user['native_dishes'].split(',')]
+            native_dishes_list.extend(dishes)
+        
+        if user.get('consultation_specialties'):
+            specialties = [s.strip() for s in user['consultation_specialties'].split(',')]
+            consultation_specialties_list.extend(specialties)
+    
+    return {
+        "total_contributors": len(users_with_heritage),
+        "cultural_backgrounds": cultural_backgrounds,
+        "top_native_dishes": dict(sorted({dish: native_dishes_list.count(dish) for dish in set(native_dishes_list)}.items(), key=lambda x: x[1], reverse=True)[:20]),
+        "top_consultation_specialties": dict(sorted({spec: consultation_specialties_list.count(spec) for spec in set(consultation_specialties_list)}.items(), key=lambda x: x[1], reverse=True)[:15]),
+        "recent_contributors": users_with_heritage[:10]
+    }
+
+@api_router.get("/heritage/dishes-by-culture/{cultural_background}")
+async def get_dishes_by_culture(cultural_background: str):
+    """Get native dishes from users of a specific cultural background"""
+    
+    users = await db.users.find({
+        "cultural_background": {"$regex": cultural_background, "$options": "i"},
+        "native_dishes": {"$exists": True, "$ne": ""}
+    }, {"_id": 0, "native_dishes": 1, "username": 1, "consultation_specialties": 1}).to_list(length=100)
+    
+    dishes_data = []
+    for user in users:
+        if user.get('native_dishes'):
+            dishes = [d.strip() for d in user['native_dishes'].split(',')]
+            for dish in dishes:
+                dishes_data.append({
+                    "dish_name": dish,
+                    "contributor": user['username'],
+                    "consultation_available": bool(user.get('consultation_specialties')),
+                    "specialties": user.get('consultation_specialties', '')
+                })
+    
+    return {
+        "cultural_background": cultural_background,
+        "total_contributors": len(users),
+        "dishes": dishes_data[:50],  # Limit to 50 for performance
+        "total_dishes": len(dishes_data)
+    }
+
 
 # MARKETPLACE ROUTES - NEW VETTING AND PAYMENT SYSTEM
 
