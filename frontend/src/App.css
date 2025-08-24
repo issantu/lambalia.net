@@ -116,6 +116,22 @@
   100% { left: 100%; }
 }
 
+/* Heritage Logo Specific Enhancements */
+.heritage-logo {
+  background: radial-gradient(circle at center, rgba(218, 165, 32, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  padding: 8px;
+}
+
+.heritage-logo img {
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.heritage-logo:hover img {
+  transform: rotate(5deg) scale(1.05);
+}
+
 /* Enhanced Form Styling */
 .auth-form {
   background: rgba(255, 255, 255, 0.95);
