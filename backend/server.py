@@ -157,6 +157,9 @@ class UserRegistration(BaseModel):
     country_id: Optional[str] = None
     postal_code: Optional[str] = None
     preferred_language: str = "en"
+    native_dishes: Optional[str] = None
+    consultation_specialties: Optional[str] = None
+    cultural_background: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: EmailStr
