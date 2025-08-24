@@ -655,8 +655,7 @@ test_plan:
     - "Specialty Ingredient Sourcing & Chain Integration - COMPLETED ✅"
     - "Ethnic Grocery Store Network & Web Integration - COMPLETED ✅"
   stuck_tasks: 
-    - "Community Impact Metrics - 500 Internal Server Error"
-    - "Premium Membership via Charity - requires more charity activities"
+    - "None - All previously stuck tasks have been resolved"
   test_all: false
   test_priority: "high_first"
 
