@@ -526,7 +526,138 @@ async def get_user_heritage_contributions():
         "recent_contributors": users_with_heritage[:10]
     }
 
-# COMPREHENSIVE REVENUE DASHBOARD
+@api_router.get("/heritage/dishes-by-culture/{cultural_background}")
+async def get_dishes_by_culture(cultural_background: str):
+    """Get native dishes from users of a specific cultural background"""
+    
+    users = await db.users.find({
+        "cultural_background": {"$regex": cultural_background, "$options": "i"},
+        "native_dishes": {"$exists": True, "$ne": ""}
+    }, {"_id": 0, "native_dishes": 1, "username": 1, "consultation_specialties": 1}).to_list(length=100)
+    
+    dishes_data = []
+    for user in users:
+        if user.get('native_dishes'):
+            dishes = [d.strip() for d in user['native_dishes'].split(',')]
+            for dish in dishes:
+                dishes_data.append({
+                    "dish_name": dish,
+                    "contributor": user['username'],
+                    "consultation_available": bool(user.get('consultation_specialties')),
+                    "specialties": user.get('consultation_specialties', '')
+                })
+    
+    return {
+        "cultural_background": cultural_background,
+        "total_contributors": len(users),
+        "dishes": dishes_data[:50],  # Limit to 50 for performance
+        "total_dishes": len(dishes_data)
+    }
+
+# SUBSCRIPTION BOX & VIRTUAL EVENTS MONETIZATION
+@api_router.get("/revenue/subscription-products")
+async def get_subscription_product_opportunities():
+    """Subscription box and recurring product opportunities"""
+    
+    subscription_products = {
+        "cultural_ingredient_boxes": {
+            "concept": "Monthly boxes with authentic ingredients for specific cultural recipes",
+            "pricing": "$29.99-49.99/month",
+            "target_market": "Diaspora communities, cultural food enthusiasts",
+            "partnerships": "H-Mart, Patel Brothers for ingredient sourcing",
+            "estimated_subscribers": "500-2000 in year 1",
+            "monthly_revenue_potential": "$15000-80000",
+            "margin": "40-60%"
+        },
+        "recipe_collection_subscriptions": {
+            "concept": "Premium access to authenticated family recipes with video tutorials",
+            "pricing": "$9.99-19.99/month",
+            "content": "5-10 exclusive family recipes monthly with cultural stories",
+            "target_market": "Cooking enthusiasts, cultural education",
+            "estimated_subscribers": "1000-5000 in year 1", 
+            "monthly_revenue_potential": "$10000-75000",
+            "margin": "85-95%"
+        },
+        "virtual_cooking_events": {
+            "concept": "Live cooking classes with cultural experts",
+            "pricing": "$15-45 per event, $99-199 monthly unlimited",
+            "format": "Interactive Zoom sessions with ingredient kits",
+            "frequency": "2-3 events per week",
+            "estimated_attendance": "20-100 per event",
+            "monthly_revenue_potential": "$5000-25000",
+            "scalability": "High - can record and resell"
+        },
+        "cultural_spice_blends": {
+            "concept": "Custom spice blends from cultural experts on platform",
+            "pricing": "$8-15 per blend, $25-40 for bundle",
+            "partnerships": "Home chefs create signature blends",
+            "distribution": "Ship direct or partner with stores",
+            "estimated_monthly_sales": "200-800 units",
+            "monthly_revenue_potential": "$2000-8000",
+            "margin": "60-75%"
+        }
+    }
+    
+    return {
+        "subscription_products": subscription_products,
+        "total_monthly_potential": "$32000-188000",
+        "implementation_priority": "cultural_ingredient_boxes (highest demand)",
+        "test_market_recommendation": "Start with 2 popular cultural communities",
+        "partnership_requirements": [
+            "Ingredient suppliers (H-Mart, specialty stores)",
+            "Shipping logistics partner", 
+            "Cultural recipe contributors",
+            "Video production capabilities"
+        ]
+    }
+
+@api_router.get("/revenue/brand-partnerships")
+async def get_brand_partnership_opportunities():
+    """Brand partnership and sponsored content opportunities"""
+    
+    brand_partnerships = {
+        "kitchen_equipment_brands": {
+            "partners": ["KitchenAid", "Cuisinart", "Lodge Cast Iron", "Instant Pot"],
+            "partnership_type": "Sponsored recipe content and equipment reviews",
+            "revenue_model": "$500-2000 per sponsored recipe + affiliate commissions",
+            "content_format": "Cultural recipes featuring specific equipment",
+            "estimated_monthly": "$3000-8000"
+        },
+        "spice_and_ingredient_brands": {
+            "partners": ["McCormick", "Penzeys Spices", "Spice Jungle", "Diaspora Co"],
+            "partnership_type": "Authentic cultural recipe development",
+            "revenue_model": "$300-1500 per recipe + ongoing royalties",
+            "content_format": "Traditional recipes highlighting specific spices/ingredients",
+            "estimated_monthly": "$2500-6000"
+        },
+        "cultural_food_festivals": {
+            "partners": ["Local cultural festivals", "Food & Wine events", "Cultural centers"],
+            "partnership_type": "Official recipe platform and cultural authenticity partner",
+            "revenue_model": "$1000-5000 per event + booth revenue",
+            "value_proposition": "Authentic cultural representation and recipe verification",
+            "estimated_monthly": "$2000-10000"
+        },
+        "media_and_publishing": {
+            "partners": ["Food Network", "Bon Appétit", "Cultural magazines", "PBS"],
+            "partnership_type": "Content licensing and cultural expert platform",
+            "revenue_model": "$500-3000 per licensed recipe + ongoing attribution",
+            "content_format": "Authenticated cultural recipes with stories",
+            "estimated_monthly": "$1500-5000"
+        }
+    }
+    
+    return {
+        "brand_partnerships": brand_partnerships,
+        "total_monthly_potential": "$9000-29000",
+        "negotiation_leverage": "Authentic cultural content and 80+ community reach",
+        "unique_value_proposition": "Only platform with verified cultural authenticity",
+        "partnership_development_strategy": [
+            "Create partnership deck highlighting cultural authenticity",
+            "Develop case studies from current cultural contributors",
+            "Establish cultural advisory board for brand partnerships",
+            "Create tiered partnership packages"
+        ]
+    }
 @api_router.get("/revenue/comprehensive-dashboard")
 async def get_comprehensive_revenue_dashboard():
     """Complete revenue analytics dashboard for all income streams"""
