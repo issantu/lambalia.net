@@ -449,9 +449,9 @@
   box-shadow: 0 12px 30px rgba(124, 179, 66, 0.6);
 }
 
-/* Enhanced Typography */
+/* Enhanced Typography - Heritage Theme */
 .heading-gradient {
-  background: linear-gradient(135deg, #2e7d32, #7cb342);
+  background: linear-gradient(135deg, #B8860B, #DAA520, #2e7d32);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
