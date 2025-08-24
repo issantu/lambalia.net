@@ -3216,10 +3216,10 @@ class LambaliaEnhancedAPITester:
         if not self.token:
             return self.log_test("Heritage Recipe Creation (African/Caribbean)", False, "- No auth token available")
         
-        # Test African recipe
+        # Test African recipe with correct format
         african_recipe_data = {
             "recipe_name": "Traditional Jollof Rice",
-            "country_code": "NG",  # Nigeria
+            "country_region": "nigeria",  # Use country_region instead of country_code
             "cultural_significance": "celebration",
             "description": "A beloved West African rice dish cooked in a flavorful tomato-based sauce",
             "ingredients": [
@@ -3228,10 +3228,10 @@ class LambaliaEnhancedAPITester:
                 {"name": "Palm oil", "amount": "1/4", "unit": "cup"},
                 {"name": "Scotch bonnet pepper", "amount": "1", "unit": "piece"}
             ],
-            "preparation_steps": [
-                {"step": 1, "instruction": "Wash and parboil rice"},
-                {"step": 2, "instruction": "Prepare tomato base with palm oil"},
-                {"step": 3, "instruction": "Combine rice with tomato base and simmer"}
+            "preparation_steps": [  # Use string array format
+                "Wash and parboil rice",
+                "Prepare tomato base with palm oil",
+                "Combine rice with tomato base and simmer"
             ],
             "cooking_time_minutes": 45,
             "difficulty_level": "intermediate",
@@ -3244,10 +3244,10 @@ class LambaliaEnhancedAPITester:
         
         if success:
             recipe_id = data.get('recipe_id', '')
-            authenticity_score = data.get('authenticity_score', 0)
-            cultural_significance = data.get('cultural_significance', '')
+            recipe_name = data.get('recipe_name', 'unknown')
+            country_region = data.get('country_region', 'unknown')
             
-            details = f"- Recipe ID: {recipe_id[:8]}..., Authenticity: {authenticity_score}, Significance: {cultural_significance}"
+            details = f"- Recipe ID: {recipe_id[:8] if recipe_id else 'N/A'}..., Name: {recipe_name}, Region: {country_region}"
         else:
             details = ""
             
