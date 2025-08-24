@@ -555,7 +555,204 @@ const CommunicationTools = ({ recipientId, recipientName }) => {
   );
 };
 
-// Ad Component
+// Ad Component - External Revenue Generation
+const ExternalAdBanner = ({ placement = "header", size = "728x90" }) => {
+  const [adContent, setAdContent] = useState(null);
+  
+  useEffect(() => {
+    // Simulate ad loading - in production would integrate with Google AdSense, Facebook Audience Network
+    const loadAd = async () => {
+      try {
+        // This would be actual ad network integration
+        const adResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/ads/external-placements`);
+        const adData = await adResponse.json();
+        
+        // Select appropriate ad based on placement
+        const placementAd = adData.ad_placements?.google_adsense?.ad_units?.find(
+          unit => unit.placement === placement
+        ) || {
+          placement: placement,
+          size: size,
+          category: "cultural_food",
+          estimated_cpm: "$2.00"
+        };
+        
+        setAdContent(placementAd);
+      } catch (error) {
+        console.log('Ad loading error:', error);
+      }
+    };
+    
+    loadAd();
+  }, [placement, size]);
+
+  if (!adContent) return null;
+
+  return (
+    <div className={`external-ad-container bg-gray-50 border border-gray-200 rounded-lg p-4 text-center ${
+      size === '728x90' ? 'h-24' : size === '300x250' ? 'h-64 w-80' : 'h-16'
+    } mx-auto mb-4`}>
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="text-xs text-gray-500 mb-1">Advertisement</div>
+        <div className="text-sm text-gray-600">
+          🍴 Authentic Cultural Ingredients & Cookware
+        </div>
+        <div className="text-xs text-gray-400 mt-1">
+          Revenue: ~{adContent.estimated_cpm} CPM | {adContent.category}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Revenue Dashboard Component (Admin/Analytics)
+const RevenueDashboard = () => {
+  const [revenueData, setRevenueData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRevenueData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/revenue/comprehensive-dashboard`);
+        const data = await response.json();
+        setRevenueData(data);
+      } catch (error) {
+        console.error('Revenue data fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRevenueData();
+  }, []);
+
+  if (loading) return <div className="text-center p-8">Loading revenue analytics...</div>;
+
+  if (!revenueData) return <div className="text-center p-8">Revenue data unavailable</div>;
+
+  const { summary, revenue_streams, recommendations, immediate_implementations } = revenueData;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold heading-gradient mb-4">💰 Revenue Analytics Dashboard</h1>
+        <p className="text-xl text-gray-600">Comprehensive monetization overview for Lambalia platform</p>
+      </div>
+
+      {/* Revenue Summary Cards */}
+      <div className="grid md:grid-cols-4 gap-6 mb-12">
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl text-center">
+          <div className="text-3xl font-bold text-green-600">
+            ${summary.current_monthly_revenue.toLocaleString()}
+          </div>
+          <div className="text-sm text-gray-600">Current Monthly Revenue</div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl text-center">
+          <div className="text-3xl font-bold text-blue-600">
+            ${summary.projected_monthly_revenue.toLocaleString()}
+          </div>
+          <div className="text-sm text-gray-600">Projected Monthly Revenue</div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl text-center">
+          <div className="text-3xl font-bold text-purple-600">
+            ${(summary.annual_projection / 1000000).toFixed(1)}M
+          </div>
+          <div className="text-sm text-gray-600">Annual Projection</div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl text-center">
+          <div className="text-3xl font-bold text-orange-600">
+            {summary.growth_potential}
+          </div>
+          <div className="text-sm text-gray-600">Growth Potential</div>
+        </div>
+      </div>
+
+      {/* Revenue Streams Breakdown */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">💼 Revenue Stream Analysis</h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          {Object.entries(revenue_streams).map(([streamName, streamData]) => (
+            <div key={streamName} className="bg-white p-6 rounded-xl shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 capitalize">
+                {streamName.replace('_', ' ')}
+              </h3>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-600">Current Monthly:</span>
+                <span className="font-semibold text-green-600">
+                  ${(streamData.total_monthly || streamData.current_monthly || 0).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm text-gray-600">Projected Monthly:</span>
+                <span className="font-semibold text-blue-600">
+                  ${streamData.projected_monthly?.toLocaleString() || '0'}
+                </span>
+              </div>
+              {streamData.commission_rate && (
+                <div className="text-xs text-gray-500">
+                  Commission: {streamData.commission_rate}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Recommendations */}
+      <section className="grid md:grid-cols-2 gap-6">
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl">
+          <h3 className="text-lg font-semibold text-green-800 mb-4">🚀 Top Recommendations</h3>
+          <ul className="space-y-2">
+            {recommendations.map((rec, idx) => (
+              <li key={idx} className="text-sm text-gray-700 flex items-start">
+                <span className="text-green-600 mr-2">•</span>
+                {rec}
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl">
+          <h3 className="text-lg font-semibold text-orange-800 mb-4">⚡ Immediate Actions</h3>
+          <ul className="space-y-2">
+            {immediate_implementations.map((action, idx) => (
+              <li key={idx} className="text-sm text-gray-700 flex items-start">
+                <span className="text-orange-600 mr-2">•</span>
+                {action}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* External Ad Revenue Section */}
+      <section className="mt-12 bg-gray-50 p-8 rounded-xl">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">🎯 External Ad Revenue Generation</h3>
+        <p className="text-gray-600 mb-6">
+          Automatic ad placement generates revenue without disrupting user experience. 
+          Projected $4,200/month from Google AdSense, Facebook Network, and affiliate marketing.
+        </p>
+        
+        <div className="space-y-4">
+          <div className="text-center">
+            <div className="text-sm text-gray-600 mb-2">Sample Header Banner Ad (728x90)</div>
+            <ExternalAdBanner placement="recipe_header" size="728x90" />
+          </div>
+          
+          <div className="flex justify-center">
+            <div className="text-center">
+              <div className="text-sm text-gray-600 mb-2">Sample Sidebar Ad (300x250)</div>
+              <ExternalAdBanner placement="sidebar_recipes" size="300x250" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
 const AdComponent = ({ placement = "feed" }) => {
   const [adContent, setAdContent] = useState(null);
 
