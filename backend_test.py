@@ -3276,6 +3276,16 @@ class LambaliaEnhancedAPITester:
         print("-" * 45)
         self.test_registration_with_native_dishes_fields()
         
+        # Login with the registered user to get token for subsequent tests
+        if not self.token:
+            login_data = {
+                "email": self.test_user_data["email"],
+                "password": self.test_user_data["password"]
+            }
+            success, data = self.make_request('POST', 'auth/login', login_data, 200)
+            if success:
+                self.token = data.get('access_token')
+        
         # 2. Heritage Recipes System with Expanded Countries
         print("\n2️⃣ HERITAGE RECIPES SYSTEM WITH EXPANDED COUNTRIES")
         print("-" * 55)
