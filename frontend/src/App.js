@@ -3325,6 +3325,7 @@ function App() {
                   <>
                     <Header />
                     <HomePage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
               } 
@@ -3336,6 +3337,7 @@ function App() {
                   <>
                     <Header />
                     <RecipeTemplatesPage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
               } 
@@ -3347,6 +3349,7 @@ function App() {
                   <>
                     <Header />
                     <CreateSnippetPage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
               } 
@@ -3358,6 +3361,7 @@ function App() {
                   <>
                     <Header />
                     <GroceryPage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
               } 
@@ -3369,6 +3373,7 @@ function App() {
                   <>
                     <Header />
                     <HomeRestaurantPage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
               } 
@@ -3380,6 +3385,7 @@ function App() {
                   <>
                     <Header />
                     <LocalMarketplacePage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
               } 
@@ -3391,6 +3397,7 @@ function App() {
                   <>
                     <Header />
                     <CharityProgramPage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
               } 
@@ -3400,6 +3407,7 @@ function App() {
               element={
                 <>
                   <LambaliaEatsApp />
+                  <Footer />
                 </>
               } 
             />
