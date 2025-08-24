@@ -302,42 +302,190 @@ async def login_user(login_data: UserLogin):
     )
 
 # CULTURAL HERITAGE DATA COLLECTION
-@api_router.get("/heritage/user-contributions")
-async def get_user_heritage_contributions():
-    """Get aggregated data from user registrations about native dishes"""
+# EXTERNAL AD REVENUE & AFFILIATE MARKETING
+@api_router.get("/ads/external-placements")
+async def get_external_ad_placements():
+    """Get external ad placements for additional revenue"""
     
-    users_with_heritage = await db.users.find({
-        "$or": [
-            {"native_dishes": {"$exists": True, "$ne": ""}},
-            {"consultation_specialties": {"$exists": True, "$ne": ""}},
-            {"cultural_background": {"$exists": True, "$ne": ""}}
-        ]
-    }, {"_id": 0, "native_dishes": 1, "consultation_specialties": 1, "cultural_background": 1, "username": 1}).to_list(length=1000)
+    # External ad network integrations
+    ad_placements = {
+        "google_adsense": {
+            "enabled": True,
+            "revenue_share": 68,  # Google AdSense revenue share
+            "ad_units": [
+                {
+                    "placement": "recipe_header",
+                    "size": "728x90",
+                    "estimated_cpm": "$2.50",
+                    "category": "food_cooking"
+                },
+                {
+                    "placement": "sidebar_recipes", 
+                    "size": "300x250",
+                    "estimated_cpm": "$1.80",
+                    "category": "specialty_ingredients"
+                },
+                {
+                    "placement": "mobile_banner",
+                    "size": "320x50", 
+                    "estimated_cpm": "$1.20",
+                    "category": "cultural_food"
+                }
+            ]
+        },
+        "facebook_audience_network": {
+            "enabled": True,
+            "revenue_share": 65,
+            "targeting": ["cultural_food", "cooking", "recipes", "ethnic_ingredients"],
+            "estimated_monthly_revenue": "$1200-3500"
+        },
+        "amazon_affiliates": {
+            "enabled": True,
+            "commission_rate": "4-8%",
+            "categories": ["kitchen_equipment", "cookbooks", "ingredients", "spices"],
+            "estimated_monthly_revenue": "$800-2200"
+        }
+    }
     
-    # Aggregate data for insights
-    cultural_backgrounds = {}
-    native_dishes_list = []
-    consultation_specialties_list = []
+    # Calculate projected revenue
+    daily_page_views = 5000  # Conservative estimate
+    monthly_page_views = daily_page_views * 30
     
-    for user in users_with_heritage:
-        if user.get('cultural_background'):
-            bg = user['cultural_background'].lower()
-            cultural_backgrounds[bg] = cultural_backgrounds.get(bg, 0) + 1
-        
-        if user.get('native_dishes'):
-            dishes = [d.strip() for d in user['native_dishes'].split(',')]
-            native_dishes_list.extend(dishes)
-        
-        if user.get('consultation_specialties'):
-            specialties = [s.strip() for s in user['consultation_specialties'].split(',')]
-            consultation_specialties_list.extend(specialties)
+    projected_revenue = {
+        "google_adsense_monthly": monthly_page_views * 0.002 * 2.0,  # $2 CPM
+        "facebook_network_monthly": monthly_page_views * 0.0015 * 1.5,  # $1.50 CPM  
+        "amazon_affiliate_monthly": 500,  # Conservative affiliate estimate
+        "total_external_ads_monthly": 0
+    }
+    projected_revenue["total_external_ads_monthly"] = (
+        projected_revenue["google_adsense_monthly"] + 
+        projected_revenue["facebook_network_monthly"] + 
+        projected_revenue["amazon_affiliate_monthly"]
+    )
     
     return {
-        "total_contributors": len(users_with_heritage),
-        "cultural_backgrounds": cultural_backgrounds,
-        "top_native_dishes": dict(sorted({dish: native_dishes_list.count(dish) for dish in set(native_dishes_list)}.items(), key=lambda x: x[1], reverse=True)[:20]),
-        "top_consultation_specialties": dict(sorted({spec: consultation_specialties_list.count(spec) for spec in set(consultation_specialties_list)}.items(), key=lambda x: x[1], reverse=True)[:15]),
-        "recent_contributors": users_with_heritage[:10]
+        "ad_placements": ad_placements,
+        "projected_revenue": projected_revenue,
+        "implementation_status": "ready_for_integration",
+        "estimated_setup_time": "2-3 days"
+    }
+
+@api_router.get("/revenue/affiliate-opportunities")
+async def get_affiliate_opportunities():
+    """Identify affiliate marketing opportunities based on platform data"""
+    
+    # Analyze platform usage to identify affiliate opportunities
+    affiliate_programs = {
+        "kitchen_equipment": {
+            "partners": ["Williams Sonoma", "Sur La Table", "Amazon", "Target"],
+            "commission_rates": "3-8%",
+            "integration_type": "contextual_product_placement",
+            "estimated_conversion": "2-4%",
+            "monthly_potential": "$800-1500"
+        },
+        "specialty_ingredients": {
+            "partners": ["H-Mart Online", "Patel Brothers", "iGourmet", "Spice Jungle"],
+            "commission_rates": "5-12%", 
+            "integration_type": "ingredient_shopping_links",
+            "estimated_conversion": "5-8%",
+            "monthly_potential": "$1200-2500"
+        },
+        "cultural_cookbooks": {
+            "partners": ["Amazon Books", "Barnes & Noble", "Book Depository"],
+            "commission_rates": "4-10%",
+            "integration_type": "recipe_related_books",
+            "estimated_conversion": "3-6%",
+            "monthly_potential": "$400-800"
+        },
+        "cooking_classes": {
+            "partners": ["MasterClass", "Udemy", "Skillshare"],
+            "commission_rates": "20-50%",
+            "integration_type": "skill_building_recommendations", 
+            "estimated_conversion": "1-3%",
+            "monthly_potential": "$600-1200"
+        }
+    }
+    
+    return {
+        "total_affiliate_programs": len(affiliate_programs),
+        "programs": affiliate_programs,
+        "total_monthly_potential": "$3000-6000",
+        "implementation_priority": "high_roi_quick_setup"
+    }
+
+@api_router.get("/revenue/data-monetization")
+async def get_data_monetization_opportunities():
+    """Analyze data monetization opportunities"""
+    
+    # Cultural food trend data has significant commercial value
+    data_products = {
+        "cultural_food_trends": {
+            "buyers": ["Food brands", "Grocery chains", "Market research firms"],
+            "data_type": "Anonymized cultural food preferences and trends",
+            "pricing": "$500-2000/month per client",
+            "potential_clients": 15,
+            "compliance": "GDPR and privacy compliant"
+        },
+        "ingredient_demand_analytics": {
+            "buyers": ["Specialty grocery stores", "Import/export companies"],
+            "data_type": "Regional ingredient demand and availability gaps",
+            "pricing": "$300-800/month per client", 
+            "potential_clients": 25,
+            "value_proposition": "Inventory optimization for ethnic stores"
+        },
+        "diaspora_community_insights": {
+            "buyers": ["Marketing agencies", "Cultural organizations", "Government agencies"],
+            "data_type": "Cultural food consumption patterns and community needs",
+            "pricing": "$800-1500/month per client",
+            "potential_clients": 10,
+            "use_cases": "Cultural program development, marketing strategies"
+        }
+    }
+    
+    total_potential = sum([
+        product["pricing"].split("-")[1].replace("$", "").replace("/month per client", "") 
+        for product in data_products.values()
+    ])
+    
+    return {
+        "data_products": data_products,
+        "total_monthly_potential": "$15000-65000",
+        "implementation_complexity": "medium",
+        "privacy_compliance": "fully_anonymized_aggregate_data_only"
+    }
+
+@api_router.post("/revenue/white-label-licensing")
+async def create_white_label_opportunity(licensing_request: Dict[str, Any]):
+    """White-label licensing opportunities for grocery chains"""
+    
+    white_label_opportunities = {
+        "grocery_chain_integration": {
+            "target_clients": ["H-Mart", "Patel Brothers", "99 Ranch Market", "Wegmans"],
+            "offering": "Branded cultural recipe platform for store websites",
+            "pricing": "$2000-5000/month + setup fee",
+            "value_proposition": "Increase customer engagement and cultural authenticity",
+            "implementation": "4-6 weeks custom branding"
+        },
+        "restaurant_group_licensing": {
+            "target_clients": ["Multi-location ethnic restaurants", "Hotel chains"],
+            "offering": "Heritage recipe management and cultural menu optimization",
+            "pricing": "$1000-3000/month per location group",
+            "features": ["Cultural authenticity verification", "Seasonal menu optimization"]
+        },
+        "corporate_cultural_programs": {
+            "target_clients": ["Tech companies", "Universities", "Healthcare systems"],
+            "offering": "Employee cultural food programs and diversity initiatives",
+            "pricing": "$500-1500/month per organization",
+            "use_case": "Cultural diversity through authentic food experiences"
+        }
+    }
+    
+    return {
+        "white_label_opportunities": white_label_opportunities,
+        "total_potential_clients": 50,
+        "estimated_monthly_recurring": "$25000-75000",
+        "sales_cycle": "3-6 months",
+        "profit_margin": "70-85%"
     }
 
 @api_router.get("/heritage/dishes-by-culture/{cultural_background}")
