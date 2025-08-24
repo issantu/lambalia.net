@@ -354,13 +354,20 @@ const LambaliaEatsApp = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="american">American</option>
+                  <option value="african">African</option>
+                  <option value="caribbean">Caribbean</option>
                   <option value="mexican">Mexican</option>
                   <option value="italian">Italian</option>
                   <option value="chinese">Chinese</option>
                   <option value="indian">Indian</option>
                   <option value="japanese">Japanese</option>
                   <option value="thai">Thai</option>
+                  <option value="korean">Korean</option>
+                  <option value="vietnamese">Vietnamese</option>
                   <option value="mediterranean">Mediterranean</option>
+                  <option value="middle_eastern">Middle Eastern</option>
+                  <option value="latin_american">Latin American</option>
+                  <option value="european">European</option>
                 </select>
               </div>
             </div>
