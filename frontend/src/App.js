@@ -275,6 +275,58 @@ const LoginPage = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
               />
             </div>
+            
+            {/* NEW: Native Dishes Question */}
+            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 rounded-lg border border-orange-200">
+              <label className="block text-sm font-medium text-orange-800 mb-2">
+                💰 Your Cultural Heritage & Earning Potential
+              </label>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    What native dishes from your culture can you cook? (This helps users find and pay you for authentic recipes)
+                  </label>
+                  <textarea
+                    name="native_dishes"
+                    value={formData.native_dishes || ''}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Jollof Rice, Plantain Fufu, Suya, Pounded Yam... (Nigerian) or Pad Thai, Tom Yum, Green Curry... (Thai)"
+                    rows="2"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    What would you like other users to contact you for? (Paid consultations - you set your rates!)
+                  </label>
+                  <textarea
+                    name="consultation_specialties"
+                    value={formData.consultation_specialties || ''}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Traditional spice blending, Authentic fermentation techniques, Holiday cooking traditions, Secret family recipes..."
+                    rows="2"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Your Cultural Background (helps us connect you with the right community)
+                  </label>
+                  <input
+                    type="text"
+                    name="cultural_background"
+                    value={formData.cultural_background || ''}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Nigerian (Yoruba), Mexican (Oaxacan), Korean, Vietnamese, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm"
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-orange-700 mt-2">
+                💡 Users pay $2.99-$12.99 for recipe consultations. The more specific your expertise, the more you can earn!
+              </p>
+            </div>
+            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
               <input
