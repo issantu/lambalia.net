@@ -645,17 +645,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Charity Program Registration - COMPLETED ✅"
-    - "Charity Activity Submission - COMPLETED ✅"
-    - "Local Organizations - COMPLETED ✅"
-    - "Farm Ecosystem Integration with 15% Commission - COMPLETED ✅"
-    - "Premium Benefits - COMPLETED ✅"
-    - "Global Heritage Recipes System Integration - COMPLETED ✅"
-    - "Heritage Recipe Submission & Discovery - COMPLETED ✅"
-    - "Specialty Ingredient Sourcing & Chain Integration - COMPLETED ✅"
-    - "Ethnic Grocery Store Network & Web Integration - COMPLETED ✅"
+    - "Registration with Native Dishes Fields - COMPLETED ✅"
+    - "Heritage Recipes System with Expanded Countries - PARTIALLY WORKING ⚠️"
+    - "Lambalia Eats with Expanded Cuisine Types - PARTIALLY WORKING ⚠️"
+    - "New Heritage Data Collection Endpoints - COMPLETED ✅"
+    - "Heritage Recipe Creation with African/Caribbean - COMPLETED ✅"
   stuck_tasks: 
-    - "None - All previously stuck tasks have been resolved"
+    - "Heritage Countries Expansion (needs 80+ countries, currently 60)"
+    - "Some Lambalia Eats cuisine types (korean, vietnamese, latin_american, european) returning 500 errors"
   test_all: false
   test_priority: "high_first"
 
