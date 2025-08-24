@@ -137,6 +137,11 @@ class UserProfile(BaseModel):
     snippets_count: int = 0
     credits: float = 0.0
     
+    # Cultural heritage and consultation fields
+    native_dishes: Optional[str] = None
+    consultation_specialties: Optional[str] = None
+    cultural_background: Optional[str] = None
+    
     # New marketplace fields
     is_vendor: bool = False
     vendor_application_id: Optional[str] = None
