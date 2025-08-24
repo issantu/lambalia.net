@@ -329,9 +329,9 @@ const Header = () => {
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-3 group">
               <img 
-                src="https://customer-assets.emergentagent.com/job_completion-quest/artifacts/gpq5b6s8_Image%20%2821%29.png" 
-                alt="Lambalia Logo" 
-                className="w-10 h-10 transition-transform group-hover:scale-110"
+                src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
+                alt="Lambalia - Global Heritage Recipes" 
+                className="w-12 h-12 transition-transform group-hover:scale-110 drop-shadow-md"
               />
               <h1 className="text-2xl font-bold heading-gradient">Lambalia</h1>
             </Link>
