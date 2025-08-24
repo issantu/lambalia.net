@@ -164,9 +164,9 @@ const LoginPage = () => {
         <div className="text-center mb-8">
           <div className="logo-shine">
             <img 
-              src="https://customer-assets.emergentagent.com/job_completion-quest/artifacts/gpq5b6s8_Image%20%2821%29.png" 
-              alt="Lambalia Logo" 
-              className="w-32 h-32 mx-auto mb-4"
+              src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
+              alt="Lambalia - Global Heritage Recipes" 
+              className="w-40 h-40 mx-auto mb-4 drop-shadow-lg"
             />
           </div>
           <h1 className="text-4xl font-bold heading-gradient">Lambalia</h1>
