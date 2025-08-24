@@ -3410,8 +3410,39 @@ function App() {
                   <>
                     <Header />
                     <ProfilePage />
+                    <Footer />
                   </>
                 </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/about" 
+              element={
+                <>
+                  <Header />
+                  <AboutPage />
+                  <Footer />
+                </>
+              } 
+            />
+            <Route 
+              path="/contact" 
+              element={
+                <>
+                  <Header />
+                  <ContactPage />
+                  <Footer />
+                </>
+              } 
+            />
+            <Route 
+              path="/careers" 
+              element={
+                <>
+                  <Header />
+                  <CareersPage />
+                  <Footer />
+                </>
               } 
             />
           </Routes>
