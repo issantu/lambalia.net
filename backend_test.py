@@ -3489,5 +3489,18 @@ def main():
     tester = LambaliaEnhancedAPITester()
     return tester.run_all_tests()
 
+def main_ui_improvements():
+    """Run focused UI improvements tests"""
+    print("Lambalia UI Improvements Test Suite")
+    print(f"Testing against: https://lambalia-recipes.preview.emergentagent.com")
+    print()
+    
+    tester = LambaliaEnhancedAPITester()
+    return tester.run_lambalia_ui_improvements_tests()
+
 if __name__ == "__main__":
-    sys.exit(main())
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "--ui-improvements":
+        sys.exit(main_ui_improvements())
+    else:
+        sys.exit(main())
