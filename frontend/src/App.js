@@ -3653,6 +3653,18 @@ function App() {
                 </>
               } 
             />
+            <Route 
+              path="/admin/revenue" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <RevenueDashboard />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
