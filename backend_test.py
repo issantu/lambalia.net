@@ -3271,20 +3271,29 @@ class LambaliaEnhancedAPITester:
         print("Testing specific improvements from user feedback during manual testing")
         print()
         
+        # Store the original test user data
+        original_test_user = self.test_user_data.copy()
+        
         # 1. Registration with Native Dishes Fields
         print("1️⃣ REGISTRATION WITH NATIVE DISHES FIELDS")
         print("-" * 45)
         self.test_registration_with_native_dishes_fields()
         
-        # Login with the registered user to get token for subsequent tests
-        if not self.token:
-            login_data = {
-                "email": self.test_user_data["email"],
-                "password": self.test_user_data["password"]
-            }
-            success, data = self.make_request('POST', 'auth/login', login_data, 200)
-            if success:
-                self.token = data.get('access_token')
+        # Use the newly registered user for subsequent tests
+        heritage_user_email = self.test_user_data["email"]
+        heritage_user_password = self.test_user_data["password"]
+        
+        # Login with the heritage user to get token for subsequent tests
+        login_data = {
+            "email": heritage_user_email,
+            "password": heritage_user_password
+        }
+        success, data = self.make_request('POST', 'auth/login', login_data, 200)
+        if success:
+            self.token = data.get('access_token')
+            print(f"   ✓ Logged in as heritage user for subsequent tests")
+        else:
+            print(f"   ✗ Failed to login as heritage user")
         
         # 2. Heritage Recipes System with Expanded Countries
         print("\n2️⃣ HERITAGE RECIPES SYSTEM WITH EXPANDED COUNTRIES")
@@ -3302,6 +3311,9 @@ class LambaliaEnhancedAPITester:
         print("-" * 45)
         self.test_heritage_user_contributions_endpoint()
         self.test_heritage_dishes_by_culture_endpoint()
+        
+        # Restore original test user data
+        self.test_user_data = original_test_user
         
         # Summary for UI improvements
         print("\n" + "=" * 60)
