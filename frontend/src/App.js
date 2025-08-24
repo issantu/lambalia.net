@@ -115,7 +115,10 @@ const LoginPage = () => {
     password: '',
     full_name: '',
     postal_code: '',
-    preferred_language: 'en'
+    preferred_language: 'en',
+    native_dishes: '',
+    consultation_specialties: '',
+    cultural_background: ''
   });
   const { login, register } = useAuth();
 
