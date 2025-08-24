@@ -1917,45 +1917,59 @@ const HomePage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
           <Link
             to="/templates"
-            className="btn-primary text-center p-4 rounded-lg no-underline text-white"
+            className="btn-primary text-center p-4 rounded-lg no-underline text-white flex flex-col items-center space-y-2"
           >
-            {t('home.actions.browseName')}
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop&crop=center" 
+                 alt="Browse Heritage Recipes" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.browseName')}</span>
           </Link>
           <Link
             to="/create-snippet"
-            className="btn-secondary text-center p-4 rounded-lg no-underline text-white"
+            className="btn-secondary text-center p-4 rounded-lg no-underline text-white flex flex-col items-center space-y-2"
           >
-            {t('home.actions.createName')}
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop&crop=center" 
+                 alt="Create Recipe" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.createName')}</span>
           </Link>
           <Link
             to="/grocery"
-            className="bg-blue-500 hover:bg-blue-600 text-center p-4 rounded-lg no-underline text-white transition-all"
+            className="bg-blue-500 hover:bg-blue-600 text-center p-4 rounded-lg no-underline text-white transition-all flex flex-col items-center space-y-2"
           >
-            {t('home.actions.ingredientsName')}
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=60&h=60&fit=crop&crop=center" 
+                 alt="Specialty Ingredients" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.ingredientsName')}</span>
           </Link>
           <Link
             to="/home-restaurant"
-            className="bg-purple-500 hover:bg-purple-600 text-center p-4 rounded-lg no-underline text-white transition-all"
+            className="bg-purple-500 hover:bg-purple-600 text-center p-4 rounded-lg no-underline text-white transition-all flex flex-col items-center space-y-2"
           >
-            {t('home.actions.restaurantName')}
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=60&h=60&fit=crop&crop=center" 
+                 alt="Home Restaurant" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.restaurantName')}</span>
           </Link>
           <Link
             to="/local-marketplace"
-            className="bg-green-500 hover:bg-green-600 text-center p-4 rounded-lg no-underline text-white transition-all"
+            className="bg-green-500 hover:bg-green-600 text-center p-4 rounded-lg no-underline text-white transition-all flex flex-col items-center space-y-2"
           >
-            {t('home.actions.marketplaceName')}
+            <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=60&h=60&fit=crop&crop=center" 
+                 alt="Local Marketplace" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.marketplaceName')}</span>
           </Link>
           <Link
             to="/charity-program"
-            className="bg-red-500 hover:bg-red-600 text-center p-4 rounded-lg no-underline text-white transition-all"
+            className="bg-red-500 hover:bg-red-600 text-center p-4 rounded-lg no-underline text-white transition-all flex flex-col items-center space-y-2"
           >
-            {t('home.actions.charityName')}
+            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=60&h=60&fit=crop&crop=center" 
+                 alt="Charity Program" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.charityName')}</span>
           </Link>
           <Link
             to="/lambalia-eats"
-            className="bg-orange-500 hover:bg-orange-600 text-center p-4 rounded-lg no-underline text-white transition-all"
+            className="bg-orange-500 hover:bg-orange-600 text-center p-4 rounded-lg no-underline text-white transition-all flex flex-col items-center space-y-2"
           >
-            {t('home.actions.eatsName')}
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=60&h=60&fit=crop&crop=center" 
+                 alt="Lambalia Eats" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.eatsName')}</span>
           </Link>
         </div>
       </div>
