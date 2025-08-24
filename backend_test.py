@@ -3072,6 +3072,232 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("Standalone Capability", success, details)
 
+    # LAMBALIA UI IMPROVEMENTS TESTS - FOCUSED TESTING FOR REVIEW REQUEST
+    
+    def test_registration_with_native_dishes_fields(self):
+        """Test registration with new cultural heritage fields"""
+        # Create a new user with the expanded registration fields
+        heritage_user_data = {
+            "username": f"heritage_chef_{datetime.now().strftime('%H%M%S')}",
+            "email": f"heritage_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Cultural Chef Test",
+            "postal_code": "10001",
+            "native_dishes": "Jollof Rice, Plantain Fufu, Suya, Pounded Yam",
+            "consultation_specialties": "Traditional Nigerian spice blending, Authentic fermentation techniques, Holiday cooking traditions",
+            "cultural_background": "Nigerian (Yoruba)"
+        }
+        
+        success, data = self.make_request('POST', 'auth/register', heritage_user_data, 200)
+        
+        if success:
+            user_data = data.get('user', {})
+            native_dishes = user_data.get('native_dishes', '')
+            consultation_specialties = user_data.get('consultation_specialties', '')
+            cultural_background = user_data.get('cultural_background', '')
+            
+            fields_stored = all([
+                native_dishes == heritage_user_data['native_dishes'],
+                consultation_specialties == heritage_user_data['consultation_specialties'],
+                cultural_background == heritage_user_data['cultural_background']
+            ])
+            
+            details = f"- Native dishes: {'✓' if native_dishes else '✗'}, Specialties: {'✓' if consultation_specialties else '✗'}, Background: {'✓' if cultural_background else '✗'}"
+        else:
+            details = ""
+            fields_stored = False
+            
+        return self.log_test("Registration with Native Dishes Fields", success and fields_stored, details)
+    
+    def test_heritage_countries_expanded(self):
+        """Test heritage countries endpoint shows 80+ countries"""
+        success, data = self.make_request('GET', 'heritage/countries')
+        
+        if success:
+            countries_count = len(data) if isinstance(data, list) else 0
+            has_80_plus = countries_count >= 80
+            
+            # Check for specific African and Caribbean countries
+            country_names = [country.get('name', '').lower() for country in data] if data else []
+            has_african = any('nigeria' in name or 'ghana' in name or 'kenya' in name for name in country_names)
+            has_caribbean = any('jamaica' in name or 'trinidad' in name or 'barbados' in name for name in country_names)
+            
+            details = f"- Found {countries_count} countries (80+ required: {'✓' if has_80_plus else '✗'}), African: {'✓' if has_african else '✗'}, Caribbean: {'✓' if has_caribbean else '✗'}"
+        else:
+            details = ""
+            has_80_plus = False
+            
+        return self.log_test("Heritage Countries Expanded (80+)", success and has_80_plus, details)
+    
+    def test_lambalia_eats_expanded_cuisine_types(self):
+        """Test Lambalia Eats with expanded cuisine types"""
+        if not self.token:
+            return self.log_test("Lambalia Eats Expanded Cuisine Types", False, "- No auth token available")
+        
+        # Test creating food requests with new cuisine types
+        new_cuisine_types = [
+            "african", "caribbean", "korean", "vietnamese", 
+            "middle_eastern", "latin_american", "european"
+        ]
+        
+        successful_requests = 0
+        
+        for cuisine in new_cuisine_types:
+            food_request_data = {
+                "dish_name": f"Craving authentic {cuisine.replace('_', ' ').title()} food",
+                "description": f"Looking for traditional {cuisine.replace('_', ' ')} dishes",
+                "cuisine_type": cuisine,
+                "max_price": 25.0,
+                "preferred_service_types": ["pickup", "delivery"],
+                "eater_location": {"lat": 40.7128, "lng": -74.0060},
+                "eater_address": "123 Main St, New York, NY 10001"
+            }
+            
+            success, data = self.make_request('POST', 'eats/request-food', food_request_data, 200)
+            if success:
+                successful_requests += 1
+        
+        details = f"- {successful_requests}/{len(new_cuisine_types)} new cuisine types accepted"
+        return self.log_test("Lambalia Eats Expanded Cuisine Types", successful_requests >= 5, details)
+    
+    def test_heritage_user_contributions_endpoint(self):
+        """Test new heritage user contributions data collection endpoint"""
+        success, data = self.make_request('GET', 'heritage/user-contributions')
+        
+        if success:
+            total_contributors = data.get('total_contributors', 0)
+            cultural_backgrounds = data.get('cultural_backgrounds', {})
+            top_native_dishes = data.get('top_native_dishes', {})
+            top_specialties = data.get('top_consultation_specialties', {})
+            recent_contributors = data.get('recent_contributors', [])
+            
+            has_data_structure = all([
+                isinstance(cultural_backgrounds, dict),
+                isinstance(top_native_dishes, dict),
+                isinstance(top_specialties, dict),
+                isinstance(recent_contributors, list)
+            ])
+            
+            details = f"- Contributors: {total_contributors}, Backgrounds: {len(cultural_backgrounds)}, Dishes: {len(top_native_dishes)}, Specialties: {len(top_specialties)}"
+        else:
+            details = ""
+            has_data_structure = False
+            
+        return self.log_test("Heritage User Contributions Endpoint", success and has_data_structure, details)
+    
+    def test_heritage_dishes_by_culture_endpoint(self):
+        """Test new heritage dishes by culture endpoint"""
+        # Test with Nigerian culture (from our test registration)
+        success, data = self.make_request('GET', 'heritage/dishes-by-culture/Nigerian')
+        
+        if success:
+            cultural_background = data.get('cultural_background', '')
+            total_contributors = data.get('total_contributors', 0)
+            dishes = data.get('dishes', [])
+            total_dishes = data.get('total_dishes', 0)
+            
+            has_proper_structure = all([
+                cultural_background.lower() == 'nigerian',
+                isinstance(dishes, list),
+                isinstance(total_dishes, int)
+            ])
+            
+            # Check dish structure if dishes exist
+            dish_structure_valid = True
+            if dishes:
+                first_dish = dishes[0]
+                required_fields = ['dish_name', 'contributor', 'consultation_available', 'specialties']
+                dish_structure_valid = all(field in first_dish for field in required_fields)
+            
+            details = f"- Culture: {cultural_background}, Contributors: {total_contributors}, Dishes: {len(dishes)}, Structure: {'✓' if dish_structure_valid else '✗'}"
+        else:
+            details = ""
+            has_proper_structure = False
+            
+        return self.log_test("Heritage Dishes by Culture Endpoint", success and has_proper_structure, details)
+    
+    def test_heritage_recipe_creation_with_african_caribbean(self):
+        """Test heritage recipe creation with African and Caribbean countries"""
+        if not self.token:
+            return self.log_test("Heritage Recipe Creation (African/Caribbean)", False, "- No auth token available")
+        
+        # Test African recipe
+        african_recipe_data = {
+            "recipe_name": "Traditional Jollof Rice",
+            "country_code": "NG",  # Nigeria
+            "cultural_significance": "celebration",
+            "description": "A beloved West African rice dish cooked in a flavorful tomato-based sauce",
+            "ingredients": [
+                {"name": "Long grain rice", "amount": "2", "unit": "cups"},
+                {"name": "Tomato paste", "amount": "3", "unit": "tbsp"},
+                {"name": "Palm oil", "amount": "1/4", "unit": "cup"},
+                {"name": "Scotch bonnet pepper", "amount": "1", "unit": "piece"}
+            ],
+            "preparation_steps": [
+                {"step": 1, "instruction": "Wash and parboil rice"},
+                {"step": 2, "instruction": "Prepare tomato base with palm oil"},
+                {"step": 3, "instruction": "Combine rice with tomato base and simmer"}
+            ],
+            "cooking_time_minutes": 45,
+            "difficulty_level": "intermediate",
+            "servings": 6,
+            "dietary_tags": ["gluten_free"],
+            "cultural_context": "Often served at celebrations and family gatherings across West Africa"
+        }
+        
+        success, data = self.make_request('POST', 'heritage/recipes/submit', african_recipe_data, 200)
+        
+        if success:
+            recipe_id = data.get('recipe_id', '')
+            authenticity_score = data.get('authenticity_score', 0)
+            cultural_significance = data.get('cultural_significance', '')
+            
+            details = f"- Recipe ID: {recipe_id[:8]}..., Authenticity: {authenticity_score}, Significance: {cultural_significance}"
+        else:
+            details = ""
+            
+        return self.log_test("Heritage Recipe Creation (African/Caribbean)", success, details)
+    
+    def run_lambalia_ui_improvements_tests(self):
+        """Run focused tests for Lambalia UI improvements"""
+        print("🎯 LAMBALIA UI IMPROVEMENTS - FOCUSED TESTING")
+        print("=" * 60)
+        print("Testing specific improvements from user feedback during manual testing")
+        print()
+        
+        # 1. Registration with Native Dishes Fields
+        print("1️⃣ REGISTRATION WITH NATIVE DISHES FIELDS")
+        print("-" * 45)
+        self.test_registration_with_native_dishes_fields()
+        
+        # 2. Heritage Recipes System with Expanded Countries
+        print("\n2️⃣ HERITAGE RECIPES SYSTEM WITH EXPANDED COUNTRIES")
+        print("-" * 55)
+        self.test_heritage_countries_expanded()
+        self.test_heritage_recipe_creation_with_african_caribbean()
+        
+        # 3. Lambalia Eats with Expanded Cuisine Types
+        print("\n3️⃣ LAMBALIA EATS WITH EXPANDED CUISINE TYPES")
+        print("-" * 45)
+        self.test_lambalia_eats_expanded_cuisine_types()
+        
+        # 4. New Heritage Data Collection Endpoints
+        print("\n4️⃣ NEW HERITAGE DATA COLLECTION ENDPOINTS")
+        print("-" * 45)
+        self.test_heritage_user_contributions_endpoint()
+        self.test_heritage_dishes_by_culture_endpoint()
+        
+        # Summary for UI improvements
+        print("\n" + "=" * 60)
+        print("📊 LAMBALIA UI IMPROVEMENTS TEST SUMMARY")
+        print("=" * 60)
+        
+        print(f"✅ UI Improvement Tests Passed: {self.tests_passed}")
+        print(f"❌ UI Improvement Tests Failed: {self.tests_run - self.tests_passed}")
+        print(f"📈 UI Improvements Success Rate: {(self.tests_passed / self.tests_run * 100):.1f}%")
+        
+        return self.tests_passed == self.tests_run
+
     def run_all_tests(self):
         """Run all API tests in sequence"""
         print("🚀 Starting Enhanced Lambalia Backend API Tests")
