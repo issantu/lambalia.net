@@ -658,6 +658,7 @@ async def get_brand_partnership_opportunities():
             "Create tiered partnership packages"
         ]
     }
+# COMPREHENSIVE REVENUE DASHBOARD
 @api_router.get("/revenue/comprehensive-dashboard")
 async def get_comprehensive_revenue_dashboard():
     """Complete revenue analytics dashboard for all income streams"""
@@ -704,12 +705,21 @@ async def get_comprehensive_revenue_dashboard():
             "total_monthly": 7500,
             "projected_monthly": 45000
         },
-        "consultation_marketplace": {
-            "recipe_consultations": {"monthly_transactions": 120, "avg_price": 8.50, "revenue": 1020},
-            "cooking_classes": {"monthly_sessions": 25, "avg_price": 35, "revenue": 875},
-            "cultural_authenticity": {"monthly_verifications": 50, "avg_price": 15, "revenue": 750},
-            "total_monthly": 2645,
-            "projected_monthly": 8500
+        "subscription_products": {
+            "ingredient_boxes": {"monthly_revenue": 0, "projected": 47500},
+            "recipe_collections": {"monthly_revenue": 0, "projected": 42500},
+            "virtual_events": {"monthly_revenue": 0, "projected": 15000},
+            "spice_blends": {"monthly_revenue": 0, "projected": 5000},
+            "total_monthly": 0,
+            "projected_monthly": 110000
+        },
+        "brand_partnerships": {
+            "equipment_brands": {"monthly_revenue": 0, "projected": 5500},
+            "ingredient_brands": {"monthly_revenue": 0, "projected": 4250},
+            "cultural_festivals": {"monthly_revenue": 0, "projected": 6000},
+            "media_licensing": {"monthly_revenue": 0, "projected": 3250},
+            "total_monthly": 0,
+            "projected_monthly": 19000
         }
     }
     
@@ -722,24 +732,25 @@ async def get_comprehensive_revenue_dashboard():
         "summary": {
             "current_monthly_revenue": current_total,
             "projected_monthly_revenue": projected_total,
+            "annual_projection": projected_total * 12,
             "growth_potential": f"{((projected_total - current_total) / current_total * 100):.0f}%",
             "diversification_score": len(revenue_streams),
             "revenue_stability": "high_diversification"
         },
         "recommendations": [
             "Accelerate external ad integration (+$2,750/month)",
+            "Launch cultural ingredient subscription boxes (+$47,500/month)",
             "Expand data monetization clients (+$26,400/month)",  
             "Close 2 white-label deals (+$37,500/month)",
-            "Grow premium subscriptions (+$3,357/month)",
-            "Scale consultation marketplace (+$5,855/month)"
+            "Develop brand partnerships (+$19,000/month)"
         ],
-        "next_30_days_action": [
-            "Implement Google AdSense integration",
-            "Launch Amazon affiliate program", 
-            "Contact 5 grocery chains for white-label licensing",
-            "Create data product sales materials",
-            "Launch premium membership marketing campaign"
-        ]
+        "immediate_implementations": [
+            "Google AdSense (2-3 days setup)",
+            "Amazon affiliate program (1 week)",
+            "Basic subscription box MVP (4 weeks)",
+            "Data product sales materials (2 weeks)"
+        ],
+        "projected_12_month_revenue": "$3.1M annually at full implementation"
     }
 
 @api_router.get("/revenue/real-time-metrics")
