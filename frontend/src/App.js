@@ -1709,7 +1709,81 @@ const RecipeTemplatesPage = () => {
             }}
             className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
           >
-            <option value="">All Countries ({Object.keys(nativeRecipes).length})</option>
+            <option value="">All Countries (80+)</option>
+            {/* Caribbean Islands */}
+            <option value="jamaica">🇯🇲 Jamaica</option>
+            <option value="trinidad_tobago">🇹🇹 Trinidad & Tobago</option>
+            <option value="barbados">🇧🇧 Barbados</option>
+            <option value="haiti">🇭🇹 Haiti</option>
+            <option value="dominican_republic">🇩🇴 Dominican Republic</option>
+            <option value="puerto_rico">🇵🇷 Puerto Rico</option>
+            <option value="cuba">🇨🇺 Cuba</option>
+            <option value="grenada">🇬🇩 Grenada</option>
+            
+            {/* Asian Heritage */}
+            <option value="china">🇨🇳 China</option>
+            <option value="japan">🇯🇵 Japan</option>
+            <option value="korea">🇰🇷 Korea</option>
+            <option value="vietnam">🇻🇳 Vietnam</option>
+            <option value="thailand">🇹🇭 Thailand</option>
+            <option value="cambodia">🇰🇭 Cambodia</option>
+            <option value="laos">🇱🇦 Laos</option>
+            <option value="philippines">🇵🇭 Philippines</option>
+            <option value="indonesia">🇮🇩 Indonesia</option>
+            <option value="malaysia">🇲🇾 Malaysia</option>
+            <option value="india">🇮🇳 India</option>
+            <option value="pakistan">🇵🇰 Pakistan</option>
+            <option value="bangladesh">🇧🇩 Bangladesh</option>
+            <option value="sri_lanka">🇱🇰 Sri Lanka</option>
+            
+            {/* African Heritage */}
+            <option value="nigeria">🇳🇬 Nigeria</option>
+            <option value="ghana">🇬🇭 Ghana</option>
+            <option value="senegal">🇸🇳 Senegal</option>
+            <option value="mali">🇲🇱 Mali</option>
+            <option value="ivory_coast">🇨🇮 Côte d'Ivoire</option>
+            <option value="cameroon">🇨🇲 Cameroon</option>
+            <option value="congo">🇨🇬 Congo</option>
+            <option value="ethiopia">🇪🇹 Ethiopia</option>
+            <option value="kenya">🇰🇪 Kenya</option>
+            <option value="tanzania">🇹🇿 Tanzania</option>
+            <option value="uganda">🇺🇬 Uganda</option>
+            <option value="somalia">🇸🇴 Somalia</option>
+            
+            {/* Latin American */}
+            <option value="mexico">🇲🇽 Mexico</option>
+            <option value="guatemala">🇬🇹 Guatemala</option>
+            <option value="honduras">🇭🇳 Honduras</option>
+            <option value="el_salvador">🇸🇻 El Salvador</option>
+            <option value="colombia">🇨🇴 Colombia</option>
+            <option value="venezuela">🇻🇪 Venezuela</option>
+            <option value="peru">🇵🇪 Peru</option>
+            <option value="ecuador">🇪🇨 Ecuador</option>
+            <option value="bolivia">🇧🇴 Bolivia</option>
+            <option value="chile">🇨🇱 Chile</option>
+            <option value="argentina">🇦🇷 Argentina</option>
+            <option value="brazil">🇧🇷 Brazil</option>
+            
+            {/* Middle Eastern */}
+            <option value="turkey">🇹🇷 Turkey</option>
+            <option value="iran">🇮🇷 Iran</option>
+            <option value="lebanon">🇱🇧 Lebanon</option>
+            <option value="syria">🇸🇾 Syria</option>
+            <option value="jordan">🇯🇴 Jordan</option>
+            <option value="afghanistan">🇦🇫 Afghanistan</option>
+            
+            {/* European Heritage */}
+            <option value="italy">🇮🇹 Italy</option>
+            <option value="spain">🇪🇸 Spain</option>
+            <option value="portugal">🇵🇹 Portugal</option>
+            <option value="france">🇫🇷 France</option>
+            <option value="germany">🇩🇪 Germany</option>
+            <option value="poland">🇵🇱 Poland</option>
+            <option value="russia">🇷🇺 Russia</option>
+            <option value="ukraine">🇺🇦 Ukraine</option>
+            <option value="greece">🇬🇷 Greece</option>
+            
+            {/* Additional entries for other countries */}
             {Object.keys(nativeRecipes).sort().map(country => (
               <option key={country} value={country.toLowerCase().replace(' ', '_')}>
                 {country} ({nativeRecipes[country].length - 1} recipes)
