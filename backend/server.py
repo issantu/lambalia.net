@@ -108,6 +108,12 @@ class RecipeStatus(str, Enum):
     PUBLISHED = "published"
     ARCHIVED = "archived"
 
+class SecurityKeyType(str, Enum):
+    BACKUP_CODE = "backup_code"
+    TOTP = "totp"  # Time-based One-Time Password (Google Authenticator)
+    WEBAUTHN = "webauthn"  # Hardware security keys
+    SMS = "sms"
+
 class Country(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
