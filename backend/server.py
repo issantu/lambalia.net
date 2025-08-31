@@ -2459,6 +2459,9 @@ lambalia_eats_service = LambaliaEatsService(db)
 # Initialize Heritage Recipes service
 heritage_recipes_service = HeritageRecipesService(db)
 
+# Initialize Smart Cooking Tool service
+smart_cooking_service = SmartCookingToolService(db)
+
 @api_router.post("/farm-vendors/apply", response_model=dict)
 async def apply_as_farm_vendor(
     application_data: FarmVendorApplicationRequest,
