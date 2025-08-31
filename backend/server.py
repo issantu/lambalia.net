@@ -304,6 +304,58 @@ async def get_current_user_optional(credentials: HTTPAuthorizationCredentials = 
     except (jwt.ExpiredSignatureError, jwt.JWTError):
         return None
 
+# Security utilities for 2FA
+import secrets
+import qrcode
+import io
+
+def generate_totp_secret() -> str:
+    """Generate a TOTP secret for Google Authenticator"""
+    return base64.b32encode(secrets.token_bytes(20)).decode('utf-8')
+
+def generate_backup_codes(count: int = 10) -> List[str]:
+    """Generate backup codes for 2FA"""
+    return [f"{secrets.randbelow(9999):04d}-{secrets.randbelow(9999):04d}" for _ in range(count)]
+
+def verify_totp_code(secret: str, code: str, window: int = 1) -> bool:
+    """Verify TOTP code with time window tolerance"""
+    import time
+    import hmac
+    import hashlib
+    import struct
+    
+    try:
+        # Decode base32 secret
+        key = base64.b32decode(secret.upper().replace(' ', ''))
+        
+        # Get current time counter
+        counter = int(time.time()) // 30
+        
+        # Check current time and window around it
+        for i in range(-window, window + 1):
+            # Generate HOTP value
+            msg = struct.pack(">Q", counter + i)
+            h = hmac.new(key, msg, hashlib.sha1).digest()
+            
+            # Dynamic truncation
+            offset = h[-1] & 0x0f
+            truncated = struct.unpack(">I", h[offset:offset+4])[0] & 0x7fffffff
+            totp = truncated % 1000000
+            
+            if f"{totp:06d}" == code:
+                return True
+        return False
+    except:
+        return False
+
+def log_login_attempt(email: str, ip_address: str, user_agent: str, success: bool, 
+                     twofa_required: bool = False, twofa_success: bool = None,
+                     failed_reason: str = None) -> str:
+    """Log login attempt for security monitoring"""
+    attempt_id = str(uuid.uuid4())
+    # In a real implementation, this would be stored in database
+    return attempt_id
+
 # Authentication Routes (keeping existing ones)
 @api_router.get("/health")
 async def health_check():
