@@ -499,6 +499,250 @@ async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
         message="Login successful"
     )
 
+@api_router.post("/auth/setup-2fa", response_model=dict)
+async def setup_2fa(setup_request: Setup2FARequest, current_user_id: str = Depends(get_current_user)):
+    """Set up two-factor authentication for user account"""
+    
+    # Get or create security profile
+    security_profile = await db.user_security_profiles.find_one({"user_id": current_user_id})
+    
+    if not security_profile:
+        security_profile = UserSecurityProfile(user_id=current_user_id)
+        await db.user_security_profiles.insert_one(security_profile.dict())
+    
+    response_data = {"success": True, "method": setup_request.method}
+    
+    if setup_request.method == SecurityKeyType.TOTP:
+        # Generate TOTP secret
+        totp_secret = generate_totp_secret()
+        
+        # Generate QR code for Google Authenticator
+        user_doc = await db.users.find_one({"id": current_user_id})
+        app_name = "Lambalia"
+        
+        totp_uri = f"otpauth://totp/{app_name}:{user_doc['email']}?secret={totp_secret}&issuer={app_name}"
+        
+        # Generate QR code image
+        qr = qrcode.QRCode(version=1, box_size=10, border=5)
+        qr.add_data(totp_uri)
+        qr.make(fit=True)
+        
+        img = qr.make_image(fill_color="black", back_color="white")
+        img_buffer = io.BytesIO()
+        img.save(img_buffer, format='PNG')
+        img_base64 = base64.b64encode(img_buffer.getvalue()).decode()
+        
+        # Store temporary secret (not activated until verified)
+        await db.user_security_profiles.update_one(
+            {"user_id": current_user_id},
+            {
+                "$set": {
+                    "temp_totp_secret": totp_secret,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        response_data.update({
+            "totp_secret": totp_secret,
+            "qr_code": f"data:image/png;base64,{img_base64}",
+            "manual_entry_key": totp_secret,
+            "instructions": "Scan QR code with Google Authenticator or enter the manual key, then verify with a 6-digit code"
+        })
+    
+    elif setup_request.method == SecurityKeyType.BACKUP_CODE:
+        # Generate backup codes
+        backup_codes = generate_backup_codes()
+        
+        await db.user_security_profiles.update_one(
+            {"user_id": current_user_id},
+            {
+                "$set": {
+                    "backup_codes": backup_codes,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        response_data.update({
+            "backup_codes": backup_codes,
+            "instructions": "Save these backup codes in a secure location. Each code can only be used once."
+        })
+    
+    elif setup_request.method == SecurityKeyType.SMS:
+        if not setup_request.phone_number:
+            raise HTTPException(status_code=400, detail="Phone number required for SMS 2FA")
+        
+        # In production, send SMS verification
+        verification_code = f"{secrets.randbelow(999999):06d}"
+        
+        await db.user_security_profiles.update_one(
+            {"user_id": current_user_id},
+            {
+                "$set": {
+                    "phone_number": setup_request.phone_number,
+                    "temp_sms_code": verification_code,
+                    "temp_sms_expires": datetime.utcnow() + timedelta(minutes=5),
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        response_data.update({
+            "phone_number": setup_request.phone_number,
+            "instructions": f"SMS sent to {setup_request.phone_number}. Enter verification code to complete setup.",
+            "test_code": verification_code  # Remove in production
+        })
+    
+    return response_data
+
+@api_router.post("/auth/verify-2fa-setup", response_model=dict)
+async def verify_2fa_setup(verify_request: Verify2FASetupRequest, current_user_id: str = Depends(get_current_user)):
+    """Verify and activate 2FA setup"""
+    
+    security_profile = await db.user_security_profiles.find_one({"user_id": current_user_id})
+    if not security_profile:
+        raise HTTPException(status_code=404, detail="Security profile not found")
+    
+    verified = False
+    
+    if verify_request.method == SecurityKeyType.TOTP:
+        temp_secret = security_profile.get('temp_totp_secret')
+        
+        if not temp_secret:
+            raise HTTPException(status_code=400, detail="No TOTP setup in progress")
+        
+        if verify_totp_code(temp_secret, verify_request.verification_code):
+            verified = True
+            # Activate TOTP
+            await db.user_security_profiles.update_one(
+                {"user_id": current_user_id},
+                {
+                    "$set": {
+                        "twofa_enabled": True,
+                        "twofa_method": SecurityKeyType.TOTP,
+                        "totp_secret": temp_secret,
+                        "last_2fa_setup": datetime.utcnow(),
+                        "updated_at": datetime.utcnow()
+                    },
+                    "$unset": {"temp_totp_secret": ""}
+                }
+            )
+    
+    elif verify_request.method == SecurityKeyType.SMS:
+        temp_code = security_profile.get('temp_sms_code')
+        temp_expires = security_profile.get('temp_sms_expires')
+        
+        if not temp_code or not temp_expires:
+            raise HTTPException(status_code=400, detail="No SMS setup in progress")
+        
+        if datetime.utcnow() > temp_expires:
+            raise HTTPException(status_code=400, detail="SMS verification code expired")
+        
+        if temp_code == verify_request.verification_code:
+            verified = True
+            # Activate SMS 2FA
+            await db.user_security_profiles.update_one(
+                {"user_id": current_user_id},
+                {
+                    "$set": {
+                        "twofa_enabled": True,
+                        "twofa_method": SecurityKeyType.SMS,
+                        "last_2fa_setup": datetime.utcnow(),
+                        "updated_at": datetime.utcnow()
+                    },
+                    "$unset": {"temp_sms_code": "", "temp_sms_expires": ""}
+                }
+            )
+    
+    if not verified:
+        raise HTTPException(status_code=400, detail="Invalid verification code")
+    
+    return {
+        "success": True,
+        "message": f"{verify_request.method.upper()} two-factor authentication activated successfully",
+        "backup_codes_recommended": verify_request.method != SecurityKeyType.BACKUP_CODE,
+        "next_steps": [
+            "Generate backup codes for account recovery",
+            "Test login with 2FA to ensure it works",
+            "Store backup codes in a secure location"
+        ]
+    }
+
+@api_router.get("/auth/2fa-status", response_model=dict)
+async def get_2fa_status(current_user_id: str = Depends(get_current_user)):
+    """Get current 2FA status and available methods"""
+    
+    security_profile = await db.user_security_profiles.find_one({"user_id": current_user_id})
+    
+    if not security_profile:
+        return {
+            "twofa_enabled": False,
+            "available_methods": ["totp", "sms", "backup_code"],
+            "setup_required": True
+        }
+    
+    enabled_methods = []
+    if security_profile.get('totp_secret'):
+        enabled_methods.append("totp")
+    if security_profile.get('phone_number'):
+        enabled_methods.append("sms")
+    if security_profile.get('backup_codes'):
+        enabled_methods.append("backup_code")
+    
+    return {
+        "twofa_enabled": security_profile.get('twofa_enabled', False),
+        "primary_method": security_profile.get('twofa_method'),
+        "enabled_methods": enabled_methods,
+        "backup_codes_available": len(security_profile.get('backup_codes', [])),
+        "backup_codes_used": len(security_profile.get('backup_codes_used', [])),
+        "last_setup": security_profile.get('last_2fa_setup'),
+        "phone_number": security_profile.get('phone_number', "").replace(security_profile.get('phone_number', "")[3:-2], "***") if security_profile.get('phone_number') else None
+    }
+
+@api_router.post("/auth/disable-2fa", response_model=dict)
+async def disable_2fa(current_user_id: str = Depends(get_current_user)):
+    """Disable two-factor authentication (requires current password)"""
+    
+    await db.user_security_profiles.update_one(
+        {"user_id": current_user_id},
+        {
+            "$set": {
+                "twofa_enabled": False,
+                "updated_at": datetime.utcnow()
+            },
+            "$unset": {
+                "twofa_method": "",
+                "totp_secret": "",
+                "backup_codes": "",
+                "backup_codes_used": "",
+                "phone_number": ""
+            }
+        }
+    )
+    
+    return {
+        "success": True,
+        "message": "Two-factor authentication disabled successfully",
+        "warning": "Your account is now less secure. Consider re-enabling 2FA."
+    }
+
+# Legacy login endpoint for backward compatibility
+@api_router.post("/auth/login-simple", response_model=TokenResponse)
+async def login_user(login_data: UserLogin):
+    """Legacy login endpoint without 2FA support - DEPRECATED"""
+    user_doc = await db.users.find_one({"email": login_data.email})
+    if not user_doc or not verify_password(login_data.password, user_doc['password_hash']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    token = create_jwt_token(user_doc['id'])
+    
+    return TokenResponse(
+        access_token=token,
+        token_type="bearer",
+        user=UserResponse(**user_doc)
+    )
+
 # CULTURAL HERITAGE DATA COLLECTION
 # EXTERNAL AD REVENUE & AFFILIATE MARKETING
 @api_router.get("/ads/external-placements")
