@@ -4918,62 +4918,6 @@ EUROPEAN_DISHES_BY_COUNTRY = {
     ]
 }
 
-# SECURITY KEY & TWO-FACTOR AUTHENTICATION SYSTEM
-class SecurityKeyType(str, Enum):
-    BACKUP_CODE = "backup_code"
-    TOTP = "totp"  # Time-based One-Time Password (Google Authenticator)
-    WEBAUTHN = "webauthn"  # Hardware security keys
-    SMS = "sms"
-
-class UserSecurityProfile(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str
-    
-    # Two-Factor Authentication
-    twofa_enabled: bool = False
-    twofa_method: Optional[SecurityKeyType] = None
-    totp_secret: Optional[str] = None  # Encrypted in production
-    
-    # Backup codes
-    backup_codes: List[str] = []  # Encrypted in production
-    backup_codes_used: List[str] = []
-    
-    # Security keys (WebAuthn/FIDO2)
-    webauthn_credentials: List[Dict[str, Any]] = []
-    
-    # Phone number for SMS (if enabled)
-    phone_number: Optional[str] = None
-    
-    # Security settings
-    require_2fa_for_withdrawals: bool = True
-    require_2fa_for_profile_changes: bool = True
-    
-    # Audit trail
-    last_2fa_setup: Optional[datetime] = None
-    failed_attempts: int = 0
-    locked_until: Optional[datetime] = None
-    
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-
-class LoginAttempt(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: Optional[str] = None
-    email: str
-    ip_address: str
-    user_agent: str
-    
-    # Login details
-    login_successful: bool = False
-    twofa_required: bool = False
-    twofa_successful: Optional[bool] = None
-    
-    # Security
-    failed_reason: Optional[str] = None
-    blocked_by_rate_limit: bool = False
-    
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-
 # ENHANCED REGISTRATION WITH AFRICAN DISHES
 # GLOBAL DISHES API ENDPOINTS
 @api_router.get("/heritage/global-dishes")
