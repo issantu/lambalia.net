@@ -1398,12 +1398,16 @@ class LambaliaEnhancedAPITester:
             cuisines_found = set()
             countries_found = set()
             
-            if data:
-                for dish in data[:50]:  # Check first 50 dishes
-                    if 'cuisine_type' in dish:
-                        cuisines_found.add(dish['cuisine_type'])
-                    if 'country' in dish:
-                        countries_found.add(dish['country'])
+            if data and isinstance(data, list):
+                # Check first 50 dishes or all if less than 50
+                sample_size = min(50, len(data))
+                for i in range(sample_size):
+                    dish = data[i]
+                    if isinstance(dish, dict):
+                        if 'cuisine_type' in dish:
+                            cuisines_found.add(dish['cuisine_type'])
+                        if 'country' in dish:
+                            countries_found.add(dish['country'])
             
             details = f"- Found {dishes_count} dishes from {len(cuisines_found)} cuisines, {len(countries_found)} countries"
             # Verify we have dishes from major world cuisines
