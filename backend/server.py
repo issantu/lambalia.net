@@ -4533,9 +4533,60 @@ class LoginAttempt(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 # ENHANCED REGISTRATION WITH AFRICAN DISHES
+# GLOBAL DISHES API ENDPOINTS
+@api_router.get("/heritage/global-dishes")
+async def get_global_dishes():
+    """Get comprehensive list of dishes from all global cuisines for registration"""
+    
+    all_dishes_databases = {
+        "African": AFRICAN_DISHES_BY_COUNTRY,
+        "Caribbean": CARIBBEAN_DISHES_BY_COUNTRY,
+        "Asian": ASIAN_DISHES_BY_COUNTRY,
+        "Latin American": LATIN_AMERICAN_DISHES_BY_COUNTRY,
+        "Middle Eastern": MIDDLE_EASTERN_DISHES_BY_COUNTRY,
+        "European": EUROPEAN_DISHES_BY_COUNTRY
+    }
+    
+    formatted_cuisines = {}
+    total_dishes = 0
+    total_countries = 0
+    
+    for cuisine_type, countries_dict in all_dishes_databases.items():
+        formatted_countries = {}
+        cuisine_dishes = 0
+        
+        for country, dishes in countries_dict.items():
+            country_name = country.replace('_', ' ').title()
+            formatted_countries[country_name] = {
+                "country_code": country,
+                "dishes": dishes,
+                "count": len(dishes)
+            }
+            cuisine_dishes += len(dishes)
+            total_dishes += len(dishes)
+        
+        formatted_cuisines[cuisine_type] = {
+            "countries": formatted_countries,
+            "total_countries": len(countries_dict),
+            "total_dishes": cuisine_dishes
+        }
+        total_countries += len(countries_dict)
+    
+    return {
+        "success": True,
+        "global_cuisines": formatted_cuisines,
+        "summary": {
+            "total_cuisines": len(all_dishes_databases),
+            "total_countries": total_countries,
+            "total_dishes": total_dishes
+        },
+        "usage": "Use in registration form to help users select dishes they can prepare from their cultural heritage",
+        "cultural_note": "Comprehensive collection from across the globe to support authentic cultural representation and diaspora connection"
+    }
+
 @api_router.get("/heritage/african-dishes")
 async def get_african_dishes():
-    """Get comprehensive list of African dishes by country for registration"""
+    """Get comprehensive list of African dishes by country for registration - LEGACY ENDPOINT"""
     
     # Format for frontend consumption
     formatted_dishes = {}
@@ -4556,7 +4607,51 @@ async def get_african_dishes():
         "total_countries": len(AFRICAN_DISHES_BY_COUNTRY),
         "total_dishes": total_dishes,
         "usage": "Use in registration form to help users select dishes they can prepare",
-        "cultural_note": "Comprehensive collection from across Africa to support authentic cultural representation"
+        "cultural_note": "Comprehensive collection from across Africa to support authentic cultural representation",
+        "migration_note": "Consider using /api/heritage/global-dishes for all cuisines"
+    }
+
+@api_router.get("/heritage/dishes-by-cuisine/{cuisine_type}")
+async def get_dishes_by_cuisine(cuisine_type: str):
+    """Get dishes from a specific cuisine type (African, Caribbean, Asian, etc.)"""
+    
+    cuisine_databases = {
+        "african": AFRICAN_DISHES_BY_COUNTRY,
+        "caribbean": CARIBBEAN_DISHES_BY_COUNTRY,
+        "asian": ASIAN_DISHES_BY_COUNTRY,
+        "latin_american": LATIN_AMERICAN_DISHES_BY_COUNTRY,
+        "middle_eastern": MIDDLE_EASTERN_DISHES_BY_COUNTRY,
+        "european": EUROPEAN_DISHES_BY_COUNTRY
+    }
+    
+    cuisine_key = cuisine_type.lower().replace(' ', '_').replace('-', '_')
+    
+    if cuisine_key not in cuisine_databases:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"Cuisine type '{cuisine_type}' not found. Available: {', '.join(cuisine_databases.keys())}"
+        )
+    
+    dishes_dict = cuisine_databases[cuisine_key]
+    formatted_dishes = {}
+    total_dishes = 0
+    
+    for country, dishes in dishes_dict.items():
+        country_name = country.replace('_', ' ').title()
+        formatted_dishes[country_name] = {
+            "country_code": country,
+            "dishes": dishes,
+            "count": len(dishes)
+        }
+        total_dishes += len(dishes)
+    
+    return {
+        "success": True,
+        "cuisine_type": cuisine_type.title(),
+        "countries": formatted_dishes,
+        "total_countries": len(dishes_dict),
+        "total_dishes": total_dishes,
+        "cultural_note": f"Traditional dishes from {cuisine_type.title()} heritage for authentic cultural representation"
     }
 @api_router.post("/admin/setup-platform-owner")
 async def setup_platform_owner(
