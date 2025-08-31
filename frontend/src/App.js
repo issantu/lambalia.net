@@ -605,7 +605,307 @@ const ExternalAdBanner = ({ placement = "header", size = "728x90" }) => {
   );
 };
 
-// Revenue Dashboard Component (Admin/Analytics)
+// User Earnings Dashboard Component
+const UserEarningsDashboard = () => {
+  const [earnings, setEarnings] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showPayoutSetup, setShowPayoutSetup] = useState(false);
+  const [payoutData, setPayoutData] = useState({
+    payout_method: 'stripe',
+    minimum_payout_amount: 25.00,
+    stripe_account_id: '',
+    paypal_email: '',
+    account_number: '',
+    routing_number: '',
+    bank_name: ''
+  });
+
+  useEffect(() => {
+    fetchEarnings();
+  }, []);
+
+  const fetchEarnings = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/payments/my-earnings`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      setEarnings(data);
+    } catch (error) {
+      console.error('Failed to fetch earnings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePayoutSetup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/payments/setup-payout-profile`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(payoutData)
+      });
+      
+      if (response.ok) {
+        alert('Payout profile updated successfully!');
+        setShowPayoutSetup(false);
+        fetchEarnings();
+      } else {
+        alert('Failed to update payout profile');
+      }
+    } catch (error) {
+      console.error('Payout setup error:', error);
+    }
+  };
+
+  if (loading) return <div className="text-center p-8">Loading earnings...</div>;
+
+  if (!earnings) return <div className="text-center p-8">Unable to load earnings data</div>;
+
+  const { earnings_summary, earnings_breakdown, payout_info, recent_transactions } = earnings;
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold heading-gradient mb-2">💰 My Earnings Dashboard</h1>
+        <p className="text-gray-600">Track your Lambalia earnings and manage payouts</p>
+      </div>
+
+      {/* Earnings Summary Cards */}
+      <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl text-center">
+          <div className="text-2xl font-bold text-green-600">
+            ${earnings_summary.current_week_earnings.toFixed(2)}
+          </div>
+          <div className="text-sm text-gray-600">This Week</div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl text-center">
+          <div className="text-2xl font-bold text-blue-600">
+            ${earnings_summary.total_lifetime_earnings.toFixed(2)}
+          </div>
+          <div className="text-sm text-gray-600">Total Earned</div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl text-center">
+          <div className="text-2xl font-bold text-purple-600">
+            ${earnings_summary.pending_payout_amount.toFixed(2)}
+          </div>
+          <div className="text-sm text-gray-600">Pending Payout</div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl text-center">
+          <div className="text-2xl font-bold text-orange-600">
+            ${earnings_summary.total_platform_commission.toFixed(2)}
+          </div>
+          <div className="text-sm text-gray-600">Platform Commission (15%)</div>
+        </div>
+      </div>
+
+      {/* Earnings Breakdown */}
+      <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="bg-white p-6 rounded-xl shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">💼 Earnings by Service</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Consultations</span>
+              <span className="font-semibold text-green-600">${earnings_breakdown.consultation_earnings.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Lambalia Eats</span>
+              <span className="font-semibold text-orange-600">${earnings_breakdown.lambalia_eats_earnings.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Home Restaurants</span>
+              <span className="font-semibold text-purple-600">${earnings_breakdown.home_restaurant_earnings.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Other Services</span>
+              <span className="font-semibold text-blue-600">${earnings_breakdown.other_earnings.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">🏦 Payout Information</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Payout Method</span>
+              <span className="font-semibold capitalize">{payout_info.payout_method}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Minimum Payout</span>
+              <span className="font-semibold">${payout_info.minimum_payout.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Next Payout</span>
+              <span className="font-semibold text-blue-600">{payout_info.next_payout_date}</span>
+            </div>
+            <button 
+              onClick={() => setShowPayoutSetup(true)}
+              className="w-full btn-primary mt-4 py-2 rounded-lg"
+            >
+              {payout_info.payout_profile_setup ? 'Update Payout Settings' : 'Setup Payout Method'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Transactions */}
+      <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">📊 Recent Transactions</h3>
+        <div className="space-y-3">
+          {recent_transactions && recent_transactions.length > 0 ? (
+            recent_transactions.map((transaction, index) => (
+              <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <div className="font-medium text-gray-800">
+                    {transaction.service_description}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {new Date(transaction.created_at).toLocaleDateString()}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="font-semibold text-green-600">
+                    +${transaction.user_earnings.toFixed(2)}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    (${transaction.platform_commission.toFixed(2)} commission)
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 text-center py-4">No transactions yet</p>
+          )}
+        </div>
+      </div>
+
+      {/* Payout Setup Modal */}
+      {showPayoutSetup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-xl max-w-md w-full mx-4">
+            <h3 className="text-xl font-semibold mb-4">Setup Payout Method</h3>
+            
+            <form onSubmit={handlePayoutSetup}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Payout Method</label>
+                <select 
+                  value={payoutData.payout_method}
+                  onChange={(e) => setPayoutData({...payoutData, payout_method: e.target.value})}
+                  className="w-full px-3 py-2 border rounded-lg"
+                >
+                  <option value="stripe">Stripe</option>
+                  <option value="paypal">PayPal</option>
+                  <option value="bank_transfer">Bank Transfer</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Minimum Payout Amount</label>
+                <input 
+                  type="number"
+                  min="10"
+                  step="0.01"
+                  value={payoutData.minimum_payout_amount}
+                  onChange={(e) => setPayoutData({...payoutData, minimum_payout_amount: parseFloat(e.target.value)})}
+                  className="w-full px-3 py-2 border rounded-lg"
+                />
+              </div>
+
+              {payoutData.payout_method === 'paypal' && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">PayPal Email</label>
+                  <input 
+                    type="email"
+                    value={payoutData.paypal_email}
+                    onChange={(e) => setPayoutData({...payoutData, paypal_email: e.target.value})}
+                    className="w-full px-3 py-2 border rounded-lg"
+                  />
+                </div>
+              )}
+
+              {payoutData.payout_method === 'bank_transfer' && (
+                <>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-2">Bank Name</label>
+                    <input 
+                      type="text"
+                      value={payoutData.bank_name}
+                      onChange={(e) => setPayoutData({...payoutData, bank_name: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-2">Account Number</label>
+                    <input 
+                      type="text"
+                      value={payoutData.account_number}
+                      onChange={(e) => setPayoutData({...payoutData, account_number: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-2">Routing Number</label>
+                    <input 
+                      type="text"
+                      value={payoutData.routing_number}
+                      onChange={(e) => setPayoutData({...payoutData, routing_number: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="flex space-x-4">
+                <button type="submit" className="flex-1 btn-primary py-2 rounded-lg">
+                  Save Settings
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => setShowPayoutSetup(false)}
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Pricing Structure Info */}
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl">
+        <h3 className="text-lg font-semibold text-blue-800 mb-4">💵 Service Pricing Structure</h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <h4 className="font-medium text-gray-800 mb-2">Consultation Services</h4>
+            <div className="space-y-1 text-sm">
+              <div>💬 Message Consultation: $2.50 (you earn $2.13)</div>
+              <div>🎵 Audio Consultation: $3.50 (you earn $2.98)</div>
+              <div>🎥 Video Consultation: $4.50 (you earn $3.83)</div>
+            </div>
+          </div>
+          <div>
+            <h4 className="font-medium text-gray-800 mb-2">Lambalia Eats</h4>
+            <div className="space-y-1 text-sm">
+              <div>🍽️ Base Meal Price: $10.00 (you earn $8.50)</div>
+              <div>🚚 Delivery Fee: $2.00 + $0.75/km</div>
+              <div>📊 Platform Commission: 15% on all transactions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 const RevenueDashboard = () => {
   const [revenueData, setRevenueData] = useState(null);
   const [loading, setLoading] = useState(true);
