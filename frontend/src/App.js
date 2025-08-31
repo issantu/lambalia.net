@@ -3974,6 +3974,18 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/my-earnings" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <UserEarningsDashboard />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
