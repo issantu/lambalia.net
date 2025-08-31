@@ -4265,6 +4265,217 @@ AFRICAN_DISHES_BY_COUNTRY = {
     ]
 }
 
+# CARIBBEAN DISHES DATABASE BY COUNTRY/ISLAND
+CARIBBEAN_DISHES_BY_COUNTRY = {
+    "jamaica": [
+        "Ackee and saltfish", "Jerk chicken", "Jerk pork", "Curry goat", "Oxtail stew",
+        "Rice and peas", "Patties", "Beef patty", "Chicken patty", "Vegetable patty",
+        "Callaloo", "Escovitch fish", "Brown stew chicken", "Steamed fish", "Mannish water",
+        "Pepper pot soup", "Gungo peas soup", "Red pea soup", "Cow foot soup",
+        "Bammy", "Festival", "Fried dumpling", "Boiled dumpling", "Johnny cake",
+        "Plantain", "Fried plantain", "Boiled green banana", "Yam", "Dasheen",
+        "Sweet potato", "Breadfruit", "Coconut drops", "Gizzada", "Grater cake",
+        "Tamarind balls", "Bustamante backbone", "Blue draws", "Cornmeal porridge",
+        "Hominy corn porridge", "Peanut porridge", "Green banana porridge"
+    ],
+    "trinidad_tobago": [
+        "Doubles", "Roti", "Curry chicken", "Curry goat", "Curry crab", "Curry duck",
+        "Pelau", "Callaloo", "Bake and shark", "Macaroni pie", "Stew chicken",
+        "Oil down", "Souse", "Black pudding", "Chow", "Pholourie", "Saheena",
+        "Kachori", "Bara", "Aloo pie", "Pies", "Pastelles", "Payme", "Kurma",
+        "Sweet bread", "Coconut bake", "Fry bake", "Buljol", "Saltfish buljol",
+        "Crab and dumpling", "Cascadura curry", "Geera pork", "Stew pork",
+        "Coconut drops", "Sugar cake", "Toolum", "Tamarind balls", "Guava cheese",
+        "Pone", "Cassava pone", "Sweet potato pone", "Mango chow", "Pommecythere chow"
+    ],
+    "barbados": [
+        "Cou-cou and flying fish", "Fish cakes", "Cutters", "Conkies", "Pudding and souse",
+        "Macaroni pie", "Rice and peas", "Peas and rice", "Breadfruit cou-cou",
+        "Sweet bread", "Cassava pone", "Coconut bread", "Rock cakes", "Turnovers",
+        "Fish broth", "Pepper pot", "Soup", "Pumpkin fritters", "Cassava chips",
+        "Plantain chips", "Sweet potato pudding", "Bread pudding", "Guava jelly",
+        "Tamarind stew", "Bajan seasoning", "Flying fish", "Dolphin fish", "Red snapper",
+        "Kingfish", "Sea eggs", "Lambi", "Land crab", "Salt bread"
+    ],
+    "haiti": [
+        "Griot", "Tasso", "Boukannen", "Diri ak djon djon", "Diri kole ak pwa",
+        "Soup joumou", "Kalalou", "Legim", "Pwason boukannen", "Pwason fri",
+        "Poul an sos", "Kabrit boukannen", "Bef boukannen", "Mayi moulen",
+        "Bannann boukannen", "Yam boukannen", "Patat boukannen", "Breadfruit",
+        "Akra", "Marinad", "Pate kode", "Pain patate", "Doukounou", "Bonbon siwo",
+        "Tablet", "Pen patat", "Akasan", "Lemonad", "Dlo kokoye", "Prestige beer"
+    ],
+    "dominican_republic": [
+        "La bandera", "Mangu", "Pollo guisado", "Pernil", "Chicharron", "Moro de guandules",
+        "Arroz con pollo", "Sancocho", "Mondongo", "Asopao", "Habichuelas con dulce",
+        "Tres golpes", "Casabe", "Tostones", "Maduros", "Yuca hervida", "Name hervido",
+        "Quipe", "Empanadas", "Pastelitos", "Croquetas", "Dulce de leche cortada",
+        "Flan", "Tres leches", "Bizcocho dominicano", "Majarete", "Dulce de coco",
+        "Raspao", "Chinola", "Jugo de tamarindo", "Morir soñando", "Mamajuana"
+    ],
+    "puerto_rico": [
+        "Mofongo", "Jibarito", "Alcapurrias", "Bacalaitos", "Pasteles", "Pernil",
+        "Arroz con gandules", "Sancocho", "Asopao", "Pollo guisado", "Chuletas",
+        "Bistec encebollado", "Ropa vieja", "Picadillo", "Habichuelas", "Viandas hervidas",
+        "Tostones", "Amarillos", "Yautia", "Malanga", "Ñame", "Casabe", "Pan tostado",
+        "Quesitos", "Mallorca", "Medianoche", "Cuchifritos", "Chicharron", "Morcilla",
+        "Tembleque", "Flan", "Tres leches", "Besitos de coco", "Dulce de papaya",
+        "Coquito", "Piña colada", "Chichaito", "Pitorro"
+    ],
+    "cuba": [
+        "Ropa vieja", "Lechon asado", "Pollo a la plancha", "Bistec de palomilla",
+        "Arroz con pollo", "Congri", "Moros y cristianos", "Frijoles negros",
+        "Yuca con mojo", "Platanos maduros", "Tostones", "Malanga", "Boniato",
+        "Croquetas", "Empanadas", "Pastelitos", "Cuban sandwich", "Medianoche",
+        "Pan con lechon", "Picadillo", "Vaca frita", "Masas de cerdo", "Chicharrones",
+        "Flan", "Tres leches", "Dulce de leche", "Arroz con leche", "Natilla",
+        "Guarapo", "Cafe cubano", "Cortadito", "Malta", "Materva", "Mojito", "Daiquiri"
+    ],
+    "antigua_barbuda": [
+        "Fungee and pepperpot", "Saltfish", "Ducana", "Seasoned rice", "Goat water",
+        "Conch fritters", "Johnny cakes", "Coconut dumplings", "Cassava bread",
+        "Sweet potato pudding", "Pineapple upside down cake", "Black cake", "Tamarind stew"
+    ],
+    "bahamas": [
+        "Conch salad", "Conch fritters", "Crack conch", "Boiled fish", "Steamed conch",
+        "Peas n' rice", "Johnny cake", "Guava duff", "Coconut tart", "Rum cake",
+        "Fish tea", "Souse", "Curry mutton", "Stew conch", "Fried plantain"
+    ],
+    "grenada": [
+        "Oil down", "Callaloo soup", "Nutmeg ice cream", "Cocoa tea", "Breadfruit",
+        "Cassava bread", "Saltfish buljol", "Curry goat", "Stew chicken", "Pelau",
+        "Sugar cake", "Fudge", "Tamarind balls", "Guava cheese", "Coconut drops"
+    ]
+}
+
+# ASIAN DISHES DATABASE BY COUNTRY
+ASIAN_DISHES_BY_COUNTRY = {
+    "china": [
+        "Kung Pao chicken", "Sweet and sour pork", "Mapo tofu", "Peking duck", "Dim sum",
+        "Hot pot", "Fried rice", "Chow mein", "Lo mein", "Wonton soup", "Dumpling",
+        "Spring rolls", "Char siu", "General Tso's chicken", "Orange chicken",
+        "Beef and broccoli", "Szechuan chicken", "Ma la hot pot", "Dan dan noodles",
+        "Xiaolongbao", "Har gow", "Siu mai", "Egg tart", "Mooncake", "Congee",
+        "Century egg", "Tea eggs", "Zongzi", "Tangyuan", "Douhua", "Stinky tofu"
+    ],
+    "japan": [
+        "Sushi", "Sashimi", "Ramen", "Udon", "Soba", "Tempura", "Yakitori", "Teriyaki",
+        "Katsu", "Tonkatsu", "Chicken katsu", "Miso soup", "Edamame", "Gyoza",
+        "Takoyaki", "Okonomiyaki", "Yakisoba", "Onigiri", "Bento", "Donburi",
+        "Chirashi", "Unagi", "Mochi", "Dorayaki", "Taiyaki", "Wagyu beef",
+        "Shabu shabu", "Sukiyaki", "Nabe", "Karaage", "Agedashi tofu"
+    ],
+    "korea": [
+        "Kimchi", "Bulgogi", "Bibimbap", "Korean BBQ", "Galbi", "Japchae", "Tteokbokki",
+        "Kimchi jjigae", "Sundubu jjigae", "Samgyeopsal", "Korean fried chicken",
+        "Banchan", "Doenjang jjigae", "Naengmyeon", "Jajangmyeon", "Kimbap",
+        "Hotteok", "Bungeoppang", "Patbingsu", "Makgeolli", "Soju", "Korean corn dogs",
+        "Gochujang", "Ssam", "Galbitang", "Seolleongtang", "Bossam", "Jokbal"
+    ],
+    "thailand": [
+        "Pad Thai", "Tom Yum", "Green curry", "Red curry", "Massaman curry", "Som tam",
+        "Thai basil chicken", "Mango sticky rice", "Thai fried rice", "Pad See Ew",
+        "Thai coconut soup", "Larb", "Satay", "Spring rolls", "Thai fish cakes",
+        "Boat noodles", "Khao Pad", "Thai tea", "Coconut ice cream", "Durian",
+        "Pad Krapow", "Thai omelet", "Gaeng Som", "Khao Soi", "Thai papaya salad"
+    ],
+    "vietnam": [
+        "Pho", "Banh mi", "Spring rolls", "Vietnamese coffee", "Bun bo hue", "Com tam",
+        "Banh xeo", "Vietnamese pancakes", "Cao lau", "Mi quang", "Bun cha",
+        "Vietnamese salad", "Che", "Banh flan", "Fish sauce", "Nuoc cham",
+        "Goi cuon", "Nem nuong", "Banh cuon", "Vietnamese sandwich", "Sticky rice"
+    ],
+    "india": [
+        "Biryani", "Curry", "Naan", "Roti", "Dal", "Samosa", "Tandoori chicken",
+        "Butter chicken", "Palak paneer", "Chana masala", "Tikka masala", "Dosa",
+        "Idli", "Vada", "Uttapam", "Rajma", "Chole", "Aloo gobi", "Vindaloo",
+        "Korma", "Saag", "Raita", "Lassi", "Chai", "Kulfi", "Gulab jamun",
+        "Jalebi", "Laddu", "Barfi", "Kheer", "Rasmalai", "Pani puri", "Bhel puri"
+    ]
+}
+
+# LATIN AMERICAN DISHES DATABASE BY COUNTRY
+LATIN_AMERICAN_DISHES_BY_COUNTRY = {
+    "mexico": [
+        "Tacos", "Burritos", "Quesadillas", "Enchiladas", "Tamales", "Chiles rellenos",
+        "Pozole", "Mole", "Carnitas", "Al pastor", "Barbacoa", "Cochinita pibil",
+        "Elote", "Guacamole", "Salsa", "Pico de gallo", "Nachos", "Fajitas",
+        "Churros", "Tres leches cake", "Flan", "Horchata", "Margarita", "Tequila",
+        "Mezcal", "Michelada", "Huevos rancheros", "Chilaquiles", "Sopes", "Tlayudas"
+    ],
+    "brazil": [
+        "Feijoada", "Churrasco", "Pão de açúcar", "Brigadeiro", "Açaí", "Caipirinha",
+        "Moqueca", "Pastel", "Coxinha", "Picanha", "Farofa", "Rice and beans",
+        "Guaraná", "Queijo bread", "Tapioca", "Beijinho", "Quindim", "Cachaça",
+        "Salgadinhos", "Empada", "Kibe", "Romeu e Julieta", "Pudim", "Pavê"
+    ],
+    "argentina": [
+        "Asado", "Empanadas", "Milanesa", "Chimichurri", "Alfajores", "Dulce de leche",
+        "Choripan", "Locro", "Humita", "Provoleta", "Malbec", "Mate", "Tango",
+        "Bife de chorizo", "Morcilla", "Parrillada", "Medialunas", "Facturas"
+    ],
+    "peru": [
+        "Ceviche", "Lomo saltado", "Aji de gallina", "Anticuchos", "Papa rellena",
+        "Causa", "Rocoto relleno", "Pachamanca", "Pollo a la brasa", "Suspiro limeño",
+        "Pisco sour", "Chicha morada", "Inca Kola", "Quinoa", "Alpaca", "Guinea pig"
+    ],
+    "colombia": [
+        "Arepas", "Bandeja paisa", "Sancocho", "Empanadas", "Patacones", "Lechona",
+        "Ajiaco", "Tamales", "Buñuelos", "Aguardiente", "Coffee", "Tres leches",
+        "Obleas", "Bocadillo", "Chicharron", "Mondongo", "Arepa de huevo"
+    ]
+}
+
+# MIDDLE EASTERN DISHES DATABASE BY COUNTRY
+MIDDLE_EASTERN_DISHES_BY_COUNTRY = {
+    "lebanon": [
+        "Hummus", "Tabbouleh", "Fattoush", "Kibbeh", "Shawarma", "Falafel", "Labneh",
+        "Manakish", "Baklava", "Kanafeh", "Arak", "Lebanese wine", "Muhammara",
+        "Baba ghanoush", "Stuffed grape leaves", "Lebanese bread", "Za'atar"
+    ],
+    "turkey": [
+        "Kebab", "Döner", "Turkish delight", "Baklava", "Börek", "Meze", "Raki",
+        "Turkish coffee", "Köfte", "Pide", "Lahmacun", "Dolma", "Turkish breakfast",
+        "Simit", "Ayran", "Iskender", "Adana kebab", "Turkish tea"
+    ],
+    "iran": [
+        "Persian rice", "Kebab koobideh", "Ghormeh sabzi", "Fesenjan", "Tahdig",
+        "Saffron", "Persian tea", "Rosewater", "Pistachio", "Pomegranate",
+        "Doogh", "Ash reshteh", "Khoreshte bademjan", "Polo", "Persian ice cream"
+    ],
+    "israel": [
+        "Falafel", "Hummus", "Shakshuka", "Sabich", "Israeli salad", "Challah",
+        "Matzo", "Gefilte fish", "Borscht", "Rugelach", "Israeli couscous",
+        "Malawach", "Jachnun", "Bourekas", "Arak", "Israeli wine"
+    ]
+}
+
+# EUROPEAN DISHES DATABASE BY COUNTRY
+EUROPEAN_DISHES_BY_COUNTRY = {
+    "italy": [
+        "Pizza", "Pasta", "Spaghetti", "Lasagna", "Risotto", "Gelato", "Tiramisu",
+        "Carbonara", "Bolognese", "Pesto", "Gnocchi", "Ravioli", "Prosciutto",
+        "Mozzarella", "Parmesan", "Bruschetta", "Antipasto", "Osso buco",
+        "Minestrone", "Cannoli", "Espresso", "Chianti", "Prosecco", "Limoncello"
+    ],
+    "france": [
+        "Croissant", "Baguette", "French toast", "Crêpes", "Quiche", "Coq au vin",
+        "Bouillabaisse", "Ratatouille", "French onion soup", "Escargot", "Foie gras",
+        "Boeuf bourguignon", "Cassoulet", "Crème brûlée", "Macarons", "Champagne",
+        "Bordeaux wine", "Camembert", "Brie", "Roquefort", "French fries", "Soufflé"
+    ],
+    "spain": [
+        "Paella", "Tapas", "Gazpacho", "Jamón ibérico", "Tortilla española", "Churros",
+        "Sangria", "Rioja wine", "Manchego cheese", "Serrano ham", "Patatas bravas",
+        "Croquetas", "Empanadas", "Flan", "Crema catalana", "Sherry", "Cava"
+    ],
+    "germany": [
+        "Bratwurst", "Sauerkraut", "Schnitzel", "Pretzel", "Beer", "Black forest cake",
+        "Sauerbraten", "Currywurst", "Spätzle", "Strudel", "Lebkuchen", "Glühwein",
+        "Weisswurst", "Döppekuchen", "Himmel un Ääd", "Riesling wine"
+    ]
+}
+
 # SECURITY KEY & TWO-FACTOR AUTHENTICATION SYSTEM
 class SecurityKeyType(str, Enum):
     BACKUP_CODE = "backup_code"
