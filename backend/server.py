@@ -202,6 +202,58 @@ class TokenResponse(BaseModel):
     token_type: str
     user: UserResponse
 
+# Enhanced login models for 2FA
+class EnhancedUserLogin(BaseModel):
+    email: EmailStr
+    password: str
+    twofa_code: Optional[str] = None  # TOTP code, backup code, or SMS code
+    twofa_method: Optional[SecurityKeyType] = None
+    remember_device: bool = False
+
+class LoginResponse(BaseModel):
+    success: bool
+    requires_2fa: bool = False
+    available_2fa_methods: List[str] = []
+    session_id: Optional[str] = None
+    access_token: Optional[str] = None
+    token_type: Optional[str] = None
+    user: Optional[UserResponse] = None
+    message: str = ""
+
+# 2FA Setup models
+class Setup2FARequest(BaseModel):
+    method: SecurityKeyType
+    phone_number: Optional[str] = None  # For SMS
+
+class Verify2FASetupRequest(BaseModel):
+    method: SecurityKeyType
+    verification_code: str
+    totp_secret: Optional[str] = None  # For TOTP setup
+
+class UserSecurityProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    
+    # Two-Factor Authentication
+    twofa_enabled: bool = False
+    twofa_method: Optional[SecurityKeyType] = None
+    totp_secret: Optional[str] = None  # Encrypted in production
+    
+    # Backup codes
+    backup_codes: List[str] = []  # Encrypted in production
+    backup_codes_used: List[str] = []
+    
+    # Security keys (WebAuthn/FIDO2)
+    webauthn_credentials: List[Dict[str, Any]] = []
+    
+    # SMS 2FA
+    phone_number: Optional[str] = None
+    
+    # Metadata
+    last_2fa_setup: Optional[datetime] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
 # Utility functions (keeping existing ones)
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
