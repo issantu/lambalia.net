@@ -3496,6 +3496,314 @@ async def stripe_webhook(request: Request):
         logging.error(f"Webhook processing error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
+# PRICING & PAYMENT PROCESSING SYSTEM
+class PricingStructure:
+    """Centralized pricing structure for all Lambalia services"""
+    
+    # Consultation Services
+    CONSULTATION_MESSAGE = 2.50
+    CONSULTATION_AUDIO = 3.50  
+    CONSULTATION_VIDEO = 4.50
+    
+    # Lambalia Eats
+    BASE_MEAL_PRICE = 10.00
+    
+    # Platform Commission
+    PLATFORM_COMMISSION_RATE = 0.15  # 15%
+    USER_EARNINGS_RATE = 0.85        # 85%
+    
+    # Delivery Pricing (per km)
+    DELIVERY_RATE_PER_KM = 0.75      # $0.75 per kilometer
+    DELIVERY_BASE_FEE = 2.00         # Minimum delivery fee
+
+class TransactionType(str, Enum):
+    CONSULTATION_MESSAGE = "consultation_message"
+    CONSULTATION_AUDIO = "consultation_audio"
+    CONSULTATION_VIDEO = "consultation_video"
+    LAMBALIA_EATS = "lambalia_eats"
+    HOME_RESTAURANT = "home_restaurant"
+    FARM_BOOKING = "farm_booking"
+    RECIPE_PURCHASE = "recipe_purchase"
+
+class PaymentStatus(str, Enum):
+    PENDING = "pending"
+    COMPLETED = "completed"
+    PROCESSING = "processing"
+    FAILED = "failed"
+    REFUNDED = "refunded"
+
+class Transaction(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    transaction_type: TransactionType
+    payer_id: str
+    recipient_id: str
+    
+    # Pricing breakdown
+    gross_amount: float
+    platform_commission: float
+    user_earnings: float
+    delivery_fee: Optional[float] = 0.0
+    
+    # Service details
+    service_description: str
+    consultation_type: Optional[str] = None  # message, audio, video
+    delivery_distance_km: Optional[float] = None
+    
+    # Payment processing
+    status: PaymentStatus = PaymentStatus.PENDING
+    stripe_payment_intent_id: Optional[str] = None
+    processed_at: Optional[datetime] = None
+    
+    # Payout tracking
+    user_payout_processed: bool = False
+    user_payout_date: Optional[datetime] = None
+    platform_earnings_collected: bool = False
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class UserEarnings(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    
+    # Weekly earnings summary
+    week_start_date: datetime
+    week_end_date: datetime
+    
+    # Earnings breakdown
+    total_gross_earnings: float = 0.0
+    platform_commission_deducted: float = 0.0  
+    net_earnings: float = 0.0
+    
+    # Transaction details
+    consultation_earnings: float = 0.0
+    lambalia_eats_earnings: float = 0.0
+    home_restaurant_earnings: float = 0.0
+    other_earnings: float = 0.0
+    
+    # Payout status
+    payout_processed: bool = False
+    payout_date: Optional[datetime] = None
+    payout_amount: float = 0.0
+    payout_method: Optional[str] = None  # stripe, paypal, bank
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class UserPayoutProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    
+    # Payout preferences
+    preferred_payout_method: str = "stripe"  # stripe, paypal, bank_transfer
+    minimum_payout_amount: float = 25.00    # Weekly minimum for payout
+    
+    # Account details (encrypted in production)
+    stripe_account_id: Optional[str] = None
+    paypal_email: Optional[str] = None
+    bank_account_info: Optional[Dict[str, str]] = None
+    
+    # Status
+    is_verified: bool = False
+    verification_date: Optional[datetime] = None
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+# PRICING CALCULATION FUNCTIONS
+def calculate_consultation_pricing(consultation_type: str) -> Dict[str, float]:
+    """Calculate pricing for consultation services"""
+    
+    pricing_map = {
+        "message": PricingStructure.CONSULTATION_MESSAGE,
+        "audio": PricingStructure.CONSULTATION_AUDIO,
+        "video": PricingStructure.CONSULTATION_VIDEO
+    }
+    
+    gross_amount = pricing_map.get(consultation_type, PricingStructure.CONSULTATION_MESSAGE)
+    platform_commission = gross_amount * PricingStructure.PLATFORM_COMMISSION_RATE
+    user_earnings = gross_amount * PricingStructure.USER_EARNINGS_RATE
+    
+    return {
+        "gross_amount": gross_amount,
+        "platform_commission": round(platform_commission, 2),
+        "user_earnings": round(user_earnings, 2),
+        "service_type": consultation_type
+    }
+
+def calculate_lambalia_eats_pricing(delivery_distance_km: Optional[float] = None) -> Dict[str, float]:
+    """Calculate pricing for Lambalia Eats orders"""
+    
+    base_meal_price = PricingStructure.BASE_MEAL_PRICE
+    
+    # Calculate delivery fee if applicable
+    delivery_fee = 0.0
+    if delivery_distance_km and delivery_distance_km > 0:
+        delivery_fee = max(
+            PricingStructure.DELIVERY_BASE_FEE,
+            delivery_distance_km * PricingStructure.DELIVERY_RATE_PER_KM
+        )
+    
+    total_gross = base_meal_price + delivery_fee
+    platform_commission = total_gross * PricingStructure.PLATFORM_COMMISSION_RATE
+    user_earnings = total_gross * PricingStructure.USER_EARNINGS_RATE
+    
+    return {
+        "gross_amount": total_gross,
+        "base_meal_price": base_meal_price,
+        "delivery_fee": round(delivery_fee, 2),
+        "platform_commission": round(platform_commission, 2),
+        "user_earnings": round(user_earnings, 2),
+        "delivery_distance_km": delivery_distance_km or 0
+    }
+
+# Helper function for updating user earnings
+async def update_user_weekly_earnings(user_id: str, transaction: Transaction):
+    """Update user's weekly earnings record"""
+    
+    # Get current week boundaries
+    now = datetime.utcnow()
+    week_start = now - timedelta(days=now.weekday())
+    week_start = week_start.replace(hour=0, minute=0, second=0, microsecond=0)
+    week_end = week_start + timedelta(days=6, hours=23, minutes=59, seconds=59)
+    
+    # Find or create weekly earnings record
+    earnings_record = await db.user_earnings.find_one({
+        "user_id": user_id,
+        "week_start_date": {"$lte": now},
+        "week_end_date": {"$gte": now}
+    })
+    
+    if not earnings_record:
+        earnings_record = UserEarnings(
+            user_id=user_id,
+            week_start_date=week_start,
+            week_end_date=week_end
+        )
+        await db.user_earnings.insert_one(earnings_record.dict())
+        earnings_record = earnings_record.dict()
+    
+    # Update earnings based on transaction type
+    update_data = {
+        "$inc": {
+            "total_gross_earnings": transaction.gross_amount,
+            "platform_commission_deducted": transaction.platform_commission,
+            "net_earnings": transaction.user_earnings
+        }
+    }
+    
+    # Add to specific category
+    if transaction.transaction_type in [TransactionType.CONSULTATION_MESSAGE, TransactionType.CONSULTATION_AUDIO, TransactionType.CONSULTATION_VIDEO]:
+        update_data["$inc"]["consultation_earnings"] = transaction.user_earnings
+    elif transaction.transaction_type == TransactionType.LAMBALIA_EATS:
+        update_data["$inc"]["lambalia_eats_earnings"] = transaction.user_earnings
+    elif transaction.transaction_type == TransactionType.HOME_RESTAURANT:
+        update_data["$inc"]["home_restaurant_earnings"] = transaction.user_earnings
+    else:
+        update_data["$inc"]["other_earnings"] = transaction.user_earnings
+    
+    await db.user_earnings.update_one(
+        {"id": earnings_record["id"]},
+        update_data
+    )
+
+# TRANSACTION PROCESSING ENDPOINTS
+@api_router.post("/payments/create-consultation-transaction")
+async def create_consultation_transaction(
+    transaction_data: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create consultation payment transaction"""
+    
+    consultation_type = transaction_data.get("consultation_type")  # message, audio, video
+    recipient_id = transaction_data.get("recipient_id")
+    service_description = transaction_data.get("service_description", "Recipe consultation")
+    
+    # Calculate pricing
+    pricing = calculate_consultation_pricing(consultation_type)
+    
+    # Create transaction record
+    transaction = Transaction(
+        transaction_type=TransactionType.CONSULTATION_MESSAGE if consultation_type == "message" else 
+                        TransactionType.CONSULTATION_AUDIO if consultation_type == "audio" else
+                        TransactionType.CONSULTATION_VIDEO,
+        payer_id=current_user_id,
+        recipient_id=recipient_id,
+        gross_amount=pricing["gross_amount"],
+        platform_commission=pricing["platform_commission"],
+        user_earnings=pricing["user_earnings"],
+        service_description=service_description,
+        consultation_type=consultation_type
+    )
+    
+    # In production, integrate with Stripe Payment Intents
+    # For now, simulate successful payment
+    transaction.status = PaymentStatus.COMPLETED
+    transaction.processed_at = datetime.utcnow()
+    
+    # Save transaction
+    await db.transactions.insert_one(transaction.dict())
+    
+    # Update user earnings
+    await update_user_weekly_earnings(recipient_id, transaction)
+    
+    return {
+        "success": True,
+        "transaction_id": transaction.id,
+        "pricing_breakdown": pricing,
+        "payment_status": "completed",
+        "message": f"${pricing['gross_amount']} consultation payment processed"
+    }
+
+@api_router.post("/payments/create-lambalia-eats-transaction")
+async def create_lambalia_eats_transaction(
+    order_data: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create Lambalia Eats payment transaction"""
+    
+    cook_id = order_data.get("cook_id")
+    delivery_distance_km = order_data.get("delivery_distance_km", 0)
+    service_description = order_data.get("service_description", "Lambalia Eats meal order")
+    
+    # Calculate pricing including delivery
+    pricing = calculate_lambalia_eats_pricing(delivery_distance_km)
+    
+    # Create transaction
+    transaction = Transaction(
+        transaction_type=TransactionType.LAMBALIA_EATS,
+        payer_id=current_user_id,
+        recipient_id=cook_id,
+        gross_amount=pricing["gross_amount"],
+        platform_commission=pricing["platform_commission"],
+        user_earnings=pricing["user_earnings"],
+        delivery_fee=pricing["delivery_fee"],
+        service_description=service_description,
+        delivery_distance_km=delivery_distance_km
+    )
+    
+    # Process payment (simulate success)
+    transaction.status = PaymentStatus.COMPLETED
+    transaction.processed_at = datetime.utcnow()
+    
+    # Save transaction
+    await db.transactions.insert_one(transaction.dict())
+    
+    # Update cook earnings
+    await update_user_weekly_earnings(cook_id, transaction)
+    
+    return {
+        "success": True,
+        "transaction_id": transaction.id,
+        "pricing_breakdown": pricing,
+        "order_summary": {
+            "meal_price": pricing["base_meal_price"],
+            "delivery_fee": pricing["delivery_fee"],
+            "total_paid": pricing["gross_amount"],
+            "cook_earnings": pricing["user_earnings"],
+            "platform_commission": pricing["platform_commission"]
+        }
+    }
+
 # USER MANAGEMENT & ROLE SYSTEM
 @api_router.post("/admin/setup-platform-owner")
 async def setup_platform_owner(
