@@ -70,6 +70,8 @@ from lambalia_eats_service import LambaliaEatsService
 from lambalia_eats_api import create_lambalia_eats_router
 from heritage_recipes_service import HeritageRecipesService
 from heritage_recipes_api import create_heritage_recipes_router
+from smart_cooking_tool import SmartCookingToolService
+from smart_cooking_api import create_smart_cooking_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
