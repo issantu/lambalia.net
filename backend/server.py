@@ -4030,7 +4030,323 @@ async def create_lambalia_eats_transaction(
         }
     }
 
-# USER MANAGEMENT & ROLE SYSTEM
+# AFRICAN DISHES DATABASE BY COUNTRY
+AFRICAN_DISHES_BY_COUNTRY = {
+    "algeria": [
+        "Couscous", "Tajine", "Makroudh", "Chorba", "Mechoui", "Brik", "Harira", 
+        "Loubia", "Rechta", "Chouarak", "Baklawa", "M'hencha", "Kalb el louz"
+    ],
+    "angola": [
+        "Muamba de galinha", "Calulu", "Funge", "Farofa de mandioca", "Kizaka", 
+        "Mufete", "Cocada amarela", "Quindim", "Moamba de dendém", "Feijão tropeiro"
+    ],
+    "benin": [
+        "Akassa", "Aloko", "Amiwo", "Djenkoume", "Fufu", "Igname pilé", "Klui klui", 
+        "Pâte", "Tchoukoutou", "Wagashi", "Yovo doko"
+    ],
+    "botswana": [
+        "Seswaa", "Pap", "Morogo", "Bogobe", "Matemekwane", "Phane", "Vetkoek", 
+        "Magwinya", "Dikgobe", "Masonja"
+    ],
+    "burkina_faso": [
+        "Tô", "Riz gras", "Poulet bicyclette", "Ragout d'igname", "Beignets", 
+        "Dolo", "Thiakry", "Couscous de mil", "Sauce d'arachide"
+    ],
+    "cameroon": [
+        "Ndolé", "Achu soup", "Eru", "Pepper soup", "Jollof rice", "Fufu", "Koki", 
+        "Kondre", "Kwacoco", "Mbanga soup", "Nkui", "Poulet DG", "Suya", "Ekwang", 
+        "Bobolo", "Garri", "Plantain", "Njama njama", "Water fufu"
+    ],
+    "cape_verde": [
+        "Cachupa", "Canja", "Djagacida", "Feijoada", "Xerém", "Linguiça", 
+        "Morcela", "Pastéis", "Pudim", "Queijadas"
+    ],
+    "central_african_republic": [
+        "Fufu", "Cassava", "Plantain", "Palm wine", "Bushmeat stew", "Yassa", 
+        "Groundnut stew", "Okra soup"
+    ],
+    "chad": [
+        "Boule", "Daraba", "Fangaso", "Kissar", "Maharagwe", "Mouton", 
+        "Nyama choma", "Peanut sauce", "Red sauce"
+    ],
+    "comoros": [
+        "Langouste à la vanille", "Mataba", "Mkatra foutra", "Pilao", "Rougail", 
+        "Sambusas", "Sorbet coco", "Urojo"
+    ],
+    "congo": [
+        "Fufu", "Kwanga", "Liboke", "Moambe", "Ngai ngai", "Pondu", "Saka saka", 
+        "Chikwanga", "Makayabu", "Ntaba"
+    ],
+    "drc": [
+        "Fufu", "Liboke", "Moambe chicken", "Pondu", "Saka saka", "Kwanga", 
+        "Chikwanga", "Makayabu", "Loso na madesu", "Ntaba", "Makemba"
+    ],
+    "djibouti": [
+        "Skudahkharis", "Fah-fah", "Sabayad", "Lahoh", "Xalwo", "Malawax", 
+        "Anjero", "Canjeero", "Hilib ari"
+    ],
+    "egypt": [
+        "Koshari", "Ful medames", "Tamiya", "Molokhia", "Mahshi", "Roz meammar", 
+        "Bamia", "Basbousa", "Baklawa", "Om ali", "Mulukhiyah", "Raqaq", 
+        "Fiteer", "Baladi bread", "Aish baladi"
+    ],
+    "equatorial_guinea": [
+        "Fufu", "Malanga", "Plantain", "Palm wine", "Bushmeat", "Fish stew", 
+        "Yuca", "Cassava bread"
+    ],
+    "eritrea": [
+        "Injera", "Zigni", "Shiro", "Kitfo", "Doro wat", "Alicha", "Berbere", 
+        "Teff bread", "Hilbet", "Ga'at"
+    ],
+    "eswatini": [
+        "Pap", "Sishwala", "Tingwenyama", "Umncweba", "Emasi", "Sidvudvu", 
+        "Ligwinya", "Tinkhobe tembuti"
+    ],
+    "ethiopia": [
+        "Injera", "Doro wat", "Kitfo", "Shiro", "Tibs", "Berbere", "Mitmita", 
+        "Tej", "Tella", "Roasted barley", "Alicha", "Gomen", "Misir wot", 
+        "Zilzil tibs", "Dulet", "Kurt", "Ga'at", "Genfo", "Ambasha"
+    ],
+    "gabon": [
+        "Poulet Nyembwe", "Poisson salé", "Beignet de crevette", "Nyama na ngou", 
+        "Manioc", "Plantain frit", "Palm wine"
+    ],
+    "gambia": [
+        "Benachin", "Domoda", "Plasas", "Yassa", "Chere", "Chakery", "Thiakry", 
+        "Superkanja", "Olele", "Nyama"
+    ],
+    "ghana": [
+        "Jollof rice", "Fufu", "Banku", "Kenkey", "Red red", "Kelewele", 
+        "Waakye", "Tuo zaafi", "Palm nut soup", "Groundnut soup", "Light soup", 
+        "Okra stew", "Kontomire", "Ampesi", "Eto", "Tatale", "Bofrot", 
+        "Chinchinga", "Shito", "Kpokpoi"
+    ],
+    "guinea": [
+        "Riz au gras", "Poulet yassa", "Fouti", "Hakko", "Tapalapa bread", 
+        "Plasas", "Kansiye", "Jollof rice"
+    ],
+    "guinea_bissau": [
+        "Jollof rice", "Caldo", "Canja", "Kansiye", "Mancarra", "Bobo", 
+        "Caldeirada", "Pastéis"
+    ],
+    "ivory_coast": [
+        "Attiéké", "Foutou", "Kedjenou", "Alloco", "Bangui", "Garba", 
+        "Sauce arachide", "Poisson braisé", "Bangui", "Placali", "Tchep", 
+        "Aloko", "Beignets"
+    ],
+    "kenya": [
+        "Ugali", "Nyama choma", "Sukuma wiki", "Githeri", "Irio", "Samosas", 
+        "Chapati", "Mandazi", "Mutura", "Mukimo", "Matoke", "Pilau", 
+        "Bhajia", "Kachumbari", "Maharagwe"
+    ],
+    "lesotho": [
+        "Papa", "Morogo", "Sesotho traditional bread", "Liphaphalali", 
+        "Makoenya", "Traditional beer", "Dried corn"
+    ],
+    "liberia": [
+        "Jollof rice", "Cassava leaf", "Palava sauce", "Fufu", "Dumboy", 
+        "Pepper soup", "Check rice", "Potato greens"
+    ],
+    "libya": [
+        "Couscous", "Shorba", "Bazin", "Asida", "Roz jerbi", "Macarona imbaukha", 
+        "Sharmoula", "Bsisa", "Usban"
+    ],
+    "madagascar": [
+        "Romazava", "Ravitoto", "Akoho sy voanio", "Henakisoa", "Vary amin'anana", 
+        "Koba", "Mofo gasy", "Ramanonaka", "Lasary", "Sambos"
+    ],
+    "malawi": [
+        "Nsima", "Chambo", "Kondowole", "Thobwa", "Zitumbuwa", "Kachumbari", 
+        "Mandasi", "Nkhwani", "Matemba", "Usipa"
+    ],
+    "mali": [
+        "Tiguadege na", "Jollof rice", "To", "Maafe", "Fufu", "Dégué", 
+        "Thiakry", "Bissap", "Dolo"
+    ],
+    "mauritania": [
+        "Thieboudienne", "Couscous", "Méchoui", "Harira", "Lakh", "Mahfe", 
+        "Camel meat", "Dates", "Zrig"
+    ],
+    "mauritius": [
+        "Dholl puri", "Roti", "Curry", "Vindaye", "Bol renversé", "Gateaux piment", 
+        "Samosas", "Mine frite", "Biryani", "Halim"
+    ],
+    "morocco": [
+        "Tagine", "Couscous", "Pastilla", "Harira", "Mechoui", "Rfissa", 
+        "Tanjia", "Chebakia", "Msemen", "Baghrir", "Sellou", "Amlou", 
+        "Briouats", "Makroudh"
+    ],
+    "mozambique": [
+        "Xima", "Matapa", "Peri-peri chicken", "Caril", "Rissois", "Samosas", 
+        "Bolo polana", "Pudim", "Chamuça", "Espetada"
+    ],
+    "namibia": [
+        "Potjiekos", "Biltong", "Boerewors", "Kapana", "Oshifima", "Ombidi", 
+        "Mopane worms", "Vetkoek", "Sosaties"
+    ],
+    "niger": [
+        "Tuwo", "Miyan kuka", "Kilishi", "Masa", "Fura da nono", "Suya", 
+        "Dan wake", "Kosai"
+    ],
+    "nigeria": [
+        "Jollof rice", "Egusi", "Pounded yam", "Suya", "Akara", "Moi moi", 
+        "Pepper soup", "Ofada rice", "Amala", "Fufu", "Ogbono soup", 
+        "Bitter leaf soup", "Ofe nsala", "Afang soup", "Edikang ikong", 
+        "Banga soup", "Oha soup", "Draw soup", "Ukazi soup", "Okra soup",
+        "Plantain", "Dodo", "Gizdodo", "Chin chin", "Puff puff", "Meat pie",
+        "Scotch egg", "Boli", "Roasted corn", "Kilishi", "Tsire", "Balangu",
+        "Tuwo shinkafa", "Miyan kuka", "Dan wake", "Kosai", "Fura da nono",
+        "Masa", "Guguru", "Ewa agoyin", "Gbegiri", "Ewedu", "Gbegiri and ewedu",
+        "Asaro", "Porridge yam", "Ji mmiri oku", "Nkwobi", "Isi ewu", 
+        "Pepper snail", "Catfish pepper soup"
+    ],
+    "rwanda": [
+        "Ugali", "Ibirayi", "Inyama n'ubuki", "Ubugali", "Umutsima", 
+        "Ubwoba", "Inyama", "Ibirayi n'inyama", "Urwagwa"
+    ],
+    "sao_tome_principe": [
+        "Calulu", "Feijoada", "Fish curry", "Banana bread", "Coconut rice", 
+        "Grilled fish", "Palm wine"
+    ],
+    "senegal": [
+        "Thieboudienne", "Yassa", "Mafé", "Pastels", "Thiakry", "Ceebu jën", 
+        "Ndambé", "Lakhou bissap", "Sombi", "Caldou", "Thiou", "Domoda"
+    ],
+    "seychelles": [
+        "Fish curry", "Octopus curry", "Ladob", "Bouyon", "Rougail", 
+        "Satini", "Kari koko", "Pwason ek diri"
+    ],
+    "sierra_leone": [
+        "Jollof rice", "Cassava leaf", "Groundnut stew", "Fufu", "Akassa", 
+        "Pepper soup", "Palm wine", "Ginger beer"
+    ],
+    "somalia": [
+        "Anjero", "Baasto", "Suqaar", "Hilib ari", "Muufo", "Malawax", 
+        "Xalwo", "Sambusas", "Lahoh", "Maraq"
+    ],
+    "south_africa": [
+        "Braai", "Biltong", "Bobotie", "Boerewors", "Bunny chow", "Sosaties", 
+        "Potjiekos", "Vetkoek", "Koeksister", "Melktert", "Rusks", "Samp", 
+        "Morogo", "Chakalaka", "Pap", "Snoek", "Waterblommetjie bredie",
+        "Tomato bredie", "Curry and rice", "Gatsby", "Roosterkoek"
+    ],
+    "south_sudan": [
+        "Kisra", "Ful", "Tamiya", "Mulah", "Goat meat", "Sorghum porridge", 
+        "Dried fish", "Okra stew"
+    ],
+    "sudan": [
+        "Ful medames", "Kisra", "Tamiya", "Mulah", "Gourrassa", "Abreh", 
+        "Elmaraara", "Kajaik", "Um ali"
+    ],
+    "tanzania": [
+        "Ugali", "Nyama choma", "Pilau", "Samosas", "Chapati", "Mandazi", 
+        "Mchuzi wa kuku", "Wali wa nazi", "Maharage ya nazi", "Mishkaki", 
+        "Vitumbua", "Kachumbari", "Mchuzi wa mboga"
+    ],
+    "togo": [
+        "Fufu", "Akume", "Banku", "Palaver sauce", "Jollof rice", "Kelewele", 
+        "Aloko", "Red red", "Kontomire"
+    ],
+    "tunisia": [
+        "Couscous", "Brik", "Harissa", "Mechouia", "Ojja", "Lablabi", 
+        "Makroudh", "Baklawa", "Bambalouni", "Chorba"
+    ],
+    "uganda": [
+        "Matoke", "Posho", "Groundnut sauce", "Luwombo", "Rolex", "Chapati", 
+        "Mandazi", "Sim sim", "Malewa", "Eshabwe"
+    ],
+    "zambia": [
+        "Nshima", "Bream", "Kapenta", "Chikanda", "Vitumbuwa", "Chibwabwa", 
+        "Ifisashi", "Delele", "Munkoyo"
+    ],
+    "zimbabwe": [
+        "Sadza", "Nyama", "Matemba", "Mufushwa", "Dovi", "Mazanje", 
+        "Mahewu", "Chimodho", "Rukweza", "Madora"
+    ]
+}
+
+# SECURITY KEY & TWO-FACTOR AUTHENTICATION SYSTEM
+class SecurityKeyType(str, Enum):
+    BACKUP_CODE = "backup_code"
+    TOTP = "totp"  # Time-based One-Time Password (Google Authenticator)
+    WEBAUTHN = "webauthn"  # Hardware security keys
+    SMS = "sms"
+
+class UserSecurityProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    
+    # Two-Factor Authentication
+    twofa_enabled: bool = False
+    twofa_method: Optional[SecurityKeyType] = None
+    totp_secret: Optional[str] = None  # Encrypted in production
+    
+    # Backup codes
+    backup_codes: List[str] = []  # Encrypted in production
+    backup_codes_used: List[str] = []
+    
+    # Security keys (WebAuthn/FIDO2)
+    webauthn_credentials: List[Dict[str, Any]] = []
+    
+    # Phone number for SMS (if enabled)
+    phone_number: Optional[str] = None
+    
+    # Security settings
+    require_2fa_for_withdrawals: bool = True
+    require_2fa_for_profile_changes: bool = True
+    
+    # Audit trail
+    last_2fa_setup: Optional[datetime] = None
+    failed_attempts: int = 0
+    locked_until: Optional[datetime] = None
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class LoginAttempt(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: Optional[str] = None
+    email: str
+    ip_address: str
+    user_agent: str
+    
+    # Login details
+    login_successful: bool = False
+    twofa_required: bool = False
+    twofa_successful: Optional[bool] = None
+    
+    # Security
+    failed_reason: Optional[str] = None
+    blocked_by_rate_limit: bool = False
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+# ENHANCED REGISTRATION WITH AFRICAN DISHES
+@api_router.get("/heritage/african-dishes")
+async def get_african_dishes():
+    """Get comprehensive list of African dishes by country for registration"""
+    
+    # Format for frontend consumption
+    formatted_dishes = {}
+    total_dishes = 0
+    
+    for country, dishes in AFRICAN_DISHES_BY_COUNTRY.items():
+        country_name = country.replace('_', ' ').title()
+        formatted_dishes[country_name] = {
+            "country_code": country,
+            "dishes": dishes,
+            "count": len(dishes)
+        }
+        total_dishes += len(dishes)
+    
+    return {
+        "success": True,
+        "african_dishes": formatted_dishes,
+        "total_countries": len(AFRICAN_DISHES_BY_COUNTRY),
+        "total_dishes": total_dishes,
+        "usage": "Use in registration form to help users select dishes they can prepare",
+        "cultural_note": "Comprehensive collection from across Africa to support authentic cultural representation"
+    }
 @api_router.post("/admin/setup-platform-owner")
 async def setup_platform_owner(
     owner_data: Dict[str, Any]
