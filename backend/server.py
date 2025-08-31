@@ -397,18 +397,106 @@ async def register_user(user_data: UserRegistration):
         user=UserResponse(**user.dict())
     )
 
-@api_router.post("/auth/login", response_model=TokenResponse)
-async def login_user(login_data: UserLogin):
+@api_router.post("/auth/login", response_model=LoginResponse)
+async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
+    """Enhanced login with 2FA support and security key verification"""
+    
+    # Get client info for logging
+    ip_address = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent", "unknown")
+    
+    # Find user
     user_doc = await db.users.find_one({"email": login_data.email})
-    if not user_doc or not verify_password(login_data.password, user_doc['password_hash']):
+    if not user_doc:
+        log_login_attempt(login_data.email, ip_address, user_agent, False, failed_reason="user_not_found")
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
+    # Verify password
+    if not verify_password(login_data.password, user_doc['password_hash']):
+        log_login_attempt(login_data.email, ip_address, user_agent, False, failed_reason="invalid_password")
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Check if user has 2FA enabled
+    security_profile = await db.user_security_profiles.find_one({"user_id": user_doc['id']})
+    
+    if security_profile and security_profile.get('twofa_enabled', False):
+        # 2FA is required
+        if not login_data.twofa_code or not login_data.twofa_method:
+            # Return available 2FA methods
+            available_methods = []
+            if security_profile.get('totp_secret'):
+                available_methods.append("totp")
+            if security_profile.get('phone_number'):
+                available_methods.append("sms")
+            if security_profile.get('backup_codes'):
+                available_methods.append("backup_code")
+            
+            session_id = str(uuid.uuid4())
+            # Store partial session (in production, use Redis or similar)
+            await db.pending_2fa_sessions.insert_one({
+                "session_id": session_id,
+                "user_id": user_doc['id'],
+                "email": login_data.email,
+                "created_at": datetime.utcnow(),
+                "expires_at": datetime.utcnow() + timedelta(minutes=10)
+            })
+            
+            return LoginResponse(
+                success=False,
+                requires_2fa=True,
+                available_2fa_methods=available_methods,
+                session_id=session_id,
+                message="Two-factor authentication required"
+            )
+        
+        # Verify 2FA code
+        twofa_valid = False
+        
+        if login_data.twofa_method == SecurityKeyType.TOTP:
+            totp_secret = security_profile.get('totp_secret')
+            if totp_secret:
+                twofa_valid = verify_totp_code(totp_secret, login_data.twofa_code)
+        
+        elif login_data.twofa_method == SecurityKeyType.BACKUP_CODE:
+            backup_codes = security_profile.get('backup_codes', [])
+            used_codes = security_profile.get('backup_codes_used', [])
+            
+            if (login_data.twofa_code in backup_codes and 
+                login_data.twofa_code not in used_codes):
+                twofa_valid = True
+                # Mark backup code as used
+                await db.user_security_profiles.update_one(
+                    {"user_id": user_doc['id']},
+                    {"$push": {"backup_codes_used": login_data.twofa_code}}
+                )
+        
+        elif login_data.twofa_method == SecurityKeyType.SMS:
+            # In production, implement SMS verification
+            twofa_valid = login_data.twofa_code == "123456"  # Placeholder
+        
+        if not twofa_valid:
+            log_login_attempt(login_data.email, ip_address, user_agent, False, 
+                            twofa_required=True, twofa_success=False, failed_reason="invalid_2fa")
+            raise HTTPException(status_code=401, detail="Invalid two-factor authentication code")
+        
+        # Clean up pending session
+        await db.pending_2fa_sessions.delete_many({"user_id": user_doc['id']})
+    
+    # Generate token
     token = create_jwt_token(user_doc['id'])
     
-    return TokenResponse(
+    # Log successful login
+    log_login_attempt(login_data.email, ip_address, user_agent, True, 
+                     twofa_required=bool(security_profile and security_profile.get('twofa_enabled')), 
+                     twofa_success=True if security_profile and security_profile.get('twofa_enabled') else None)
+    
+    return LoginResponse(
+        success=True,
+        requires_2fa=False,
         access_token=token,
         token_type="bearer",
-        user=UserResponse(**user_doc)
+        user=UserResponse(**user_doc),
+        message="Login successful"
     )
 
 # CULTURAL HERITAGE DATA COLLECTION
