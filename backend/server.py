@@ -3656,7 +3656,6 @@ def calculate_lambalia_eats_pricing(delivery_distance_km: Optional[float] = None
         "delivery_distance_km": delivery_distance_km or 0
     }
 
-# Helper function for updating user earnings
 async def update_user_weekly_earnings(user_id: str, transaction: Transaction):
     """Update user's weekly earnings record"""
     
@@ -3705,6 +3704,233 @@ async def update_user_weekly_earnings(user_id: str, transaction: Transaction):
         {"id": earnings_record["id"]},
         update_data
     )
+
+# USER EARNINGS DASHBOARD
+@api_router.get("/payments/my-earnings")
+async def get_user_earnings(current_user_id: str = Depends(get_current_user)):
+    """Get user's earnings dashboard"""
+    
+    # Get current week earnings
+    now = datetime.utcnow()
+    week_start = now - timedelta(days=now.weekday())
+    week_start = week_start.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    current_week_earnings = await db.user_earnings.find_one({
+        "user_id": current_user_id,
+        "week_start_date": {"$lte": now},
+        "week_end_date": {"$gte": now}
+    })
+    
+    # Get all-time earnings
+    all_earnings = await db.user_earnings.find({
+        "user_id": current_user_id
+    }).to_list(length=100)
+    
+    # Calculate totals
+    total_net_earnings = sum([e.get("net_earnings", 0) for e in all_earnings])
+    total_commission_paid = sum([e.get("platform_commission_deducted", 0) for e in all_earnings])
+    total_gross = sum([e.get("total_gross_earnings", 0) for e in all_earnings])
+    
+    # Get payout profile
+    payout_profile = await db.user_payout_profiles.find_one({"user_id": current_user_id})
+    
+    # Recent transactions
+    recent_transactions = await db.transactions.find({
+        "recipient_id": current_user_id,
+        "status": PaymentStatus.COMPLETED
+    }).sort("created_at", -1).limit(10).to_list(length=10)
+    
+    # Pending payouts
+    pending_payouts = await db.user_earnings.find({
+        "user_id": current_user_id,
+        "payout_processed": False,
+        "net_earnings": {"$gte": (payout_profile.get("minimum_payout_amount", 25.0) if payout_profile else 25.0)}
+    }).to_list(length=10)
+    
+    pending_amount = sum([e.get("net_earnings", 0) for e in pending_payouts])
+    
+    return {
+        "user_id": current_user_id,
+        "earnings_summary": {
+            "current_week_earnings": current_week_earnings.get("net_earnings", 0) if current_week_earnings else 0,
+            "total_lifetime_earnings": total_net_earnings,
+            "total_platform_commission": total_commission_paid,
+            "total_gross_revenue": total_gross,
+            "pending_payout_amount": pending_amount
+        },
+        "earnings_breakdown": {
+            "consultation_earnings": sum([e.get("consultation_earnings", 0) for e in all_earnings]),
+            "lambalia_eats_earnings": sum([e.get("lambalia_eats_earnings", 0) for e in all_earnings]),
+            "home_restaurant_earnings": sum([e.get("home_restaurant_earnings", 0) for e in all_earnings]),
+            "other_earnings": sum([e.get("other_earnings", 0) for e in all_earnings])
+        },
+        "current_week": current_week_earnings,
+        "recent_transactions": recent_transactions,
+        "payout_info": {
+            "payout_profile_setup": bool(payout_profile),
+            "minimum_payout": payout_profile.get("minimum_payout_amount", 25.0) if payout_profile else 25.0,
+            "next_payout_date": "Every Sunday at 11:59 PM EST",
+            "payout_method": payout_profile.get("preferred_payout_method", "not_set") if payout_profile else "not_set"
+        }
+    }
+
+@api_router.post("/payments/setup-payout-profile")  
+async def setup_payout_profile(
+    payout_data: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Set up user's payout profile for weekly payments"""
+    
+    payout_method = payout_data.get("payout_method", "stripe")
+    minimum_amount = payout_data.get("minimum_payout_amount", 25.0)
+    
+    # Validate minimum amount
+    if minimum_amount < 10.0:
+        raise HTTPException(status_code=400, detail="Minimum payout amount must be at least $10")
+    
+    # Create or update payout profile
+    payout_profile = {
+        "user_id": current_user_id,
+        "preferred_payout_method": payout_method,
+        "minimum_payout_amount": minimum_amount,
+        "updated_at": datetime.utcnow()
+    }
+    
+    # Add method-specific details
+    if payout_method == "stripe":
+        payout_profile["stripe_account_id"] = payout_data.get("stripe_account_id")
+    elif payout_method == "paypal":
+        payout_profile["paypal_email"] = payout_data.get("paypal_email")
+    elif payout_method == "bank_transfer":
+        payout_profile["bank_account_info"] = {
+            "account_number": payout_data.get("account_number", ""),
+            "routing_number": payout_data.get("routing_number", ""),
+            "bank_name": payout_data.get("bank_name", "")
+        }
+    
+    # Update or create profile
+    await db.user_payout_profiles.update_one(
+        {"user_id": current_user_id},
+        {"$set": payout_profile},
+        upsert=True
+    )
+    
+    return {
+        "success": True,
+        "message": "Payout profile updated successfully",
+        "payout_method": payout_method,
+        "minimum_amount": minimum_amount,
+        "next_payout": "Next Sunday if minimum amount reached"
+    }
+
+# WEEKLY PAYOUT PROCESSING (Platform Owner)
+@api_router.post("/admin/process-weekly-payouts")
+async def process_weekly_payouts(current_user_id: str = Depends(get_current_user)):
+    """Process all weekly payouts - Platform Owner Only"""
+    
+    user = await db.users.find_one({"id": current_user_id})
+    if not user or not user.get("is_platform_owner"):
+        raise HTTPException(status_code=403, detail="Platform owner access required")
+    
+    # Get all users with unpaid earnings above minimum threshold
+    unpaid_earnings = await db.user_earnings.aggregate([
+        {"$match": {"payout_processed": False}},
+        {"$group": {
+            "_id": "$user_id",
+            "total_pending": {"$sum": "$net_earnings"},
+            "total_commission": {"$sum": "$platform_commission_deducted"},
+            "earnings_records": {"$push": "$$ROOT"}
+        }},
+        {"$match": {"total_pending": {"$gte": 25.0}}}  # Default minimum
+    ]).to_list(length=1000)
+    
+    payout_results = []
+    total_platform_earnings = 0.0
+    
+    for user_earnings in unpaid_earnings:
+        user_id = user_earnings["_id"]
+        pending_amount = user_earnings["total_pending"]
+        commission_collected = user_earnings["total_commission"]
+        
+        # Get user payout profile
+        payout_profile = await db.user_payout_profiles.find_one({"user_id": user_id})
+        
+        if not payout_profile:
+            payout_results.append({
+                "user_id": user_id,
+                "status": "skipped",
+                "reason": "No payout profile setup",
+                "pending_amount": pending_amount
+            })
+            continue
+        
+        # Check if amount meets user's minimum threshold
+        user_minimum = payout_profile.get("minimum_payout_amount", 25.0)
+        if pending_amount < user_minimum:
+            payout_results.append({
+                "user_id": user_id,
+                "status": "skipped", 
+                "reason": f"Below minimum threshold ${user_minimum}",
+                "pending_amount": pending_amount
+            })
+            continue
+        
+        # Process payout (simulate - integrate with real payment processor in production)
+        try:
+            # Mark earnings as paid
+            earnings_ids = [record["id"] for record in user_earnings["earnings_records"]]
+            await db.user_earnings.update_many(
+                {"id": {"$in": earnings_ids}},
+                {"$set": {
+                    "payout_processed": True,
+                    "payout_date": datetime.utcnow(),
+                    "payout_amount": pending_amount,
+                    "payout_method": payout_profile.get("preferred_payout_method")
+                }}
+            )
+            
+            # Add to platform earnings
+            total_platform_earnings += commission_collected
+            
+            payout_results.append({
+                "user_id": user_id,
+                "status": "processed",
+                "payout_amount": pending_amount,
+                "payout_method": payout_profile.get("preferred_payout_method"),
+                "commission_collected": commission_collected
+            })
+            
+        except Exception as e:
+            payout_results.append({
+                "user_id": user_id,
+                "status": "failed",
+                "reason": str(e),
+                "pending_amount": pending_amount
+            })
+    
+    # Record platform earnings collection
+    if total_platform_earnings > 0:
+        await db.platform_earnings.insert_one({
+            "id": str(uuid.uuid4()),
+            "collection_date": datetime.utcnow(),
+            "total_commission_collected": total_platform_earnings,
+            "payouts_processed": len([r for r in payout_results if r["status"] == "processed"]),
+            "collection_type": "weekly_payout_processing"
+        })
+    
+    return {
+        "success": True,
+        "payout_summary": {
+            "total_payouts_processed": len([r for r in payout_results if r["status"] == "processed"]),
+            "total_amount_paid": sum([r.get("payout_amount", 0) for r in payout_results if r["status"] == "processed"]),
+            "total_platform_earnings": total_platform_earnings,
+            "payouts_skipped": len([r for r in payout_results if r["status"] == "skipped"]),
+            "payouts_failed": len([r for r in payout_results if r["status"] == "failed"])
+        },
+        "detailed_results": payout_results,
+        "processing_date": datetime.utcnow().isoformat(),
+        "next_processing": "Next Sunday at 11:59 PM EST"
+    }
 
 # TRANSACTION PROCESSING ENDPOINTS
 @api_router.post("/payments/create-consultation-transaction")
