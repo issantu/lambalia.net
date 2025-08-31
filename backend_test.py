@@ -1429,12 +1429,15 @@ class LambaliaEnhancedAPITester:
             african_countries = set()
             sample_dishes = []
             
-            if data:
-                for dish in data[:10]:
-                    if 'country' in dish:
-                        african_countries.add(dish['country'])
-                    if 'name' in dish:
-                        sample_dishes.append(dish['name'])
+            if data and isinstance(data, list):
+                sample_size = min(10, len(data))
+                for i in range(sample_size):
+                    dish = data[i]
+                    if isinstance(dish, dict):
+                        if 'country' in dish:
+                            african_countries.add(dish['country'])
+                        if 'name' in dish:
+                            sample_dishes.append(dish['name'])
             
             details = f"- Found {dishes_count} African dishes from {len(african_countries)} countries"
             if sample_dishes:
