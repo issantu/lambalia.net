@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 class LambaliaEnhancedAPITester:
-    def __init__(self, base_url="https://lambalia-recipes.preview.emergentagent.com"):
+    def __init__(self, base_url="https://lambalia-recipes-1.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
@@ -3511,7 +3511,7 @@ class LambaliaEnhancedAPITester:
 def main():
     """Main test runner"""
     print("Enhanced Lambalia Backend API Test Suite")
-    print(f"Testing against: https://lambalia-recipes.preview.emergentagent.com")
+    print(f"Testing against: https://lambalia-recipes-1.preview.emergentagent.com")
     print()
     
     tester = LambaliaEnhancedAPITester()
@@ -3520,7 +3520,7 @@ def main():
 def main_ui_improvements():
     """Run focused UI improvements tests"""
     print("Lambalia UI Improvements Test Suite")
-    print(f"Testing against: https://lambalia-recipes.preview.emergentagent.com")
+    print(f"Testing against: https://lambalia-recipes-1.preview.emergentagent.com")
     print()
     
     tester = LambaliaEnhancedAPITester()
