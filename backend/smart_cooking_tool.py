@@ -8,7 +8,8 @@ import logging
 from pydantic import BaseModel, Field
 import uuid
 import requests
-from emergentintegrations import get_llm_client
+import os
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 class IngredientInput(BaseModel):
     """Model for user ingredient input"""
@@ -86,7 +87,7 @@ class SmartCookingToolService:
     def __init__(self, db: AsyncIOMotorDatabase):
         self.db = db
         self.logger = logging.getLogger(__name__)
-        self.llm_client = get_llm_client()
+        self.llm_client = LlmChat()
         
         # Tool pricing
         self.basic_price = 2.99
