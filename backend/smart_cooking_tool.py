@@ -87,7 +87,6 @@ class SmartCookingToolService:
     def __init__(self, db: AsyncIOMotorDatabase):
         self.db = db
         self.logger = logging.getLogger(__name__)
-        self.llm_client = LlmChat()
         
         # Tool pricing
         self.basic_price = 2.99
