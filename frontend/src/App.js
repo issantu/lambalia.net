@@ -2713,7 +2713,10 @@ const AboutPage = () => {
 
       <div className="space-y-8">
         <section className="bg-gradient-to-r from-orange-50 to-yellow-50 p-8 rounded-xl">
-          <h2 className="text-2xl font-bold text-orange-800 mb-4">🌍 Our Mission</h2>
+          <div className="flex items-center mb-4">
+            <Icon name="Heritage" size={32} className="text-orange-600 mr-3" />
+            <h2 className="text-2xl font-bold text-orange-800">Our Mission</h2>
+          </div>
           <p className="text-gray-700 text-lg leading-relaxed">
             Lambalia is the world's first comprehensive cultural culinary ecosystem, designed to preserve, share, and monetize global food heritage. 
             We connect diaspora communities with authentic ingredients, traditional recipes, and cultural cooking wisdom while empowering home cooks to transform their kitchens into sources of income.
