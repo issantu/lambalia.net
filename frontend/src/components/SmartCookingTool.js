@@ -26,7 +26,7 @@ const SmartCookingTool = ({ user, onClose }) => {
   const units = ['cup', 'tbsp', 'tsp', 'oz', 'lb', 'g', 'kg', 'ml', 'L', 'piece', 'clove', 'bunch'];
   
   // Cuisine options
-  const cuisineOptions = ['Italian', 'Asian', 'Mexican', 'Indian', 'Mediterranean', 'American', 'French', 'Thai', 'Japanese', 'Korean'];
+  const cuisineOptions = ['Italian', 'Asian', 'Mexican', 'Indian', 'Mediterranean', 'American', 'French', 'Thai', 'Japanese', 'Korean', 'African', 'Caribbean'];
   
   // Dietary restrictions
   const dietaryOptions = ['Vegetarian', 'Vegan', 'Gluten-free', 'Dairy-free', 'Keto', 'Paleo', 'Low-carb', 'Low-sodium'];
