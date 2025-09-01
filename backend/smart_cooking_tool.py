@@ -192,17 +192,18 @@ class SmartCookingToolService:
         
         try:
             # Use Emergent LLM for recipe generation
-            response = await self.llm_client.chat.completions.create(
+            system_message = "You are a professional chef and AI cooking assistant specialized in creating personalized recipes from available ingredients."
+            user_message = UserMessage(content=prompt)
+            
+            response = await self.llm_client.send_message(
+                messages=[user_message],
+                system_message=system_message,
                 model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "You are a professional chef and AI cooking assistant specialized in creating personalized recipes from available ingredients."},
-                    {"role": "user", "content": prompt}
-                ],
                 temperature=0.7,
                 max_tokens=2000
             )
             
-            ai_response = response.choices[0].message.content
+            ai_response = response.content
             
             # Parse AI response and create recipe suggestions
             recipes = self._parse_ai_recipe_response(ai_response, session.available_ingredients)
