@@ -2804,7 +2804,10 @@ const AboutPage = () => {
         </section>
 
         <section className="bg-gray-50 p-8 rounded-xl">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">📊 Our Impact</h2>
+          <div className="flex items-center justify-center mb-4">
+            <Icon name="Star" size={32} className="text-gray-700 mr-3" />
+            <h2 className="text-2xl font-bold text-gray-800">Our Impact</h2>
+          </div>
           <div className="grid md:grid-cols-4 gap-6 text-center">
             <div>
               <div className="text-3xl font-bold text-green-600">80+</div>
