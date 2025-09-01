@@ -176,17 +176,23 @@ class SmartCookingToolService:
         - Dietary restrictions: {', '.join(session.preferences.dietary_restrictions) if session.preferences.dietary_restrictions else 'None'}
         - Skill level: {session.preferences.skill_level}
 
+        SPECIAL CULTURAL KNOWLEDGE:
+        - If African cuisine is preferred: Draw from authentic dishes like Jollof Rice, Egusi, Fufu, Injera, Tagine, Bobotie, etc. from 54+ African countries
+        - If Caribbean cuisine is preferred: Use authentic dishes like Jerk Chicken, Callaloo, Doubles, Pelau, Ropa Vieja, etc. from Jamaica, Trinidad, Haiti, Cuba, etc.
+        - Maintain cultural authenticity while adapting to available ingredients
+
         For each recipe, provide:
-        1. Recipe name and cuisine type
+        1. Recipe name and cuisine type (be specific about regional origin if applicable)
         2. Difficulty level and timing
         3. Which ingredients from the list to use
         4. Additional ingredients needed (if any)
-        5. Step-by-step instructions
-        6. Cultural authenticity notes
+        5. Step-by-step instructions with cultural cooking techniques
+        6. Cultural authenticity notes and background
         7. Ingredient utilization score (0-1)
 
-        Focus on maximizing the use of available ingredients while creating delicious, authentic dishes.
+        Focus on maximizing the use of available ingredients while creating delicious, culturally authentic dishes.
         Consider ingredient freshness and suggest using expiring items first.
+        If cultural cuisines are selected, prioritize authentic traditional methods and flavor profiles.
         """
         
         try:
