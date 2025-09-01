@@ -373,86 +373,129 @@ const LoginPage = () => {
   );
 };
 
-// Enhanced Navigation Header
+// Enhanced Navigation Header with Professional Icons and Smart Cooking Tool
 const Header = () => {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
+  const [showSmartCooking, setShowSmartCooking] = useState(false);
 
   return (
-    <header className="nav-header shadow-lg border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo and Navigation */}
-          <div className="flex items-center space-x-8">
-            <Link to="/" className="flex items-center space-x-3 group">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
-                alt="Lambalia - Global Heritage Recipes" 
-                className="w-12 h-12 transition-transform group-hover:scale-110 drop-shadow-md"
-              />
-              <h1 className="text-2xl font-bold heading-gradient">Lambalia</h1>
-            </Link>
-            <nav className="hidden md:flex space-x-1">
-              <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.browse')}
+    <>
+      <header className="nav-header shadow-lg border-b bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo and Navigation */}
+            <div className="flex items-center space-x-8">
+              <Link to="/" className="flex items-center space-x-3 group">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
+                  alt="Lambalia - Global Heritage Recipes" 
+                  className="w-12 h-12 transition-transform group-hover:scale-110 drop-shadow-md"
+                />
+                <h1 className="text-2xl font-bold heading-gradient">Lambalia</h1>
               </Link>
-              <Link to="/create-snippet" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.create')}
-              </Link>
-              <Link to="/grocery" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.ingredients')}
-              </Link>
-              <Link to="/home-restaurant" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.restaurant')}
-              </Link>
-              <Link to="/local-marketplace" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.marketplace')}
-              </Link>
-              <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.charity')}
-              </Link>
-              <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.eats')}
-              </Link>
-              <Link to="/about" className="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md font-medium">
-                About
-              </Link>
-              <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium">
-                {t('nav.profile')}
-              </Link>
-            </nav>
-          </div>
-
-          {/* User actions and Language Switcher */}
-          <div className="flex items-center space-x-4">
-            <LanguageSwitcher />
-            
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">
-                  {t('common.welcome', { name: user.username || user.full_name })}
-                </span>
-                <button 
-                  onClick={logout}
-                  className="text-sm text-gray-500 hover:text-gray-700"
+              
+              <nav className="hidden md:flex space-x-1">
+                {/* Smart Cooking Tool - Premium Position */}
+                <button
+                  onClick={() => setShowSmartCooking(true)}
+                  className="nav-link bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2 shadow-lg"
                 >
-                  {t('auth.logout')}
+                  <AnimatedIcon name="SmartCooking" size={18} className="text-white" />
+                  <span>Smart Cooking</span>
+                  <span className="bg-white bg-opacity-20 px-2 py-0.5 rounded-full text-xs">$2.99</span>
                 </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link to="/login" className="text-sm text-gray-700 hover:text-green-600">
-                  {t('auth.login')}
+                
+                <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Browse" size={16} className="text-gray-600" />
+                  <span>{t('nav.browse')}</span>
                 </Link>
-                <Link to="/register" className="btn-primary px-4 py-2 rounded-md text-sm">
-                  {t('auth.joinLambalia')}
+                
+                <Link to="/create-snippet" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Create" size={16} className="text-gray-600" />
+                  <span>{t('nav.create')}</span>
                 </Link>
-              </div>
-            )}
+                
+                <Link to="/grocery" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Store" size={16} className="text-gray-600" />
+                  <span>{t('nav.ingredients')}</span>
+                </Link>
+                
+                <Link to="/home-restaurant" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Restaurant" size={16} className="text-gray-600" />
+                  <span>{t('nav.restaurant')}</span>
+                </Link>
+                
+                <Link to="/local-marketplace" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Marketplace" size={16} className="text-gray-600" />
+                  <span>{t('nav.marketplace')}</span>
+                </Link>
+                
+                <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Heart" size={16} className="text-gray-600" />
+                  <span>{t('nav.charity')}</span>
+                </Link>
+                
+                <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Utensils" size={16} className="text-gray-600" />
+                  <span>{t('nav.eats')}</span>
+                </Link>
+                
+                <Link to="/about" className="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Heritage" size={16} className="text-gray-600" />
+                  <span>About</span>
+                </Link>
+                
+                <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
+                  <Icon name="Profile" size={16} className="text-gray-600" />
+                  <span>{t('nav.profile')}</span>
+                </Link>
+              </nav>
+            </div>
+
+            {/* User actions and Language Switcher */}
+            <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
+              
+              {user ? (
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-700 flex items-center space-x-2">
+                    <Icon name="Profile" size={16} className="text-green-600" />
+                    <span>{t('common.welcome', { name: user.username || user.full_name })}</span>
+                  </span>
+                  <button 
+                    onClick={logout}
+                    className="text-sm text-gray-500 hover:text-gray-700 flex items-center space-x-1"
+                  >
+                    <Icon name="Settings" size={14} />
+                    <span>{t('auth.logout')}</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-4">
+                  <Link to="/login" className="text-sm text-gray-700 hover:text-green-600 flex items-center space-x-1">
+                    <Icon name="Lock" size={14} />
+                    <span>{t('auth.login')}</span>
+                  </Link>
+                  <Link to="/register" className="btn-primary px-4 py-2 rounded-md text-sm flex items-center space-x-2">
+                    <Icon name="Profile" size={14} className="text-white" />
+                    <span>{t('auth.joinLambalia')}</span>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Smart Cooking Tool Modal */}
+      {showSmartCooking && (
+        <SmartCookingTool 
+          user={user} 
+          onClose={() => setShowSmartCooking(false)}
+        />
+      )}
+    </>
   );
 };
 
