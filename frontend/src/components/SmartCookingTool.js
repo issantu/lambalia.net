@@ -378,6 +378,9 @@ const SmartCookingTool = ({ user, onClose }) => {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Preferred Cuisines (optional)
           </label>
+          <p className="text-xs text-gray-500 mb-3">
+            Select your favorite cuisines to get culturally authentic recipe suggestions. We have authentic dishes from 80+ countries!
+          </p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {cuisineOptions.map(cuisine => (
               <button
@@ -388,16 +391,31 @@ const SmartCookingTool = ({ user, onClose }) => {
                     : [...preferences.cuisine_preferences, cuisine];
                   setPreferences({...preferences, cuisine_preferences: updated});
                 }}
-                className={`p-2 rounded-lg border text-sm ${
+                className={`p-2 rounded-lg border text-sm transition-all ${
                   preferences.cuisine_preferences.includes(cuisine)
-                    ? 'bg-green-100 border-green-500 text-green-700'
-                    : 'bg-white border-gray-300 hover:border-gray-400'
+                    ? 'bg-green-100 border-green-500 text-green-700 shadow-md'
+                    : 'bg-white border-gray-300 hover:border-gray-400 hover:shadow-sm'
                 }`}
               >
+                {cuisine === 'African' && '🌍 '}
+                {cuisine === 'Caribbean' && '🏝️ '}
+                {cuisine === 'Asian' && '🥢 '}
+                {cuisine === 'Italian' && '🍝 '}
+                {cuisine === 'Mexican' && '🌶️ '}
+                {cuisine === 'Indian' && '🍛 '}
+                {cuisine === 'French' && '🥖 '}
+                {cuisine === 'Thai' && '🌶️ '}
+                {cuisine === 'Japanese' && '🍣 '}
+                {cuisine === 'Korean' && '🥢 '}
+                {cuisine === 'Mediterranean' && '🫒 '}
+                {cuisine === 'American' && '🍔 '}
                 {cuisine}
               </button>
             ))}
           </div>
+          <p className="text-xs text-blue-600 mt-2">
+            💡 <strong>New:</strong> African & Caribbean cuisines now include authentic dishes from 64+ countries and islands!
+          </p>
         </div>
 
         {/* Dietary Restrictions */}
