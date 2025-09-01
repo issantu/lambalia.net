@@ -191,18 +191,20 @@ class SmartCookingToolService:
         
         try:
             # Use Emergent LLM for recipe generation
-            system_message = "You are a professional chef and AI cooking assistant specialized in creating personalized recipes from available ingredients."
-            user_message = UserMessage(content=prompt)
+            # Get API key from environment or use default
+            api_key = os.environ.get('EMERGENT_LLM_KEY', 'sk-emergent-default')
             
-            response = await self.llm_client.send_message(
-                messages=[user_message],
-                system_message=system_message,
-                model="gpt-4o-mini",
-                temperature=0.7,
-                max_tokens=2000
+            # Create LLM chat instance
+            system_message = "You are a professional chef and AI cooking assistant specialized in creating personalized recipes from available ingredients."
+            llm_chat = LlmChat(
+                api_key=api_key,
+                session_id=f"cooking_{session.id}",
+                system_message=system_message
             )
             
-            ai_response = response.content
+            # Send user message
+            user_message = UserMessage(text=prompt)
+            ai_response = await llm_chat.send_message(user_message)
             
             # Parse AI response and create recipe suggestions
             recipes = self._parse_ai_recipe_response(ai_response, session.available_ingredients)
