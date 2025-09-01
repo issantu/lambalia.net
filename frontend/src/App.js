@@ -2748,42 +2748,57 @@ const AboutPage = () => {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">🚀 Our Platform Ecosystem</h2>
+          <div className="flex items-center justify-center mb-6">
+            <Icon name="SmartCooking" size={32} className="text-gray-700 mr-3" />
+            <h2 className="text-2xl font-bold text-gray-800 text-center">Our Platform Ecosystem</h2>
+          </div>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-purple-50 rounded-lg">
-              <div className="text-3xl mb-3">🏠</div>
+            <div className="text-center p-6 bg-purple-50 rounded-lg hover:shadow-lg transition-shadow">
+              <AnimatedIcon name="Restaurant" size={48} className="text-purple-600 mx-auto mb-3" />
               <h4 className="font-semibold text-purple-800">Home Restaurants</h4>
               <p className="text-sm text-gray-600">Transform kitchens into dining experiences</p>
             </div>
             
-            <div className="text-center p-6 bg-green-50 rounded-lg">
-              <div className="text-3xl mb-3">🍽️</div>
+            <div className="text-center p-6 bg-green-50 rounded-lg hover:shadow-lg transition-shadow">
+              <AnimatedIcon name="Utensils" size={48} className="text-green-600 mx-auto mb-3" />
               <h4 className="font-semibold text-green-800">Lambalia Eats</h4>
               <p className="text-sm text-gray-600">Real-time food marketplace</p>
             </div>
             
-            <div className="text-center p-6 bg-blue-50 rounded-lg">
-              <div className="text-3xl mb-3">🌱</div>
+            <div className="text-center p-6 bg-blue-50 rounded-lg hover:shadow-lg transition-shadow">
+              <AnimatedIcon name="Farm" size={48} className="text-blue-600 mx-auto mb-3" />
               <h4 className="font-semibold text-blue-800">Farm Ecosystem</h4>
               <p className="text-sm text-gray-600">Direct farm-to-table connections</p>
             </div>
             
-            <div className="text-center p-6 bg-red-50 rounded-lg">
-              <div className="text-3xl mb-3">❤️</div>
+            <div className="text-center p-6 bg-red-50 rounded-lg hover:shadow-lg transition-shadow">
+              <AnimatedIcon name="Heart" size={48} className="text-red-600 mx-auto mb-3" />
               <h4 className="font-semibold text-red-800">Charity Program</h4>
               <p className="text-sm text-gray-600">Social impact through food sharing</p>
             </div>
             
-            <div className="text-center p-6 bg-orange-50 rounded-lg">
-              <div className="text-3xl mb-3">🛒</div>
+            <div className="text-center p-6 bg-orange-50 rounded-lg hover:shadow-lg transition-shadow">
+              <AnimatedIcon name="Store" size={48} className="text-orange-600 mx-auto mb-3" />
               <h4 className="font-semibold text-orange-800">Specialty Ingredients</h4>
               <p className="text-sm text-gray-600">Ethnic grocery store network</p>
             </div>
             
-            <div className="text-center p-6 bg-indigo-50 rounded-lg">
-              <div className="text-3xl mb-3">🌍</div>
-              <h4 className="font-semibent text-indigo-800">Heritage Recipes</h4>
+            <div className="text-center p-6 bg-indigo-50 rounded-lg hover:shadow-lg transition-shadow">
+              <AnimatedIcon name="Heritage" size={48} className="text-indigo-600 mx-auto mb-3" />
+              <h4 className="font-semibold text-indigo-800">Heritage Recipes</h4>
               <p className="text-sm text-gray-600">Global cultural preservation</p>
+            </div>
+            
+            {/* New Smart Cooking Tool Feature */}
+            <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg hover:shadow-lg transition-shadow border-2 border-orange-200">
+              <AnimatedIcon name="SmartCooking" size={48} className="text-orange-600 mx-auto mb-3" />
+              <h4 className="font-semibold text-orange-800">Smart Cooking Assistant</h4>
+              <p className="text-sm text-gray-600">AI-powered recipe generation from your ingredients</p>
+              <div className="mt-2">
+                <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
+                  New Feature - $2.99
+                </span>
+              </div>
             </div>
           </div>
         </section>
