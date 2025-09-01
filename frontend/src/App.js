@@ -2725,7 +2725,10 @@ const AboutPage = () => {
 
         <section className="grid md:grid-cols-2 gap-8">
           <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold text-green-700 mb-3">🥄 Heritage Preservation</h3>
+            <div className="flex items-center mb-3">
+              <Icon name="Recipe" size={24} className="text-green-600 mr-3" />
+              <h3 className="text-xl font-semibold text-green-700">Heritage Preservation</h3>
+            </div>
             <p className="text-gray-600">
               We preserve traditional recipes from 80+ global communities, ensuring cultural food knowledge passes to future generations. 
               Our AI-powered translation maintains cultural authenticity while making recipes accessible worldwide.
@@ -2733,7 +2736,10 @@ const AboutPage = () => {
           </div>
           
           <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold text-blue-700 mb-3">💰 Economic Empowerment</h3>
+            <div className="flex items-center mb-3">
+              <Icon name="Dollar" size={24} className="text-blue-600 mr-3" />
+              <h3 className="text-xl font-semibold text-blue-700">Economic Empowerment</h3>
+            </div>
             <p className="text-gray-600">
               Through our multi-marketplace ecosystem, home cooks earn $50-$200 per experience, recipe consultations generate $2.99-$12.99, 
               and our 15% commission structure supports sustainable income generation.
