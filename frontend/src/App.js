@@ -398,16 +398,6 @@ const Header = () => {
             
             {/* Main Navigation */}
             <nav className="hidden lg:flex items-center space-x-1">
-              {/* Smart Cooking Tool - Prominent but not overwhelming */}
-              <button
-                onClick={() => setShowSmartCooking(true)}
-                className="nav-link bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center space-x-1.5 shadow-md"
-              >
-                <AnimatedIcon name="SmartCooking" size={16} className="text-white" />
-                <span>Smart Cook</span>
-                <span className="bg-white bg-opacity-20 px-1.5 py-0.5 rounded-full text-xs">$2.99</span>
-              </button>
-              
               <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
                 <Icon name="Browse" size={14} className="text-gray-600" />
                 <span>{t('nav.browse')}</span>
@@ -451,6 +441,16 @@ const Header = () => {
 
             {/* User Actions */}
             <div className="flex items-center space-x-3">
+              {/* Smart Cooking Tool - Small and unobtrusive */}
+              <button
+                onClick={() => setShowSmartCooking(true)}
+                className="bg-orange-500 hover:bg-orange-600 text-white px-2 py-1 rounded text-xs font-medium transition-colors flex items-center space-x-1"
+              >
+                <AnimatedIcon name="SmartCooking" size={12} className="text-white" />
+                <span className="hidden md:inline">AI Cook</span>
+                <span className="bg-white bg-opacity-20 px-1 py-0.5 rounded text-xs">$3</span>
+              </button>
+              
               <LanguageSwitcher />
               
               {user ? (
