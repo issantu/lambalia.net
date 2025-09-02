@@ -5238,6 +5238,9 @@ app.include_router(smart_cooking_router, prefix="/api")
 transaction_verification_router = create_transaction_verification_router(transaction_verification_service, get_current_user, get_current_user_optional)
 app.include_router(transaction_verification_router, prefix="/api")
 
+# Include Feedback System router
+app.include_router(feedback_router)
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
