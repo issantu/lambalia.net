@@ -3530,12 +3530,292 @@ const AboutPage = () => {
   );
 };
 
-// Contact Page Component  
+// Contact Page Component with Enhanced User Feedback System  
 const ContactPage = () => {
   const { t } = useTranslation();
-  
-  return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('contact');
+  const [feedbackForm, setFeedbackForm] = useState({
+    type: 'general',
+    rating: 5,
+    subject: '',
+    message: '',
+    category: '',
+    urgency: 'low',
+    email: user?.email || '',
+    name: user?.full_name || user?.username || ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    
+    try {
+      // In a real implementation, this would send to your feedback collection API
+      const feedbackData = {
+        ...feedbackForm,
+        timestamp: new Date().toISOString(),
+        user_id: user?.id,
+        platform_version: '1.0',
+        browser: navigator.userAgent,
+        url: window.location.href
+      };
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      console.log('Feedback submitted:', feedbackData);
+      setSubmitted(true);
+      
+      // Reset form
+      setFeedbackForm({
+        ...feedbackForm,
+        subject: '',
+        message: '',
+        rating: 5
+      });
+      
+    } catch (error) {
+      alert('Failed to submit feedback. Please try again.');
+    }
+    
+    setSubmitting(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFeedbackForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const feedbackTypes = [
+    { value: 'general', label: 'General Feedback', icon: '💬' },
+    { value: 'bug', label: 'Bug Report', icon: '🐛' },
+    { value: 'feature', label: 'Feature Request', icon: '💡' },
+    { value: 'ui', label: 'UI/UX Issues', icon: '🎨' },
+    { value: 'performance', label: 'Performance Issues', icon: '⚡' },
+    { value: 'recipe', label: 'Recipe/Content Issues', icon: '🍳' },
+    { value: 'payment', label: 'Payment/Earnings Issues', icon: '💰' },
+    { value: 'vendor', label: 'Vendor Program Feedback', icon: '🏪' },
+    { value: 'compliment', label: 'Compliments & Praise', icon: '⭐' }
+  ];
+
+  const urgencyLevels = [
+    { value: 'low', label: 'Low', color: 'text-green-600', desc: 'General feedback, suggestions' },
+    { value: 'medium', label: 'Medium', color: 'text-yellow-600', desc: 'Minor issues, improvements' },
+    { value: 'high', label: 'High', color: 'text-orange-600', desc: 'Significant problems' },
+    { value: 'critical', label: 'Critical', color: 'text-red-600', desc: 'Platform broken, urgent issues' }
+  ];
+
+  const renderFeedbackForm = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-4">📝 Share Your Experience</h2>
+        <p className="text-gray-600">
+          Your feedback helps us improve Lambalia for everyone in our global culinary community
+        </p>
+      </div>
+
+      {submitted && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+          <div className="flex items-center">
+            <Icon name="CheckCircle" size={24} className="text-green-600 mr-3" />
+            <div>
+              <h3 className="text-green-800 font-semibold">Feedback Submitted Successfully!</h3>
+              <p className="text-green-700 text-sm mt-1">
+                Thank you for helping us improve Lambalia. We'll review your feedback and get back to you if needed.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleFeedbackSubmit} className="space-y-6">
+        {/* User Info */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={feedbackForm.name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={feedbackForm.email}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Feedback Type */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">Feedback Type</label>
+          <div className="grid md:grid-cols-3 gap-3">
+            {feedbackTypes.map(type => (
+              <button
+                key={type.value}
+                type="button"
+                onClick={() => setFeedbackForm(prev => ({ ...prev, type: type.value }))}
+                className={`p-3 rounded-lg border text-left transition-all ${
+                  feedbackForm.type === type.value
+                    ? 'border-green-500 bg-green-50 text-green-800'
+                    : 'border-gray-300 hover:border-green-300 hover:bg-green-50'
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <span className="text-lg">{type.icon}</span>
+                  <span className="text-sm font-medium">{type.label}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Rating */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Overall Experience Rating
+          </label>
+          <div className="flex items-center space-x-2">
+            {[1, 2, 3, 4, 5].map(rating => (
+              <button
+                key={rating}
+                type="button"
+                onClick={() => setFeedbackForm(prev => ({ ...prev, rating }))}
+                className={`text-2xl transition-colors ${
+                  rating <= feedbackForm.rating ? 'text-yellow-400' : 'text-gray-300'
+                }`}
+              >
+                ⭐
+              </button>
+            ))}
+            <span className="ml-3 text-sm text-gray-600">
+              {feedbackForm.rating}/5 - {
+                feedbackForm.rating === 5 ? 'Excellent' :
+                feedbackForm.rating === 4 ? 'Good' :
+                feedbackForm.rating === 3 ? 'Average' :
+                feedbackForm.rating === 2 ? 'Poor' : 'Very Poor'
+              }
+            </span>
+          </div>
+        </div>
+
+        {/* Urgency */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">Priority Level</label>
+          <div className="grid md:grid-cols-2 gap-3">
+            {urgencyLevels.map(level => (
+              <button
+                key={level.value}
+                type="button"
+                onClick={() => setFeedbackForm(prev => ({ ...prev, urgency: level.value }))}
+                className={`p-3 rounded-lg border text-left transition-all ${
+                  feedbackForm.urgency === level.value
+                    ? 'border-green-500 bg-green-50'
+                    : 'border-gray-300 hover:border-green-300 hover:bg-green-50'
+                }`}
+              >
+                <div className={`font-medium ${level.color}`}>{level.label}</div>
+                <div className="text-xs text-gray-600">{level.desc}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Subject */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+          <input
+            type="text"
+            name="subject"
+            value={feedbackForm.subject}
+            onChange={handleInputChange}
+            placeholder="Brief summary of your feedback..."
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
+        </div>
+
+        {/* Message */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Detailed Feedback
+          </label>
+          <textarea
+            name="message"
+            value={feedbackForm.message}
+            onChange={handleInputChange}
+            rows="6"
+            placeholder="Please provide detailed feedback. Include steps to reproduce if reporting a bug, or describe your experience in detail..."
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
+        </div>
+
+        {/* Submit Button */}
+        <div className="text-center">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {submitting ? 'Submitting Feedback...' : 'Submit Feedback'}
+          </button>
+        </div>
+      </form>
+
+      {/* Quick Feedback Options */}
+      <div className="mt-12 bg-gray-50 p-6 rounded-lg">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Feedback Options</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <a
+            href="mailto:feedback@lambalia.com?subject=Quick Feedback"
+            className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200"
+          >
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">📧</span>
+              <div>
+                <h4 className="font-medium text-gray-800">Email Direct</h4>
+                <p className="text-sm text-gray-600">feedback@lambalia.com</p>
+              </div>
+            </div>
+          </a>
+          
+          <a
+            href="https://forms.google.com/lambalia-feedback"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200"
+          >
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">📋</span>
+              <div>
+                <h4 className="font-medium text-gray-800">Survey Form</h4>
+                <p className="text-sm text-gray-600">Detailed questionnaire</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderContactInfo = () => (
+    <div>
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold heading-gradient mb-4">Contact Lambalia</h1>
         <p className="text-xl text-gray-600">Get in touch with our global culinary community</p>
@@ -3604,7 +3884,7 @@ const ContactPage = () => {
             </div>
 
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl">
-              <h3 className="font-semibent text-blue-800 mb-3">💼 Careers</h3>
+              <h3 className="font-semibold text-blue-800 mb-3">💼 Careers</h3>
               <p className="text-sm text-gray-600 mb-2">Join our mission to preserve global culinary heritage</p>
               <Link to="/careers" className="text-blue-600 font-medium">
                 View Open Positions →
@@ -3617,6 +3897,17 @@ const ContactPage = () => {
               <a href="mailto:security@lambalia.com" className="text-red-600 font-medium">
                 security@lambalia.com
               </a>
+            </div>
+
+            <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-xl">
+              <h3 className="font-semibold text-pink-800 mb-3">💝 User Feedback</h3>
+              <p className="text-sm text-gray-600 mb-2">Experience feedback, suggestions, compliments</p>
+              <button
+                onClick={() => setActiveTab('feedback')}
+                className="text-pink-600 font-medium hover:text-pink-800"
+              >
+                Submit Feedback →
+              </button>
             </div>
           </div>
         </section>
@@ -3634,6 +3925,40 @@ const ContactPage = () => {
           <a href="#" className="text-red-600 hover:text-red-800 font-medium">YouTube</a>
         </div>
       </section>
+    </div>
+  );
+  
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Tab Navigation */}
+      <div className="flex justify-center mb-8">
+        <div className="bg-white rounded-lg shadow-lg p-1">
+          <button
+            onClick={() => setActiveTab('contact')}
+            className={`px-6 py-2 rounded-md font-medium transition-colors ${
+              activeTab === 'contact'
+                ? 'bg-green-500 text-white'
+                : 'text-gray-600 hover:text-green-600'
+            }`}
+          >
+            📞 Contact Info
+          </button>
+          <button
+            onClick={() => setActiveTab('feedback')}
+            className={`px-6 py-2 rounded-md font-medium transition-colors ${
+              activeTab === 'feedback'
+                ? 'bg-green-500 text-white'
+                : 'text-gray-600 hover:text-green-600'
+            }`}
+          >
+            📝 Share Feedback
+          </button>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'contact' && renderContactInfo()}
+      {activeTab === 'feedback' && renderFeedbackForm()}
     </div>
   );
 };
