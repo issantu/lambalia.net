@@ -2464,6 +2464,9 @@ heritage_recipes_service = HeritageRecipesService(db)
 # Initialize Smart Cooking Tool service
 smart_cooking_service = SmartCookingToolService(db)
 
+# Initialize Transaction Verification service
+transaction_verification_service = TransactionVerificationService(db)
+
 @api_router.post("/farm-vendors/apply", response_model=dict)
 async def apply_as_farm_vendor(
     application_data: FarmVendorApplicationRequest,
