@@ -4,14 +4,20 @@ import { useTranslation } from 'react-i18next';
 const LanguageSwitcher = ({ className = '' }) => {
   const { i18n } = useTranslation();
 
-  // Focus on core languages for Lambalia's diverse user base
+  // Extensive language list restored for global reach
   const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'es', name: 'Español', flag: '🇪🇸' },
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
+    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
     { code: 'pt', name: 'Português', flag: '🇧🇷' },
+    { code: 'ja', name: '日本語', flag: '🇯🇵' },
     { code: 'zh', name: '中文', flag: '🇨🇳' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' }
+    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+    { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+    { code: 'ko', name: '한국어', flag: '🇰🇷' }
   ];
 
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
@@ -49,7 +55,7 @@ const LanguageSwitcher = ({ className = '' }) => {
           </svg>
         </button>
 
-        <div className="absolute right-0 z-50 mt-1 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out">
+        <div className="absolute right-0 z-50 mt-1 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out max-h-80 overflow-y-auto">
           <div className="py-1" role="menu" aria-orientation="vertical">
             {languages.map((language) => (
               <button
