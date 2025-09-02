@@ -72,6 +72,8 @@ from heritage_recipes_service import HeritageRecipesService
 from heritage_recipes_api import create_heritage_recipes_router
 from smart_cooking_tool import SmartCookingToolService
 from smart_cooking_api import create_smart_cooking_router
+from transaction_verification_system import TransactionVerificationService
+from transaction_verification_api import create_transaction_verification_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
