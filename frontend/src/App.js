@@ -159,6 +159,11 @@ const LoginPage = () => {
 
   return (
     <div className="landing-page flex items-center justify-center px-4">
+      {/* Language Switcher for Login Page */}
+      <div className="absolute top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
+      
       {/* Animated Background Elements */}
       <div className="fume-container">
         <div className="fume"></div>
