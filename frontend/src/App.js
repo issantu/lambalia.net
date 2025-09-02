@@ -3553,32 +3553,27 @@ const ContactPage = () => {
     setSubmitting(true);
     
     try {
-      // In a real implementation, this would send to your feedback collection API
-      const feedbackData = {
-        ...feedbackForm,
-        timestamp: new Date().toISOString(),
-        user_id: user?.id,
-        platform_version: '1.0',
-        browser: navigator.userAgent,
-        url: window.location.href
-      };
+      // Submit to actual feedback API
+      const response = await axios.post(`${API}/feedback/submit`, feedbackForm);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      console.log('Feedback submitted:', feedbackData);
-      setSubmitted(true);
-      
-      // Reset form
-      setFeedbackForm({
-        ...feedbackForm,
-        subject: '',
-        message: '',
-        rating: 5
-      });
+      if (response.data.success) {
+        setSubmitted(true);
+        console.log('Feedback submitted successfully:', response.data);
+        
+        // Reset form
+        setFeedbackForm({
+          ...feedbackForm,
+          subject: '',
+          message: '',
+          rating: 5
+        });
+      } else {
+        throw new Error('Feedback submission failed');
+      }
       
     } catch (error) {
-      alert('Failed to submit feedback. Please try again.');
+      console.error('Feedback submission error:', error);
+      alert('Failed to submit feedback. Please try again or contact support directly.');
     }
     
     setSubmitting(false);
