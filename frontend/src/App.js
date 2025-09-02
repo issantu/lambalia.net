@@ -1921,6 +1921,646 @@ const HomeRestaurantPage = () => {
   );
 };
 
+// Vendor Conversion Hub Component
+const VendorConversionHub = () => {
+  const [activeVendorTab, setActiveVendorTab] = useState('overview');
+  const [showApplicationForm, setShowApplicationForm] = useState(null);
+
+  const vendorTabs = [
+    { id: 'overview', title: 'Start Earning', icon: 'Dollar' },
+    { id: 'home-restaurant', title: 'Home Restaurant Training', icon: 'Restaurant' },
+    { id: 'quick-eats', title: 'Quick Eats Training', icon: 'Utensils' },
+    { id: 'delivery', title: 'Delivery Partner', icon: 'Truck' },
+    { id: 'applications', title: 'My Applications', icon: 'FileText' }
+  ];
+
+  const renderOverview = () => (
+    <div className="space-y-8">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white p-8 rounded-xl">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold mb-4">Transform Your Kitchen Into Income</h2>
+          <p className="text-xl mb-6 text-green-100">
+            Today you eat somewhere, tomorrow someone eats at your place. Turn your passion into profit!
+          </p>
+          <div className="grid md:grid-cols-3 gap-6 mt-8">
+            <div className="bg-white bg-opacity-20 p-6 rounded-lg">
+              <Icon name="Restaurant" size={32} className="text-white mx-auto mb-3" />
+              <h3 className="font-bold text-lg mb-2">Home Restaurant</h3>
+              <p className="text-sm text-green-100">Host intimate dining experiences</p>
+              <p className="text-green-200 font-semibold mt-2">$50-200 per person</p>
+            </div>
+            <div className="bg-white bg-opacity-20 p-6 rounded-lg">
+              <Icon name="Utensils" size={32} className="text-white mx-auto mb-3" />
+              <h3 className="font-bold text-lg mb-2">Quick Eats</h3>
+              <p className="text-sm text-green-100">Fast, authentic meals on-demand</p>
+              <p className="text-green-200 font-semibold mt-2">$8-25 per order</p>
+            </div>
+            <div className="bg-white bg-opacity-20 p-6 rounded-lg">
+              <Icon name="Truck" size={32} className="text-white mx-auto mb-3" />
+              <h3 className="font-bold text-lg mb-2">Delivery Partner</h3>
+              <p className="text-sm text-green-100">Deliver meals in your area</p>
+              <p className="text-green-200 font-semibold mt-2">$15-30 per hour</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-green-500">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <Icon name="Restaurant" size={24} className="text-green-600 mr-3" />
+            Home Restaurant Host
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Create authentic dining experiences in your home. Perfect for special occasions and cultural sharing.
+          </p>
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Icon name="CheckCircle" size={16} className="text-green-500 mr-2" />
+              <span>Earn $50-200 per person</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Icon name="CheckCircle" size={16} className="text-green-500 mr-2" />
+              <span>Flexible scheduling</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Icon name="CheckCircle" size={16} className="text-green-500 mr-2" />
+              <span>Cultural preservation</span>
+            </div>
+          </div>
+          <div className="flex space-x-3">
+            <button
+              onClick={() => setActiveVendorTab('home-restaurant')}
+              className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium"
+            >
+              View Training
+            </button>
+            <button
+              onClick={() => setShowApplicationForm('home-restaurant')}
+              className="flex-1 bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-lg font-medium"
+            >
+              Apply Now
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-blue-500">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <Icon name="Utensils" size={24} className="text-blue-600 mr-3" />
+            Quick Eats Provider
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Serve fast, authentic meals for busy people. The modern food truck without the truck!
+          </p>
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center text-sm text-gray-600">
+              <Icon name="CheckCircle" size={16} className="text-blue-500 mr-2" />
+              <span>Earn $8-25 per order</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Icon name="CheckCircle" size={16} className="text-blue-500 mr-2" />
+              <span>High volume potential</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <Icon name="CheckCircle" size={16} className="text-blue-500 mr-2" />
+              <span>Daily earning opportunities</span>
+            </div>
+          </div>
+          <div className="flex space-x-3">
+            <button
+              onClick={() => setActiveVendorTab('quick-eats')}
+              className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium"
+            >
+              View Training
+            </button>
+            <button
+              onClick={() => setShowApplicationForm('quick-eats')}
+              className="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium"
+            >
+              Apply Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Success Stories */}
+      <div className="bg-gray-50 p-6 rounded-lg">
+        <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">Success Stories</h3>
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <div className="text-center mb-3">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-green-600 font-bold">M</span>
+              </div>
+              <h4 className="font-semibold">Maria</h4>
+              <p className="text-sm text-gray-600">Mexican Home Restaurant</p>
+            </div>
+            <p className="text-sm text-gray-700">
+              "Started hosting family dinners and now earn $3,200/month sharing our traditions!"
+            </p>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <div className="text-center mb-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-blue-600 font-bold">A</span>
+              </div>
+              <h4 className="font-semibold">Ahmed</h4>
+              <p className="text-sm text-gray-600">Middle Eastern Quick Eats</p>
+            </div>
+            <p className="text-sm text-gray-700">
+              "Quick shawarma and falafel orders helped me earn $2,800 last month!"
+            </p>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <div className="text-center mb-3">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-purple-600 font-bold">K</span>
+              </div>
+              <h4 className="font-semibold">Kenji</h4>
+              <p className="text-sm text-gray-600">Japanese Delivery Partner</p>
+            </div>
+            <p className="text-sm text-gray-700">
+              "Perfect part-time income! $1,800/month delivering authentic meals."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Getting Started Steps */}
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">Getting Started is Easy</h3>
+        <div className="grid md:grid-cols-4 gap-6">
+          <div className="text-center">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span className="text-green-600 font-bold">1</span>
+            </div>
+            <h4 className="font-medium mb-2">Choose Your Path</h4>
+            <p className="text-sm text-gray-600">Select from Home Restaurant, Quick Eats, or Delivery Partner</p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span className="text-blue-600 font-bold">2</span>
+            </div>
+            <h4 className="font-medium mb-2">Complete Training</h4>
+            <p className="text-sm text-gray-600">Learn best practices, safety, and success strategies</p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span className="text-purple-600 font-bold">3</span>
+            </div>
+            <h4 className="font-medium mb-2">Submit Application</h4>
+            <p className="text-sm text-gray-600">Apply for certification with our guided process</p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span className="text-orange-600 font-bold">4</span>
+            </div>
+            <h4 className="font-medium mb-2">Start Earning</h4>
+            <p className="text-sm text-gray-600">Get certified and begin your vendor journey</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderApplications = () => (
+    <div className="space-y-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">My Vendor Applications</h2>
+        <p className="text-gray-600">Track your certification progress and application status</p>
+      </div>
+
+      <div className="grid gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-yellow-500">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Home Restaurant Host</h3>
+              <p className="text-sm text-gray-600">Application submitted 3 days ago</p>
+            </div>
+            <span className="bg-yellow-100 text-yellow-800 text-sm px-3 py-1 rounded-full">
+              Under Review
+            </span>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center text-sm">
+              <Icon name="CheckCircle" size={16} className="text-green-500 mr-2" />
+              <span>Training completed</span>
+            </div>
+            <div className="flex items-center text-sm">
+              <Icon name="CheckCircle" size={16} className="text-green-500 mr-2" />
+              <span>Application submitted</span>
+            </div>
+            <div className="flex items-center text-sm">
+              <Icon name="Clock" size={16} className="text-yellow-500 mr-2" />
+              <span>Background check in progress</span>
+            </div>
+            <div className="flex items-center text-sm">
+              <Icon name="Clock" size={16} className="text-gray-400 mr-2" />
+              <span>Final approval pending</span>
+            </div>
+          </div>
+          <div className="mt-4 bg-gray-50 p-3 rounded-lg">
+            <p className="text-sm text-gray-600">
+              <strong>Next step:</strong> Our team will contact you within 2-3 business days for kitchen inspection.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-gray-300">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Quick Eats Provider</h3>
+              <p className="text-sm text-gray-600">Not started</p>
+            </div>
+            <span className="bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full">
+              Available
+            </span>
+          </div>
+          <p className="text-gray-600 mb-4">Complete the Quick Eats training to unlock this opportunity.</p>
+          <button
+            onClick={() => setActiveVendorTab('quick-eats')}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >
+            Start Training
+          </button>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-gray-300">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Delivery Partner</h3>
+              <p className="text-sm text-gray-600">Not started</p>
+            </div>
+            <span className="bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full">
+              Available
+            </span>
+          </div>
+          <p className="text-gray-600 mb-4">Join our delivery network and start earning immediately.</p>
+          <button
+            onClick={() => setShowApplicationForm('delivery')}
+            className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg"
+          >
+            Apply Now
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+        <h3 className="text-lg font-semibold text-blue-800 mb-3">💡 Pro Tip</h3>
+        <p className="text-blue-700 text-sm">
+          You can apply for multiple vendor types! Many successful vendors combine Home Restaurant hosting 
+          with Quick Eats to maximize their earning potential. Start with one, master it, then expand.
+        </p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Vendor Hub Navigation */}
+      <div className="bg-white rounded-lg shadow-lg">
+        <div className="flex flex-wrap justify-center border-b">
+          {vendorTabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveVendorTab(tab.id)}
+              className={`flex items-center space-x-2 px-4 py-3 border-b-2 transition-colors ${
+                activeVendorTab === tab.id
+                  ? 'border-green-500 text-green-600 bg-green-50'
+                  : 'border-transparent text-gray-600 hover:text-green-600 hover:bg-gray-50'
+              }`}
+            >
+              <Icon name={tab.icon} size={16} />
+              <span className="font-medium">{tab.title}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeVendorTab === 'overview' && renderOverview()}
+      {activeVendorTab === 'home-restaurant' && <HomeRestaurantTraining />}
+      {activeVendorTab === 'quick-eats' && <QuickEatsTraining />}
+      {activeVendorTab === 'delivery' && <DeliveryPartnerInfo />}
+      {activeVendorTab === 'applications' && renderApplications()}
+
+      {/* Application Forms Modal */}
+      {showApplicationForm && (
+        <VendorApplicationModal 
+          type={showApplicationForm} 
+          onClose={() => setShowApplicationForm(null)} 
+        />
+      )}
+    </div>
+  );
+};
+
+// Delivery Partner Info Component
+const DeliveryPartnerInfo = () => (
+  <div className="space-y-6">
+    <div className="text-center mb-8">
+      <Icon name="Truck" size={48} className="text-purple-600 mx-auto mb-4" />
+      <h2 className="text-2xl font-bold text-gray-800">Delivery Partner Program</h2>
+      <p className="text-gray-600">Earn money delivering authentic meals in your area</p>
+    </div>
+
+    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-8 rounded-xl">
+      <h3 className="text-xl font-semibold text-purple-800 mb-6 text-center">Why Join Our Delivery Network?</h3>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <div className="flex items-start space-x-3">
+            <Icon name="Dollar" size={20} className="text-green-600 mt-1" />
+            <div>
+              <h4 className="font-semibold text-gray-800">Competitive Pay</h4>
+              <p className="text-sm text-gray-600">$15-30 per hour including tips and bonuses</p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-3">
+            <Icon name="Clock" size={20} className="text-blue-600 mt-1" />
+            <div>
+              <h4 className="font-semibold text-gray-800">Flexible Schedule</h4>
+              <p className="text-sm text-gray-600">Work when you want, as much as you want</p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-3">
+            <Icon name="MapPin" size={20} className="text-red-600 mt-1" />
+            <div>
+              <h4 className="font-semibold text-gray-800">Local Focus</h4>
+              <p className="text-sm text-gray-600">Short delivery distances, know your community</p>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-start space-x-3">
+            <Icon name="Community" size={20} className="text-purple-600 mt-1" />
+            <div>
+              <h4 className="font-semibold text-gray-800">Cultural Impact</h4>
+              <p className="text-sm text-gray-600">Help preserve food traditions in your community</p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-3">
+            <Icon name="Star" size={20} className="text-yellow-600 mt-1" />
+            <div>
+              <h4 className="font-semibold text-gray-800">Quality Products</h4>
+              <p className="text-sm text-gray-600">Deliver authentic, homemade meals people love</p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-3">
+            <Icon name="Shield" size={20} className="text-green-600 mt-1" />
+            <div>
+              <h4 className="font-semibold text-gray-800">Full Support</h4>
+              <p className="text-sm text-gray-600">Insurance, equipment, and 24/7 support included</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-8">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Requirements</h3>
+        <div className="space-y-3">
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-green-500 mr-3" />
+            <span>Valid driver's license</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-green-500 mr-3" />
+            <span>Reliable vehicle (car, bike, or scooter)</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-green-500 mr-3" />
+            <span>Smartphone with GPS</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-green-500 mr-3" />
+            <span>Age 18+ with clean driving record</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-green-500 mr-3" />
+            <span>Pass background check</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">What We Provide</h3>
+        <div className="space-y-3">
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-blue-500 mr-3" />
+            <span>Insulated delivery bags</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-blue-500 mr-3" />
+            <span>Mobile app for easy order management</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-blue-500 mr-3" />
+            <span>Liability insurance coverage</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-blue-500 mr-3" />
+            <span>24/7 driver support hotline</span>
+          </div>
+          <div className="flex items-center text-sm">
+            <Icon name="CheckCircle" size={16} className="text-blue-500 mr-3" />
+            <span>Weekly earnings statements</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-white p-6 rounded-lg shadow-lg">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Typical Earnings</h3>
+      <div className="grid md:grid-cols-3 gap-6 text-center">
+        <div className="bg-green-50 p-4 rounded-lg">
+          <div className="text-2xl font-bold text-green-600">$18/hour</div>
+          <div className="text-sm text-gray-600">Part-time (10-20 hours/week)</div>
+          <div className="text-xs text-gray-500 mt-1">Including tips</div>
+        </div>
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="text-2xl font-bold text-blue-600">$22/hour</div>
+          <div className="text-sm text-gray-600">Full-time (30-40 hours/week)</div>
+          <div className="text-xs text-gray-500 mt-1">Including bonuses</div>
+        </div>
+        <div className="bg-purple-50 p-4 rounded-lg">
+          <div className="text-2xl font-bold text-purple-600">$28/hour</div>
+          <div className="text-sm text-gray-600">Peak hours & weekends</div>
+          <div className="text-xs text-gray-500 mt-1">High demand periods</div>
+        </div>
+      </div>
+    </div>
+
+    <div className="text-center">
+      <button className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-semibold">
+        Apply to Become a Delivery Partner
+      </button>
+      <p className="text-sm text-gray-600 mt-2">Application takes 5 minutes • Start earning within 48 hours</p>
+    </div>
+  </div>
+);
+
+// Vendor Application Modal Component
+const VendorApplicationModal = ({ type, onClose }) => {
+  const [formData, setFormData] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      alert(`${type.replace('-', ' ')} application submitted successfully!`);
+      onClose();
+    } catch (error) {
+      alert('Application submission failed. Please try again.');
+    }
+    setSubmitting(false);
+  };
+
+  const getFormContent = () => {
+    switch (type) {
+      case 'home-restaurant':
+        return {
+          title: 'Home Restaurant Host Application',
+          description: 'Start hosting authentic dining experiences in your home',
+          fields: [
+            { name: 'legal_name', label: 'Legal Name', type: 'text', required: true },
+            { name: 'phone_number', label: 'Phone Number', type: 'tel', required: true },
+            { name: 'address', label: 'Home Address', type: 'text', required: true },
+            { name: 'dining_capacity', label: 'Maximum Guests', type: 'select', options: [2,4,6,8,10,12,15,20], required: true },
+            { name: 'cuisine_specialties', label: 'Cuisine Specialties', type: 'textarea', placeholder: 'e.g., Italian, Mexican, Thai...' },
+            { name: 'years_cooking_experience', label: 'Years of Cooking Experience', type: 'number', min: 0 }
+          ]
+        };
+      case 'quick-eats':
+        return {
+          title: 'Quick Eats Provider Application',
+          description: 'Provide fast, authentic meals for busy customers',
+          fields: [
+            { name: 'legal_name', label: 'Legal Name', type: 'text', required: true },
+            { name: 'phone_number', label: 'Phone Number', type: 'tel', required: true },
+            { name: 'kitchen_address', label: 'Kitchen Address', type: 'text', required: true },
+            { name: 'service_radius', label: 'Service Radius (km)', type: 'number', min: 1, max: 25 },
+            { name: 'menu_items', label: 'Sample Menu Items', type: 'textarea', placeholder: 'List 5-10 items you plan to offer...' },
+            { name: 'daily_capacity', label: 'Daily Order Capacity', type: 'number', min: 5, max: 200 }
+          ]
+        };
+        case 'delivery':
+        return {
+          title: 'Delivery Partner Application',
+          description: 'Join our delivery network and start earning today',
+          fields: [
+            { name: 'legal_name', label: 'Legal Name', type: 'text', required: true },
+            { name: 'phone_number', label: 'Phone Number', type: 'tel', required: true },
+            { name: 'email', label: 'Email Address', type: 'email', required: true },
+            { name: 'vehicle_type', label: 'Vehicle Type', type: 'select', options: ['Car', 'Motorcycle', 'Bicycle', 'Scooter'], required: true },
+            { name: 'license_number', label: 'Driver License Number', type: 'text', required: true },
+            { name: 'service_areas', label: 'Preferred Service Areas', type: 'textarea', placeholder: 'List neighborhoods or zip codes...' },
+            { name: 'availability', label: 'Availability', type: 'textarea', placeholder: 'Days and hours you can work...' }
+          ]
+        };
+      default:
+        return { title: 'Application', description: '', fields: [] };
+    }
+  };
+
+  const form = getFormContent();
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">{form.title}</h3>
+              <p className="text-gray-600">{form.description}</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <Icon name="X" size={24} />
+            </button>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {form.fields.map((field) => (
+            <div key={field.name}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {field.label} {field.required && '*'}
+              </label>
+              {field.type === 'select' ? (
+                <select
+                  name={field.name}
+                  required={field.required}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="">Select...</option>
+                  {field.options.map((option) => (
+                    <option key={option} value={option}>
+                      {typeof option === 'number' ? `${option}` : option}
+                    </option>
+                  ))}
+                </select>
+              ) : field.type === 'textarea' ? (
+                <textarea
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  rows="3"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              ) : (
+                <input
+                  type={field.type}
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  min={field.min}
+                  max={field.max}
+                  required={field.required}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              )}
+            </div>
+          ))}
+
+          <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+            <h4 className="font-medium text-yellow-800 mb-2">Next Steps</h4>
+            <ul className="text-sm text-yellow-700 space-y-1">
+              <li>• Application review within 3-5 business days</li>
+              <li>• Background check and verification</li>
+              <li>• Kitchen inspection (for food services)</li>
+              <li>• Final approval and account activation</li>
+            </ul>
+          </div>
+
+          <div className="flex space-x-4 pt-4">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+            >
+              {submitting ? 'Submitting...' : 'Submit Application'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 // Enhanced Profile Page with Monetization Features and Vendor Conversion Hub
 const ProfilePage = () => {
   const { user } = useAuth();
