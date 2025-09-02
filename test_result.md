@@ -184,6 +184,17 @@ backend:
         comment: "COMPREHENSIVE TESTING PASSED: All API endpoints integration working perfectly. ✅ Global dishes unified endpoint (GET /api/heritage/global-dishes) ✅ All 6 cuisine-specific endpoints working ✅ Legacy endpoint maintained for backward compatibility ✅ Enhanced authentication endpoints (11 endpoints) all functional ✅ All endpoints return proper JSON responses ✅ Authentication and authorization working correctly ✅ API integration seamless and production-ready."
 
 frontend:
+  - task: "Vendor Conversion Hub Integration"
+    implemented: false
+    working: false
+    file: "App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Starting integration of HomeRestaurantTraining and QuickEatsTraining components into user account/profile area. Creating comprehensive vendor conversion system accessible to subscribed users with training documents, application forms for Home Restaurant, Quick Eats, and Delivery Partner certifications."
   - task: "Registration Form Enhancement for Global Dishes"
     implemented: false
     working: false
