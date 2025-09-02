@@ -39,7 +39,7 @@ const LanguageSwitcher = ({ className = '' }) => {
   };
 
   return (
-    <div className={`relative inline-block text-left ${className}`}>
+    <div className={`relative inline-block text-left ${className}`} style={{ zIndex: 1000 }}>
       <div className="group">
         <button
           type="button"
@@ -55,7 +55,15 @@ const LanguageSwitcher = ({ className = '' }) => {
           </svg>
         </button>
 
-        <div className="absolute right-0 z-[9999] mt-1 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out max-h-80 overflow-y-auto" style={{ zIndex: 9999 }}>
+        <div 
+          className="absolute right-0 mt-1 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out max-h-80 overflow-y-auto" 
+          style={{ 
+            zIndex: 9999,
+            position: 'absolute',
+            top: '100%',
+            right: 0
+          }}
+        >
           <div className="py-1" role="menu" aria-orientation="vertical">
             {languages.map((language) => (
               <button
