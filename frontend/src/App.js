@@ -10,6 +10,8 @@ import CharityProgramPage from './CharityProgram';
 import LambaliaEatsApp from './LambaliaEats';
 import { Icon, AnimatedIcon } from './components/ProfessionalIcons';
 import SmartCookingTool from './components/SmartCookingTool';
+import HomeRestaurantTraining from './components/HomeRestaurantTraining';
+import QuickEatsTraining from './components/QuickEatsTraining';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
