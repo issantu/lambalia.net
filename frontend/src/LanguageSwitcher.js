@@ -55,7 +55,7 @@ const LanguageSwitcher = ({ className = '' }) => {
           </svg>
         </button>
 
-        <div className="absolute right-0 z-50 mt-1 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out max-h-80 overflow-y-auto">
+        <div className="absolute right-0 z-[9999] mt-1 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out max-h-80 overflow-y-auto" style={{ zIndex: 9999 }}>
           <div className="py-1" role="menu" aria-orientation="vertical">
             {languages.map((language) => (
               <button
