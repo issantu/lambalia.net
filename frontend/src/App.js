@@ -1921,11 +1921,12 @@ const HomeRestaurantPage = () => {
   );
 };
 
-// Enhanced Profile Page with Monetization Features
+// Enhanced Profile Page with Monetization Features and Vendor Conversion Hub
 const ProfilePage = () => {
   const { user } = useAuth();
   const [userSnippets, setUserSnippets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeProfileTab, setActiveProfileTab] = useState('overview');
   const [earnings, setEarnings] = useState({
     communication: 145.80,
     homeRestaurant: 890.50,
