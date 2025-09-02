@@ -2057,86 +2057,124 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Revenue Dashboard */}
-      <div className="revenue-dashboard mb-8">
-        <h2 className="text-2xl font-bold mb-4">💰 Your Earnings Dashboard</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          <div className="revenue-item">
-            <div>
-              <p className="text-sm opacity-90">Communication Fees</p>
-              <p className="text-xs opacity-75">Messages, calls, video</p>
-            </div>
-            <div className="revenue-amount">${earnings.communication}</div>
-          </div>
-          <div className="revenue-item">
-            <div>
-              <p className="text-sm opacity-90">Home Restaurant</p>
-              <p className="text-xs opacity-75">Dining experiences</p>
-            </div>
-            <div className="revenue-amount">${earnings.homeRestaurant}</div>
-          </div>
-          <div className="revenue-item">
-            <div>
-              <p className="text-sm opacity-90">Grocery Commissions</p>
-              <p className="text-xs opacity-75">Ingredient sales</p>
-            </div>
-            <div className="revenue-amount">${earnings.groceryCommissions}</div>
-          </div>
-          <div className="revenue-item">
-            <div>
-              <p className="text-sm opacity-90">Ad Revenue</p>
-              <p className="text-xs opacity-75">Recipe page ads</p>
-            </div>
-            <div className="revenue-amount">${earnings.adRevenue}</div>
-          </div>
-        </div>
-        <div className="text-center">
-          <p className="text-xl font-bold">Total Monthly Earnings: ${totalEarnings.toFixed(2)}</p>
-          <button className="btn-secondary mt-3 px-6 py-2">💳 Withdraw Earnings</button>
-        </div>
-      </div>
-
-      {/* Ad Placement */}
-      <AdComponent placement="profile" />
-
-      {/* Snippets Playlist */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-800">My Recipe Snippets Playlist</h2>
-          <Link
-            to="/create-snippet"
-            className="btn-primary px-4 py-2 rounded-lg"
-          >
-            Create New Snippet ✨
-          </Link>
-        </div>
-        <p className="text-gray-600 mt-2">Your snippets are displayed in playlist order for easy viewing</p>
-      </div>
-      
-      {loading ? (
-        <div className="flex justify-center items-center h-32">
-          <div className="loading text-4xl">⏳</div>
-        </div>
-      ) : userSnippets.length === 0 ? (
-        <div className="text-center py-12 glass">
-          <p className="text-gray-500 mb-4 text-lg">You haven't created any snippets yet.</p>
-          <Link
-            to="/create-snippet"
-            className="btn-primary px-6 py-3 rounded-lg text-lg"
-          >
-            Create Your First Snippet 🚀
-          </Link>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {userSnippets.map((snippet, index) => (
-            <SnippetCard key={snippet.id} snippet={snippet} playlistIndex={index} />
+      {/* Profile Navigation Tabs */}
+      <div className="bg-white rounded-lg shadow-lg mb-8">
+        <div className="flex flex-wrap justify-center border-b">
+          {[
+            { id: 'overview', title: 'Overview', icon: 'Profile' },
+            { id: 'vendor-hub', title: 'Become a Vendor', icon: 'Restaurant' },
+            { id: 'snippets', title: 'My Snippets', icon: 'Recipe' },
+            { id: 'earnings', title: 'Earnings', icon: 'Dollar' }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveProfileTab(tab.id)}
+              className={`flex items-center space-x-2 px-4 py-3 border-b-2 transition-colors ${
+                activeProfileTab === tab.id
+                  ? 'border-green-500 text-green-600 bg-green-50'
+                  : 'border-transparent text-gray-600 hover:text-green-600 hover:bg-gray-50'
+              }`}
+            >
+              <Icon name={tab.icon} size={16} />
+              <span className="font-medium">{tab.title}</span>
+            </button>
           ))}
         </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeProfileTab === 'overview' && (
+        <>
+          {/* Revenue Dashboard */}
+          <div className="revenue-dashboard mb-8">
+            <h2 className="text-2xl font-bold mb-4">💰 Your Earnings Dashboard</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <div className="revenue-item">
+                <div>
+                  <p className="text-sm opacity-90">Communication Fees</p>
+                  <p className="text-xs opacity-75">Messages, calls, video</p>
+                </div>
+                <div className="revenue-amount">${earnings.communication}</div>
+              </div>
+              <div className="revenue-item">
+                <div>
+                  <p className="text-sm opacity-90">Home Restaurant</p>
+                  <p className="text-xs opacity-75">Dining experiences</p>
+                </div>
+                <div className="revenue-amount">${earnings.homeRestaurant}</div>
+              </div>
+              <div className="revenue-item">
+                <div>
+                  <p className="text-sm opacity-90">Grocery Commissions</p>
+                  <p className="text-xs opacity-75">Ingredient sales</p>
+                </div>
+                <div className="revenue-amount">${earnings.groceryCommissions}</div>
+              </div>
+              <div className="revenue-item">
+                <div>
+                  <p className="text-sm opacity-90">Ad Revenue</p>
+                  <p className="text-xs opacity-75">Recipe page ads</p>
+                </div>
+                <div className="revenue-amount">${earnings.adRevenue}</div>
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-xl font-bold">Total Monthly Earnings: ${totalEarnings.toFixed(2)}</p>
+              <button className="btn-secondary mt-3 px-6 py-2">💳 Withdraw Earnings</button>
+            </div>
+          </div>
+
+          {/* Ad Placement */}
+          <AdComponent placement="profile" />
+        </>
       )}
 
-      {/* Ad between snippets */}
-      {userSnippets.length > 2 && <AdComponent placement="between-snippets" />}
+      {activeProfileTab === 'vendor-hub' && <VendorConversionHub />}
+      
+      {activeProfileTab === 'snippets' && (
+        <>
+          {/* Snippets Playlist */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-800">My Recipe Snippets Playlist</h2>
+              <Link
+                to="/create-snippet"
+                className="btn-primary px-4 py-2 rounded-lg"
+              >
+                Create New Snippet ✨
+              </Link>
+            </div>
+            <p className="text-gray-600 mt-2">Your snippets are displayed in playlist order for easy viewing</p>
+          </div>
+          
+          {loading ? (
+            <div className="flex justify-center items-center h-32">
+              <div className="loading text-4xl">⏳</div>
+            </div>
+          ) : userSnippets.length === 0 ? (
+            <div className="text-center py-12 glass">
+              <p className="text-gray-500 mb-4 text-lg">You haven't created any snippets yet.</p>
+              <Link
+                to="/create-snippet"
+                className="btn-primary px-6 py-3 rounded-lg text-lg"
+              >
+                Create Your First Snippet 🚀
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {userSnippets.map((snippet, index) => (
+                <SnippetCard key={snippet.id} snippet={snippet} playlistIndex={index} />
+              ))}
+            </div>
+          )}
+
+          {/* Ad between snippets */}
+          {userSnippets.length > 2 && <AdComponent placement="between-snippets" />}
+        </>
+      )}
+
+      {activeProfileTab === 'earnings' && <UserEarningsDashboard />}
     </div>
   );
 };
