@@ -384,101 +384,97 @@ const Header = () => {
       <header className="nav-header shadow-lg border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo and Navigation */}
-            <div className="flex items-center space-x-8">
+            {/* Logo Section */}
+            <div className="flex items-center space-x-4">
               <Link to="/" className="flex items-center space-x-3 group">
                 <img 
                   src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
                   alt="Lambalia - Global Heritage Recipes" 
-                  className="w-12 h-12 transition-transform group-hover:scale-110 drop-shadow-md"
+                  className="w-10 h-10 transition-transform group-hover:scale-110 drop-shadow-md"
                 />
-                <h1 className="text-2xl font-bold heading-gradient">Lambalia</h1>
+                <h1 className="text-xl font-bold heading-gradient">Lambalia</h1>
+              </Link>
+            </div>
+            
+            {/* Main Navigation */}
+            <nav className="hidden lg:flex items-center space-x-1">
+              {/* Smart Cooking Tool - Prominent but not overwhelming */}
+              <button
+                onClick={() => setShowSmartCooking(true)}
+                className="nav-link bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center space-x-1.5 shadow-md"
+              >
+                <AnimatedIcon name="SmartCooking" size={16} className="text-white" />
+                <span>Smart Cook</span>
+                <span className="bg-white bg-opacity-20 px-1.5 py-0.5 rounded-full text-xs">$2.99</span>
+              </button>
+              
+              <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
+                <Icon name="Browse" size={14} className="text-gray-600" />
+                <span>{t('nav.browse')}</span>
               </Link>
               
-              <nav className="hidden md:flex space-x-1">
-                {/* Smart Cooking Tool - Premium Position */}
-                <button
-                  onClick={() => setShowSmartCooking(true)}
-                  className="nav-link bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2 shadow-lg"
-                >
-                  <AnimatedIcon name="SmartCooking" size={18} className="text-white" />
-                  <span>Smart Cooking</span>
-                  <span className="bg-white bg-opacity-20 px-2 py-0.5 rounded-full text-xs">$2.99</span>
-                </button>
-                
-                <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Browse" size={16} className="text-gray-600" />
-                  <span>{t('nav.browse')}</span>
-                </Link>
-                
-                <Link to="/create-snippet" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Create" size={16} className="text-gray-600" />
-                  <span>{t('nav.create')}</span>
-                </Link>
-                
-                <Link to="/grocery" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Store" size={16} className="text-gray-600" />
-                  <span>{t('nav.ingredients')}</span>
-                </Link>
-                
-                <Link to="/home-restaurant" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Restaurant" size={16} className="text-gray-600" />
-                  <span>{t('nav.restaurant')}</span>
-                </Link>
-                
-                <Link to="/local-marketplace" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Marketplace" size={16} className="text-gray-600" />
-                  <span>{t('nav.marketplace')}</span>
-                </Link>
-                
-                <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Heart" size={16} className="text-gray-600" />
-                  <span>{t('nav.charity')}</span>
-                </Link>
-                
-                <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Utensils" size={16} className="text-gray-600" />
-                  <span>{t('nav.eats')}</span>
-                </Link>
-                
-                <Link to="/about" className="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Heritage" size={16} className="text-gray-600" />
-                  <span>About</span>
-                </Link>
-                
-                <Link to="/profile" className="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md font-medium flex items-center space-x-2">
-                  <Icon name="Profile" size={16} className="text-gray-600" />
-                  <span>{t('nav.profile')}</span>
-                </Link>
-              </nav>
-            </div>
+              <Link to="/create-snippet" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
+                <Icon name="Create" size={14} className="text-gray-600" />
+                <span>{t('nav.create')}</span>
+              </Link>
+              
+              <Link to="/grocery" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
+                <Icon name="Store" size={14} className="text-gray-600" />
+                <span className="hidden xl:inline">{t('nav.ingredients')}</span>
+                <span className="xl:hidden">Store</span>
+              </Link>
+              
+              <Link to="/home-restaurant" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
+                <Icon name="Restaurant" size={14} className="text-gray-600" />
+                <span className="hidden xl:inline">{t('nav.restaurant')}</span>
+                <span className="xl:hidden">Restaurant</span>
+              </Link>
+              
+              <Link to="/local-marketplace" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
+                <Icon name="Marketplace" size={14} className="text-gray-600" />
+                <span className="hidden xl:inline">{t('nav.marketplace')}</span>
+                <span className="xl:hidden">Market</span>
+              </Link>
+              
+              <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
+                <Icon name="Heart" size={14} className="text-gray-600" />
+                <span className="hidden xl:inline">{t('nav.charity')}</span>
+                <span className="xl:hidden">Charity</span>
+              </Link>
+              
+              <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
+                <Icon name="Utensils" size={14} className="text-gray-600" />
+                <span className="hidden xl:inline">{t('nav.eats')}</span>
+                <span className="xl:hidden">Eats</span>
+              </Link>
+            </nav>
 
-            {/* User actions and Language Switcher */}
-            <div className="flex items-center space-x-4">
+            {/* User Actions */}
+            <div className="flex items-center space-x-3">
               <LanguageSwitcher />
               
               {user ? (
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-700 flex items-center space-x-2">
-                    <Icon name="Profile" size={16} className="text-green-600" />
-                    <span>{t('common.welcome', { name: user.username || user.full_name })}</span>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-gray-700 flex items-center space-x-1.5">
+                    <Icon name="Profile" size={14} className="text-green-600" />
+                    <span className="hidden md:inline">{t('common.welcome', { name: user.username || user.full_name })}</span>
                   </span>
                   <button 
                     onClick={logout}
                     className="text-sm text-gray-500 hover:text-gray-700 flex items-center space-x-1"
                   >
-                    <Icon name="Settings" size={14} />
-                    <span>{t('auth.logout')}</span>
+                    <Icon name="Settings" size={12} />
+                    <span className="hidden md:inline">{t('auth.logout')}</span>
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
                   <Link to="/login" className="text-sm text-gray-700 hover:text-green-600 flex items-center space-x-1">
-                    <Icon name="Lock" size={14} />
+                    <Icon name="Lock" size={12} />
                     <span>{t('auth.login')}</span>
                   </Link>
-                  <Link to="/register" className="btn-primary px-4 py-2 rounded-md text-sm flex items-center space-x-2">
-                    <Icon name="Profile" size={14} className="text-white" />
+                  <Link to="/register" className="btn-primary px-3 py-1.5 rounded-md text-sm flex items-center space-x-1.5">
+                    <Icon name="Profile" size={12} className="text-white" />
                     <span>{t('auth.joinLambalia')}</span>
                   </Link>
                 </div>
