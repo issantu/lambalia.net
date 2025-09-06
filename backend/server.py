@@ -5224,6 +5224,109 @@ async def add_team_member(
         "added_by": user.get("email")
     }
 
+# =====================================================
+# LAMBALIA MARKET API ENDPOINTS
+# =====================================================
+
+@api_router.get("/lambalia-market/offers", response_model=List[MarketItemResponse])
+async def get_market_offers(
+    postal_code: Optional[str] = None,
+    radius_miles: float = 10
+):
+    """Get food offers by location"""
+    try:
+        offers = await lambalia_market_service.get_offers_by_location(postal_code, radius_miles)
+        return offers
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch offers: {str(e)}")
+
+@api_router.get("/lambalia-market/demands", response_model=List[MarketItemResponse])
+async def get_market_demands(
+    postal_code: Optional[str] = None,
+    radius_miles: float = 10
+):
+    """Get food demands by location"""
+    try:
+        demands = await lambalia_market_service.get_demands_by_location(postal_code, radius_miles)
+        return demands
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch demands: {str(e)}")
+
+@api_router.post("/lambalia-market/offers", response_model=MarketItemResponse)
+async def create_market_offer(
+    offer_data: MarketItemCreate,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create a new food offer"""
+    try:
+        # Get user info
+        user = await db.users.find_one({"id": current_user_id})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        user_name = user.get("full_name") or user.get("username") or "Anonymous"
+        offer = await lambalia_market_service.create_offer(current_user_id, user_name, offer_data)
+        return offer
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create offer: {str(e)}")
+
+@api_router.post("/lambalia-market/demands", response_model=MarketItemResponse)
+async def create_market_demand(
+    demand_data: MarketItemCreate,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create a new food demand"""
+    try:
+        # Get user info
+        user = await db.users.find_one({"id": current_user_id})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        user_name = user.get("full_name") or user.get("username") or "Anonymous"
+        demand = await lambalia_market_service.create_demand(current_user_id, user_name, demand_data)
+        return demand
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create demand: {str(e)}")
+
+@api_router.post("/lambalia-market/subscribe-to-offer", response_model=MarketSubscriptionResponse)
+async def subscribe_to_offer(
+    subscription_request: MarketSubscriptionRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Subscribe to a food offer (buy food)"""
+    try:
+        subscription = await lambalia_market_service.subscribe_to_offer(current_user_id, subscription_request)
+        return subscription
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to subscribe to offer: {str(e)}")
+
+@api_router.post("/lambalia-market/subscribe-to-demand", response_model=MarketSubscriptionResponse)
+async def subscribe_to_demand(
+    subscription_request: MarketSubscriptionRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Subscribe to a food demand (fulfill cooking request)"""
+    try:
+        subscription = await lambalia_market_service.subscribe_to_demand(current_user_id, subscription_request)
+        return subscription
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to subscribe to demand: {str(e)}")
+
+@api_router.get("/lambalia-market/dashboard", response_model=MarketDashboardResponse)
+async def get_market_dashboard(
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get user's market dashboard data"""
+    try:
+        dashboard = await lambalia_market_service.get_user_dashboard(current_user_id)
+        return dashboard
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch dashboard: {str(e)}")
+
 # Keep all existing routes from previous implementation
 # (Reference recipes, snippets, grocery, etc.)
 
