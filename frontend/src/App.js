@@ -8,6 +8,7 @@ import './App.css';
 import LocalMarketplacePage from './LocalMarketplace';
 import CharityProgramPage from './CharityProgram';
 import LambaliaEatsApp from './LambaliaEats';
+import LambaliaMarket from './LambaliaMarket';
 import { Icon, AnimatedIcon } from './components/ProfessionalIcons';
 import SmartCookingTool from './components/SmartCookingTool';
 import HomeRestaurantTraining from './components/HomeRestaurantTraining';
