@@ -8,7 +8,7 @@ from fastapi.security import HTTPBearer
 from typing import Dict, List, Optional
 import logging
 
-from .feedback_system import (
+from feedback_system import (
     feedback_service,
     FeedbackSubmission,
     FeedbackStatus,
