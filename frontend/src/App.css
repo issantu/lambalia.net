@@ -1,34 +1,578 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Enhanced Lambalia Platform Styles */
+.App {
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Dynamic Landing Page Background */
+.landing-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2d5016 0%, #5c9625 25%, #7cb342 50%, #4a7c1c 75%, #2e5217 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.landing-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(139, 195, 74, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(76, 175, 80, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(104, 159, 56, 0.25) 0%, transparent 50%);
+  animation: breathe 4s ease-in-out infinite;
 }
 
-.App-link {
-    color: #61dafb;
+@keyframes breathe {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Floating Fume Animation */
+.fume-container {
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 200px;
+  height: 300px;
+  pointer-events: none;
+}
+
+.fume {
+  position: absolute;
+  width: 6px;
+  height: 50px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1));
+  border-radius: 50px;
+  animation: fume-rise 3s ease-in-out infinite;
+}
+
+.fume:nth-child(1) {
+  left: 20px;
+  animation-delay: 0s;
+}
+
+.fume:nth-child(2) {
+  left: 40px;
+  animation-delay: 0.5s;
+}
+
+.fume:nth-child(3) {
+  left: 60px;
+  animation-delay: 1s;
+}
+
+.fume:nth-child(4) {
+  left: 80px;
+  animation-delay: 1.5s;
+}
+
+@keyframes fume-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-100px) scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-200px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Dynamic Shine Effect - Enhanced for New Logo */
+.logo-shine {
+  position: relative;
+  display: inline-block;
+  filter: drop-shadow(0 4px 8px rgba(218, 165, 32, 0.3));
+  transition: all 0.3s ease;
+}
+
+.logo-shine:hover {
+  filter: drop-shadow(0 6px 12px rgba(218, 165, 32, 0.4));
+  transform: scale(1.02);
+}
+
+.logo-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shine 4s infinite;
+  border-radius: 50%;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Heritage Logo Specific Enhancements */
+.heritage-logo {
+  background: radial-gradient(circle at center, rgba(218, 165, 32, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  padding: 8px;
+}
+
+.heritage-logo img {
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.heritage-logo:hover img {
+  transform: rotate(5deg) scale(1.05);
+}
+
+/* Enhanced Form Styling */
+.auth-form {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.auth-form:hover {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Navigation Improvements - Heritage Theme */
+.nav-header {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(218, 165, 32, 0.2);
+  box-shadow: 0 2px 8px rgba(218, 165, 32, 0.1);
+}
+
+.nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #7cb342 !important;
+  transform: translateY(-1px);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 50%;
+  background-color: #7cb342;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Enhanced Cards */
+.recipe-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.recipe-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradient Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #7cb342, #558b2f);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #8bc34a, #689f38);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124, 179, 66, 0.4);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #ff7043, #d84315);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #ff8a65, #e64a19);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 112, 67, 0.4);
+}
+
+/* Monetization Features Styling */
+.communication-tools {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.comm-tool {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.comm-tool.message {
+  background: linear-gradient(135deg, #25d366, #20b358);
+}
+
+.comm-tool.audio {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+}
+
+.comm-tool.video {
+  background: linear-gradient(135deg, #e91e63, #c2185b);
+}
+
+.comm-tool:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.comm-tool .price-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ffc107;
+  color: #000;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+/* Home Restaurant Feature */
+.home-restaurant {
+  background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+  color: white;
+  padding: 24px;
+  border-radius: 16px;
+  margin: 20px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-restaurant::before {
+  content: '🏠👩‍🍳';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  opacity: 0.7;
+}
+
+.home-restaurant h3 {
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.home-restaurant p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+/* Grocery Integration */
+.grocery-integration {
+  background: linear-gradient(135deg, #00bcd4, #0097a7);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+.grocery-store {
+  background: white;
+  color: #333;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grocery-store .store-logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.grocery-store .store-distance {
+  color: #666;
+  font-size: 12px;
+}
+
+.grocery-store .store-price {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+/* Ad Placement Styling */
+.ad-container {
+  background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+  color: #666;
+  position: relative;
+}
+
+.ad-container::before {
+  content: '📢 Ad Space';
+  font-size: 14px;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  color: #999;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .landing-page {
+    padding: 20px;
+  }
+  
+  .fume-container {
+    display: none;
+  }
+  
+  .communication-tools {
+    gap: 8px;
+  }
+  
+  .comm-tool {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .recipe-card {
+    margin-bottom: 16px;
+  }
+}
+
+/* Loading Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.loading {
+  animation: pulse 1.5s infinite;
+}
+
+/* Success Animations */
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success-message {
+  animation: bounce-in 0.5s ease-out;
+}
+
+/* Floating Action Button for Quick Actions */
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7cb342, #558b2f);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(124, 179, 66, 0.4);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(124, 179, 66, 0.6);
+}
+
+/* Enhanced Typography - Heritage Theme */
+.heading-gradient {
+  background: linear-gradient(135deg, #B8860B, #DAA520, #2e7d32);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+}
+
+/* Profile Enhancement */
+.profile-premium {
+  background: linear-gradient(135deg, #ffd700, #ffb300);
+  color: #333;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+.profile-premium h4 {
+  margin: 0 0 8px 0;
+}
+
+/* Kitchen Live Streaming */
+.live-kitchen {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.live-indicator {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ff0000;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+/* Enhanced Tooltips */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Text utility classes */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Glassmorphism effects */
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  color: white;
+}
+
+/* Revenue Dashboard */
+.revenue-dashboard {
+  background: linear-gradient(135deg, #4caf50, #388e3c);
+  color: white;
+  padding: 24px;
+  border-radius: 16px;
+  margin: 20px 0;
+}
+
+.revenue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.revenue-item:last-child {
+  border-bottom: none;
+}
+
+.revenue-amount {
+  font-weight: bold;
+  font-size: 18px;
 }
