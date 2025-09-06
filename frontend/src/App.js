@@ -5002,6 +5002,18 @@ function App() {
               } 
             />
             <Route 
+              path="/lambalia-market" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <LambaliaMarket />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/profile" 
               element={
                 <ProtectedRoute>
