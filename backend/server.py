@@ -2473,6 +2473,9 @@ smart_cooking_service = SmartCookingToolService(db)
 # Initialize Transaction Verification service
 transaction_verification_service = TransactionVerificationService(db)
 
+# Initialize Lambalia Market service
+lambalia_market_service = LambaliaMarketService(db)
+
 @api_router.post("/farm-vendors/apply", response_model=dict)
 async def apply_as_farm_vendor(
     application_data: FarmVendorApplicationRequest,
