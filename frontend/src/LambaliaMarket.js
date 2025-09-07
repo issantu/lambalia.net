@@ -458,7 +458,7 @@ const LambaliaMarket = () => {
             ) : (
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                  🥺 Food Demands in Your Area
+                  🥺 {t('lod.demandsInArea')}
                 </h2>
                 {demands.length > 0 ? (
                   demands.map(demand => (
