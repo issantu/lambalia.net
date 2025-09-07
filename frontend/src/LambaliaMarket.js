@@ -438,7 +438,7 @@ const LambaliaMarket = () => {
             {activeTab === 'offers' ? (
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                  🍽️ Available Food Offers Near You
+                  🍽️ {t('lod.availableFood')}
                 </h2>
                 {offers.length > 0 ? (
                   offers.map(offer => (
