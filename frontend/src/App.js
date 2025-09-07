@@ -5286,6 +5286,18 @@ function App() {
               } 
             />
             <Route 
+              path="/contact" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <ContactPage />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/profile" 
               element={
                 <ProtectedRoute>
