@@ -82,6 +82,7 @@ from lambalia_market_models import (
 )
 from grocery_ad_service import GroceryAdService, GroceryAd, GroceryStoreLocation
 from currency_exchange_service import CurrencyExchangeService, TransactionRecord, CommissionSummary
+from admin_dashboard_service import AdminDashboardService, DashboardMetrics, DashboardChartData
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
