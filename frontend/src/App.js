@@ -220,7 +220,7 @@ const LoginPage = () => {
         {isLogin ? (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.email')}</label>
               <input
                 type="email"
                 value={email}
@@ -230,7 +230,7 @@ const LoginPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.password')}</label>
               <input
                 type="password"
                 value={password}
@@ -243,7 +243,7 @@ const LoginPage = () => {
               type="submit"
               className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
             >
-              Enter Your Kitchen 👩‍🍳
+              {t('auth.loginButton')}
             </button>
           </form>
         ) : (
