@@ -5350,6 +5350,73 @@ async def get_market_dashboard(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch dashboard: {str(e)}")
 
+# AUTOMATED GROCERY STORE ADS ROUTES - MONETIZATION
+
+@api_router.get("/grocery-ads/contextual", response_model=List[dict])
+async def get_contextual_grocery_ads(
+    postal_code: str,
+    ingredients: Optional[str] = None,
+    placement: str = "banner",
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get contextual grocery store ads based on user location and recipe ingredients"""
+    
+    # Parse ingredients if provided
+    ingredient_list = []
+    if ingredients:
+        ingredient_list = [ing.strip() for ing in ingredients.split(',')]
+    
+    # Generate contextual ads
+    ads = await grocery_ad_service.generate_contextual_grocery_ads(
+        user_postal_code=postal_code,
+        recipe_ingredients=ingredient_list,
+        placement=placement
+    )
+    
+    # Track impressions for all returned ads
+    for ad in ads:
+        await grocery_ad_service.track_ad_impression(ad.ad_id, current_user_id, placement)
+    
+    return [ad.dict() for ad in ads]
+
+@api_router.get("/grocery-ads/nearby-stores", response_model=List[dict])
+async def get_nearby_grocery_stores(
+    postal_code: str,
+    radius_km: float = 25.0
+):
+    """Get nearby grocery stores for user's postal code"""
+    stores = await grocery_ad_service.get_nearby_stores(postal_code, radius_km)
+    return [store.dict() for store in stores]
+
+@api_router.post("/grocery-ads/track-click")
+async def track_grocery_ad_click(
+    ad_id: str,
+    placement: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Track grocery ad click for analytics and revenue"""
+    await grocery_ad_service.track_ad_click(ad_id, current_user_id, placement)
+    return {"success": True, "message": "Click tracked successfully"}
+
+@api_router.get("/grocery-ads/performance", response_model=dict)
+async def get_grocery_ad_performance(
+    chain_id: Optional[str] = None,
+    days: int = 30
+):
+    """Get grocery ad performance metrics for revenue tracking"""
+    metrics = await grocery_ad_service.get_ad_performance_metrics(chain_id, days)
+    return metrics
+
+@api_router.post("/grocery-ads/initialize-stores")
+async def initialize_grocery_store_database():
+    """Initialize grocery store locations database (admin only)"""
+    locations = await grocery_ad_service.initialize_grocery_store_locations()
+    return {
+        "success": True,
+        "message": f"Initialized {len(locations)} grocery store locations",
+        "stores_count": len(locations)
+    }
+
 # Keep all existing routes from previous implementation
 # (Reference recipes, snippets, grocery, etc.)
 
