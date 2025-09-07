@@ -423,7 +423,7 @@ const LambaliaMarket = () => {
               onClick={fetchMarketData}
               className="btn-primary px-4 py-2 rounded-lg"
             >
-              🔍 Update
+              🔍 {t('common.update')}
             </button>
           </div>
         </div>
