@@ -702,6 +702,18 @@ backend:
         agent: "testing"
         comment: "COMPREHENSIVE TESTING PASSED: Impact calculator endpoint working correctly. GET /api/charity/impact-calculator with query parameters (activity_type, food_donated_lbs, meals_provided, people_helped, volunteer_hours) returns proper impact score calculations. Example: 590.4 estimated score with breakdown including base_score: 10.0, food_donation_points, meals_provided_points, people_helped_points, volunteer_hours_points. Tier progress tracking functional with 3 tiers available."
 
+  - task: "Enhanced User Registration with Phone Number and 2FA Support"
+    implemented: true
+    working: false
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Enhanced user registration system to include required phone number field, phone number uniqueness validation, and optional 2FA security profile initialization during registration. Updated UserRegistration, UserProfile, and UserResponse models."
+
   - task: "Global Heritage Recipes System Integration"
     implemented: true
     working: true
