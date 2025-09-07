@@ -604,17 +604,25 @@ const resources = {
       },
 
       auth: {
-        login: "تسجيل الدخول",
-        register: "التسجيل",
-        logout: "تسجيل الخروج",
+        login: "دخول",
+        register: "تسجيل",
+        logout: "خروج",
         email: "البريد الإلكتروني",
         password: "كلمة المرور",
         username: "اسم المستخدم",
         fullName: "الاسم الكامل",
+        phoneNumber: "رقم الهاتف",
         postalCode: "الرمز البريدي",
+        forgotPassword: "نسيت كلمة المرور؟",
+        rememberMe: "تذكرني",
         loginButton: "ادخل إلى مطبخك 👨‍🍳",
-        registerButton: "انضم للمجتمع",
-        joinLambalia: "انضم إلى لامباليا"
+        registerButton: "ابدأ رحلتك الطهوية",
+        joinLambalia: "انضم إلى Lambalia",
+        welcomeMessage: "انضم إلى مجتمعنا من الطهاة المنزليين الذين يشاركون الوصفات الأصيلة من جميع أنحاء العالم!",
+        phoneRequired: "مطلوب لأمان الحساب وإشعارات الطلبات",
+        twoFactorTitle: "تفعيل الأمان ثنائي الطبقات (موصى به)",
+        twoFactorDesc: "أضف طبقة إضافية من الأمان لحسابك مع التحقق عبر الرسائل النصية. هذا يساعد في حماية أرباحك ومعلوماتك الشخصية.",
+        twoFactorFeatures: "رموز التحقق عبر الرسائل النصية • حماية محسنة للحساب • مدفوعات آمنة"
       },
 
       cuisines: {
