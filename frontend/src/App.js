@@ -511,7 +511,7 @@ const Header = () => {
                 <div className="flex items-center space-x-3">
                   <span className="text-sm text-gray-700 flex items-center space-x-1.5">
                     <Icon name="Profile" size={14} className="text-green-600" />
-                    <span className="hidden md:inline">{t('common.welcome', { name: user.username || user.full_name })}</span>
+                    <span className="hidden md:inline">welcome</span>
                   </span>
                   <button 
                     onClick={logout}
