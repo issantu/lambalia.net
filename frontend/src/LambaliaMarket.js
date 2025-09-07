@@ -257,7 +257,7 @@ const LambaliaMarket = () => {
           <div className="space-y-1">
             <div className="flex items-center text-gray-600">
               <Icon name="Users" size={12} className="mr-1" />
-              <span>{item.quantity_people} people</span>
+              <span>{item.quantity_people} {t('lod.people')}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <Icon name="Clock" size={12} className="mr-1" />
