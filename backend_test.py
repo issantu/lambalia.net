@@ -4312,6 +4312,29 @@ class LambaliaEnhancedAPITester:
         self.test_distance_calculation()
         self.test_compatibility_scoring()
         
+        # LOD (Local Offers & Demands) Marketplace Tests - Translation Fixes Verification
+        print("\n🏪 Testing LOD (Local Offers & Demands) Marketplace...")
+        self.test_lod_backend_service_health()
+        self.test_lod_database_connections()
+        
+        print("\n📋 Testing LOD Offers & Demands...")
+        self.test_lod_get_offers_without_postal_code()
+        self.test_lod_get_offers_with_postal_code()
+        self.test_lod_get_demands_without_postal_code()
+        self.test_lod_get_demands_with_postal_code()
+        self.test_lod_create_food_offer()
+        self.test_lod_create_food_demand()
+        
+        print("\n🔗 Testing LOD Subscriptions...")
+        self.test_lod_subscribe_to_offer()
+        self.test_lod_subscribe_to_demand()
+        
+        print("\n💰 Testing LOD Business Logic...")
+        self.test_lod_commission_calculation()
+        self.test_lod_geo_location_filtering()
+        self.test_lod_data_validation()
+        self.test_lod_error_handling()
+        
         # Enhanced Ad System & Monetization tests - Phase 3
         print("\n💰 Testing Enhanced Ad System & Monetization (Phase 3)...")
         self.test_get_user_engagement_profile()
