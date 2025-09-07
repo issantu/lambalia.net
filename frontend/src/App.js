@@ -4308,9 +4308,14 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
-              © 2024 Lambalia Global Inc. All rights reserved. Preserving culinary heritage worldwide.
-            </p>
+            <div className="text-center md:text-left">
+              <p className="text-gray-400 text-sm">
+                © 2024 Lambalia Global Inc. All rights reserved. Preserving culinary heritage worldwide.
+              </p>
+              <p className="text-gray-500 text-xs mt-1">
+                Part of <strong className="text-gray-400">Ishango Technologies</strong> - Cultural Preservation Technology
+              </p>
+            </div>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <span className="text-xs text-gray-500">🌍 Operating in 15+ countries</span>
               <span className="text-xs text-gray-500">📞 24/7 Multilingual Support</span>
