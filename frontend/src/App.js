@@ -366,6 +366,31 @@ const LoginPage = () => {
                 required
               />
             </div>
+
+            {/* Two-Layer Security Option */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  name="enable_2fa"
+                  checked={formData.enable_2fa}
+                  onChange={handleInputChange}
+                  className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-blue-800 mb-1">
+                    🔒 Enable Two-Layer Security (Recommended)
+                  </label>
+                  <p className="text-xs text-blue-700">
+                    Add an extra layer of security to your account with SMS verification. 
+                    This helps protect your earnings and personal information.
+                  </p>
+                  <div className="mt-2 text-xs text-blue-600">
+                    ✓ SMS verification codes  •  ✓ Enhanced account protection  •  ✓ Secure payments
+                  </div>
+                </div>
+              </div>
+            </div>
             <button
               type="submit"
               className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
