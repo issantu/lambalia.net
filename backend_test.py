@@ -21,6 +21,7 @@ class LambaliaEnhancedAPITester:
             "username": f"testuser_{datetime.now().strftime('%H%M%S')}",
             "email": f"test_{datetime.now().strftime('%H%M%S')}@example.com",
             "password": "testpass123",
+            "phone_number": f"+1555{datetime.now().strftime('%H%M%S')}",
             "full_name": "Test User",
             "postal_code": "12345",
             "preferred_language": "en"
