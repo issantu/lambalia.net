@@ -5505,13 +5505,13 @@ async def convert_currency_endpoint(request: CurrencyConversionRequest):
 async def calculate_commission_endpoint(request: CommissionCalculationRequest):
     """Calculate commission for a transaction"""
     
-    if currency not in currency_service.supported_currencies:
+    if request.currency not in currency_service.supported_currencies:
         raise HTTPException(status_code=400, detail="Unsupported currency")
     
     try:
         from decimal import Decimal
-        amount_decimal = Decimal(str(amount))
-        commission_rate_decimal = Decimal(str(commission_rate))
+        amount_decimal = Decimal(str(request.amount))
+        commission_rate_decimal = Decimal(str(request.commission_rate))
         
         commission_info = await currency_service.calculate_commission(
             amount_decimal, currency, commission_rate_decimal
