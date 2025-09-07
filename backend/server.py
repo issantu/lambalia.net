@@ -2463,7 +2463,7 @@ lambalia_eats_service = LambaliaEatsService(db)
 heritage_recipes_service = HeritageRecipesService(db)
 
 # Initialize Smart Cooking Tool service
-smart_cooking_service = SmartCookingToolService(db)
+# smart_cooking_service = SmartCookingToolService(db)
 
 # Initialize Transaction Verification service
 transaction_verification_service = TransactionVerificationService(db)
