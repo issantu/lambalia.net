@@ -392,13 +392,18 @@ const resources = {
         password: "Mot de passe",
         username: "Nom d'utilisateur",
         fullName: "Nom complet",
+        phoneNumber: "Numéro de Téléphone",
         postalCode: "Code postal",
         forgotPassword: "Mot de passe oublié?",
         rememberMe: "Se souvenir de moi",
         loginButton: "Entrez dans Votre Cuisine 👨‍🍳",
-        registerButton: "Rejoindre la Communauté",
+        registerButton: "Commencez Votre Voyage Culinaire",
         joinLambalia: "Rejoindre Lambalia",
-        welcomeMessage: "Rejoignez notre communauté de chefs à domicile partageant des recettes authentiques du monde entier!"
+        welcomeMessage: "Rejoignez notre communauté de chefs à domicile partageant des recettes authentiques du monde entier!",
+        phoneRequired: "Requis pour la sécurité du compte et les notifications de commande",
+        twoFactorTitle: "Activer la Sécurité à Deux Couches (Recommandé)",
+        twoFactorDesc: "Ajoutez une couche supplémentaire de sécurité à votre compte avec la vérification SMS. Cela aide à protéger vos gains et informations personnelles.",
+        twoFactorFeatures: "Codes de vérification SMS • Protection de compte améliorée • Paiements sécurisés"
       },
 
       home: {
