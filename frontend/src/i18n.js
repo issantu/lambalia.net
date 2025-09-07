@@ -517,6 +517,8 @@ const resources = {
         marketplace: "ローカルマーケット",
         charity: "社会貢献",
         eats: "クイック料理",
+        lod: "地域オファー＆デマンド",
+        lodShort: "LOD",
         profile: "プロフィール"
       },
 
