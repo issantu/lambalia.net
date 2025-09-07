@@ -342,7 +342,7 @@ const LoginPage = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
-                    Your Cultural Background (helps us connect you with the right community)
+                    {t('auth.culturalBgLabel')}
                   </label>
                   <input
                     type="text"
