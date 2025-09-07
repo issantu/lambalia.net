@@ -295,7 +295,7 @@ const LambaliaMarket = () => {
             )}
             {item.delivery_available && (
               <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded">
-                🚚 Delivery
+                🚚 {t('lod.delivery')}
               </span>
             )}
           </div>
