@@ -214,11 +214,11 @@ const LambaliaMarket = () => {
     const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
     
     if (diffHours > 0) {
-      return `${diffHours}h ${diffMins}m left`;
+      return `${diffHours}${t('lod.hours')} ${diffMins}${t('lod.minutes')} ${t('lod.timeLeft')}`;
     } else if (diffMins > 0) {
-      return `${diffMins}m left`;
+      return `${diffMins}${t('lod.minutes')} ${t('lod.timeLeft')}`;
     } else {
-      return 'Expired';
+      return t('lod.expired');
     }
   };
 
