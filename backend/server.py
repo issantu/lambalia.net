@@ -5459,17 +5459,17 @@ class CurrencyConversionRequest(BaseModel):
 async def convert_currency_endpoint(request: CurrencyConversionRequest):
     """Convert amount between currencies"""
     
-    if from_currency not in currency_service.supported_currencies:
+    if request.from_currency not in currency_service.supported_currencies:
         raise HTTPException(status_code=400, detail="Unsupported source currency")
     
-    if to_currency not in currency_service.supported_currencies:
+    if request.to_currency not in currency_service.supported_currencies:
         raise HTTPException(status_code=400, detail="Unsupported target currency")
     
     try:
         from decimal import Decimal
-        amount_decimal = Decimal(str(amount))
+        amount_decimal = Decimal(str(request.amount))
         converted_amount, exchange_rate = await currency_service.convert_currency(
-            amount_decimal, from_currency, to_currency
+            amount_decimal, request.from_currency, request.to_currency
         )
         
         return {
