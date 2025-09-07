@@ -23,7 +23,6 @@ isort>=5.13.2
 flake8>=7.0.0
 mypy>=1.8.0
 stripe>=8.0.0
-emergentintegrations
 geopy>=2.3.0
 qrcode>=7.4.2
 Pillow>=10.0.0
