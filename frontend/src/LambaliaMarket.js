@@ -238,7 +238,7 @@ const LambaliaMarket = () => {
                 ? 'bg-green-100 text-green-800' 
                 : 'bg-blue-100 text-blue-800'
             }`}>
-              {type === 'offer' ? '🍽️ Available' : '🥺 Wanted'}
+              {type === 'offer' ? `🍽️ ${t('lod.available')}` : `🥺 ${t('lod.wanted')}`}
             </span>
             {item.is_locked && (
               <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800 mt-1">
