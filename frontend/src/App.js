@@ -380,14 +380,13 @@ const LoginPage = () => {
                 />
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-blue-800 mb-1">
-                    🔒 Enable Two-Layer Security (Recommended)
+                    🔒 {t('auth.twoFactorTitle')}
                   </label>
                   <p className="text-xs text-blue-700">
-                    Add an extra layer of security to your account with SMS verification. 
-                    This helps protect your earnings and personal information.
+                    {t('auth.twoFactorDesc')}
                   </p>
                   <div className="mt-2 text-xs text-blue-600">
-                    ✓ SMS verification codes  •  ✓ Enhanced account protection  •  ✓ Secure payments
+                    ✓ {t('auth.twoFactorFeatures')}
                   </div>
                 </div>
               </div>
