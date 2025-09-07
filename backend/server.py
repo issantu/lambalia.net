@@ -2525,6 +2525,7 @@ lambalia_market_service = LambaliaMarketService(db)
 # Initialize Grocery Ad service
 grocery_ad_service = GroceryAdService(db)
 currency_service = CurrencyExchangeService(db)
+admin_dashboard_service = AdminDashboardService(db)
 
 @api_router.post("/farm-vendors/apply", response_model=dict)
 async def apply_as_farm_vendor(
