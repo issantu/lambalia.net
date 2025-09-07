@@ -5502,11 +5502,7 @@ async def convert_currency_endpoint(request: CurrencyConversionRequest):
         raise HTTPException(status_code=500, detail=f"Currency conversion failed: {str(e)}")
 
 @api_router.post("/currency/calculate-commission")
-async def calculate_commission_endpoint(
-    amount: float,
-    currency: str,
-    commission_rate: Optional[float] = 0.15
-):
+async def calculate_commission_endpoint(request: CommissionCalculationRequest):
     """Calculate commission for a transaction"""
     
     if currency not in currency_service.supported_currencies:
