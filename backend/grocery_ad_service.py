@@ -230,7 +230,7 @@ class GroceryAdService:
             user_coords = (40.7589, -73.9851)  # Default to NYC
         
         # Get all stores from database
-        stores_cursor = await self.db.grocery_store_locations.find({})
+        stores_cursor = self.db.grocery_store_locations.find({})
         stores_data = await stores_cursor.to_list(length=None)
         
         nearby_stores = []
