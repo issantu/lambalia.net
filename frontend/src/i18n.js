@@ -340,7 +340,15 @@ const resources = {
         error: "Error",
         success: "Éxito",
         warning: "Advertencia",
-        info: "Información"
+        info: "Información",
+        welcome: "Bienvenido",
+        aiCook: "Chef IA",
+        update: "Actualizar",
+        postOffer: "Publicar Oferta",
+        postDemand: "Publicar Demanda",
+        creating: "Creando...",
+        saving: "Guardando...",
+        loadingData: "Cargando datos..."
       },
 
       auth: {
