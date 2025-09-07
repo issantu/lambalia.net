@@ -4040,14 +4040,14 @@ const ContactPage = () => {
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Feedback Options</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <a
-            href="mailto:feedback@lambalia.com?subject=Quick Feedback"
+            href="mailto:contact@lambalia.net?subject=Quick Feedback"
             className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200"
           >
             <div className="flex items-center space-x-3">
               <span className="text-2xl">📧</span>
               <div>
                 <h4 className="font-medium text-gray-800">Email Direct</h4>
-                <p className="text-sm text-gray-600">feedback@lambalia.com</p>
+                <p className="text-sm text-gray-600">contact@lambalia.net</p>
               </div>
             </div>
           </a>
