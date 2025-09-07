@@ -290,7 +290,7 @@ const LambaliaMarket = () => {
           <div className="flex space-x-2 text-xs">
             {item.pickup_available && (
               <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                🏃 Pickup
+                🏃 {t('lod.pickup')}
               </span>
             )}
             {item.delivery_available && (
