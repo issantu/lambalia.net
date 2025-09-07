@@ -138,6 +138,7 @@ class UserProfile(BaseModel):
     username: str
     email: EmailStr
     password_hash: str
+    phone_number: str  # Required field for enhanced security
     full_name: Optional[str] = None
     bio: Optional[str] = None
     profile_photo: Optional[str] = None
