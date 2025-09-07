@@ -4135,8 +4135,8 @@ const ContactPage = () => {
             <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
               <h3 className="font-semibold text-purple-800 mb-3">🤝 Community Support</h3>
               <p className="text-sm text-gray-600 mb-2">User support, cultural authenticity, recipe verification</p>
-              <a href="mailto:support@lambalia.com" className="text-purple-600 font-medium">
-                support@lambalia.com
+              <a href="mailto:customer@lambalia.net" className="text-purple-600 font-medium">
+                customer@lambalia.net
               </a>
             </div>
 
