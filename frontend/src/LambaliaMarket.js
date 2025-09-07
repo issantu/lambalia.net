@@ -261,7 +261,7 @@ const LambaliaMarket = () => {
             </div>
             <div className="flex items-center text-gray-600">
               <Icon name="Clock" size={12} className="mr-1" />
-              <span>{item.preparation_time_hours}h prep</span>
+              <span>{item.preparation_time_hours}{t('lod.hours')} {t('lod.prep')}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <Icon name="MapPin" size={12} className="mr-1" />
