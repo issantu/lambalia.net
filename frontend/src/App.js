@@ -395,7 +395,7 @@ const LoginPage = () => {
               type="submit"
               className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
             >
-              Start Your Culinary Journey 🌟
+              {t('auth.registerButton')} 🌟
             </button>
           </form>
         )}
