@@ -4524,8 +4524,8 @@ const Footer = () => {
               <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
               <li><Link to="/careers" className="text-gray-400 hover:text-white">Careers</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
-              <li><a href="mailto:press@lambalia.com" className="text-gray-400 hover:text-white">Press</a></li>
-              <li><a href="mailto:partnerships@lambalia.com" className="text-gray-400 hover:text-white">Partnerships</a></li>
+              <li><a href="mailto:contact@lambalia.net" className="text-gray-400 hover:text-white">Press</a></li>
+              <li><a href="mailto:sales@lambalia.net" className="text-gray-400 hover:text-white">Partnerships</a></li>
             </ul>
           </div>
 
