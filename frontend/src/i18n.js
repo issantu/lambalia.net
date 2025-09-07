@@ -569,7 +569,12 @@ const resources = {
         phoneRequired: "Requis pour la sécurité du compte et les notifications de commande",
         twoFactorTitle: "Activer la Sécurité à Deux Couches (Recommandé)",
         twoFactorDesc: "Ajoutez une couche supplémentaire de sécurité à votre compte avec la vérification SMS. Cela aide à protéger vos gains et informations personnelles.",
-        twoFactorFeatures: "Codes de vérification SMS • Protection de compte améliorée • Paiements sécurisés"
+        twoFactorFeatures: "Codes de vérification SMS • Protection de compte améliorée • Paiements sécurisés",
+        subtitle: "Goûtez au Patrimoine du Monde",
+        culturalInfo: "🌍 80+ Communautés Culturelles • 🥄 Recettes Patrimoniales • 🛒 Ingrédients Spéciaux",
+        nativeDishesLabel: "Quels plats natifs de votre culture pouvez-vous cuisiner? (Cela aide les utilisateurs à vous trouver et vous payer pour des recettes authentiques)",
+        consultationLabel: "Pour quoi aimeriez-vous que d'autres utilisateurs vous contactent? (Consultations payantes - vous fixez vos tarifs !)",
+        culturalBgLabel: "Votre Origine Culturelle (nous aide à vous connecter avec la bonne communauté)"
       },
 
       home: {
