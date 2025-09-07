@@ -5514,7 +5514,7 @@ async def calculate_commission_endpoint(request: CommissionCalculationRequest):
         commission_rate_decimal = Decimal(str(request.commission_rate))
         
         commission_info = await currency_service.calculate_commission(
-            amount_decimal, currency, commission_rate_decimal
+            amount_decimal, request.currency, commission_rate_decimal
         )
         
         # Convert Decimal values to float for JSON serialization
