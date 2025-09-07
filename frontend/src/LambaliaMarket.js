@@ -391,7 +391,7 @@ const LambaliaMarket = () => {
               className="btn-primary px-4 py-2 rounded-lg flex items-center space-x-2"
             >
               <Icon name="Plus" size={16} />
-              <span>Post Offer</span>
+              <span>{t('common.postOffer')}</span>
             </button>
             <button
               onClick={() => {
