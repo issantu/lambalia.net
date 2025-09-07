@@ -66,7 +66,12 @@ const resources = {
         phoneRequired: "Required for account security and order notifications",
         twoFactorTitle: "Enable Two-Layer Security (Recommended)",
         twoFactorDesc: "Add an extra layer of security to your account with SMS verification. This helps protect your earnings and personal information.",
-        twoFactorFeatures: "SMS verification codes • Enhanced account protection • Secure payments"
+        twoFactorFeatures: "SMS verification codes • Enhanced account protection • Secure payments",
+        subtitle: "Taste the World's Heritage",
+        culturalInfo: "🌍 80+ Cultural Communities • 🥄 Heritage Recipes • 🛒 Specialty Ingredients",
+        nativeDishesLabel: "What native dishes from your culture can you cook? (This helps users find and pay you for authentic recipes)",
+        consultationLabel: "What would you like other users to contact you for? (Paid consultations - you set your rates!)",
+        culturalBgLabel: "Your Cultural Background (helps us connect you with the right community)"
       },
 
       // Home
