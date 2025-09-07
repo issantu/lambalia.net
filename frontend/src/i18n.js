@@ -559,6 +559,8 @@ const resources = {
         marketplace: "السوق المحلي",
         charity: "رد الجميل",
         eats: "الطعام السريع",
+        lod: "العروض والطلبات المحلية",
+        lodShort: "ع.ط",
         profile: "الملف الشخصي"
       },
 
