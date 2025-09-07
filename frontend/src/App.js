@@ -4529,16 +4529,41 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Support Links */}
+          {/* Professional Contact Emails */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Support</h4>
+            <h4 className="text-lg font-semibold mb-4">📧 Contact Us</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="mailto:support@lambalia.com" className="text-gray-400 hover:text-white">Help Center</a></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Community Guidelines</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
-              <li><a href="mailto:security@lambalia.com" className="text-gray-400 hover:text-white">Report Issue</a></li>
+              <li>
+                <a href="mailto:contact@lambalia.net" className="text-gray-400 hover:text-white flex items-center space-x-2">
+                  <span>📧</span><span>General Inquiries</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:customer@lambalia.net" className="text-gray-400 hover:text-white flex items-center space-x-2">
+                  <span>🛟</span><span>Customer Support</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:help@lambalia.net" className="text-gray-400 hover:text-white flex items-center space-x-2">
+                  <span>🔧</span><span>Technical Help</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:sales@lambalia.net" className="text-gray-400 hover:text-white flex items-center space-x-2">
+                  <span>💼</span><span>Business & Sales</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:issantu@lambalia.net" className="text-gray-400 hover:text-white flex items-center space-x-2">
+                  <span>👔</span><span>Executive Office</span>
+                </a>
+              </li>
             </ul>
+            <div className="mt-4 text-xs text-gray-500">
+              <Link to="/contact" className="hover:text-white">
+                📞 View all contact options →
+              </Link>
+            </div>
           </div>
         </div>
 
