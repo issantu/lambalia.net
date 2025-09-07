@@ -405,7 +405,7 @@ const LoginPage = () => {
 
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600 mb-4">
-            Join our community of home chefs sharing authentic recipes from around the world!
+            {t('auth.welcomeMessage')}
           </p>
           
           {/* Monetization Preview */}
