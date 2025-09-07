@@ -5272,6 +5272,18 @@ function App() {
               } 
             />
             <Route 
+              path="/admin/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <AdminDashboard />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/profile" 
               element={
                 <ProtectedRoute>
