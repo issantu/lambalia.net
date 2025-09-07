@@ -409,7 +409,7 @@ const LambaliaMarket = () => {
         {/* Location Input */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Filter by Location:
+            {t('lod.filterLocation')}
           </label>
           <div className="flex space-x-2">
             <input
