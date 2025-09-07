@@ -234,6 +234,18 @@ frontend:
         agent: "main"
         comment: "Need to update login form to support enhanced authentication flow with 2FA challenge, method selection, and proper error handling for security requirements."
 
+  - task: "About Us and Footer Enhancement with Ishango Technologies"
+    implemented: true
+    working: false
+    file: "App.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated About Us page and Footer to include Ishango Technologies information. Added new company section explaining that Lambalia Global Inc. is part of Ishango Technologies, with detailed description of the parent company's mission and focus on cultural preservation technology."
+
 metadata:
   created_by: "main_agent"
   version: "2.0"
