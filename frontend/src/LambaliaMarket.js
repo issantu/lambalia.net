@@ -451,7 +451,7 @@ const LambaliaMarket = () => {
                   ))
                 ) : (
                   <div className="text-center py-8 text-gray-500">
-                    No offers available in your area. Be the first to post one!
+                    {t('lod.noOffers')}
                   </div>
                 )}
               </div>
