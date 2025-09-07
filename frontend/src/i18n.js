@@ -475,6 +475,8 @@ const resources = {
         marketplace: "本地市场",
         charity: "回馈社会",
         eats: "快餐",
+        lod: "本地供需",
+        lodShort: "供需",
         profile: "个人资料"
       },
 
