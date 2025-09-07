@@ -511,10 +511,18 @@ const resources = {
         password: "密码",
         username: "用户名",
         fullName: "全名",
+        phoneNumber: "电话号码",
         postalCode: "邮政编码",
+        forgotPassword: "忘记密码？",
+        rememberMe: "记住我",
         loginButton: "进入您的厨房 👨‍🍳",
-        registerButton: "加入社区",
-        joinLambalia: "加入 Lambalia"
+        registerButton: "开始您的烹饪之旅",
+        joinLambalia: "加入Lambalia",
+        welcomeMessage: "加入我们的家庭厨师社区，分享来自世界各地的正宗食谱！",
+        phoneRequired: "账户安全和订单通知必需",
+        twoFactorTitle: "启用双重安全验证（推荐）",
+        twoFactorDesc: "通过短信验证为您的账户添加额外的安全层。这有助于保护您的收入和个人信息。",
+        twoFactorFeatures: "短信验证码 • 增强账户保护 • 安全支付"
       },
 
       cuisines: {
