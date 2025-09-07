@@ -24,6 +24,24 @@ const LanguageSwitcher = ({ className = '' }) => {
 
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
   const changeLanguage = (langCode) => {
     i18n.changeLanguage(langCode);
     
@@ -38,6 +56,9 @@ const LanguageSwitcher = ({ className = '' }) => {
     
     // Store language preference
     localStorage.setItem('lambalia-language', langCode);
+    
+    // Close dropdown after selection
+    setIsOpen(false);
   };
 
   return (
