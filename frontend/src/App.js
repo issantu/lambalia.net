@@ -281,7 +281,7 @@ const LoginPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.phoneNumber')} *</label>
               <input
                 type="tel"
                 name="phone_number"
@@ -291,10 +291,10 @@ const LoginPage = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
                 required
               />
-              <p className="text-xs text-gray-500 mt-1">Required for account security and order notifications</p>
+              <p className="text-xs text-gray-500 mt-1">{t('auth.phoneRequired')}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.postalCode')}</label>
               <input
                 type="text"
                 name="postal_code"
