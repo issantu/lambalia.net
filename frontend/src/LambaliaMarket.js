@@ -401,7 +401,7 @@ const LambaliaMarket = () => {
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
             >
               <Icon name="Plus" size={16} />
-              <span>Post Demand</span>
+              <span>{t('common.postDemand')}</span>
             </button>
           </div>
         </div>
