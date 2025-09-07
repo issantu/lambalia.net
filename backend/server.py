@@ -319,6 +319,7 @@ async def get_current_user_optional(credentials: HTTPAuthorizationCredentials = 
         return user_id
     except (jwt.ExpiredSignatureError, jwt.JWTError):
         return None
+
 # Helper function to check if user is admin
 async def is_admin(user_id: str) -> bool:
     """Check if user has admin privileges"""
