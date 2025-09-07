@@ -272,7 +272,7 @@ const LambaliaMarket = () => {
             <div className="flex items-center text-gray-600">
               <span className="text-lg mr-1">💰</span>
               <span className="font-semibold text-green-600">
-                ${item.price_per_person}/person
+                ${item.price_per_person}/{t('lod.person')}
               </span>
             </div>
             <div className="flex items-center text-gray-600">
