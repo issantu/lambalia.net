@@ -3517,6 +3517,25 @@ const AboutPage = () => {
           </div>
         </section>
 
+        <section className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-xl">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">🏢 Our Company</h2>
+            <p className="text-lg text-gray-700 mb-4">
+              <strong>Lambalia Global Inc.</strong> is proudly part of <strong>Ishango Technologies</strong>, a leading innovator in cultural preservation technology.
+            </p>
+            <p className="text-gray-600 mb-6">
+              Ishango Technologies is dedicated to building platforms that preserve and celebrate global heritage while empowering communities through technology. Our mission extends beyond food to encompass all forms of cultural preservation and economic empowerment.
+            </p>
+            <div className="flex items-center justify-center space-x-4 text-sm text-gray-500">
+              <span>🌍 Global Impact</span>
+              <span>•</span>
+              <span>🔬 Innovation-Driven</span>
+              <span>•</span>
+              <span>🤝 Community-Focused</span>
+            </div>
+          </div>
+        </section>
+
         <section className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">🤝 Join Our Mission</h2>
           <p className="text-gray-600 mb-6">
