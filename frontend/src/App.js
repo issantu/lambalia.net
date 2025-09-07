@@ -280,6 +280,19 @@ const LoginPage = () => {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+              <input
+                type="tel"
+                name="phone_number"
+                value={formData.phone_number}
+                onChange={handleInputChange}
+                placeholder="+1 (555) 123-4567"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                required
+              />
+              <p className="text-xs text-gray-500 mt-1">Required for account security and order notifications</p>
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
               <input
                 type="text"
