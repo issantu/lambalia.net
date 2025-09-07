@@ -198,11 +198,11 @@ const LambaliaMarket = () => {
         subscription_type: item.pickup_available ? 'pickup' : 'delivery'
       });
       
-      alert(`Successfully subscribed to ${item.dish_name}! You will be contacted with pickup/delivery details.`);
+      alert(`${t('lod.subscribeSuccess')} ${item.dish_name}! ${t('lod.contactDetails')}`);
       fetchMarketData();
     } catch (error) {
       console.error('Subscription failed:', error);
-      alert('Subscription failed. Please try again.');
+      alert(t('lod.subscribeError'));
     }
   };
 
