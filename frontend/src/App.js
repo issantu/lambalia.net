@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './i18n'; // Initialize i18n
 import LanguageSwitcher from './LanguageSwitcher';
 import AdminDashboard from './components/AdminDashboard';
-import ContactPage from './components/ContactPage';
+
 import { ContactWidget } from './components/ContactInfo';
 import './App.css';
 import LocalMarketplacePage from './LocalMarketplace';
