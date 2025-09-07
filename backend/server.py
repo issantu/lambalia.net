@@ -319,6 +319,29 @@ async def get_current_user_optional(credentials: HTTPAuthorizationCredentials = 
         return user_id
     except (jwt.ExpiredSignatureError, jwt.JWTError):
         return None
+# Helper function to check if user is admin
+async def is_admin(user_id: str) -> bool:
+    """Check if user has admin privileges"""
+    try:
+        user = await db.users.find_one({"id": user_id}, {"_id": 0})
+        return user and user.get("is_admin", False)
+    except Exception as e:
+        logger.error(f"Error checking admin status: {e}")
+        return False
+
+# Helper function to make user admin (for initial setup)
+async def make_admin(user_id: str) -> bool:
+    """Make a user admin - use this for initial admin setup"""
+    try:
+        result = await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"is_admin": True}},
+            upsert=False
+        )
+        return result.modified_count > 0
+    except Exception as e:
+        logger.error(f"Error making user admin: {e}")
+        return False
 
 # Security utilities for 2FA
 import secrets
