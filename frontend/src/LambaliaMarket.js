@@ -242,7 +242,7 @@ const LambaliaMarket = () => {
             </span>
             {item.is_locked && (
               <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800 mt-1">
-                🔒 Locked
+                🔒 {t('lod.locked')}
               </span>
             )}
           </div>
