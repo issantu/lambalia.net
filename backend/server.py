@@ -174,6 +174,7 @@ class UserRegistration(BaseModel):
     username: str
     email: EmailStr
     password: str
+    phone_number: str  # Required for enhanced security
     full_name: Optional[str] = None
     country_id: Optional[str] = None
     postal_code: Optional[str] = None
@@ -181,6 +182,7 @@ class UserRegistration(BaseModel):
     native_dishes: Optional[str] = None
     consultation_specialties: Optional[str] = None
     cultural_background: Optional[str] = None
+    enable_2fa: bool = False  # Optional 2FA setup during registration
 
 class UserLogin(BaseModel):
     email: EmailStr
