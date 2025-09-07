@@ -396,12 +396,27 @@ async def register_user(user_data: UserRegistration):
     if existing_user:
         raise HTTPException(status_code=400, detail="User already exists")
     
+    # Check if phone number is already in use
+    existing_phone = await db.users.find_one({"phone_number": user_data.phone_number})
+    if existing_phone:
+        raise HTTPException(status_code=400, detail="Phone number already registered")
+    
     user_dict = user_data.dict()
     user_dict['password_hash'] = hash_password(user_data.password)
     del user_dict['password']
+    del user_dict['enable_2fa']  # Remove from user profile
     
     user = UserProfile(**user_dict)
     await db.users.insert_one(user.dict())
+    
+    # Initialize user security profile if 2FA is requested
+    if user_data.enable_2fa:
+        security_profile = UserSecurityProfile(
+            user_id=user.id,
+            phone_number=user_data.phone_number,
+            twofa_enabled=False  # Will be enabled after verification
+        )
+        await db.user_security_profiles.insert_one(security_profile.dict())
     
     token = create_jwt_token(user.id)
     
