@@ -471,7 +471,7 @@ const LambaliaMarket = () => {
                   ))
                 ) : (
                   <div className="text-center py-8 text-gray-500">
-                    No demands in your area. Check back later!
+                    {t('lod.noDemands')}
                   </div>
                 )}
               </div>
