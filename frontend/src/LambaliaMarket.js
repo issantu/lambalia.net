@@ -324,10 +324,10 @@ const LambaliaMarket = () => {
             }`}
           >
             {item.is_locked 
-              ? '🔒 Locked' 
+              ? `🔒 ${t('lod.locked')}` 
               : type === 'offer' 
-              ? '🛒 Subscribe & Buy' 
-              : '👨‍🍳 I Can Make This'
+              ? `🛒 ${t('lod.subscribeBuy')}` 
+              : `👨‍🍳 ${t('lod.canMake')}`
             }
           </button>
         </div>
