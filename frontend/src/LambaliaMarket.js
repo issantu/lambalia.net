@@ -378,7 +378,7 @@ const LambaliaMarket = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              🥺 Food Demands ({demands.length})
+              🥺 {t('lod.foodDemands')} ({demands.length})
             </button>
           </div>
 
