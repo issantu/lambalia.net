@@ -183,10 +183,10 @@ const LambaliaMarket = () => {
       });
       
       fetchMarketData();
-      alert(`${modalType === 'offer' ? 'Offer' : 'Demand'} created successfully!`);
+      alert(`${modalType === 'offer' ? t('lod.postOfferModal') : t('lod.postDemandModal')} ${t('lod.createSuccess')}`);
     } catch (error) {
       console.error('Failed to create item:', error);
-      alert('Failed to create item. Please try again.');
+      alert(t('lod.createError'));
     }
   };
 
