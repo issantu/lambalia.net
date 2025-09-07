@@ -370,7 +370,12 @@ const resources = {
         phoneRequired: "Requerido para seguridad de cuenta y notificaciones de pedidos",
         twoFactorTitle: "Habilitar Seguridad de Dos Capas (Recomendado)",
         twoFactorDesc: "Añade una capa extra de seguridad a tu cuenta con verificación SMS. Esto ayuda a proteger tus ganancias e información personal.",
-        twoFactorFeatures: "Códigos de verificación SMS • Protección mejorada de cuenta • Pagos seguros"
+        twoFactorFeatures: "Códigos de verificación SMS • Protección mejorada de cuenta • Pagos seguros",
+        subtitle: "Prueba la Herencia del Mundo",
+        culturalInfo: "🌍 80+ Comunidades Culturales • 🥄 Recetas Patrimoniales • 🛒 Ingredientes Especiales",
+        nativeDishesLabel: "¿Qué platos nativos de tu cultura puedes cocinar? (Esto ayuda a los usuarios a encontrarte y pagarte por recetas auténticas)",
+        consultationLabel: "¿Para qué te gustaría que otros usuarios te contacten? (Consultas pagadas - ¡tú estableces tus tarifas!)",
+        culturalBgLabel: "Tu Trasfondo Cultural (nos ayuda a conectarte con la comunidad correcta)"
       },
 
       home: {
