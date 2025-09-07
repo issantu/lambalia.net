@@ -229,7 +229,7 @@ const LambaliaMarket = () => {
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-gray-800">{item.title}</h3>
             <p className="text-sm text-gray-500">
-              by {item.user_name} • {item.distance_miles} miles away
+              by {item.user_name} • {item.distance_miles} {t('lod.miles')}
             </p>
           </div>
           <div className="flex flex-col items-end">
