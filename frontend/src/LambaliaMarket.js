@@ -431,7 +431,7 @@ const LambaliaMarket = () => {
         {/* Market Items */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="text-lg text-gray-600">Loading market data...</div>
+            <div className="text-lg text-gray-600">{t('lod.loadingMarket')}</div>
           </div>
         ) : (
           <div className="grid lg:grid-cols-2 gap-6">
