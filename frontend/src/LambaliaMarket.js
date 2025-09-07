@@ -368,7 +368,7 @@ const LambaliaMarket = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              🍽️ Available Offers ({offers.length})
+              🍽️ {t('lod.availableOffers')} ({offers.length})
             </button>
             <button
               onClick={() => setActiveTab('demands')}
