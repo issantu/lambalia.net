@@ -504,7 +504,7 @@ const Header = () => {
                 className="bg-orange-500 hover:bg-orange-600 text-white px-2 py-1 rounded text-xs font-medium transition-colors flex items-center space-x-1"
               >
                 <AnimatedIcon name="SmartCooking" size={12} className="text-white" />
-                <span className="hidden md:inline">AI Cook</span>
+                <span className="hidden md:inline">{t('common.aiCook')}</span>
                 <span className="bg-white bg-opacity-20 px-1 py-0.5 rounded text-xs">$3</span>
               </button>
               
