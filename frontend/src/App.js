@@ -329,7 +329,7 @@ const LoginPage = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
-                    What would you like other users to contact you for? (Paid consultations - you set your rates!)
+                    {t('auth.consultationLabel')}
                   </label>
                   <textarea
                     name="consultation_specialties"
