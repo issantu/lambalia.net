@@ -4127,8 +4127,8 @@ const ContactPage = () => {
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl">
               <h3 className="font-semibold text-orange-800 mb-3">🎯 Media & Press</h3>
               <p className="text-sm text-gray-600 mb-2">Press inquiries, interviews, feature stories</p>
-              <a href="mailto:press@lambalia.com" className="text-orange-600 font-medium">
-                press@lambalia.com
+              <a href="mailto:contact@lambalia.net" className="text-orange-600 font-medium">
+                contact@lambalia.net
               </a>
             </div>
 
