@@ -454,16 +454,24 @@ const resources = {
 
       auth: {
         login: "Anmelden",
-        register: "Registrieren", 
-        logout: "Abmelden",
+        register: "Registrieren",
+        logout: "Abmelden", 
         email: "E-Mail",
         password: "Passwort",
         username: "Benutzername",
         fullName: "Vollständiger Name",
+        phoneNumber: "Telefonnummer",
         postalCode: "Postleitzahl",
+        forgotPassword: "Passwort vergessen?",
+        rememberMe: "Angemeldet bleiben",
         loginButton: "Betreten Sie Ihre Küche 👨‍🍳",
-        registerButton: "Der Gemeinschaft Beitreten",
-        joinLambalia: "Lambalia Beitreten"
+        registerButton: "Beginnen Sie Ihre Kulinarische Reise",
+        joinLambalia: "Lambalia Beitreten",
+        welcomeMessage: "Treten Sie unserer Gemeinschaft von Hausköchen bei, die authentische Rezepte aus aller Welt teilen!",
+        phoneRequired: "Erforderlich für Kontosicherheit und Bestellbenachrichtigungen",
+        twoFactorTitle: "Zwei-Schicht-Sicherheit Aktivieren (Empfohlen)",
+        twoFactorDesc: "Fügen Sie eine zusätzliche Sicherheitsschicht zu Ihrem Konto mit SMS-Verifizierung hinzu. Dies hilft, Ihre Einnahmen und persönlichen Informationen zu schützen.",
+        twoFactorFeatures: "SMS-Verifizierungscodes • Erweiterte Kontosicherheit • Sichere Zahlungen"
       },
 
       cuisines: {
