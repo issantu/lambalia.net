@@ -919,6 +919,21 @@ backend:
         agent: "testing"
         comment: "UI IMPROVEMENTS TESTING PARTIALLY PASSED: Lambalia Eats expanded cuisine types partially working. 3/7 new cuisine types functional (african, caribbean, middle_eastern). Issues with korean, vietnamese, latin_american, european returning 500 errors. Core functionality working for most cuisine types."
 
+  - task: "LOD (Local Offers & Demands) Marketplace Backend API"
+    implemented: true
+    working: true
+    file: "server.py, lambalia_market_service.py, lambalia_market_models.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Starting comprehensive testing of LOD marketplace backend API endpoints after translation fixes. Testing all 6 core endpoints: GET/POST offers, GET/POST demands, POST subscribe-to-offer, POST subscribe-to-demand. Focus on geo-location filtering, commission calculations, data validation, and error handling."
+      - working: true
+        agent: "testing"
+        comment: "LOD MARKETPLACE BACKEND TESTING COMPLETED SUCCESSFULLY! All critical LOD marketplace features from review request are fully functional (17/17 tests passed, 100% success rate): ✅ GET /api/lambalia-market/offers (with and without postal_code parameter) - Both working correctly, geo-filtering operational ✅ GET /api/lambalia-market/demands (with and without postal_code parameter) - Both working correctly, location-based filtering active ✅ POST /api/lambalia-market/offers (create new food offer) - Working perfectly, commission calculations accurate (15%) ✅ POST /api/lambalia-market/demands (create new food demand) - Working perfectly, total value calculations correct ✅ POST /api/lambalia-market/subscribe-to-offer - Working correctly, business rules prevent self-subscription ✅ POST /api/lambalia-market/subscribe-to-demand - Working correctly, cook earnings calculated properly ✅ Backend Service Health - FastAPI server running on port 8001, all endpoints accessible ✅ Database Connections - MongoDB working correctly, read/write operations successful ✅ Commission Calculation - 15% platform commission accurate ($20×4=$80, commission=$12, earnings=$68) ✅ Geo-location Filtering - Postal code filtering working for multiple locations ✅ Data Validation - Properly rejecting invalid data with 422 validation errors ✅ Error Handling - Correctly handling non-existent items with 400 errors. LOD marketplace backend is production-ready and meets all requirements from the review request."
+
   - task: "Heritage Data Collection Endpoints"
     implemented: true
     working: true
