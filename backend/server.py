@@ -193,6 +193,7 @@ class UserResponse(BaseModel):
     id: str
     username: str
     email: str
+    phone_number: str
     full_name: Optional[str] = None
     bio: Optional[str] = None
     profile_photo: Optional[str] = None
