@@ -118,12 +118,14 @@ const LoginPage = () => {
     username: '',
     email: '',
     password: '',
+    phone_number: '',
     full_name: '',
     postal_code: '',
     preferred_language: 'en',
     native_dishes: '',
     consultation_specialties: '',
-    cultural_background: ''
+    cultural_background: '',
+    enable_2fa: false
   });
   const { login, register } = useAuth();
 
