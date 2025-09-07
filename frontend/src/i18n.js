@@ -55,13 +55,18 @@ const resources = {
         password: "Password",
         username: "Username",
         fullName: "Full Name",
+        phoneNumber: "Phone Number",
         postalCode: "Postal Code",
         forgotPassword: "Forgot Password?",
         rememberMe: "Remember Me",
         loginButton: "Enter Your Kitchen 👨‍🍳",
-        registerButton: "Join Community",
+        registerButton: "Start Your Culinary Journey",
         joinLambalia: "Join Lambalia",
-        welcomeMessage: "Join our community of home chefs sharing authentic recipes from around the world!"
+        welcomeMessage: "Join our community of home chefs sharing authentic recipes from around the world!",
+        phoneRequired: "Required for account security and order notifications",
+        twoFactorTitle: "Enable Two-Layer Security (Recommended)",
+        twoFactorDesc: "Add an extra layer of security to your account with SMS verification. This helps protect your earnings and personal information.",
+        twoFactorFeatures: "SMS verification codes • Enhanced account protection • Secure payments"
       },
 
       // Home
