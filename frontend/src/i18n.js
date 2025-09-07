@@ -688,6 +688,8 @@ const resources = {
         marketplace: "Mercato Locale",
         charity: "Dare Indietro",
         eats: "Cibo Veloce",
+        lod: "Offerte e Richieste Locali",
+        lodShort: "ORL",
         profile: "Profilo"
       },
 
