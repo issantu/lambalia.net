@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Continue the implementation of the African dishes database and integrate the requested security key into the login procedure. Expand heritage recipes system to include all ethnicities using Wikipedia data where there are lists of dishes by ethnicity. Implement comprehensive global dishes database including Caribbean, Asian, Latin American, Middle Eastern, and European cuisines with security key authentication for enhanced login security."
+user_problem_statement: "Fix the persistent translation bug where forms and general content remain in English despite language switching. Complete the LOD (Local Offers & Demands) marketplace frontend implementation with proper geo-location filtering, subscription/locking functionality, and commission display. Ensure 100% seamless content translation across all languages."
 
 backend:
   - task: "Comprehensive Global Dishes Database Implementation"
