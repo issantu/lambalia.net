@@ -111,6 +111,7 @@ const AuthProvider = ({ children }) => {
 
 // Enhanced Login Component with Dynamic Background
 const LoginPage = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
