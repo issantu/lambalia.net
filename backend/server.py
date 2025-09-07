@@ -5239,7 +5239,7 @@ transaction_verification_router = create_transaction_verification_router(transac
 app.include_router(transaction_verification_router, prefix="/api")
 
 # Include Feedback System router
-app.include_router(feedback_router)
+# app.include_router(feedback_router)
 
 # CORS
 app.add_middleware(
