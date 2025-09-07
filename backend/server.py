@@ -5455,6 +5455,23 @@ class CurrencyConversionRequest(BaseModel):
     from_currency: str
     to_currency: str = 'USD'
 
+class CommissionCalculationRequest(BaseModel):
+    amount: float
+    currency: str
+    commission_rate: float = 0.15
+
+class TransactionRecordRequest(BaseModel):
+    user_id: str
+    transaction_type: str
+    amount: float
+    currency: str
+    country_code: Optional[str] = None
+    payment_method: Optional[str] = None
+    commission_rate: float = 0.15
+
+class CurrencyPreferenceRequest(BaseModel):
+    currency_code: str
+
 @api_router.post("/currency/convert")
 async def convert_currency_endpoint(request: CurrencyConversionRequest):
     """Convert amount between currencies"""
