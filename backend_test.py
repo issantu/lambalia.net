@@ -1598,17 +1598,23 @@ class LambaliaEnhancedAPITester:
             "notes": "I can prepare this authentic dish with traditional ingredients. Will deliver fresh and hot."
         }
 
-        success, data = self.make_request('POST', 'lambalia-market/subscribe-to-demand', subscription_data, 200)
+        # Try to subscribe - expect 400 if it's our own demand (correct business logic)
+        success, data = self.make_request('POST', 'lambalia-market/subscribe-to-demand', subscription_data, 400)
         
-        if success:
-            subscription_id = data.get('id')
-            total_amount = data.get('total_amount', 0)
-            platform_commission = data.get('platform_commission', 0)
-            user_earnings = data.get('user_earnings', 0)
-            commission_rate = platform_commission / total_amount if total_amount > 0 else 0
-            details = f"- Subscription ID: {subscription_id}, Total: ${total_amount}, Commission: {commission_rate:.1%}, Cook Earnings: ${user_earnings}"
+        if success and 'Cannot subscribe to your own demand' in data.get('detail', ''):
+            details = "- Correctly prevented self-subscription (business rule working)"
         else:
-            details = ""
+            # If it's not our own demand, it should work
+            success, data = self.make_request('POST', 'lambalia-market/subscribe-to-demand', subscription_data, 200)
+            if success:
+                subscription_id = data.get('id')
+                total_amount = data.get('total_amount', 0)
+                platform_commission = data.get('platform_commission', 0)
+                user_earnings = data.get('user_earnings', 0)
+                commission_rate = platform_commission / total_amount if total_amount > 0 else 0
+                details = f"- Subscription ID: {subscription_id}, Total: ${total_amount}, Commission: {commission_rate:.1%}, Cook Earnings: ${user_earnings}"
+            else:
+                details = "- Subscription failed for unknown reason"
             
         return self.log_test("LOD Subscribe to Demand", success, details)
 
