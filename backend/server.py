@@ -5474,9 +5474,9 @@ async def convert_currency_endpoint(request: CurrencyConversionRequest):
         
         return {
             "original_amount": float(amount_decimal),
-            "original_currency": from_currency,
+            "original_currency": request.from_currency,
             "converted_amount": float(converted_amount),
-            "target_currency": to_currency,
+            "target_currency": request.to_currency,
             "exchange_rate": float(exchange_rate.rate),
             "rate_source": exchange_rate.source,
             "timestamp": exchange_rate.timestamp.isoformat()
