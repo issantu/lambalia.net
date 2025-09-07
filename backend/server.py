@@ -5419,6 +5419,243 @@ async def initialize_grocery_store_database():
         "stores_count": len(locations)
     }
 
+# CURRENCY EXCHANGE & COMMISSION MANAGEMENT ROUTES
+
+@api_router.get("/currency/rates/{base_currency}")
+async def get_exchange_rates(base_currency: str, target_currencies: Optional[str] = None):
+    """Get current exchange rates for a base currency"""
+    
+    if base_currency not in currency_service.supported_currencies:
+        raise HTTPException(status_code=400, detail="Unsupported base currency")
+    
+    target_list = target_currencies.split(',') if target_currencies else ['USD']
+    rates = {}
+    
+    for target_currency in target_list:
+        if target_currency in currency_service.supported_currencies:
+            try:
+                rate_info = await currency_service.get_exchange_rate(base_currency, target_currency)
+                rates[target_currency] = {
+                    "rate": float(rate_info.rate),
+                    "timestamp": rate_info.timestamp.isoformat(),
+                    "source": rate_info.source,
+                    "expires_at": rate_info.expires_at.isoformat()
+                }
+            except Exception as e:
+                rates[target_currency] = {"error": str(e)}
+    
+    return {
+        "base_currency": base_currency,
+        "rates": rates,
+        "supported_currencies": currency_service.supported_currencies
+    }
+
+@api_router.post("/currency/convert")
+async def convert_currency_endpoint(
+    amount: float,
+    from_currency: str,
+    to_currency: str = 'USD'
+):
+    """Convert amount between currencies"""
+    
+    if from_currency not in currency_service.supported_currencies:
+        raise HTTPException(status_code=400, detail="Unsupported source currency")
+    
+    if to_currency not in currency_service.supported_currencies:
+        raise HTTPException(status_code=400, detail="Unsupported target currency")
+    
+    try:
+        from decimal import Decimal
+        amount_decimal = Decimal(str(amount))
+        converted_amount, exchange_rate = await currency_service.convert_currency(
+            amount_decimal, from_currency, to_currency
+        )
+        
+        return {
+            "original_amount": float(amount_decimal),
+            "original_currency": from_currency,
+            "converted_amount": float(converted_amount),
+            "target_currency": to_currency,
+            "exchange_rate": float(exchange_rate.rate),
+            "rate_source": exchange_rate.source,
+            "timestamp": exchange_rate.timestamp.isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Currency conversion failed: {str(e)}")
+
+@api_router.post("/currency/calculate-commission")
+async def calculate_commission_endpoint(
+    amount: float,
+    currency: str,
+    commission_rate: Optional[float] = 0.15
+):
+    """Calculate commission for a transaction"""
+    
+    if currency not in currency_service.supported_currencies:
+        raise HTTPException(status_code=400, detail="Unsupported currency")
+    
+    try:
+        from decimal import Decimal
+        amount_decimal = Decimal(str(amount))
+        commission_rate_decimal = Decimal(str(commission_rate))
+        
+        commission_info = await currency_service.calculate_commission(
+            amount_decimal, currency, commission_rate_decimal
+        )
+        
+        # Convert Decimal values to float for JSON serialization
+        result = {}
+        for key, value in commission_info.items():
+            if isinstance(value, Decimal):
+                result[key] = float(value)
+            else:
+                result[key] = value
+        
+        return {
+            "success": True,
+            "commission_calculation": result
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Commission calculation failed: {str(e)}")
+
+@api_router.post("/transactions/record")
+async def record_transaction_endpoint(
+    user_id: str,
+    transaction_type: str,
+    amount: float,
+    currency: str,
+    country_code: Optional[str] = None,
+    payment_method: Optional[str] = None,
+    commission_rate: Optional[float] = 0.15,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Record a financial transaction with currency conversion"""
+    
+    if currency not in currency_service.supported_currencies:
+        raise HTTPException(status_code=400, detail="Unsupported currency")
+    
+    if transaction_type not in ['purchase', 'commission', 'payout', 'fee']:
+        raise HTTPException(status_code=400, detail="Invalid transaction type")
+    
+    try:
+        from decimal import Decimal
+        
+        transaction = TransactionRecord(
+            user_id=user_id,
+            transaction_type=transaction_type,
+            amount_original=Decimal(str(amount)),
+            currency_original=currency,
+            commission_rate=Decimal(str(commission_rate)),
+            country_code=country_code,
+            payment_method=payment_method,
+            metadata={
+                "recorded_by": current_user_id,
+                "api_version": "1.0"
+            }
+        )
+        
+        transaction_id = await currency_service.record_transaction(transaction)
+        
+        return {
+            "success": True,
+            "transaction_id": transaction_id,
+            "message": "Transaction recorded successfully"
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Transaction recording failed: {str(e)}")
+
+@api_router.get("/currency/user-preference/{user_id}")
+async def get_user_currency_preference(
+    user_id: str,
+    language_code: Optional[str] = None,
+    country_code: Optional[str] = None
+):
+    """Get user's preferred currency"""
+    
+    try:
+        preferred_currency = await currency_service.get_user_currency_preference(
+            user_id, language_code, country_code
+        )
+        
+        currency_info = currency_service.get_currency_info(preferred_currency)
+        
+        return {
+            "user_id": user_id,
+            "preferred_currency": preferred_currency,
+            "currency_info": currency_info,
+            "determined_by": "user_preference" if await currency_service.db.user_preferences.find_one({"user_id": user_id}) else "auto_detected"
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get currency preference: {str(e)}")
+
+@api_router.post("/currency/user-preference/{user_id}")
+async def set_user_currency_preference(
+    user_id: str,
+    currency_code: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Set user's currency preference"""
+    
+    # Users can only set their own preference, admins can set any
+    if user_id != current_user_id and not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Can only set your own currency preference")
+    
+    success = await currency_service.set_user_currency_preference(user_id, currency_code)
+    
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid currency code or update failed")
+    
+    return {
+        "success": True,
+        "user_id": user_id,
+        "currency_preference": currency_code,
+        "message": "Currency preference updated successfully"
+    }
+
+@api_router.get("/admin/commission-summary")
+async def get_commission_summary(
+    start_date: str,
+    end_date: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get commission summary for admin dashboard (admin only)"""
+    
+    if not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        from datetime import datetime
+        start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+        
+        summary = await currency_service.get_commission_summary(start_dt, end_dt)
+        
+        # Convert Decimal values to float for JSON serialization
+        summary_dict = summary.dict()
+        summary_dict['total_volume_usd'] = float(summary_dict['total_volume_usd'])
+        summary_dict['total_commission_usd'] = float(summary_dict['total_commission_usd'])
+        
+        return {
+            "success": True,
+            "summary": summary_dict
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get commission summary: {str(e)}")
+
+@api_router.get("/currency/supported")
+async def get_supported_currencies():
+    """Get list of supported currencies"""
+    
+    return {
+        "supported_currencies": currency_service.supported_currencies,
+        "language_currency_mapping": currency_service.language_currency_map,
+        "total_supported": len(currency_service.supported_currencies)
+    }
+
 # Keep all existing routes from previous implementation
 # (Reference recipes, snippets, grocery, etc.)
 
