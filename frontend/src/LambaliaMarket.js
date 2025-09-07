@@ -349,7 +349,7 @@ const LambaliaMarket = () => {
             {userLocation && (
               <div className="mt-4 inline-block bg-white bg-opacity-20 px-4 py-2 rounded-lg">
                 <Icon name="MapPin" size={16} className="inline mr-2" />
-                Showing results for: {userLocation}
+                {t('lod.showingResults')} {userLocation}
               </div>
             )}
           </div>
