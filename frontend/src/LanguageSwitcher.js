@@ -62,31 +62,33 @@ const LanguageSwitcher = ({ className = '' }) => {
   };
 
   return (
-    <div className={`relative inline-block text-left ${className}`} style={{ zIndex: 1000 }}>
-      <div className="group">
+    <div ref={dropdownRef} className={`relative inline-block text-left ${className}`} style={{ zIndex: 50000 }}>
+      <div>
         <button
           type="button"
+          onClick={toggleDropdown}
           className="inline-flex justify-center items-center px-2 py-1 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-green-500"
-          aria-expanded="true"
+          aria-expanded={isOpen}
           aria-haspopup="true"
         >
           <span className="mr-1 text-sm">{currentLanguage.flag}</span>
           <span className="hidden md:inline text-xs">{currentLanguage.name}</span>
           <span className="md:hidden text-xs">{currentLanguage.code.toUpperCase()}</span>
-          <svg className="ml-1 h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <svg className={`ml-1 h-3 w-3 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
           </svg>
         </button>
 
-        <div 
-          className="absolute right-0 mt-1 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out max-h-80 overflow-y-auto" 
-          style={{ 
-            zIndex: 9999,
-            position: 'absolute',
-            top: '100%',
-            right: 0
-          }}
-        >
+        {isOpen && (
+          <div 
+            className="absolute right-0 mt-1 w-44 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-10 transition-all duration-200 ease-in-out max-h-80 overflow-y-auto border border-gray-200" 
+            style={{ 
+              zIndex: 99999,
+              position: 'absolute',
+              top: '100%',
+              right: 0
+            }}
+          >
           <div className="py-1" role="menu" aria-orientation="vertical">
             {languages.map((language) => (
               <button
