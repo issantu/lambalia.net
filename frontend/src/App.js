@@ -118,6 +118,7 @@ const LoginPage = () => {
     email: '',
     password: '',
     full_name: '',
+    phone_number: '', 
     postal_code: '',
     preferred_language: 'en',
     native_dishes: '',
