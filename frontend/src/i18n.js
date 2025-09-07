@@ -554,17 +554,25 @@ const resources = {
       },
 
       auth: {
-        login: "ログイン", 
+        login: "ログイン",
         register: "登録",
         logout: "ログアウト",
-        email: "メールアドレス",
+        email: "メール",
         password: "パスワード",
         username: "ユーザー名",
-        fullName: "フルネーム",
+        fullName: "氏名",
+        phoneNumber: "電話番号",
         postalCode: "郵便番号",
-        loginButton: "あなたのキッチンに入る 👨‍🍳",
-        registerButton: "コミュニティに参加",
-        joinLambalia: "Lambaliaに参加"
+        forgotPassword: "パスワードを忘れた？",
+        rememberMe: "ログイン状態を保持",
+        loginButton: "キッチンに入る 👨‍🍳",
+        registerButton: "料理の旅を始める",
+        joinLambalia: "Lambaliaに参加",
+        welcomeMessage: "世界中の本格的なレシピを共有するホームシェフのコミュニティにご参加ください！",
+        phoneRequired: "アカウントセキュリティと注文通知に必要",
+        twoFactorTitle: "二段階認証を有効にする（推奨）",
+        twoFactorDesc: "SMS認証でアカウントに追加のセキュリティ層を追加します。これにより収入と個人情報が保護されます。",
+        twoFactorFeatures: "SMS認証コード • 強化されたアカウント保護 • 安全な支払い"
       },
 
       cuisines: {
