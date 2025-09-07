@@ -1263,49 +1263,127 @@ const RevenueDashboard = () => {
     </div>
   );
 };
-const AdComponent = ({ placement = "feed" }) => {
+const AdComponent = ({ placement = "feed", ingredients = [] }) => {
   const [adContent, setAdContent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Mock ad loading - in production, integrate with Google AdSense or similar
-    const mockAds = [
-      {
-        title: "Premium Kitchen Tools",
-        description: "Upgrade your cooking with professional-grade equipment",
-        image: "🔪",
-        sponsor: "CookingPro"
-      },
-      {
-        title: "Organic Ingredients Delivered",
-        description: "Fresh, organic ingredients delivered to your door",
-        image: "🥕",
-        sponsor: "FreshDirect"
-      },
-      {
-        title: "Cooking Classes Online",
-        description: "Learn from master chefs around the world",
-        image: "👨‍🍳",
-        sponsor: "MasterClass"
+    const loadContextualAd = async () => {
+      if (!user) {
+        // Show fallback ad for non-logged-in users
+        setAdContent({
+          title: "Join Lambalia for Personalized Grocery Deals",
+          description: "Get targeted grocery store ads based on your recipes and location",
+          image: "🛒",
+          sponsor: "Lambalia",
+          cta_text: "Sign Up Free"
+        });
+        setLoading(false);
+        return;
       }
-    ];
 
-    const randomAd = mockAds[Math.floor(Math.random() * mockAds.length)];
-    setAdContent(randomAd);
-  }, []);
+      try {
+        const userPostalCode = user.postal_code || '10001';
+        const params = new URLSearchParams({
+          postal_code: userPostalCode,
+          placement: placement
+        });
+        
+        if (ingredients && ingredients.length > 0) {
+          params.append('ingredients', ingredients.join(','));
+        }
+        
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/grocery-ads/contextual?${params}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        
+        if (response.ok) {
+          const ads = await response.json();
+          if (ads && ads.length > 0) {
+            const ad = ads[0];
+            setAdContent({
+              ad_id: ad.ad_id,
+              title: ad.title,
+              description: ad.description,
+              image: "🏪",
+              sponsor: ad.chain_id.replace('_', ' ').toUpperCase(),
+              cta_text: ad.cta_text,
+              cta_url: ad.cta_url,
+              distance: ad.store_location?.distance_km
+            });
+          }
+        }
+      } catch (error) {
+        console.log('Contextual ad loading error:', error);
+      }
+      
+      setLoading(false);
+    };
+
+    loadContextualAd();
+  }, [placement, ingredients, user]);
+
+  const handleAdClick = async () => {
+    if (adContent && adContent.ad_id && user) {
+      try {
+        await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/grocery-ads/track-click`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            ad_id: adContent.ad_id,
+            placement: placement
+          })
+        });
+        
+        if (adContent.cta_url) {
+          window.open(adContent.cta_url, '_blank');
+        }
+      } catch (error) {
+        console.error('Ad click tracking error:', error);
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="ad-container bg-gray-50 p-4 rounded-lg">
+        <div className="flex items-center space-x-4">
+          <div className="text-2xl">⏳</div>
+          <div className="text-sm text-gray-500">Loading personalized ads...</div>
+        </div>
+      </div>
+    );
+  }
 
   if (!adContent) return null;
 
   return (
-    <div className="ad-container">
+    <div className="ad-container bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-lg border border-blue-200 mb-4">
       <div className="flex items-center space-x-4">
         <div className="text-4xl">{adContent.image}</div>
         <div className="flex-1">
           <h4 className="font-semibold text-gray-800">{adContent.title}</h4>
           <p className="text-sm text-gray-600">{adContent.description}</p>
-          <p className="text-xs text-gray-500">Sponsored by {adContent.sponsor}</p>
+          <div className="flex items-center space-x-2 mt-1">
+            <p className="text-xs text-gray-500">Sponsored by {adContent.sponsor}</p>
+            {adContent.distance && (
+              <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                {adContent.distance}km away
+              </span>
+            )}
+          </div>
         </div>
-        <button className="btn-secondary text-sm px-4 py-2">
-          Learn More
+        <button 
+          className="btn-primary text-sm px-4 py-2"
+          onClick={handleAdClick}
+        >
+          {adContent.cta_text || 'Learn More'}
         </button>
       </div>
     </div>
