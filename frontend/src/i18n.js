@@ -43,7 +43,15 @@ const resources = {
         error: "Error",
         success: "Success",
         warning: "Warning",
-        info: "Information"
+        info: "Information",
+        welcome: "Welcome",
+        aiCook: "AI Cook",
+        update: "Update",
+        postOffer: "Post Offer",
+        postDemand: "Post Demand",
+        creating: "Creating...",
+        saving: "Saving...",
+        loadingData: "Loading data..."
       },
 
       // Authentication
