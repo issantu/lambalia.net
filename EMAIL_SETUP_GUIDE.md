@@ -148,4 +148,4 @@ Create templates for common responses to maintain consistency and professionalis
 
 **📧 All email addresses are now displayed on your website's footer and contact page!**
 
-Visit: https://local-food-market.preview.emergentagent.com/contact
+Visit: https://foodloc-platform.preview.emergentagent.com/contact

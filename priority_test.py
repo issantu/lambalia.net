@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 class PriorityAPITester:
-    def __init__(self, base_url="https://local-food-market.preview.emergentagent.com"):
+    def __init__(self, base_url="https://foodloc-platform.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
