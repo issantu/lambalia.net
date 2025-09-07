@@ -189,9 +189,9 @@ const LoginPage = () => {
             />
           </div>
           <h1 className="text-4xl font-bold heading-gradient">Lambalia</h1>
-          <p className="text-gray-600 mt-2 font-medium">Taste the World's Heritage</p>
+          <p className="text-gray-600 mt-2 font-medium">{t('auth.subtitle')}</p>
           <div className="mt-4 text-sm text-gray-500">
-            <p>🌍 80+ Cultural Communities • 🥄 Heritage Recipes • 🛒 Specialty Ingredients</p>
+            <p>{t('auth.culturalInfo')}</p>
           </div>
         </div>
 
