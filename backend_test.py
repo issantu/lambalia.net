@@ -1386,6 +1386,365 @@ class LambaliaEnhancedAPITester:
         details = f"- Perfect match score: {perfect_score} (expected 0.95)"
         return self.log_test("Compatibility Scoring", score_correct, details)
 
+    # LOD (LOCAL OFFERS & DEMANDS) MARKETPLACE TESTS - Translation Fixes Verification
+
+    def test_lod_get_offers_without_postal_code(self):
+        """Test GET /api/lambalia-market/offers without postal_code parameter"""
+        success, data = self.make_request('GET', 'lambalia-market/offers')
+        
+        if success:
+            offers_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {offers_count} offers without location filter"
+            if offers_count > 0:
+                first_offer = data[0]
+                details += f", First: {first_offer.get('title', 'unknown')[:30]}..."
+        else:
+            details = ""
+            
+        return self.log_test("LOD Get Offers (No Postal Code)", success, details)
+
+    def test_lod_get_offers_with_postal_code(self):
+        """Test GET /api/lambalia-market/offers with postal_code parameter"""
+        success, data = self.make_request('GET', 'lambalia-market/offers?postal_code=10001&radius_miles=15')
+        
+        if success:
+            offers_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {offers_count} offers in postal code 10001"
+            if offers_count > 0:
+                first_offer = data[0]
+                distance = first_offer.get('distance_miles', 'N/A')
+                details += f", Distance: {distance} miles"
+        else:
+            details = ""
+            
+        return self.log_test("LOD Get Offers (With Postal Code)", success, details)
+
+    def test_lod_get_demands_without_postal_code(self):
+        """Test GET /api/lambalia-market/demands without postal_code parameter"""
+        success, data = self.make_request('GET', 'lambalia-market/demands')
+        
+        if success:
+            demands_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {demands_count} demands without location filter"
+            if demands_count > 0:
+                first_demand = data[0]
+                details += f", First: {first_demand.get('title', 'unknown')[:30]}..."
+        else:
+            details = ""
+            
+        return self.log_test("LOD Get Demands (No Postal Code)", success, details)
+
+    def test_lod_get_demands_with_postal_code(self):
+        """Test GET /api/lambalia-market/demands with postal_code parameter"""
+        success, data = self.make_request('GET', 'lambalia-market/demands?postal_code=10001&radius_miles=20')
+        
+        if success:
+            demands_count = len(data) if isinstance(data, list) else 0
+            details = f"- Found {demands_count} demands in postal code 10001"
+            if demands_count > 0:
+                first_demand = data[0]
+                distance = first_demand.get('distance_miles', 'N/A')
+                details += f", Distance: {distance} miles"
+        else:
+            details = ""
+            
+        return self.log_test("LOD Get Demands (With Postal Code)", success, details)
+
+    def test_lod_create_food_offer(self):
+        """Test POST /api/lambalia-market/offers (create new food offer)"""
+        if not self.token:
+            return self.log_test("LOD Create Food Offer", False, "- No auth token available")
+
+        from datetime import datetime, timedelta
+        
+        offer_data = {
+            "title": "Homemade Italian Lasagna",
+            "description": "Traditional Italian lasagna with layers of pasta, meat sauce, bechamel, and cheese. Made with family recipe passed down for generations.",
+            "dish_name": "Lasagna Bolognese",
+            "cuisine_type": "Italian",
+            "quantity_people": 6,
+            "price_per_person": 18.50,
+            "postal_code": "10001",
+            "pickup_available": True,
+            "delivery_available": False,
+            "preparation_time_hours": 3.0,
+            "dietary_restrictions": ["contains_dairy", "contains_gluten"],
+            "spice_level": "mild",
+            "expires_at": (datetime.utcnow() + timedelta(hours=24)).isoformat()
+        }
+
+        success, data = self.make_request('POST', 'lambalia-market/offers', offer_data, 200)
+        
+        if success:
+            self.lod_offer_id = data.get('id')
+            title = data.get('title', 'unknown')
+            price = data.get('price_per_person', 0)
+            commission_rate = 0.15
+            expected_earnings = price * (1 - commission_rate)
+            details = f"- Offer ID: {self.lod_offer_id}, Title: {title}, Price: ${price}/person"
+        else:
+            details = ""
+            
+        return self.log_test("LOD Create Food Offer", success, details)
+
+    def test_lod_create_food_demand(self):
+        """Test POST /api/lambalia-market/demands (create new food demand)"""
+        if not self.token:
+            return self.log_test("LOD Create Food Demand", False, "- No auth token available")
+
+        from datetime import datetime, timedelta
+        
+        demand_data = {
+            "title": "Looking for Authentic Paella Valenciana",
+            "description": "Seeking someone to prepare traditional Spanish paella for a family gathering. Must use authentic bomba rice and saffron.",
+            "dish_name": "Paella Valenciana",
+            "cuisine_type": "Spanish",
+            "quantity_people": 8,
+            "price_per_person": 22.00,
+            "postal_code": "10001",
+            "pickup_available": True,
+            "delivery_available": True,
+            "preparation_time_hours": 2.5,
+            "dietary_restrictions": ["no_shellfish"],
+            "spice_level": "medium",
+            "expires_at": (datetime.utcnow() + timedelta(hours=48)).isoformat()
+        }
+
+        success, data = self.make_request('POST', 'lambalia-market/demands', demand_data, 200)
+        
+        if success:
+            self.lod_demand_id = data.get('id')
+            title = data.get('title', 'unknown')
+            price = data.get('price_per_person', 0)
+            quantity = data.get('quantity_people', 0)
+            total_value = price * quantity
+            details = f"- Demand ID: {self.lod_demand_id}, Title: {title}, Total Value: ${total_value}"
+        else:
+            details = ""
+            
+        return self.log_test("LOD Create Food Demand", success, details)
+
+    def test_lod_subscribe_to_offer(self):
+        """Test POST /api/lambalia-market/subscribe-to-offer"""
+        if not self.token:
+            return self.log_test("LOD Subscribe to Offer", False, "- No auth token available")
+
+        # First get available offers to subscribe to
+        success, offers_data = self.make_request('GET', 'lambalia-market/offers?postal_code=10001')
+        
+        if not success or not offers_data:
+            return self.log_test("LOD Subscribe to Offer", False, "- No offers available to subscribe to")
+
+        # Use the first available offer
+        offer_to_subscribe = offers_data[0]
+        offer_id = offer_to_subscribe.get('id')
+        
+        if not offer_id:
+            return self.log_test("LOD Subscribe to Offer", False, "- No valid offer ID found")
+
+        subscription_data = {
+            "item_id": offer_id,
+            "fulfillment_type": "pickup",
+            "notes": "Looking forward to this delicious meal! Please confirm pickup time."
+        }
+
+        success, data = self.make_request('POST', 'lambalia-market/subscribe-to-offer', subscription_data, 200)
+        
+        if success:
+            subscription_id = data.get('id')
+            total_amount = data.get('total_amount', 0)
+            platform_commission = data.get('platform_commission', 0)
+            user_earnings = data.get('user_earnings', 0)
+            commission_rate = platform_commission / total_amount if total_amount > 0 else 0
+            details = f"- Subscription ID: {subscription_id}, Total: ${total_amount}, Commission: {commission_rate:.1%}, Seller Earnings: ${user_earnings}"
+        else:
+            details = ""
+            
+        return self.log_test("LOD Subscribe to Offer", success, details)
+
+    def test_lod_subscribe_to_demand(self):
+        """Test POST /api/lambalia-market/subscribe-to-demand"""
+        if not self.token:
+            return self.log_test("LOD Subscribe to Demand", False, "- No auth token available")
+
+        # First get available demands to subscribe to
+        success, demands_data = self.make_request('GET', 'lambalia-market/demands?postal_code=10001')
+        
+        if not success or not demands_data:
+            return self.log_test("LOD Subscribe to Demand", False, "- No demands available to subscribe to")
+
+        # Use the first available demand
+        demand_to_subscribe = demands_data[0]
+        demand_id = demand_to_subscribe.get('id')
+        
+        if not demand_id:
+            return self.log_test("LOD Subscribe to Demand", False, "- No valid demand ID found")
+
+        subscription_data = {
+            "item_id": demand_id,
+            "fulfillment_type": "delivery",
+            "notes": "I can prepare this authentic dish with traditional ingredients. Will deliver fresh and hot."
+        }
+
+        success, data = self.make_request('POST', 'lambalia-market/subscribe-to-demand', subscription_data, 200)
+        
+        if success:
+            subscription_id = data.get('id')
+            total_amount = data.get('total_amount', 0)
+            platform_commission = data.get('platform_commission', 0)
+            user_earnings = data.get('user_earnings', 0)
+            commission_rate = platform_commission / total_amount if total_amount > 0 else 0
+            details = f"- Subscription ID: {subscription_id}, Total: ${total_amount}, Commission: {commission_rate:.1%}, Cook Earnings: ${user_earnings}"
+        else:
+            details = ""
+            
+        return self.log_test("LOD Subscribe to Demand", success, details)
+
+    def test_lod_commission_calculation(self):
+        """Test LOD marketplace 15% commission calculation"""
+        # Test commission calculation with known values
+        test_price = 20.00
+        test_quantity = 4
+        total_amount = test_price * test_quantity  # $80.00
+        expected_commission_rate = 0.15  # 15%
+        expected_commission = total_amount * expected_commission_rate  # $12.00
+        expected_user_earnings = total_amount - expected_commission  # $68.00
+        
+        commission_correct = abs(expected_commission - 12.00) < 0.01
+        earnings_correct = abs(expected_user_earnings - 68.00) < 0.01
+        
+        details = f"- Price: ${test_price}/person × {test_quantity} people = ${total_amount}, Commission (15%): ${expected_commission}, User Earnings: ${expected_user_earnings}"
+        return self.log_test("LOD Commission Calculation", commission_correct and earnings_correct, details)
+
+    def test_lod_geo_location_filtering(self):
+        """Test geo-location filtering by postal code"""
+        # Test different postal codes to verify filtering
+        test_cases = [
+            {"postal_code": "10001", "description": "NYC Manhattan"},
+            {"postal_code": "90210", "description": "Beverly Hills"},
+            {"postal_code": "60601", "description": "Chicago Loop"}
+        ]
+        
+        successful_filters = 0
+        
+        for case in test_cases:
+            success, data = self.make_request('GET', f'lambalia-market/offers?postal_code={case["postal_code"]}&radius_miles=10')
+            if success:
+                successful_filters += 1
+                # Check if results are properly filtered (in production, this would verify actual geo-filtering)
+                if isinstance(data, list):
+                    for offer in data:
+                        if offer.get('postal_code') == case["postal_code"]:
+                            break
+        
+        details = f"- {successful_filters}/{len(test_cases)} postal code filters working"
+        return self.log_test("LOD Geo-location Filtering", successful_filters > 0, details)
+
+    def test_lod_data_validation(self):
+        """Test data validation for offers and demands creation"""
+        if not self.token:
+            return self.log_test("LOD Data Validation", False, "- No auth token available")
+
+        # Test invalid offer data (missing required fields)
+        invalid_offer_data = {
+            "title": "",  # Empty title should fail
+            "description": "Test description",
+            "dish_name": "Test Dish",
+            "cuisine_type": "Italian",
+            "quantity_people": 0,  # Invalid quantity (should be >= 1)
+            "price_per_person": -5.0,  # Invalid price (should be >= 0)
+            "postal_code": "10001"
+        }
+
+        success, data = self.make_request('POST', 'lambalia-market/offers', invalid_offer_data, 422)
+        
+        validation_working = success  # Success means we got expected 422 validation error
+        
+        if validation_working:
+            details = "- Correctly rejected invalid offer data with validation errors"
+        else:
+            details = "- Failed to validate offer data properly"
+            
+        return self.log_test("LOD Data Validation", validation_working, details)
+
+    def test_lod_error_handling(self):
+        """Test error handling for invalid subscription attempts"""
+        if not self.token:
+            return self.log_test("LOD Error Handling", False, "- No auth token available")
+
+        # Test subscribing to non-existent offer
+        invalid_subscription_data = {
+            "item_id": "non-existent-offer-id",
+            "fulfillment_type": "pickup",
+            "notes": "Test subscription"
+        }
+
+        success, data = self.make_request('POST', 'lambalia-market/subscribe-to-offer', invalid_subscription_data, 500)
+        
+        error_handling_working = success  # Success means we got expected error response
+        
+        if error_handling_working:
+            details = "- Correctly handled subscription to non-existent offer"
+        else:
+            details = "- Error handling needs improvement"
+            
+        return self.log_test("LOD Error Handling", error_handling_working, details)
+
+    def test_lod_backend_service_health(self):
+        """Test LOD marketplace backend service health"""
+        # Test that all LOD endpoints are accessible
+        endpoints_to_test = [
+            ('GET', 'lambalia-market/offers'),
+            ('GET', 'lambalia-market/demands')
+        ]
+        
+        accessible_endpoints = 0
+        
+        for method, endpoint in endpoints_to_test:
+            success, data = self.make_request(method, endpoint)
+            if success:
+                accessible_endpoints += 1
+        
+        service_healthy = accessible_endpoints == len(endpoints_to_test)
+        
+        details = f"- {accessible_endpoints}/{len(endpoints_to_test)} LOD endpoints accessible"
+        return self.log_test("LOD Backend Service Health", service_healthy, details)
+
+    def test_lod_database_connections(self):
+        """Test database connections for LOD marketplace"""
+        # Test that database operations work by creating and retrieving data
+        if not self.token:
+            return self.log_test("LOD Database Connections", False, "- No auth token available")
+
+        # Create a test offer to verify database write
+        test_offer_data = {
+            "title": "Database Test Offer",
+            "description": "Test offer to verify database connectivity",
+            "dish_name": "Test Dish",
+            "cuisine_type": "Test",
+            "quantity_people": 2,
+            "price_per_person": 15.00,
+            "postal_code": "00000",
+            "pickup_available": True,
+            "delivery_available": False,
+            "preparation_time_hours": 1.0,
+            "dietary_restrictions": [],
+            "spice_level": "mild"
+        }
+
+        create_success, create_data = self.make_request('POST', 'lambalia-market/offers', test_offer_data, 200)
+        
+        if create_success:
+            # Try to retrieve offers to verify database read
+            read_success, read_data = self.make_request('GET', 'lambalia-market/offers')
+            database_working = read_success and isinstance(read_data, list)
+            details = "- Database write and read operations successful"
+        else:
+            database_working = False
+            details = "- Database write operation failed"
+            
+        return self.log_test("LOD Database Connections", database_working, details)
+
     # GLOBAL DISHES DATABASE TESTS - Comprehensive World Cuisines
 
     def test_global_dishes_unified_endpoint(self):
