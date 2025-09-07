@@ -316,7 +316,7 @@ const LoginPage = () => {
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
-                    What native dishes from your culture can you cook? (This helps users find and pay you for authentic recipes)
+                    {t('auth.nativeDishesLabel')}
                   </label>
                   <textarea
                     name="native_dishes"
