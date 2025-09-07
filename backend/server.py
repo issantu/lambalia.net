@@ -5696,6 +5696,273 @@ async def get_supported_currencies():
         "total_supported": len(currency_service.supported_currencies)
     }
 
+# COMPREHENSIVE ADMIN DASHBOARD ROUTES
+
+@api_router.get("/admin/dashboard/overview", response_model=dict)
+async def get_admin_dashboard_overview(
+    period: str = 'daily',  # daily, weekly, monthly, yearly
+    custom_start: Optional[str] = None,
+    custom_end: Optional[str] = None,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get comprehensive admin dashboard overview"""
+    
+    if not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        custom_start_dt = None
+        custom_end_dt = None
+        
+        if custom_start:
+            custom_start_dt = datetime.fromisoformat(custom_start.replace('Z', '+00:00'))
+        if custom_end:
+            custom_end_dt = datetime.fromisoformat(custom_end.replace('Z', '+00:00'))
+        
+        overview = await admin_dashboard_service.get_dashboard_overview(
+            period=period,
+            custom_start=custom_start_dt,
+            custom_end=custom_end_dt
+        )
+        
+        return {
+            "success": True,
+            "data": overview.dict(),
+            "generated_at": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Admin dashboard overview error: {e}")
+        raise HTTPException(status_code=500, detail=f"Dashboard overview failed: {str(e)}")
+
+@api_router.get("/admin/dashboard/real-time")
+async def get_real_time_dashboard_stats(current_user_id: str = Depends(get_current_user)):
+    """Get real-time platform statistics"""
+    
+    if not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        stats = await admin_dashboard_service.get_real_time_stats()
+        
+        return {
+            "success": True,
+            "data": stats
+        }
+        
+    except Exception as e:
+        logger.error(f"Real-time stats error: {e}")
+        raise HTTPException(status_code=500, detail=f"Real-time stats failed: {str(e)}")
+
+@api_router.get("/admin/dashboard/charts/{metric}")
+async def get_dashboard_chart_data(
+    metric: str,  # transactions, volume, commission
+    period: str = 'daily',  # daily, weekly, monthly
+    days_back: int = 30,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get chart data for dashboard visualizations"""
+    
+    if not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    if metric not in ['transactions', 'volume', 'commission']:
+        raise HTTPException(status_code=400, detail="Invalid metric. Choose: transactions, volume, commission")
+    
+    if days_back > 365:
+        raise HTTPException(status_code=400, detail="Maximum 365 days allowed")
+    
+    try:
+        chart_data = await admin_dashboard_service.get_chart_data(
+            metric=metric,
+            period=period,
+            days_back=days_back
+        )
+        
+        return {
+            "success": True,
+            "data": chart_data.dict(),
+            "metric": metric,
+            "period": period,
+            "days_back": days_back
+        }
+        
+    except Exception as e:
+        logger.error(f"Chart data error: {e}")
+        raise HTTPException(status_code=500, detail=f"Chart data failed: {str(e)}")
+
+@api_router.post("/admin/setup/make-admin/{user_id}")
+async def make_user_admin(
+    user_id: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Make a user admin (admin only) - Use this for initial admin setup"""
+    
+    # Allow self-promotion if no admins exist yet, otherwise require admin
+    admin_count = await db.users.count_documents({"is_admin": True})
+    
+    if admin_count > 0 and not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        success = await make_admin(user_id)
+        
+        if success:
+            return {
+                "success": True,
+                "message": f"User {user_id} has been granted admin privileges",
+                "admin_count": admin_count + 1
+            }
+        else:
+            raise HTTPException(status_code=404, detail="User not found or update failed")
+            
+    except Exception as e:
+        logger.error(f"Make admin error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to grant admin privileges: {str(e)}")
+
+@api_router.get("/admin/users/list")
+async def get_admin_users_list(
+    page: int = 1,
+    limit: int = 50,
+    search: Optional[str] = None,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get paginated list of users (admin only)"""
+    
+    if not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Build search query
+        query = {}
+        if search:
+            query["$or"] = [
+                {"username": {"$regex": search, "$options": "i"}},
+                {"email": {"$regex": search, "$options": "i"}},
+                {"full_name": {"$regex": search, "$options": "i"}}
+            ]
+        
+        # Get total count
+        total_count = await db.users.count_documents(query)
+        
+        # Get paginated results
+        skip = (page - 1) * limit
+        users_cursor = db.users.find(query, {"password_hash": 0}).skip(skip).limit(limit)
+        users = await users_cursor.to_list(length=limit)
+        
+        return {
+            "success": True,
+            "data": {
+                "users": users,
+                "pagination": {
+                    "current_page": page,
+                    "total_pages": (total_count + limit - 1) // limit,
+                    "total_count": total_count,
+                    "limit": limit
+                }
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Users list error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get users list: {str(e)}")
+
+@api_router.get("/admin/system/health")
+async def get_system_health(current_user_id: str = Depends(get_current_user)):
+    """Get system health status (admin only)"""
+    
+    if not await is_admin(current_user_id):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Check database connectivity
+        db_status = "healthy"
+        try:
+            await db.command("ping")
+        except Exception:
+            db_status = "unhealthy"
+        
+        # Check collections status
+        collections_status = {}
+        collection_names = [
+            "users", "financial_transactions", "food_orders", 
+            "market_items", "recipes", "reviews"
+        ]
+        
+        for collection_name in collection_names:
+            try:
+                count = await getattr(db, collection_name).count_documents({})
+                collections_status[collection_name] = {
+                    "status": "healthy",
+                    "document_count": count
+                }
+            except Exception as e:
+                collections_status[collection_name] = {
+                    "status": "error",
+                    "error": str(e)
+                }
+        
+        # Overall system status
+        overall_status = "healthy" if db_status == "healthy" else "degraded"
+        
+        return {
+            "success": True,
+            "data": {
+                "overall_status": overall_status,
+                "database_status": db_status,
+                "collections": collections_status,
+                "checked_at": datetime.utcnow().isoformat()
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"System health check error: {e}")
+        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
+
+# Quick admin access endpoint for development/testing
+@api_router.post("/admin/dev/quick-setup")
+async def quick_admin_setup():
+    """Quick admin setup for development (removes in production)"""
+    
+    # This should be removed in production!
+    if os.getenv("ENVIRONMENT") == "production":
+        raise HTTPException(status_code=404, detail="Not found")
+    
+    try:
+        # Create a demo admin user if none exists
+        existing_admin = await db.users.find_one({"is_admin": True})
+        if existing_admin:
+            return {
+                "success": True,
+                "message": "Admin user already exists",
+                "admin_id": existing_admin.get("id")
+            }
+        
+        # Create demo admin
+        demo_admin = {
+            "id": "admin_demo_123",
+            "username": "admin",
+            "email": "admin@lambalia.com",
+            "full_name": "Lambalia Admin",
+            "is_admin": True,
+            "created_at": datetime.utcnow(),
+            "password_hash": "demo_hash"  # In production, use proper hashing
+        }
+        
+        await db.users.insert_one(demo_admin)
+        
+        return {
+            "success": True,
+            "message": "Demo admin user created",
+            "admin_id": "admin_demo_123",
+            "username": "admin",
+            "note": "Use this for testing admin dashboard access"
+        }
+        
+    except Exception as e:
+        logger.error(f"Quick admin setup error: {e}")
+        raise HTTPException(status_code=500, detail=f"Quick setup failed: {str(e)}")
+
 # Keep all existing routes from previous implementation
 # (Reference recipes, snippets, grocery, etc.)
 
