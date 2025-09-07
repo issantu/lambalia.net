@@ -2496,6 +2496,9 @@ transaction_verification_service = TransactionVerificationService(db)
 # Initialize Lambalia Market service
 lambalia_market_service = LambaliaMarketService(db)
 
+# Initialize Grocery Ad service
+grocery_ad_service = GroceryAdService(db)
+
 @api_router.post("/farm-vendors/apply", response_model=dict)
 async def apply_as_farm_vendor(
     application_data: FarmVendorApplicationRequest,
