@@ -5450,12 +5450,13 @@ async def get_exchange_rates(base_currency: str, target_currencies: Optional[str
         "supported_currencies": currency_service.supported_currencies
     }
 
-@api_router.post("/currency/convert")
-async def convert_currency_endpoint(
-    amount: float,
-    from_currency: str,
+class CurrencyConversionRequest(BaseModel):
+    amount: float
+    from_currency: str
     to_currency: str = 'USD'
-):
+
+@api_router.post("/currency/convert")
+async def convert_currency_endpoint(request: CurrencyConversionRequest):
     """Convert amount between currencies"""
     
     if from_currency not in currency_service.supported_currencies:
