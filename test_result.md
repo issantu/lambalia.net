@@ -1014,6 +1014,7 @@ test_plan:
     - "Lambalia Eats with Expanded Cuisine Types - PARTIALLY WORKING ⚠️"
     - "New Heritage Data Collection Endpoints - COMPLETED ✅"
     - "Heritage Recipe Creation with African/Caribbean - COMPLETED ✅"
+    - "LOD (Local Offers & Demands) Marketplace Backend API - COMPLETED ✅"
   stuck_tasks: 
     - "Heritage Countries Expansion (needs 80+ countries, currently 60)"
     - "Some Lambalia Eats cuisine types (korean, vietnamese, latin_american, european) returning 500 errors"
