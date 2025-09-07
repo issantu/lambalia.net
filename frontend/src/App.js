@@ -4466,7 +4466,7 @@ const CareersPage = () => {
         </div>
         
         <div className="mt-8">
-          <a href="mailto:careers@lambalia.com" className="btn-primary px-8 py-3 rounded-lg">
+          <a href="mailto:contact@lambalia.net" className="btn-primary px-8 py-3 rounded-lg">
             Start Your Application 🚀
           </a>
         </div>
