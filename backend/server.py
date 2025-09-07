@@ -80,6 +80,7 @@ from lambalia_market_models import (
     MarketItemCreate, MarketItemResponse, MarketSubscriptionRequest,
     MarketSubscriptionResponse, MarketDashboardResponse, FulfillmentType
 )
+from grocery_ad_service import GroceryAdService, GroceryAd, GroceryStoreLocation
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
