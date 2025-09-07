@@ -489,8 +489,8 @@ const Header = () => {
               
               <Link to="/lambalia-market" className="nav-link text-gray-700 hover:text-blue-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
                 <Icon name="MapPin" size={14} className="text-gray-600" />
-                <span className="hidden xl:inline">Local Offers & Demands</span>
-                <span className="xl:hidden">LOD</span>
+                <span className="hidden xl:inline">{t('nav.lod')}</span>
+                <span className="xl:hidden">{t('nav.lodShort')}</span>
               </Link>
             </nav>
 
