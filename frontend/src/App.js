@@ -4926,7 +4926,7 @@ function App() {
                    </ProtectedRoute>
 }
 />
-<Route path="/lambalia-market" element={
+<Route path="/local-offers-demands" element={
   <ProtectedRoute>
     <>
       <Header />
