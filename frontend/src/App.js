@@ -4930,7 +4930,7 @@ function App() {
   <ProtectedRoute>
     <>
       <Header />
-      <LambaliaMarket />
+      <LocalOffersAndDemands />
       <Footer />
     </>
   </ProtectedRoute>
