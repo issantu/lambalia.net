@@ -6,7 +6,7 @@ import './i18n'; // Initialize i18n
 import LanguageSwitcher from './LanguageSwitcher';
 import './App.css';
 import LocalMarketplacePage from './LocalMarketplace';
-import LambaliaMarket from './LambaliaMarket';
+import LocalOffersAndDemands from './components/LocalOffersAndDemands';
 import CharityProgramPage from './CharityProgram';
 import LambaliaEatsApp from './LambaliaEats';
 import { Icon, AnimatedIcon } from './components/ProfessionalIcons';
