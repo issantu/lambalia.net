@@ -4923,7 +4923,20 @@ function App() {
                 <ProtectedRoute>
                   <>
                     <Header />
-                    <HomePage />
+                   </ProtectedRoute>
+}
+/>
+<Route path="/lambalia-market" element={
+  <ProtectedRoute>
+    <>
+      <Header />
+      <LambaliaMarket />
+      <Footer />
+    </>
+  </ProtectedRoute>
+} />
+<Route
+                <HomePage />
                     <Footer />
                   </>
                 </ProtectedRoute>
