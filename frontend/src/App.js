@@ -4927,11 +4927,11 @@ function App() {
                    </ProtectedRoute>
 }
 />
-<Route path="/local-offers-demands" element={
+<Route path="/chef-market" element={
   <ProtectedRoute>
     <>
       <Header />
-      <LocalOffersAndDemands />
+      <ChefMarket />
       <Footer />
     </>
   </ProtectedRoute>
