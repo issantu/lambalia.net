@@ -4924,20 +4924,19 @@ function App() {
                 <ProtectedRoute>
                   <>
                     <Header />
-                   </ProtectedRoute>
-}
-/>
-<Route path="/chef-market" element={
-  <ProtectedRoute>
-    <>
-      <Header />
-      <ChefMarket />
-      <Footer />
-    </>
-  </ProtectedRoute>
-} />
-<Route
-                <HomePage />
+                    <HomePage />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/chef-market" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <ChefMarket />
                     <Footer />
                   </>
                 </ProtectedRoute>
