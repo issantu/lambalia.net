@@ -145,7 +145,16 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
     
-    const result = await register(formData);
+    // Map frontend field names to backend field names
+    const registrationData = {
+      ...formData,
+      phone: formData.phone_number, // Map phone_number to phone for backend
+    };
+    
+    // Remove the original phone_number field
+    delete registrationData.phone_number;
+    
+    const result = await register(registrationData);
     if (result.success) {
       window.location.href = '/';
     } else {
