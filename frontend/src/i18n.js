@@ -16,6 +16,7 @@ const resources = {
         marketplace: "Local Market",
         charity: "Give Back",
         eats: "Quick Eats",
+        offers: "Local Offers",
         profile: "Profile"
       },
       
