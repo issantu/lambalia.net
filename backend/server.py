@@ -196,6 +196,7 @@ class UserResponse(BaseModel):
     username: str
     email: str
     full_name: Optional[str] = None
+    phone: Optional[str] = None  # Added phone field
     bio: Optional[str] = None
     profile_photo: Optional[str] = None
     country_id: Optional[str] = None
