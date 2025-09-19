@@ -5278,6 +5278,334 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ========================================
+# SMS NOTIFICATION & TIP SYSTEM ENDPOINTS  
+# ========================================
+
+@api_router.post("/sms/test")
+async def test_sms_service(
+    phone_number: str,
+    message: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Test SMS notification service"""
+    try:
+        sms_service = await get_sms_service()
+        result = await sms_service._send_sms(phone_number, message)
+        return {
+            "success": result["success"],
+            "message": "SMS sent successfully" if result["success"] else "SMS failed",
+            "details": result
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@api_router.get("/sms/status")
+async def get_sms_service_status():
+    """Get SMS service configuration status"""
+    try:
+        sms_service = await get_sms_service()
+        return sms_service.get_service_status()
+    except Exception as e:
+        return {"enabled": False, "error": str(e)}
+
+@api_router.post("/notifications/account-change")
+async def send_account_change_notification(
+    change_details: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Send account change SMS notification"""
+    try:
+        # Get user phone number
+        user = await db.users.find_one({"id": current_user_id})
+        if not user or not user.get("phone"):
+            return {"success": False, "error": "User phone number not found"}
+        
+        sms_service = await get_sms_service()
+        result = await sms_service.send_account_change_sms(
+            phone_number=user["phone"],
+            change_details=change_details
+        )
+        
+        return {
+            "success": result["success"],
+            "message": "Account change notification sent" if result["success"] else "Failed to send notification"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@api_router.post("/notifications/transaction")
+async def send_transaction_notification(
+    transaction_data: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Send transaction SMS notification (money in/out)"""
+    try:
+        # Get user phone number
+        user = await db.users.find_one({"id": current_user_id})
+        if not user or not user.get("phone"):
+            return {"success": False, "error": "User phone number not found"}
+        
+        sms_service = await get_sms_service()
+        
+        transaction_type = transaction_data.get("type", "unknown")
+        amount = transaction_data.get("amount", 0.0)
+        balance = transaction_data.get("balance", 0.0)
+        reference = transaction_data.get("reference", "N/A")
+        
+        if transaction_type == "money_in":
+            result = await sms_service.send_money_in_sms(
+                phone_number=user["phone"],
+                amount=amount,
+                transaction_type=transaction_data.get("source", "payment"),
+                reference=reference,
+                balance=balance
+            )
+        else:
+            result = await sms_service.send_money_out_sms(
+                phone_number=user["phone"],
+                amount=amount,
+                recipient=transaction_data.get("recipient", "merchant"),
+                reference=reference,
+                balance=balance
+            )
+        
+        return {
+            "success": result["success"],
+            "message": "Transaction notification sent" if result["success"] else "Failed to send notification"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@api_router.post("/service/complete")
+async def complete_service_transaction(
+    service_data: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Mark a service as completed and schedule rating request"""
+    try:
+        tip_rating_service = await get_tip_rating_service()
+        
+        service_id = await tip_rating_service.create_service_completion_record({
+            "service_type": service_data.get("service_type", ServiceType.HOME_RESTAURANT),
+            "user_id": current_user_id,
+            "provider_id": service_data.get("provider_id"),
+            "details": service_data.get("details", {}),
+            "amount": service_data.get("amount", 0.0),
+            "payment_method_id": service_data.get("payment_method_id")
+        })
+        
+        return {
+            "success": True,
+            "service_id": service_id,
+            "message": "Service completed and rating request scheduled"
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@api_router.post("/service/rate-and-tip")
+async def submit_service_rating_and_tip(
+    rating_data: RatingRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Submit service rating and optional tip"""
+    try:
+        tip_rating_service = await get_tip_rating_service()
+        
+        # Ensure current user matches the rating user
+        rating_data.user_id = current_user_id
+        
+        result = await tip_rating_service.submit_rating_and_tip(rating_data)
+        
+        if result["success"]:
+            # Send SMS confirmation to both parties
+            user = await db.users.find_one({"id": current_user_id})
+            provider = await db.users.find_one({"id": rating_data.provider_id})
+            
+            if user.get("phone"):
+                sms_service = await get_sms_service()
+                confirmation_message = f"Thank you for your {rating_data.rating}-star rating! "
+                if rating_data.tip_amount and rating_data.tip_amount > 0:
+                    confirmation_message += f"Your ${rating_data.tip_amount:.2f} tip has been processed."
+                
+                await sms_service._send_sms(user["phone"], confirmation_message)
+            
+            return {
+                "success": True,
+                "rating_id": result["rating_id"],
+                "tip_processed": result["tip_processed"],
+                "tip_amount": result["tip_amount"],
+                "message": "Rating and tip submitted successfully"
+            }
+        else:
+            return {"success": False, "error": result["error"]}
+            
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@api_router.get("/earnings/summary/{provider_id}")
+async def get_provider_earnings_summary(
+    provider_id: str,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get provider earnings summary with regular and tip separation"""
+    try:
+        # Verify user can access these earnings (provider themselves or admin)
+        if current_user_id != provider_id:
+            user = await db.users.find_one({"id": current_user_id})
+            if not user or not user.get("is_platform_owner"):
+                raise HTTPException(status_code=403, detail="Access denied")
+        
+        tip_rating_service = await get_tip_rating_service()
+        
+        # Parse dates if provided
+        start_dt = datetime.fromisoformat(start_date) if start_date else None
+        end_dt = datetime.fromisoformat(end_date) if end_date else None
+        
+        summary = await tip_rating_service.get_provider_earnings_summary(
+            provider_id, start_dt, end_dt
+        )
+        
+        return summary
+        
+    except Exception as e:
+        return {"error": str(e)}
+
+@api_router.get("/admin/pending-ratings")
+async def get_pending_rating_requests(
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get services that need rating SMS sent - Admin only"""
+    try:
+        user = await db.users.find_one({"id": current_user_id})
+        if not user or not user.get("is_platform_owner"):
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        tip_rating_service = await get_tip_rating_service()
+        pending_requests = await tip_rating_service.get_pending_rating_requests()
+        
+        return {
+            "pending_count": len(pending_requests),
+            "requests": pending_requests
+        }
+        
+    except Exception as e:
+        return {"error": str(e)}
+
+@api_router.post("/admin/send-rating-sms/{service_id}")
+async def send_rating_sms_request(
+    service_id: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Manually send rating SMS for a completed service - Admin only"""
+    try:
+        user = await db.users.find_one({"id": current_user_id})
+        if not user or not user.get("is_platform_owner"):
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        # Get service record
+        service_record = await db.completed_services.find_one({"id": service_id})
+        if not service_record:
+            return {"success": False, "error": "Service not found"}
+        
+        # Get user details
+        user_record = await db.users.find_one({"id": service_record["user_id"]})
+        if not user_record or not user_record.get("phone"):
+            return {"success": False, "error": "User phone not found"}
+        
+        # Send rating SMS
+        sms_service = await get_sms_service()
+        rating_link = f"https://lambalia.com/rate/{service_id}"
+        
+        result = await sms_service.send_service_rating_sms(
+            phone_number=user_record["phone"],
+            user_name=user_record.get("full_name", user_record["username"]),
+            service_type=service_record["service_type"],
+            rating_link=rating_link
+        )
+        
+        if result["success"]:
+            # Mark as sent
+            await db.completed_services.update_one(
+                {"id": service_id},
+                {"$set": {"rating_sent": True}}
+            )
+        
+        return {
+            "success": result["success"],
+            "message": "Rating SMS sent" if result["success"] else "Failed to send SMS"
+        }
+        
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+# Enhanced User Profile Update with SMS notification
+@api_router.put("/users/profile")
+async def update_user_profile(
+    profile_updates: Dict[str, Any],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Update user profile with SMS notification for important changes"""
+    try:
+        # Get current user data
+        current_user = await db.users.find_one({"id": current_user_id})
+        if not current_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Check for important changes that require SMS notification
+        important_changes = []
+        
+        if "email" in profile_updates and profile_updates["email"] != current_user.get("email"):
+            important_changes.append(f"Email changed to {profile_updates['email']}")
+        
+        if "phone" in profile_updates and profile_updates["phone"] != current_user.get("phone"):
+            important_changes.append(f"Phone number changed to {profile_updates['phone']}")
+        
+        if "password" in profile_updates:
+            # Hash new password
+            profile_updates["password_hash"] = hash_password(profile_updates["password"])
+            del profile_updates["password"]
+            important_changes.append("Password changed")
+        
+        # Update user profile
+        await db.users.update_one(
+            {"id": current_user_id},
+            {
+                "$set": {
+                    **profile_updates,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        # Send SMS notification for important changes
+        if important_changes and current_user.get("phone"):
+            try:
+                sms_service = await get_sms_service()
+                change_details = "; ".join(important_changes)
+                await sms_service.send_account_change_sms(
+                    phone_number=current_user["phone"],
+                    change_details=change_details
+                )
+            except Exception as e:
+                logger.warning(f"Failed to send account change SMS: {str(e)}")
+        
+        # Get updated user data
+        updated_user = await db.users.find_one({"id": current_user_id})
+        
+        return {
+            "success": True,
+            "message": "Profile updated successfully",
+            "user": UserResponse(**updated_user),
+            "sms_sent": len(important_changes) > 0 and bool(current_user.get("phone"))
+        }
+        
+    except Exception as e:
+        logger.error(f"Profile update error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Profile update failed")
+
 @app.on_event("startup")
 async def startup_event():
     # Create indexes for marketplace
