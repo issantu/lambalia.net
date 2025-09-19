@@ -402,6 +402,19 @@ async def register_user(user_data: UserRegistration):
     user = UserProfile(**user_dict)
     await db.users.insert_one(user.dict())
     
+    # Send welcome SMS notification
+    try:
+        sms_service = await get_sms_service()
+        if user.phone:
+            await sms_service.send_registration_sms(
+                phone_number=user.phone,
+                user_name=user.full_name or user.username
+            )
+            logger.info(f"Welcome SMS sent to new user: {user.username}")
+    except Exception as e:
+        logger.warning(f"Failed to send welcome SMS to {user.username}: {str(e)}")
+        # Don't fail registration if SMS fails
+    
     token = create_jwt_token(user.id)
     
     return TokenResponse(
