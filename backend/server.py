@@ -142,6 +142,7 @@ class UserProfile(BaseModel):
     email: EmailStr
     password_hash: str
     full_name: Optional[str] = None
+    phone: Optional[str] = None  # Added phone field for SMS notifications
     bio: Optional[str] = None
     profile_photo: Optional[str] = None
     country_id: Optional[str] = None
