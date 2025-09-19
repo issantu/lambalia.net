@@ -4048,16 +4048,17 @@ class LambaliaEnhancedAPITester:
 def main():
     """Main test runner"""
     print("Enhanced Lambalia Backend API Test Suite")
-    print(f"Testing against: https://lambalia-finder.preview.emergentagent.com")
+    tester = LambaliaEnhancedAPITester()
+    print(f"Testing against: {tester.base_url}")
     print()
     
-    tester = LambaliaEnhancedAPITester()
     return tester.run_all_tests()
 
 def main_ui_improvements():
     """Run focused UI improvements tests"""
     print("Lambalia UI Improvements Test Suite")
-    print(f"Testing against: https://lambalia-finder.preview.emergentagent.com")
+    tester = LambaliaEnhancedAPITester()
+    print(f"Testing against: {tester.base_url}")
     print()
     
     tester = LambaliaEnhancedAPITester()
