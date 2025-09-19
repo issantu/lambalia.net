@@ -5003,6 +5003,18 @@ function App() {
               } 
             />
             <Route 
+              path="/local-offers" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <LocalOffersAndDemands />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/charity-program" 
               element={
                 <ProtectedRoute>
