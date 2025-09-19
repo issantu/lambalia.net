@@ -791,63 +791,209 @@ const UserEarningsDashboard = () => {
 
   if (!earningsData) return <div className="text-center p-8">Unable to load earnings data</div>;
 
-  const { earnings_summary, earnings_breakdown, payout_info, recent_transactions } = earnings;
+  const { regular_earnings, tips, total_earnings, period } = earningsData;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold heading-gradient mb-2">💰 My Earnings Dashboard</h1>
-        <p className="text-gray-600">Track your Lambalia earnings and manage payouts</p>
+        <h1 className="text-3xl font-bold heading-gradient mb-2">💰 Enhanced Earnings Dashboard</h1>
+        <p className="text-gray-600">Track your Lambalia earnings and tips - tax categorized</p>
+        
+        {/* Period Selector */}
+        <div className="mt-4">
+          <select 
+            value={selectedPeriod} 
+            onChange={(e) => setSelectedPeriod(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            <option value="current_month">Current Month</option>
+            <option value="last_month">Last Month</option>
+            <option value="last_3_months">Last 3 Months</option>
+            <option value="current_year">Current Year</option>
+          </select>
+        </div>
       </div>
 
-      {/* Earnings Summary Cards */}
+      {/* Enhanced Earnings Summary Cards */}
       <div className="grid md:grid-cols-4 gap-6 mb-8">
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl text-center">
           <div className="text-2xl font-bold text-green-600">
-            ${earnings_summary.current_week_earnings.toFixed(2)}
+            ${regular_earnings.total.toFixed(2)}
           </div>
-          <div className="text-sm text-gray-600">This Week</div>
+          <div className="text-sm text-gray-600">Regular Earnings</div>
+          <div className="text-xs text-gray-500 mt-1">Tax Category: Regular Income</div>
+        </div>
+        
+        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl text-center">
+          <div className="text-2xl font-bold text-orange-600">
+            ${tips.total.toFixed(2)}
+          </div>
+          <div className="text-sm text-gray-600">Tips Received</div>
+          <div className="text-xs text-gray-500 mt-1">Tax Category: Tips</div>
         </div>
         
         <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl text-center">
           <div className="text-2xl font-bold text-blue-600">
-            ${earnings_summary.total_lifetime_earnings.toFixed(2)}
+            ${total_earnings.toFixed(2)}
           </div>
-          <div className="text-sm text-gray-600">Total Earned</div>
+          <div className="text-sm text-gray-600">Total Earnings</div>
+          <div className="text-xs text-gray-500 mt-1">Regular + Tips</div>
         </div>
         
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl text-center">
           <div className="text-2xl font-bold text-purple-600">
-            ${earnings_summary.pending_payout_amount.toFixed(2)}
+            {regular_earnings.count + tips.count}
           </div>
-          <div className="text-sm text-gray-600">Pending Payout</div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl text-center">
-          <div className="text-2xl font-bold text-orange-600">
-            ${earnings_summary.total_platform_commission.toFixed(2)}
-          </div>
-          <div className="text-sm text-gray-600">Platform Commission (15%)</div>
+          <div className="text-sm text-gray-600">Total Transactions</div>
+          <div className="text-xs text-gray-500 mt-1">{regular_earnings.count} regular, {tips.count} tips</div>
         </div>
       </div>
 
-      {/* Earnings Breakdown */}
+      {/* Tax Information Section */}
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
+        <h3 className="text-lg font-semibold text-amber-800 mb-4">📊 Tax Information</h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white p-4 rounded-lg">
+            <h4 className="font-medium text-gray-800 mb-2">Regular Income</h4>
+            <p className="text-2xl font-bold text-green-600">${regular_earnings.total.toFixed(2)}</p>
+            <p className="text-sm text-gray-600">Report as business income on your tax return</p>
+          </div>
+          <div className="bg-white p-4 rounded-lg">
+            <h4 className="font-medium text-gray-800 mb-2">Tips Income</h4>
+            <p className="text-2xl font-bold text-orange-600">${tips.total.toFixed(2)}</p>
+            <p className="text-sm text-gray-600">Report as tip income (subject to different tax treatment)</p>
+          </div>
+        </div>
+        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+          <p className="text-sm text-blue-700">
+            💡 <strong>Tax Tip:</strong> Keep these categories separate for accurate tax reporting. 
+            Regular earnings may be subject to self-employment tax, while tips have different reporting requirements.
+          </p>
+        </div>
+      </div>
+
+      {/* Performance Metrics */}
       <div className="grid md:grid-cols-2 gap-8 mb-8">
         <div className="bg-white p-6 rounded-xl shadow-lg">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">💼 Earnings by Service</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">📈 Performance Metrics</h3>
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-600">Consultations</span>
-              <span className="font-semibold text-green-600">${earnings_breakdown.consultation_earnings.toFixed(2)}</span>
+              <span className="text-gray-600">Average per Transaction</span>
+              <span className="font-semibold text-green-600">
+                ${total_earnings > 0 ? (total_earnings / (regular_earnings.count + tips.count)).toFixed(2) : '0.00'}
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Lambalia Eats</span>
-              <span className="font-semibold text-orange-600">${earnings_breakdown.lambalia_eats_earnings.toFixed(2)}</span>
+              <span className="text-gray-600">Average Tip Amount</span>
+              <span className="font-semibold text-orange-600">
+                ${tips.count > 0 ? (tips.total / tips.count).toFixed(2) : '0.00'}
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Home Restaurants</span>
-              <span className="font-semibold text-purple-600">${earnings_breakdown.home_restaurant_earnings.toFixed(2)}</span>
+              <span className="text-gray-600">Tip Rate</span>
+              <span className="font-semibold text-purple-600">
+                {regular_earnings.count > 0 ? ((tips.count / regular_earnings.count) * 100).toFixed(1) : '0'}%
+              </span>
             </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">💡 Earnings Optimization</h3>
+          <div className="space-y-4">
+            {tips.count === 0 && (
+              <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-sm text-yellow-700">
+                  🌟 <strong>Increase Tips:</strong> Provide exceptional service to earn more tips! 
+                  Great reviews lead to higher tip rates.
+                </p>
+              </div>
+            )}
+            {regular_earnings.count < 5 && (
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-700">
+                  🚀 <strong>Boost Activity:</strong> Complete more services to increase your regular earnings.
+                </p>
+              </div>
+            )}
+            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-green-700">
+                ✨ <strong>Quality Focus:</strong> High-quality service leads to both better ratings and higher tips!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Payout Section */}
+      <div className="bg-white p-6 rounded-xl shadow-lg">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-800">💳 Payout Management</h3>
+          <button
+            onClick={() => setShowPayoutSetup(!showPayoutSetup)}
+            className="btn-secondary px-4 py-2 rounded-lg"
+          >
+            {showPayoutSetup ? 'Cancel' : 'Setup Payout'}
+          </button>
+        </div>
+        
+        {showPayoutSetup && (
+          <form onSubmit={handlePayoutSetup} className="space-y-4 border-t pt-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Payout Method</label>
+                <select
+                  value={payoutData.payout_method}
+                  onChange={(e) => setPayoutData({...payoutData, payout_method: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="stripe">Stripe</option>
+                  <option value="paypal">PayPal</option>
+                  <option value="bank">Direct Bank Transfer</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Payout Amount</label>
+                <input
+                  type="number"
+                  min="25"
+                  step="0.01"
+                  value={payoutData.minimum_payout_amount}
+                  onChange={(e) => setPayoutData({...payoutData, minimum_payout_amount: parseFloat(e.target.value)})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            
+            {payoutData.payout_method === 'paypal' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">PayPal Email</label>
+                <input
+                  type="email"
+                  value={payoutData.paypal_email}
+                  onChange={(e) => setPayoutData({...payoutData, paypal_email: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            )}
+            
+            <button type="submit" className="btn-primary px-6 py-2 rounded-lg">
+              Save Payout Settings
+            </button>
+          </form>
+        )}
+        
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+          <h4 className="font-medium text-gray-800 mb-2">Current Payout Status</h4>
+          <p className="text-sm text-gray-600">
+            Next payout: <strong>${total_earnings.toFixed(2)}</strong> • 
+            Processing: <strong>Weekly on Fridays</strong> • 
+            Minimum: <strong>$25.00</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
             <div className="flex justify-between">
               <span className="text-gray-600">Other Services</span>
               <span className="font-semibold text-blue-600">${earnings_breakdown.other_earnings.toFixed(2)}</span>
