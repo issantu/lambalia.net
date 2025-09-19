@@ -685,11 +685,12 @@ const ExternalAdBanner = ({ placement = "header", size = "728x90" }) => {
   );
 };
 
-// User Earnings Dashboard Component
+// Enhanced User Earnings Dashboard Component with Tips Separation
 const UserEarningsDashboard = () => {
-  const [earnings, setEarnings] = useState(null);
+  const [earningsData, setEarningsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showPayoutSetup, setShowPayoutSetup] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState('current_month');
   const [payoutData, setPayoutData] = useState({
     payout_method: 'stripe',
     minimum_payout_amount: 25.00,
@@ -701,18 +702,55 @@ const UserEarningsDashboard = () => {
   });
 
   useEffect(() => {
-    fetchEarnings();
-  }, []);
+    fetchEnhancedEarnings();
+  }, [selectedPeriod]);
 
-  const fetchEarnings = async () => {
+  const fetchEnhancedEarnings = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/payments/my-earnings`, {
+      // Get current user ID from token or user context
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      // Decode token to get user ID (simple implementation)
+      const tokenData = JSON.parse(atob(token.split('.')[1]));
+      const userId = tokenData.user_id;
+
+      // Fetch enhanced earnings summary with tips separation
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/earnings/summary/${userId}?period=${selectedPeriod}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
-      const data = await response.json();
-      setEarnings(data);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setEarningsData(data);
+      } else {
+        // Fallback to old earnings endpoint
+        const fallbackResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/payments/my-earnings`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const fallbackData = await fallbackResponse.json();
+        
+        // Transform old format to new format
+        setEarningsData({
+          provider_id: userId,
+          period: { start_date: new Date().toISOString(), end_date: new Date().toISOString() },
+          regular_earnings: {
+            total: fallbackData?.total_earnings || 0,
+            count: fallbackData?.transactions_count || 0,
+            tax_category: "regular_income"
+          },
+          tips: {
+            total: 0,
+            count: 0,
+            tax_category: "tips" 
+          },
+          total_earnings: fallbackData?.total_earnings || 0
+        });
+      }
     } catch (error) {
       console.error('Failed to fetch earnings:', error);
     } finally {
@@ -735,7 +773,7 @@ const UserEarningsDashboard = () => {
       if (response.ok) {
         alert('Payout profile updated successfully!');
         setShowPayoutSetup(false);
-        fetchEarnings();
+        fetchEnhancedEarnings();
       } else {
         alert('Failed to update payout profile');
       }
@@ -744,9 +782,14 @@ const UserEarningsDashboard = () => {
     }
   };
 
-  if (loading) return <div className="text-center p-8">Loading earnings...</div>;
+  if (loading) return (
+    <div className="text-center p-8">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+      <p className="text-gray-600">Loading earnings...</p>
+    </div>
+  );
 
-  if (!earnings) return <div className="text-center p-8">Unable to load earnings data</div>;
+  if (!earningsData) return <div className="text-center p-8">Unable to load earnings data</div>;
 
   const { earnings_summary, earnings_breakdown, payout_info, recent_transactions } = earnings;
 
