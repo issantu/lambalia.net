@@ -39,7 +39,7 @@ from marketplace_models import (
     VendorType, BookingStatus, OrderStatus, PaymentStatus, DocumentType
 )
 from payment_service import payment_service, pricing_engine
-# from translation_service import get_translation_service
+from translation_service import get_translation_service
 from daily_marketplace_service import DailyMarketplaceService
 from marketplace_daily_models import (
     CookingOfferRequest, EatingRequestRequest, AppointmentRequest,
