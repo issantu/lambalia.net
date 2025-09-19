@@ -178,6 +178,7 @@ class UserRegistration(BaseModel):
     email: EmailStr
     password: str
     full_name: Optional[str] = None
+    phone: Optional[str] = None  # Added phone field for SMS notifications
     country_id: Optional[str] = None
     postal_code: Optional[str] = None
     preferred_language: str = "en"
