@@ -10,7 +10,7 @@ import time
 
 class TranslationSystemTester:
     def __init__(self):
-        self.base_url = "https://lambalia-web.preview.emergentagent.com"
+        self.base_url = "https://lambalia-finder.preview.emergentagent.com"
         self.api_url = f"{self.base_url}/api"
         
     def test_cultural_preservation_critical(self):

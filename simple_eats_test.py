@@ -6,7 +6,7 @@ Simple Lambalia Eats Test - Focus on Review Request Requirements
 import requests
 import json
 
-BASE_URL = "https://lambalia-web.preview.emergentagent.com/api"
+BASE_URL = "https://lambalia-finder.preview.emergentagent.com/api"
 
 def test_endpoint(name, endpoint, expected_fields=None):
     """Test a single endpoint"""
