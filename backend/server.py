@@ -40,6 +40,8 @@ from marketplace_models import (
 )
 from payment_service import payment_service, pricing_engine
 from translation_service import get_translation_service
+from sms_notification_service import get_sms_service
+from tip_rating_service import get_tip_rating_service, RatingRequest, ServiceType
 from daily_marketplace_service import DailyMarketplaceService
 from marketplace_daily_models import (
     CookingOfferRequest, EatingRequestRequest, AppointmentRequest,
