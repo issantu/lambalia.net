@@ -343,6 +343,7 @@ const resources = {
         marketplace: "Marché Local",
         charity: "Donner en Retour",
         eats: "Repas Rapides",
+        offers: "Offres Locales",
         profile: "Profil"
       },
       
