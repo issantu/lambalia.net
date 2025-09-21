@@ -5721,6 +5721,214 @@ async def update_user_profile(
         logger.error(f"Profile update error: {str(e)}")
         raise HTTPException(status_code=500, detail="Profile update failed")
 
+# ========================================
+# SNIPPET ENDPOINTS - Recipe Snippets
+# ========================================
+
+@api_router.post("/snippets", response_model=SnippetResponse)
+async def create_snippet(
+    snippet_data: SnippetCreate,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Create a new recipe snippet"""
+    try:
+        snippet_dict = snippet_data.dict()
+        snippet_dict['author_id'] = current_user_id
+        
+        # Get user's country for context
+        user = await db.users.find_one({"id": current_user_id})
+        if user:
+            snippet_dict['country_id'] = user.get('country_id')
+        
+        # Create snippet with default values
+        snippet = RecipeSnippet(**snippet_dict)
+        
+        # Insert into database
+        await db.snippets.insert_one(snippet.dict())
+        
+        # Update user's snippet count
+        await db.users.update_one(
+            {"id": current_user_id},
+            {"$inc": {"snippets_count": 1}}
+        )
+        
+        # Get author info
+        author = await db.users.find_one({"id": current_user_id})
+        
+        response_dict = snippet.dict()
+        response_dict['author_username'] = author['username'] if author else None
+        
+        return SnippetResponse(**response_dict)
+        
+    except Exception as e:
+        logger.error(f"Failed to create snippet: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create snippet. Please try again.")
+
+@api_router.get("/snippets", response_model=List[SnippetResponse])
+async def get_snippets(
+    skip: int = 0,
+    limit: int = 20,
+    author_id: Optional[str] = None,
+    country_id: Optional[str] = None,
+    snippet_type: Optional[SnippetType] = None
+):
+    """Get snippets with optional filtering"""
+    try:
+        query = {}
+        
+        if author_id:
+            query["author_id"] = author_id
+        if country_id:
+            query["country_id"] = country_id
+        if snippet_type:
+            query["snippet_type"] = snippet_type
+        
+        snippets_cursor = db.snippets.find(query).sort("created_at", -1).skip(skip).limit(limit)
+        snippets = await snippets_cursor.to_list(length=limit)
+        
+        # Get author info for each snippet
+        result = []
+        for snippet in snippets:
+            author = await db.users.find_one({"id": snippet["author_id"]})
+            snippet_response = SnippetResponse(**snippet)
+            snippet_response.author_username = author['username'] if author else None
+            result.append(snippet_response)
+        
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to get snippets: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get snippets")
+
+@api_router.get("/users/{user_id}/snippets/playlist", response_model=List[SnippetResponse])
+async def get_user_snippets_playlist(user_id: str):
+    """Get user's snippets organized as a playlist"""
+    try:
+        snippets_cursor = db.snippets.find({
+            "author_id": user_id,
+            "is_featured_in_profile": True
+        }).sort("playlist_order", 1)
+        
+        snippets = await snippets_cursor.to_list(length=100)
+        
+        # Get author info
+        author = await db.users.find_one({"id": user_id})
+        
+        result = []
+        for snippet in snippets:
+            snippet_response = SnippetResponse(**snippet)
+            snippet_response.author_username = author['username'] if author else None
+            result.append(snippet_response)
+        
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to get user snippets playlist: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get user snippets")
+
+@api_router.post("/snippets/{snippet_id}/like")
+async def like_snippet(snippet_id: str, current_user_id: str = Depends(get_current_user)):
+    """Like or unlike a snippet"""
+    try:
+        snippet = await db.snippets.find_one({"id": snippet_id})
+        if not snippet:
+            raise HTTPException(status_code=404, detail="Snippet not found")
+        
+        # Check if user already liked this snippet
+        user_like = await db.snippet_likes.find_one({
+            "snippet_id": snippet_id,
+            "user_id": current_user_id
+        })
+        
+        if user_like:
+            # Unlike - remove like and decrement count
+            await db.snippet_likes.delete_one({
+                "snippet_id": snippet_id,
+                "user_id": current_user_id
+            })
+            await db.snippets.update_one(
+                {"id": snippet_id},
+                {"$inc": {"likes_count": -1}}
+            )
+            return {"liked": False, "message": "Snippet unliked"}
+        else:
+            # Like - add like and increment count
+            await db.snippet_likes.insert_one({
+                "snippet_id": snippet_id,
+                "user_id": current_user_id,
+                "created_at": datetime.utcnow()
+            })
+            await db.snippets.update_one(
+                {"id": snippet_id},
+                {"$inc": {"likes_count": 1}}
+            )
+            return {"liked": True, "message": "Snippet liked"}
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to like/unlike snippet: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process like")
+
+@api_router.delete("/snippets/{snippet_id}")
+async def delete_snippet(snippet_id: str, current_user_id: str = Depends(get_current_user)):
+    """Delete a snippet (only by the author)"""
+    try:
+        snippet = await db.snippets.find_one({"id": snippet_id})
+        if not snippet:
+            raise HTTPException(status_code=404, detail="Snippet not found")
+        
+        if snippet["author_id"] != current_user_id:
+            raise HTTPException(status_code=403, detail="You can only delete your own snippets")
+        
+        # Delete the snippet
+        await db.snippets.delete_one({"id": snippet_id})
+        
+        # Delete associated likes
+        await db.snippet_likes.delete_many({"snippet_id": snippet_id})
+        
+        # Update user's snippet count
+        await db.users.update_one(
+            {"id": current_user_id},
+            {"$inc": {"snippets_count": -1}}
+        )
+        
+        return {"message": "Snippet deleted successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to delete snippet: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to delete snippet")
+
+@api_router.get("/snippets/{snippet_id}", response_model=SnippetResponse)
+async def get_snippet_by_id(snippet_id: str):
+    """Get a specific snippet by ID"""
+    try:
+        snippet = await db.snippets.find_one({"id": snippet_id})
+        if not snippet:
+            raise HTTPException(status_code=404, detail="Snippet not found")
+        
+        # Increment view count
+        await db.snippets.update_one(
+            {"id": snippet_id},
+            {"$inc": {"views_count": 1}}
+        )
+        
+        # Get author info
+        author = await db.users.find_one({"id": snippet["author_id"]})
+        
+        snippet_response = SnippetResponse(**snippet)
+        snippet_response.author_username = author['username'] if author else None
+        
+        return snippet_response
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get snippet: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get snippet")
+
 @app.on_event("startup")
 async def startup_event():
     # Create indexes for marketplace
