@@ -90,7 +90,7 @@ db = client[os.environ['DB_NAME']]
 
 # Create the main app
 app = FastAPI(title="Lambalia Marketplace API", description="Complete Home Restaurant Marketplace with Vetting & Payments")
-api_router = APIRouter(prefix="/api")
+api_router = APIRouter()
 @app.get("/")
 async def root():
     return {"message": "Lambalia API is working"}
