@@ -1386,6 +1386,322 @@ class LambaliaEnhancedAPITester:
         details = f"- Perfect match score: {perfect_score} (expected 0.95)"
         return self.log_test("Compatibility Scoring", score_correct, details)
 
+    # ENHANCED SMART COOKING TOOL TESTS - SuperCook + HackTheMenu Integration
+
+    def test_enhanced_cooking_service_stats(self):
+        """Test Enhanced Cooking Service Status endpoint"""
+        success, data = self.make_request('GET', 'enhanced-cooking/stats')
+        
+        if success:
+            stats = data.get('stats', {})
+            available_ingredients = stats.get('available_ingredients', 0)
+            fastfood_items = stats.get('fastfood_items', 0)
+            secret_menu_items = stats.get('secret_menu_items', 0)
+            supported_restaurants = stats.get('supported_restaurants', 0)
+            features = stats.get('features', [])
+            service_status = data.get('service_status', '')
+            
+            details = f"- Ingredients: {available_ingredients}, FastFood: {fastfood_items}, Secret: {secret_menu_items}, Restaurants: {supported_restaurants}, Features: {len(features)}"
+            
+            # Verify expected minimums based on review request
+            has_base_ingredients = available_ingredients >= 20
+            has_fastfood_recipes = fastfood_items >= 51
+            has_secret_menu = secret_menu_items >= 27
+            has_restaurants = supported_restaurants >= 5
+            
+            details += f", Base ingredients: {'✓' if has_base_ingredients else '✗'}"
+            details += f", FastFood recipes: {'✓' if has_fastfood_recipes else '✗'}"
+            details += f", Secret menu: {'✓' if has_secret_menu else '✗'}"
+            details += f", Restaurants: {'✓' if has_restaurants else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced Cooking Service Stats", success, details)
+
+    def test_fastfood_restaurants_endpoint(self):
+        """Test Fast Food Restaurants endpoint"""
+        success, data = self.make_request('GET', 'enhanced-cooking/fastfood/restaurants')
+        
+        if success:
+            restaurants = data.get('restaurants', [])
+            total_items = data.get('total_items', 0)
+            total_secret_items = data.get('total_secret_items', 0)
+            
+            # Check for expected restaurants
+            restaurant_names = [r.get('name', '') for r in restaurants]
+            expected_restaurants = ["McDonald's", "KFC", "Taco Bell", "Burger King", "Subway"]
+            found_restaurants = sum(1 for name in expected_restaurants if name in restaurant_names)
+            
+            details = f"- Found {len(restaurants)} restaurants, Total items: {total_items}, Secret items: {total_secret_items}"
+            details += f", Major chains: {found_restaurants}/{len(expected_restaurants)}"
+            
+            # Verify each restaurant has required fields
+            all_have_required_fields = all(
+                r.get('name') and r.get('category') and 
+                isinstance(r.get('items_available'), int) and 
+                isinstance(r.get('secret_menu_items'), int)
+                for r in restaurants
+            )
+            details += f", Complete data: {'✓' if all_have_required_fields else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Fast Food Restaurants Endpoint", success, details)
+
+    def test_ingredient_suggestions_endpoint(self):
+        """Test Ingredient Suggestions endpoint with sample queries"""
+        test_queries = ["chick", "tom", "ric", "egg", "oni"]
+        successful_queries = 0
+        total_suggestions = 0
+        
+        for query in test_queries:
+            success, data = self.make_request('GET', f'enhanced-cooking/ingredients/suggestions?query={query}')
+            
+            if success:
+                suggestions = data.get('suggestions', [])
+                successful_queries += 1
+                total_suggestions += len(suggestions)
+                
+                # Verify suggestion structure
+                if suggestions:
+                    first_suggestion = suggestions[0]
+                    has_required_fields = all(
+                        field in first_suggestion 
+                        for field in ['name', 'category', 'common_names']
+                    )
+                    if not has_required_fields:
+                        successful_queries -= 1
+        
+        details = f"- {successful_queries}/{len(test_queries)} queries successful, {total_suggestions} total suggestions"
+        return self.log_test("Ingredient Suggestions Endpoint", successful_queries > 0, details)
+
+    def test_secret_menu_items_endpoint(self):
+        """Test Secret Menu Items endpoint"""
+        success, data = self.make_request('GET', 'enhanced-cooking/recipes/secret-menu')
+        
+        if success:
+            secret_items = data.get('secret_menu_items', [])
+            total_items = data.get('total_items', 0)
+            restaurants = data.get('restaurants', [])
+            
+            details = f"- Found {total_items} secret menu items from {len(restaurants)} restaurants"
+            
+            # Verify expected minimum (27 secret menu items from review request)
+            has_minimum_items = total_items >= 27
+            details += f", Minimum items: {'✓' if has_minimum_items else '✗'}"
+            
+            # Check item structure
+            if secret_items:
+                first_item = secret_items[0]
+                has_required_fields = all(
+                    field in first_item 
+                    for field in ['id', 'restaurant', 'name', 'category', 'ingredients', 'instructions']
+                )
+                details += f", Complete structure: {'✓' if has_required_fields else '✗'}"
+                
+                # Verify popularity sorting
+                is_sorted = all(
+                    secret_items[i].get('popularity_score', 0) >= secret_items[i+1].get('popularity_score', 0)
+                    for i in range(len(secret_items)-1)
+                )
+                details += f", Sorted by popularity: {'✓' if is_sorted else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Secret Menu Items Endpoint", success, details)
+
+    def test_fastfood_recipes_by_restaurant(self):
+        """Test Fast Food Recipes by Restaurant endpoint"""
+        test_restaurants = ["McDonalds", "KFC", "Taco Bell"]
+        successful_tests = 0
+        
+        for restaurant in test_restaurants:
+            success, data = self.make_request('GET', f'enhanced-cooking/recipes/fastfood/{restaurant}?include_secret_menu=true')
+            
+            if success:
+                items = data.get('items', [])
+                restaurant_name = data.get('restaurant', '')
+                total_items = data.get('total_items', 0)
+                
+                successful_tests += 1
+                
+                # Check if items belong to the requested restaurant
+                if items:
+                    # Verify item structure
+                    first_item = items[0]
+                    has_required_fields = all(
+                        field in first_item 
+                        for field in ['id', 'name', 'category', 'ingredients', 'instructions', 'is_secret_menu']
+                    )
+                    if not has_required_fields:
+                        successful_tests -= 1
+        
+        details = f"- {successful_tests}/{len(test_restaurants)} restaurant queries successful"
+        return self.log_test("Fast Food Recipes by Restaurant", successful_tests > 0, details)
+
+    def test_enhanced_cooking_pantry_system(self):
+        """Test Enhanced Cooking Pantry System (SuperCook-style)"""
+        if not self.token:
+            return self.log_test("Enhanced Cooking Pantry System", False, "- No auth token available")
+
+        # Test creating pantry
+        pantry_data = {"pantry_name": "Test Kitchen"}
+        success, data = self.make_request('POST', 'enhanced-cooking/pantry/create', pantry_data, 200)
+        
+        if not success:
+            return self.log_test("Enhanced Cooking Pantry System", False, "- Failed to create pantry")
+
+        pantry_id = data.get('pantry_id')
+        
+        # Test adding ingredients
+        ingredients_data = {"ingredients": ["chicken breast", "rice", "onion", "garlic", "tomato"]}
+        success, data = self.make_request('POST', 'enhanced-cooking/pantry/add-ingredients', ingredients_data, 200)
+        
+        if not success:
+            return self.log_test("Enhanced Cooking Pantry System", False, "- Failed to add ingredients")
+
+        ingredients_added = data.get('ingredients_added', 0)
+        total_ingredients = data.get('total_ingredients', 0)
+        
+        # Test getting pantry
+        success, data = self.make_request('GET', 'enhanced-cooking/pantry')
+        
+        if success:
+            pantry = data.get('pantry', {})
+            pantry_ingredients = pantry.get('ingredients', [])
+            ingredient_count = pantry.get('ingredient_count', 0)
+            
+            details = f"- Pantry ID: {pantry_id}, Added: {ingredients_added}, Total: {total_ingredients}, Retrieved: {ingredient_count}"
+        else:
+            details = "- Failed to retrieve pantry"
+            
+        return self.log_test("Enhanced Cooking Pantry System", success, details)
+
+    def test_enhanced_cooking_recipe_finder(self):
+        """Test Enhanced Cooking Recipe Finder (SuperCook-style ingredient matching)"""
+        if not self.token:
+            return self.log_test("Enhanced Cooking Recipe Finder", False, "- No auth token available")
+
+        # First ensure we have ingredients in pantry (from previous test or add some)
+        ingredients_data = {"ingredients": ["eggs", "milk", "flour", "chicken", "rice", "pasta", "tomato", "cheese"]}
+        self.make_request('POST', 'enhanced-cooking/pantry/add-ingredients', ingredients_data, 200)
+        
+        # Test finding recipes with no missing ingredients
+        success, data = self.make_request('GET', 'enhanced-cooking/recipes/find?max_missing=0')
+        
+        if success:
+            recipes = data.get('recipes', [])
+            total_found = data.get('total_found', 0)
+            ingredients_used = data.get('ingredients_used', [])
+            max_missing_allowed = data.get('max_missing_allowed', 0)
+            
+            details = f"- Found {total_found} recipes, Using {len(ingredients_used)} ingredients, Max missing: {max_missing_allowed}"
+            
+            # Check recipe structure
+            if recipes:
+                first_recipe = recipes[0]
+                has_required_fields = all(
+                    field in first_recipe 
+                    for field in ['id', 'name', 'cuisine_type', 'complexity', 'ingredients_used', 'instructions', 'source']
+                )
+                details += f", Complete structure: {'✓' if has_required_fields else '✗'}"
+                
+                # Check for different recipe sources
+                sources = set(recipe.get('source', '') for recipe in recipes)
+                details += f", Sources: {', '.join(sources)}"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced Cooking Recipe Finder", success, details)
+
+    def test_enhanced_cooking_ai_recipe_generation(self):
+        """Test Enhanced Cooking AI Recipe Generation"""
+        if not self.token:
+            return self.log_test("Enhanced Cooking AI Recipe Generation", False, "- No auth token available")
+
+        # Ensure we have enough ingredients for AI generation
+        ingredients_data = {"ingredients": ["chicken breast", "rice", "onion", "garlic", "tomato", "cheese", "olive oil"]}
+        self.make_request('POST', 'enhanced-cooking/pantry/add-ingredients', ingredients_data, 200)
+        
+        success, data = self.make_request('POST', 'enhanced-cooking/recipes/generate-ai')
+        
+        if success:
+            ai_recipes = data.get('ai_recipes', [])
+            ingredients_used = data.get('ingredients_used', [])
+            
+            details = f"- Generated {len(ai_recipes)} AI recipes using {len(ingredients_used)} ingredients"
+            
+            # Check AI recipe structure
+            if ai_recipes:
+                first_recipe = ai_recipes[0]
+                has_required_fields = all(
+                    field in first_recipe 
+                    for field in ['id', 'name', 'cuisine_type', 'ingredients_used', 'instructions', 'source']
+                )
+                details += f", Complete structure: {'✓' if has_required_fields else '✗'}"
+                
+                # Verify it's marked as AI-generated
+                is_ai_source = first_recipe.get('source') == 'lambalia_ai'
+                details += f", AI source: {'✓' if is_ai_source else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced Cooking AI Recipe Generation", success, details)
+
+    def test_enhanced_cooking_comprehensive_features(self):
+        """Test Enhanced Cooking Tool comprehensive features"""
+        features_tested = 0
+        total_features = 6
+        
+        # Test 1: Service stats (already tested above, but verify key features)
+        success, data = self.make_request('GET', 'enhanced-cooking/stats')
+        if success:
+            stats = data.get('stats', {})
+            features = stats.get('features', [])
+            expected_features = [
+                "SuperCook-style ingredient matching",
+                "HackTheMenu fast food clones", 
+                "AI-powered recipe generation",
+                "Virtual pantry management",
+                "Secret menu items",
+                "Ingredient autocomplete"
+            ]
+            
+            features_found = sum(1 for feature in expected_features if feature in features)
+            if features_found >= 5:  # Allow for slight variations in naming
+                features_tested += 1
+        
+        # Test 2: Fast food restaurants
+        success, data = self.make_request('GET', 'enhanced-cooking/fastfood/restaurants')
+        if success and data.get('restaurants'):
+            features_tested += 1
+        
+        # Test 3: Ingredient suggestions
+        success, data = self.make_request('GET', 'enhanced-cooking/ingredients/suggestions?query=chicken')
+        if success and data.get('suggestions'):
+            features_tested += 1
+        
+        # Test 4: Secret menu items
+        success, data = self.make_request('GET', 'enhanced-cooking/recipes/secret-menu')
+        if success and data.get('secret_menu_items'):
+            features_tested += 1
+        
+        # Test 5: Restaurant-specific recipes
+        success, data = self.make_request('GET', 'enhanced-cooking/recipes/fastfood/McDonalds')
+        if success and data.get('items'):
+            features_tested += 1
+        
+        # Test 6: Service integration check
+        success, data = self.make_request('GET', 'enhanced-cooking/stats')
+        if success and data.get('service_status') == "Enhanced Smart Cooking Service Active":
+            features_tested += 1
+        
+        details = f"- {features_tested}/{total_features} core features working"
+        success_rate = (features_tested / total_features) * 100
+        details += f", Success rate: {success_rate:.0f}%"
+        
+        return self.log_test("Enhanced Cooking Comprehensive Features", features_tested >= 5, details)
+
     # GLOBAL DISHES DATABASE TESTS - Comprehensive World Cuisines
 
     def test_global_dishes_unified_endpoint(self):
