@@ -11,6 +11,7 @@ import CharityProgramPage from './CharityProgram';
 import LambaliaEatsApp from './LambaliaEats';
 import { Icon, AnimatedIcon } from './components/ProfessionalIcons';
 import SmartCookingTool from './components/SmartCookingTool';
+import EnhancedSmartCooking from './components/EnhancedSmartCooking';
 import HomeRestaurantTraining from './components/HomeRestaurantTraining';
 import ChefMarket from './ChefMarket';
 import QuickEatsTraining from './components/QuickEatsTraining';
