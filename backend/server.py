@@ -5848,6 +5848,9 @@ async def get_snippet_by_id(snippet_id: str):
 # APP INITIALIZATION AND ROUTERS
 # ========================================
 
+# Include main API router (must be after all route definitions)
+app.include_router(api_router, prefix="/api")
+
 @app.on_event("startup")
 async def startup_event():
     # Create indexes for marketplace
