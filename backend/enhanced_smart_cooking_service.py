@@ -147,60 +147,526 @@ class EnhancedSmartCookingService:
         ]
     
     def _load_fastfood_database(self) -> List[FastFoodItem]:
-        """Load HackTheMenu-style fast food database"""
+        """Load comprehensive HackTheMenu-style fast food database"""
         return [
-            # McDonald's Items
+            # McDonald's Items (15 items as advertised)
             FastFoodItem(
                 id="mcdonalds_big_mac_clone",
                 restaurant="McDonald's",
                 item_name="Homemade Big Mac",
                 category="Burgers",
-                ingredients=["ground beef", "lettuce", "onion", "pickle", "cheese", "bread", "mayonnaise", "ketchup"],
-                instructions="Form beef patties, cook until done. Toast buns. Layer: sauce, lettuce, onion, patty, cheese, pickle. Assemble burger.",
-                is_secret_menu=False
+                ingredients=["ground beef", "lettuce", "onion", "pickle", "cheese", "bread", "mayonnaise", "ketchup", "sesame seed bun"],
+                instructions="Form 1/4 lb beef patties, season with salt and pepper. Cook patties 3-4 minutes each side. Toast sesame seed buns. Mix mayo and ketchup for special sauce. Layer: bottom bun, sauce, lettuce, onion, beef patty, cheese, middle bun, sauce, lettuce, onion, second patty, pickle, top bun.",
+                is_secret_menu=False,
+                popularity_score=95
             ),
             FastFoodItem(
                 id="mcdonalds_mcgriddle_clone",
                 restaurant="McDonald's", 
                 item_name="Homemade McGriddle",
                 category="Breakfast",
-                ingredients=["pancake mix", "maple syrup", "eggs", "cheese", "bacon"],
-                instructions="Make pancake 'buns' with syrup mixed in. Cook eggs and bacon. Assemble sandwich.",
-                is_secret_menu=False
+                ingredients=["pancake mix", "maple syrup", "eggs", "cheese", "bacon", "butter"],
+                instructions="Make pancake batter, add maple syrup directly to batter. Cook small pancakes as 'buns'. Scramble eggs, cook bacon. Assemble: pancake, egg, cheese, bacon, pancake.",
+                is_secret_menu=False,
+                popularity_score=88
             ),
-            
-            # KFC Items
             FastFoodItem(
-                id="kfc_chicken_clone",
-                restaurant="KFC",
-                item_name="Copycat KFC Fried Chicken",
-                category="Chicken", 
-                ingredients=["chicken", "flour", "salt", "black pepper", "paprika", "garlic powder", "oil"],
-                instructions="Season flour with spices. Coat chicken, fry until golden and cooked through.",
-                is_secret_menu=False
+                id="mcdonalds_mcmuffin_clone",
+                restaurant="McDonald's",
+                item_name="Egg McMuffin Clone",
+                category="Breakfast", 
+                ingredients=["english muffin", "eggs", "canadian bacon", "cheese", "butter"],
+                instructions="Toast English muffin halves. Cook round eggs in ring molds. Grill Canadian bacon. Assemble: muffin bottom, bacon, egg, cheese, muffin top.",
+                is_secret_menu=False,
+                popularity_score=92
             ),
-            
-            # Secret Menu Items
+            FastFoodItem(
+                id="mcdonalds_quarter_pounder_clone",
+                restaurant="McDonald's",
+                item_name="Quarter Pounder Clone",
+                category="Burgers",
+                ingredients=["ground beef", "sesame seed bun", "ketchup", "mustard", "onion", "cheese", "pickle"],
+                instructions="Form 1/4 lb beef patty. Season generously with salt and pepper. Cook 4-5 minutes each side. Toast buns. Add ketchup, mustard, diced onions, cheese, pickles.",
+                is_secret_menu=False,
+                popularity_score=89
+            ),
+            FastFoodItem(
+                id="mcdonalds_mcchicken_clone",
+                restaurant="McDonald's",
+                item_name="McChicken Clone",
+                category="Chicken",
+                ingredients=["chicken breast", "flour", "breadcrumbs", "mayo", "lettuce", "bun"],
+                instructions="Pound chicken thin. Bread with flour, egg, breadcrumbs. Deep fry until golden. Serve on bun with mayo and lettuce.",
+                is_secret_menu=False,
+                popularity_score=85
+            ),
+            FastFoodItem(
+                id="mcdonalds_fries_clone",
+                restaurant="McDonald's",
+                item_name="McDonald's Fries Clone",
+                category="Sides",
+                ingredients=["russet potatoes", "vegetable oil", "salt", "dextrose", "sodium acid pyrophosphate"],
+                instructions="Cut potatoes into fries. Blanch in water, then freeze. Fry twice: once at 325°F, then at 375°F. Season with salt immediately.",
+                is_secret_menu=False,
+                popularity_score=98
+            ),
+            FastFoodItem(
+                id="mcdonalds_apple_pie_clone",
+                restaurant="McDonald's",
+                item_name="McDonald's Apple Pie Clone",
+                category="Dessert",
+                ingredients=["puff pastry", "apples", "sugar", "cinnamon", "cornstarch"],
+                instructions="Dice apples, mix with sugar, cinnamon, cornstarch. Wrap in puff pastry rectangles. Seal edges, cut vents. Bake at 400°F for 15-20 minutes.",
+                is_secret_menu=False,
+                popularity_score=91
+            ),
+            FastFoodItem(
+                id="mcdonalds_shamrock_shake_clone",
+                restaurant="McDonald's",
+                item_name="Shamrock Shake Clone",
+                category="Beverages",
+                ingredients=["vanilla ice cream", "milk", "mint extract", "green food coloring", "whipped cream"],
+                instructions="Blend vanilla ice cream, milk, mint extract, and green food coloring until smooth. Top with whipped cream.",
+                is_secret_menu=False,
+                popularity_score=87
+            ),
             FastFoodItem(
                 id="mcdonalds_land_sea_air",
                 restaurant="McDonald's",
                 item_name="Land, Sea & Air Burger (Secret)",
                 category="Secret Menu",
-                ingredients=["ground beef", "chicken breast", "fish fillet", "cheese", "lettuce", "bread"],
-                instructions="Order a Big Mac, add chicken patty and fish fillet. Stack all proteins together.",
+                ingredients=["ground beef", "chicken breast", "fish fillet", "cheese", "lettuce", "bread", "tartar sauce", "mayo"],
+                instructions="Order Big Mac, add grilled chicken and fish fillet. Stack: beef patty, chicken, fish. Ultimate protein burger challenge!",
                 is_secret_menu=True,
                 popularity_score=85
             ),
-            
-            # Taco Bell
             FastFoodItem(
-                id="tacobell_quesadilla_hack",
-                restaurant="Taco Bell", 
-                item_name="Copycat Crunchwrap",
+                id="mcdonalds_big_mac_chicken",
+                restaurant="McDonald's",
+                item_name="Chicken Big Mac (Secret)",
+                category="Secret Menu",
+                ingredients=["chicken patties", "big mac sauce", "lettuce", "cheese", "onion", "sesame seed bun"],
+                instructions="Order Big Mac but substitute chicken patties for beef. Same assembly but with crispy chicken instead.",
+                is_secret_menu=True,
+                popularity_score=82
+            ),
+            FastFoodItem(
+                id="mcdonalds_mcgangbang",
+                restaurant="McDonald's",
+                item_name="McGangBang (Secret)",
+                category="Secret Menu",
+                ingredients=["mcdouble", "mcchicken", "bun"],
+                instructions="Order McDouble and McChicken. Split McDouble, insert entire McChicken patty between beef patties.",
+                is_secret_menu=True,
+                popularity_score=78
+            ),
+            FastFoodItem(
+                id="mcdonalds_poor_mans_big_mac",
+                restaurant="McDonald's",
+                item_name="Poor Man's Big Mac (Secret)",
+                category="Secret Menu",
+                ingredients=["mcdouble", "lettuce", "big mac sauce"],
+                instructions="Order McDouble, add lettuce and Big Mac sauce. Cheaper version of Big Mac with same flavors.",
+                is_secret_menu=True,
+                popularity_score=88
+            ),
+            FastFoodItem(
+                id="mcdonalds_neapolitan_shake",
+                restaurant="McDonald's",
+                item_name="Neapolitan Shake (Secret)",
+                category="Secret Menu",
+                ingredients=["vanilla shake", "chocolate shake", "strawberry shake"],
+                instructions="Order equal parts vanilla, chocolate, and strawberry shakes mixed together. Classic three-flavor combo.",
+                is_secret_menu=True,
+                popularity_score=75
+            ),
+            FastFoodItem(
+                id="mcdonalds_surf_turf",
+                restaurant="McDonald's",
+                item_name="Surf & Turf (Secret)",
+                category="Secret Menu",
+                ingredients=["quarter pounder", "filet o fish", "cheese"],
+                instructions="Order Quarter Pounder and Filet-O-Fish. Combine both patties in one burger for land and sea combo.",
+                is_secret_menu=True,
+                popularity_score=80
+            ),
+            FastFoodItem(
+                id="mcdonalds_monster_mac",
+                restaurant="McDonald's",
+                item_name="Monster Mac (Secret)",
+                category="Secret Menu",
+                ingredients=["big mac", "extra beef patties", "extra cheese", "extra sauce"],
+                instructions="Order Big Mac with 8 beef patties instead of 2. Massive burger for serious appetite. Ask nicely!",
+                is_secret_menu=True,
+                popularity_score=90
+            ),
+            
+            # KFC Items (10 items as advertised)
+            FastFoodItem(
+                id="kfc_original_chicken_clone",
+                restaurant="KFC",
+                item_name="KFC Original Recipe Clone",
+                category="Chicken",
+                ingredients=["chicken", "flour", "salt", "black pepper", "paprika", "garlic powder", "onion powder", "oregano", "basil", "marjoram", "celery salt"],
+                instructions="Mix 11 herbs and spices with flour. Pressure fry chicken at 315°F for 15-18 minutes. The secret blend creates the signature taste.",
+                is_secret_menu=False,
+                popularity_score=96
+            ),
+            FastFoodItem(
+                id="kfc_coleslaw_clone",
+                restaurant="KFC",
+                item_name="KFC Coleslaw Clone",
+                category="Sides",
+                ingredients=["cabbage", "carrots", "onion", "mayonnaise", "vinegar", "sugar", "salt", "celery seed"],
+                instructions="Finely chop cabbage and carrots. Mix mayo, vinegar, sugar, salt, celery seed. Combine and chill for 2 hours minimum.",
+                is_secret_menu=False,
+                popularity_score=89
+            ),
+            FastFoodItem(
+                id="kfc_biscuits_clone",
+                restaurant="KFC",
+                item_name="KFC Buttermilk Biscuits Clone",
+                category="Sides",
+                ingredients=["flour", "baking powder", "salt", "sugar", "buttermilk", "butter", "shortening"],
+                instructions="Mix dry ingredients. Cut in cold butter and shortening. Add buttermilk. Drop onto baking sheet. Bake at 425°F for 15-17 minutes.",
+                is_secret_menu=False,
+                popularity_score=93
+            ),
+            FastFoodItem(
+                id="kfc_mashed_potatoes_clone",
+                restaurant="KFC",
+                item_name="KFC Mashed Potatoes Clone",
+                category="Sides",
+                ingredients=["instant potatoes", "chicken broth", "butter", "salt", "pepper"],
+                instructions="Prepare instant potatoes with chicken broth instead of water. Add butter, salt, pepper. Whip until creamy.",
+                is_secret_menu=False,
+                popularity_score=87
+            ),
+            FastFoodItem(
+                id="kfc_gravy_clone",
+                restaurant="KFC",
+                item_name="KFC Gravy Clone",
+                category="Sides",
+                ingredients=["chicken drippings", "flour", "chicken broth", "salt", "pepper", "sage"],
+                instructions="Make roux with drippings and flour. Slowly add chicken broth, whisk constantly. Season with salt, pepper, sage.",
+                is_secret_menu=False,
+                popularity_score=91
+            ),
+            FastFoodItem(
+                id="kfc_popcorn_chicken_clone",
+                restaurant="KFC",
+                item_name="KFC Popcorn Chicken Clone",
+                category="Chicken",
+                ingredients=["chicken breast", "flour", "corn starch", "kfc spice blend", "buttermilk", "oil"],
+                instructions="Cut chicken into bite-sized pieces. Marinate in buttermilk. Coat in seasoned flour mixture. Fry until golden and crispy.",
+                is_secret_menu=False,
+                popularity_score=88
+            ),
+            FastFoodItem(
+                id="kfc_nashville_hot_clone",
+                restaurant="KFC",
+                item_name="KFC Nashville Hot Clone",
+                category="Chicken",
+                ingredients=["fried chicken", "cayenne pepper", "paprika", "sugar", "garlic powder", "hot oil"],
+                instructions="Fry chicken as normal. Mix cayenne, paprika, sugar, garlic powder with hot frying oil. Brush spicy oil mixture on hot chicken.",
+                is_secret_menu=False,
+                popularity_score=85
+            ),
+            FastFoodItem(
+                id="kfc_mac_and_cheese_clone",
+                restaurant="KFC",
+                item_name="KFC Mac & Cheese Clone",
+                category="Sides",
+                ingredients=["elbow pasta", "cheddar cheese", "milk", "butter", "flour", "mustard powder"],
+                instructions="Cook pasta. Make cheese sauce with butter, flour, milk, cheese, mustard powder. Combine and bake until bubbly.",
+                is_secret_menu=False,
+                popularity_score=84
+            ),
+            FastFoodItem(
+                id="kfc_double_down_clone",
+                restaurant="KFC",
+                item_name="KFC Double Down Clone",
+                category="Secret Menu",
+                ingredients=["fried chicken breast", "bacon", "cheese", "colonel sauce"],
+                instructions="Use two fried chicken breasts as 'buns'. Layer bacon, cheese, and sauce between chicken pieces. Ultimate low-carb indulgence.",
+                is_secret_menu=True,
+                popularity_score=92
+            ),
+            FastFoodItem(
+                id="kfc_triple_down_clone",
+                restaurant="KFC",
+                item_name="KFC Triple Down (Secret)",
+                category="Secret Menu",
+                ingredients=["fried chicken breast", "bacon", "cheese", "colonel sauce", "extra chicken"],
+                instructions="Three chicken breasts with bacon and cheese layers. Even more extreme than Double Down. Not officially on menu.",
+                is_secret_menu=True,
+                popularity_score=88
+            ),
+            
+            # Taco Bell Items (12 items as advertised)
+            FastFoodItem(
+                id="tacobell_crunchwrap_clone",
+                restaurant="Taco Bell",
+                item_name="Crunchwrap Supreme Clone",
                 category="Mexican",
-                ingredients=["large tortilla", "ground beef", "cheese", "lettuce", "tomato", "sour cream", "taco shell"],
-                instructions="Layer beef, cheese, and crushed taco shell in center of tortilla. Add toppings, fold edges, cook until crispy.",
-                is_secret_menu=False
+                ingredients=["large flour tortilla", "ground beef", "cheese", "lettuce", "tomato", "sour cream", "tostada shell"],
+                instructions="Layer beef, cheese, crushed tostada shell in center of large tortilla. Add lettuce, tomato, sour cream. Fold edges to create hexagon. Grill until crispy.",
+                is_secret_menu=False,
+                popularity_score=94
+            ),
+            FastFoodItem(
+                id="tacobell_mexican_pizza_clone",
+                restaurant="Taco Bell",
+                item_name="Mexican Pizza Clone",
+                category="Mexican",
+                ingredients=["flour tortillas", "ground beef", "refried beans", "cheese", "tomatoes", "green onions", "enchilada sauce"],
+                instructions="Fry tortillas until crispy. Layer: tortilla, beans, beef, tortilla, sauce, cheese, tomatoes, green onions. Bake until cheese melts.",
+                is_secret_menu=False,
+                popularity_score=91
+            ),
+            FastFoodItem(
+                id="tacobell_quesadilla_clone",
+                restaurant="Taco Bell",
+                item_name="Chicken Quesadilla Clone",
+                category="Mexican",
+                ingredients=["flour tortilla", "chicken", "cheese", "creamy jalapeno sauce"],
+                instructions="Season and grill chicken. Place chicken and cheese on half tortilla. Add sauce, fold. Grill until crispy and cheese melts.",
+                is_secret_menu=False,
+                popularity_score=89
+            ),
+            FastFoodItem(
+                id="tacobell_chalupa_clone",
+                restaurant="Taco Bell",
+                item_name="Chalupa Supreme Clone",
+                category="Mexican",  
+                ingredients=["masa dough", "ground beef", "lettuce", "tomato", "cheese", "sour cream"],
+                instructions="Form masa into shell shape, fry until golden. Fill with seasoned beef, lettuce, tomato, cheese, sour cream.",
+                is_secret_menu=False,
+                popularity_score=87
+            ),
+            FastFoodItem(
+                id="tacobell_nacho_fries_clone",
+                restaurant="Taco Bell",
+                item_name="Nacho Fries Clone",
+                category="Sides",
+                ingredients=["frozen fries", "taco seasoning", "nacho cheese sauce", "oil"],
+                instructions="Fry frozen fries, season with taco seasoning while hot. Serve with warm nacho cheese sauce for dipping.",
+                is_secret_menu=False,
+                popularity_score=86
+            ),
+            FastFoodItem(
+                id="tacobell_beefy_5layer_clone",
+                restaurant="Taco Bell",
+                item_name="Beefy 5-Layer Burrito Clone",
+                category="Mexican",
+                ingredients=["flour tortilla", "ground beef", "refried beans", "cheese", "sour cream", "nacho cheese"],
+                instructions="Layer beans, beef, cheese, sour cream, nacho cheese on tortilla. Roll tightly. Grill lightly to warm through.",
+                is_secret_menu=False,
+                popularity_score=83
+            ),
+            FastFoodItem(
+                id="tacobell_cinnamon_twists_clone",
+                restaurant="Taco Bell",
+                item_name="Cinnamon Twists Clone",
+                category="Dessert",
+                ingredients=["pasta spirals", "oil", "cinnamon", "sugar"],
+                instructions="Deep fry pasta spirals until puffed and golden. Immediately toss in cinnamon sugar mixture while hot.",
+                is_secret_menu=False,
+                popularity_score=78
+            ),
+            FastFoodItem(
+                id="tacobell_volcano_taco",
+                restaurant="Taco Bell",
+                item_name="Volcano Taco (Secret)",
+                category="Secret Menu",
+                ingredients=["taco shell", "ground beef", "lava sauce", "lettuce", "cheese"],
+                instructions="Regular taco but ask for 'lava sauce' - extremely spicy red sauce. Not on current menu but some locations still make it.",
+                is_secret_menu=True,
+                popularity_score=89
+            ),
+            FastFoodItem(
+                id="tacobell_hulk_burrito",
+                restaurant="Taco Bell",
+                item_name="The Hulk (Secret)",
+                category="Secret Menu",
+                ingredients=["bean burrito", "guacamole", "extra guacamole"],
+                instructions="Order bean burrito, add extra guacamole to make it green like the Hulk. Simple but delicious vegetarian option.",
+                is_secret_menu=True,
+                popularity_score=72
+            ),
+            FastFoodItem(
+                id="tacobell_incredible_hulk",
+                restaurant="Taco Bell",
+                item_name="Incredible Hulk (Secret)",
+                category="Secret Menu", 
+                ingredients=["beef burrito", "guacamole", "extra beef"],
+                instructions="Beef burrito with extra guacamole and extra beef. Hulk-sized portion for big appetites.",
+                is_secret_menu=True,
+                popularity_score=85
+            ),
+            FastFoodItem(
+                id="tacobell_superman_burrito",
+                restaurant="Taco Bell",
+                item_name="Superman Burrito (Secret)",
+                category="Secret Menu",
+                ingredients=["bean burrito", "beef", "potatoes", "guacamole", "cheese"],
+                instructions="Bean burrito with added beef, potatoes, and guac. Everything burrito with super powers.",
+                is_secret_menu=True,
+                popularity_score=81
+            ),
+            FastFoodItem(
+                id="tacobell_cheesarito",
+                restaurant="Taco Bell",
+                item_name="Cheesarito (Secret)",
+                category="Secret Menu",
+                ingredients=["flour tortilla", "cheese", "taco meat", "taco sauce"],
+                instructions="Simple cheese and meat burrito. Old menu item that some locations still make. Classic minimalist approach.",
+                is_secret_menu=True,
+                popularity_score=77
+            ),
+            
+            # Burger King Items (8 items)
+            FastFoodItem(
+                id="burgerking_whopper_clone",
+                restaurant="Burger King",
+                item_name="Whopper Clone",
+                category="Burgers",
+                ingredients=["ground beef", "sesame seed bun", "lettuce", "tomato", "onion", "pickle", "ketchup", "mayo"],
+                instructions="Form 1/4 lb beef patty, flame grill or char-broil. Toast sesame seed buns. Layer: mayo, lettuce, tomato, onion, pickle, beef patty, ketchup, bottom bun.",
+                is_secret_menu=False,
+                popularity_score=92
+            ),
+            FastFoodItem(
+                id="burgerking_chicken_fries_clone",
+                restaurant="Burger King",
+                item_name="Chicken Fries Clone",
+                category="Chicken",
+                ingredients=["chicken breast", "flour", "breadcrumbs", "spices", "oil"],
+                instructions="Cut chicken into fry-shaped strips. Bread with seasoned flour and breadcrumbs. Deep fry until golden. Serve with dipping sauces.",
+                is_secret_menu=False,
+                popularity_score=88
+            ),
+            FastFoodItem(
+                id="burgerking_onion_rings_clone",
+                restaurant="Burger King",
+                item_name="Onion Rings Clone",
+                category="Sides",
+                ingredients=["onions", "flour", "breadcrumbs", "buttermilk", "spices"],
+                instructions="Slice onions thick, separate rings. Dip in buttermilk, coat in seasoned flour and breadcrumbs. Fry until golden and crispy.",
+                is_secret_menu=False,
+                popularity_score=85
+            ),
+            FastFoodItem(
+                id="burgerking_impossible_whopper_clone",
+                restaurant="Burger King",
+                item_name="Impossible Whopper Clone",
+                category="Burgers",
+                ingredients=["impossible burger patty", "sesame seed bun", "lettuce", "tomato", "onion", "pickle", "ketchup", "mayo"],
+                instructions="Cook Impossible patty according to package directions. Assemble exactly like regular Whopper. Plant-based version of classic.",
+                is_secret_menu=False,
+                popularity_score=79
+            ),
+            FastFoodItem(
+                id="burgerking_croissanwich_clone",
+                restaurant="Burger King",
+                item_name="Croissan'wich Clone",
+                category="Breakfast",
+                ingredients=["croissant", "eggs", "cheese", "ham", "butter"],
+                instructions="Slice croissant in half, butter and toast lightly. Scramble eggs, warm ham. Assemble: croissant, egg, cheese, ham, croissant top.",
+                is_secret_menu=False,
+                popularity_score=83
+            ),
+            FastFoodItem(
+                id="burgerking_suicide_burger",
+                restaurant="Burger King",
+                item_name="Suicide Burger (Secret)",
+                category="Secret Menu",
+                ingredients=["whopper", "extra beef patties", "extra cheese", "extra bacon"],
+                instructions="Order Whopper with 4 beef patties, 4 slices of cheese, 8 strips of bacon. Heart attack on a bun. Ask nicely!",
+                is_secret_menu=True,
+                popularity_score=87
+            ),
+            FastFoodItem(
+                id="burgerking_mustard_whopper",
+                restaurant="Burger King",
+                item_name="Mustard Whopper (Secret)",
+                category="Secret Menu",
+                ingredients=["whopper", "mustard", "no mayo"],
+                instructions="Order Whopper but substitute mustard for mayo. Tangy twist on the classic. Some prefer this original way.",
+                is_secret_menu=True,
+                popularity_score=74
+            ),
+            FastFoodItem(
+                id="burgerking_veggie_whopper",
+                restaurant="Burger King",
+                item_name="Veggie Whopper (Secret)",
+                category="Secret Menu",
+                ingredients=["whopper bun", "lettuce", "tomato", "onion", "pickle", "ketchup", "mayo", "cheese"],
+                instructions="Whopper without the meat patty. All the vegetables and condiments. Simple vegetarian option before plant-based patties.",
+                is_secret_menu=True,
+                popularity_score=68
+            ),
+            
+            # Subway Items (6 items)
+            FastFoodItem(
+                id="subway_italian_bmt_clone",
+                restaurant="Subway",
+                item_name="Italian BMT Clone",
+                category="Sandwiches",
+                ingredients=["sub roll", "salami", "pepperoni", "ham", "provolone cheese", "lettuce", "tomato", "onion", "italian dressing"],
+                instructions="Slice sub roll, layer meats and cheese. Toast if desired. Add vegetables and Italian dressing. Classic Italian-American combo.",
+                is_secret_menu=False,
+                popularity_score=89
+            ),
+            FastFoodItem(
+                id="subway_meatball_marinara_clone",
+                restaurant="Subway",
+                item_name="Meatball Marinara Clone",
+                category="Sandwiches",
+                ingredients=["sub roll", "meatballs", "marinara sauce", "mozzarella cheese", "italian herbs"],
+                instructions="Heat meatballs in marinara sauce. Place on sub roll, top with mozzarella. Toast until cheese melts. Sprinkle with Italian herbs.",
+                is_secret_menu=False,
+                popularity_score=91
+            ),
+            FastFoodItem(
+                id="subway_chicken_teriyaki_clone",
+                restaurant="Subway",
+                item_name="Chicken Teriyaki Clone",
+                category="Sandwiches",
+                ingredients=["sub roll", "chicken breast", "teriyaki sauce", "cheese", "lettuce", "tomato", "cucumber"],
+                instructions="Grill chicken breast, glaze with teriyaki sauce. Place on sub with cheese, vegetables. Sweet and savory combination.",
+                is_secret_menu=False,
+                popularity_score=86
+            ),
+            FastFoodItem(
+                id="subway_tuna_clone",
+                restaurant="Subway",
+                item_name="Tuna Sub Clone",
+                category="Sandwiches",
+                ingredients=["sub roll", "tuna", "mayonnaise", "celery", "cheese", "lettuce", "tomato"],
+                instructions="Mix tuna with mayo and diced celery. Spread on sub roll, add cheese and vegetables. Classic tuna salad sandwich.",
+                is_secret_menu=False,
+                popularity_score=78
+            ),
+            FastFoodItem(
+                id="subway_pizza_sub",
+                restaurant="Subway",
+                item_name="Pizza Sub (Secret)",
+                category="Secret Menu",
+                ingredients=["sub roll", "marinara sauce", "pepperoni", "mozzarella cheese", "italian seasoning"],
+                instructions="Spread marinara on sub roll, add pepperoni and mozzarella. Toast until cheese melts. Tastes like pizza in sandwich form!",
+                is_secret_menu=True,
+                popularity_score=84
+            ),
+            FastFoodItem(
+                id="subway_old_cut",
+                restaurant="Subway",
+                item_name="Old Cut (Secret)",
+                category="Secret Menu",
+                ingredients=["any subway sandwich", "special cutting method"],
+                instructions="Ask for the 'old cut' - they cut a V-shaped wedge out of the top instead of cutting the roll in half. Holds ingredients better!",
+                is_secret_menu=True,
+                popularity_score=71
             )
         ]
     
