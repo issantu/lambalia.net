@@ -5255,8 +5255,8 @@ heritage_recipes_router = create_heritage_recipes_router(heritage_recipes_servic
 app.include_router(heritage_recipes_router, prefix="/api")
 
 # Include Smart Cooking Tool router with proper prefix
-# smart_cooking_router = create_smart_cooking_router(smart_cooking_service, get_current_user, get_current_user_optional)
-# app.include_router(smart_cooking_router, prefix="/api")
+smart_cooking_router = create_smart_cooking_router(smart_cooking_service, get_current_user, get_current_user_optional)
+app.include_router(smart_cooking_router, prefix="/api")
 
 # Include Transaction Verification router with proper prefix
 transaction_verification_router = create_transaction_verification_router(transaction_verification_service, get_current_user, get_current_user_optional)
