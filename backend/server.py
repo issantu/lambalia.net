@@ -5638,6 +5638,11 @@ async def update_user_profile(
 # SNIPPET ENDPOINTS - Recipe Snippets
 # ========================================
 
+@api_router.get("/test-snippets")
+async def test_snippets():
+    """Test endpoint to verify router is working"""
+    return {"message": "Snippets router is working"}
+
 @api_router.post("/snippets", response_model=SnippetResponse)
 async def create_snippet(
     snippet_data: SnippetCreate,
