@@ -171,10 +171,10 @@ def create_enhanced_smart_cooking_router(db, get_current_user):
         try:
             service = await get_enhanced_cooking_service(db)
             
-            # Filter fast food database by restaurant
+            # Filter fast food database by restaurant (case-insensitive)
             restaurant_items = []
             for item in service.fastfood_database:
-                if item.restaurant.lower() == restaurant.lower():
+                if item.restaurant.lower() == restaurant.lower() or restaurant.lower() in item.restaurant.lower():
                     if include_secret_menu or not item.is_secret_menu:
                         restaurant_items.append({
                         "id": item.id,
@@ -183,7 +183,7 @@ def create_enhanced_smart_cooking_router(db, get_current_user):
                         "ingredients": item.ingredients,
                         "instructions": item.instructions,
                         "is_secret_menu": item.is_secret_menu,
-                        "popularity_score": item.popularity_score
+                        "popularity_score": getattr(item, 'popularity_score', 0)
                     })
             
             return {
