@@ -5260,6 +5260,10 @@ app.include_router(heritage_recipes_router, prefix="/api")
 smart_cooking_router = create_smart_cooking_router(smart_cooking_service, get_current_user, get_current_user_optional)
 app.include_router(smart_cooking_router, prefix="/api")
 
+# Include Enhanced Smart Cooking router (SuperCook + HackTheMenu)
+enhanced_cooking_router = create_enhanced_smart_cooking_router(db, get_current_user)
+app.include_router(enhanced_cooking_router, prefix="/api")
+
 # Include Transaction Verification router with proper prefix
 transaction_verification_router = create_transaction_verification_router(transaction_verification_service, get_current_user, get_current_user_optional)
 app.include_router(transaction_verification_router, prefix="/api")
