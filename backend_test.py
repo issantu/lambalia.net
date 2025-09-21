@@ -4307,6 +4307,20 @@ class LambaliaEnhancedAPITester:
         self.test_social_impact_scoring_system()
         self.test_integration_profit_and_social_impact()
         
+        # Enhanced Smart Cooking Tool Tests - SuperCook + HackTheMenu Integration
+        print("\n🍳 Testing Enhanced Smart Cooking Tool (SuperCook + HackTheMenu)...")
+        self.test_enhanced_cooking_service_stats()
+        self.test_fastfood_restaurants_endpoint()
+        self.test_ingredient_suggestions_endpoint()
+        self.test_secret_menu_items_endpoint()
+        self.test_fastfood_recipes_by_restaurant()
+        
+        print("\n🥘 Testing Enhanced Cooking Features...")
+        self.test_enhanced_cooking_pantry_system()
+        self.test_enhanced_cooking_recipe_finder()
+        self.test_enhanced_cooking_ai_recipe_generation()
+        self.test_enhanced_cooking_comprehensive_features()
+
         # Global Heritage Recipes & Specialty Ingredients System Tests
         print("\n🌍 Testing Global Heritage Recipes & Specialty Ingredients System...")
         self.test_heritage_countries_list()
