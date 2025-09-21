@@ -5352,7 +5352,7 @@ async def add_team_member(
 # (Reference recipes, snippets, grocery, etc.)
 
 # Include main API router
-app.include_router(api_router)
+app.include_router(api_router, prefix="/api")
 
 # Include Lambalia Eats router with proper prefix
 lambalia_eats_router = create_lambalia_eats_router(lambalia_eats_service, get_current_user, get_current_user_optional)
