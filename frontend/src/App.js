@@ -526,8 +526,8 @@ const Header = () => {
 
       {/* Smart Cooking Tool Modal */}
       {showSmartCooking && (
-        <SmartCookingTool 
-          user={user} 
+        <EnhancedSmartCooking
+          user={user}
           onClose={() => setShowSmartCooking(false)}
         />
       )}
