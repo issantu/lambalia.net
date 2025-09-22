@@ -4305,8 +4305,8 @@ const Footer = () => {
               <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
               <li><Link to="/careers" className="text-gray-400 hover:text-white">Careers</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
-              <li><a href="mailto:press@lambalia.com" className="text-gray-400 hover:text-white">Press</a></li>
-              <li><a href="mailto:partnerships@lambalia.com" className="text-gray-400 hover:text-white">Partnerships</a></li>
+              <li><a href="mailto:contact@lambalia.net" className="text-gray-400 hover:text-white">Press</a></li>
+              <li><a href="mailto:issantu.tembe@lambalia.net" className="text-gray-400 hover:text-white">Partnerships</a></li>
             </ul>
           </div>
 
@@ -4314,11 +4314,11 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="mailto:support@lambalia.com" className="text-gray-400 hover:text-white">Help Center</a></li>
+              <li><a href="mailto:support@lambalia.net" className="text-gray-400 hover:text-white">Help Center</a></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white">Community Guidelines</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
-              <li><a href="mailto:security@lambalia.com" className="text-gray-400 hover:text-white">Report Issue</a></li>
+              <li><a href="mailto:helpdesk@lambalia.net" className="text-gray-400 hover:text-white">Report Issue</a></li>
             </ul>
           </div>
         </div>
