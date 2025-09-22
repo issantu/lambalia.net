@@ -4343,7 +4343,7 @@ const Footer = () => {
 // Keep existing CreateSnippetPage and GroceryPage components (too long for single response)
 // Just need to add enhanced styling classes
 
-// Create Snippet Page with Enhanced Monetization
+// Create Snippet Page with Enhanced Image & Video Upload
 const CreateSnippetPage = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -4359,7 +4359,15 @@ const CreateSnippetPage = () => {
     tags: [],
     video_duration: ''
   });
+  const [mediaFiles, setMediaFiles] = useState({
+    main_image: null,
+    video_url: null
+  });
+  const [imagePreviews, setImagePreviews] = useState({
+    main_image: null
+  });
   const [submitting, setSubmitting] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -4368,6 +4376,120 @@ const CreateSnippetPage = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  // Enhanced image upload handler
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file');
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size should be less than 5MB');
+        return;
+      }
+
+      setMediaFiles(prev => ({
+        ...prev,
+        main_image: file
+      }));
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreviews(prev => ({
+          ...prev,
+          main_image: e.target.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Video upload handler
+  const handleVideoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('video/')) {
+        alert('Please select a valid video file');
+        return;
+      }
+      
+      // Validate file size (max 50MB)
+      if (file.size > 50 * 1024 * 1024) {
+        alert('Video size should be less than 50MB');
+        return;
+      }
+
+      setMediaFiles(prev => ({
+        ...prev,
+        video_url: file
+      }));
+
+      // Get video duration
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.onloadedmetadata = () => {
+        const duration = Math.round(video.duration);
+        if (duration > 60) {
+          alert('Video should be less than 60 seconds');
+          setMediaFiles(prev => ({
+            ...prev,
+            video_url: null
+          }));
+          return;
+        }
+        setFormData(prev => ({
+          ...prev,
+          video_duration: duration
+        }));
+      };
+      video.src = URL.createObjectURL(file);
+    }
+  };
+
+  // Drag and drop handlers
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    const imageFile = files.find(file => file.type.startsWith('image/'));
+    
+    if (imageFile) {
+      const mockEvent = {
+        target: {
+          files: [imageFile]
+        }
+      };
+      handleImageUpload(mockEvent);
+    }
+  };
+
+  // Convert file to base64 for API submission
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
   };
 
   const addIngredient = () => {
