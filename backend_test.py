@@ -5100,6 +5100,53 @@ def main_snippet_media_tests():
         print(f"⚠️  {failed_count} snippet media tests failed. Check the issues above.")
         return 1
 
+def main_profile_photo_tests():
+    """Run focused profile photo upload and retrieval tests"""
+    print("🖼️ Lambalia Profile Photo Upload and Retrieval Test Suite")
+    print("=" * 70)
+    tester = LambaliaEnhancedAPITester()
+    print(f"Testing against: {tester.base_url}")
+    print()
+    
+    # Basic setup tests
+    print("🔧 Setting up test environment...")
+    tester.test_health_check()
+    tester.test_user_registration()
+    tester.test_user_login()
+    tester.test_get_current_user()
+    
+    # Core profile photo tests
+    print("\n📸 Testing Profile Photo Upload...")
+    tester.test_profile_photo_upload_valid_png()
+    tester.test_profile_photo_upload_valid_jpeg()
+    
+    print("\n🔍 Testing Validation...")
+    tester.test_profile_photo_upload_invalid_format()
+    tester.test_profile_photo_upload_missing_data()
+    tester.test_profile_photo_upload_empty_data()
+    tester.test_profile_photo_upload_non_image_base64()
+    
+    print("\n📋 Testing Retrieval and Persistence...")
+    tester.test_profile_data_retrieval_with_photo()
+    tester.test_profile_photo_persistence()
+    tester.test_profile_photo_base64_integrity()
+    tester.test_profile_photo_overwrite()
+    
+    print("\n🔒 Testing Security...")
+    tester.test_profile_photo_unauthorized_access()
+    
+    # Print summary
+    print("\n" + "=" * 70)
+    print(f"📊 Profile Photo Test Results: {tester.tests_passed}/{tester.tests_run} tests passed")
+    
+    if tester.tests_passed == tester.tests_run:
+        print("🎉 All profile photo tests passed! Profile photo upload and retrieval functionality is working correctly.")
+        return 0
+    else:
+        failed_count = tester.tests_run - tester.tests_passed
+        print(f"⚠️  {failed_count} profile photo tests failed. Check the issues above.")
+        return 1
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "--ui-improvements":
