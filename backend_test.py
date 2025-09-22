@@ -4793,5 +4793,7 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "--ui-improvements":
         sys.exit(main_ui_improvements())
+    elif len(sys.argv) > 1 and sys.argv[1] == "--snippet-media":
+        sys.exit(main_snippet_media_tests())
     else:
         sys.exit(main())
