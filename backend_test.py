@@ -4548,6 +4548,17 @@ class LambaliaEnhancedAPITester:
         self.test_get_user_snippets_playlist()
         self.test_like_snippet()
         
+        # Snippet Media Upload and Display tests
+        print("\n📸 Testing Snippet Media Upload and Display...")
+        self.test_create_snippet_with_image_only()
+        self.test_create_snippet_with_video_only()
+        self.test_create_snippet_with_both_media()
+        self.test_create_snippet_without_media()
+        self.test_get_snippets_with_media_fields()
+        self.test_get_user_snippets_playlist_with_media()
+        self.test_snippet_media_data_integrity()
+        self.test_snippet_video_duration_handling()
+        
         # Grocery integration tests
         print("\n🛒 Testing Grocery Integration...")
         self.test_grocery_search()
