@@ -891,6 +891,24 @@ backend:
         agent: "testing"
         comment: "COMPREHENSIVE TESTING PASSED: Snippet Media Upload and Display fully functional (12/12 tests passed, 100% success rate). ✅ Snippet Creation with Media (4/4 tests): POST /api/snippets accepts main_image and video_url as base64 data, supports image-only, video-only, both media types, and backward compatibility without media ✅ Snippet Retrieval with Media (2/2 tests): GET /api/snippets and GET /api/users/{user_id}/snippets/playlist return media fields properly serialized ✅ Data Integrity (2/2 tests): Base64 data stored/retrieved without corruption, video duration handled correctly. API verification confirmed snippets are being stored with base64 video data (data:video/mp4;base64,AAAA...) and proper field structure. Frontend CreateSnippetPage sends media correctly, SnippetCard components updated for proper display."
 
+  - task: "Profile Picture Upload and Withdrawal Button Functionality"
+    implemented: true
+    working: true
+    file: "server.py, App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "User reported two issues: 1) Profile accounts should have profile pictures instead of just initials, 2) Withdrawal button in earnings dashboard is not working - not leading to next steps. Need to implement profile picture upload/display and fix withdrawal button functionality."
+      - working: "NA"
+        agent: "main"
+        comment: "IMPLEMENTATION COMPLETED: 1) Added profile picture upload functionality with camera icon in profile header, preview, validation (2MB limit, image formats), and upload button 2) Added PUT /api/users/profile-photo backend endpoint for base64 image storage 3) Fixed withdrawal button by adding onClick handler and comprehensive withdrawal modal with amount input, method selection, fees info, and processing time details 4) Updated profile display to show uploaded photos or fallback to initials 5) Backend restarted successfully."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING PASSED: Profile Picture and Withdrawal functionality fully operational (15/15 tests passed, 100% success rate). ✅ Profile Photo Upload (PNG/JPEG): PUT /api/users/profile-photo accepts base64 data correctly ✅ Photo Validation: Proper rejection of invalid formats, missing data, empty data, non-image base64 ✅ Profile Data Retrieval: GET /api/users/me returns profile_photo field correctly ✅ Photo Persistence: 100% retrieval success rate across multiple attempts ✅ Base64 Integrity: No data corruption, exact character match ✅ Authentication Security: Unauthorized access properly rejected ✅ Frontend Integration: Profile photo upload UI working, withdrawal modal opening/closing successfully. Both user-reported issues resolved completely."
+
 frontend:
   - task: "Create traditional restaurant registration UI"
     implemented: true
