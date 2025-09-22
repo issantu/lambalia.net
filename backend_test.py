@@ -4778,7 +4778,7 @@ class LambaliaEnhancedAPITester:
             "profile_photo": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
         }
 
-        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 401)
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 403)
         
         # Restore token
         self.token = original_token
