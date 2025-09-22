@@ -855,6 +855,21 @@ backend:
         agent: "testing"
         comment: "FOCUSED TESTING COMPLETED: Enhanced Smart Cooking Tool fixes verified (5/6 tests passed, 83% success rate). ✅ HackTheMenu Content Expansion CONFIRMED: Successfully expanded from 5 items to 51+ items across all 5 restaurants (McDonald's, KFC, Taco Bell, Burger King, Subway) with 27 secret menu items ✅ AI Recipe Generation FIXED: No server errors, generates proper AI recipes with valid structure and lambalia_ai source ✅ Secret Menu Items EXPANDED: 19+ secret menu items with popularity scores, properly sorted by popularity ✅ Ingredient-Based Recipe Matching WORKING: SuperCook-style matching with 3 search modes (exact, 1 missing, 2 missing ingredients) ✅ Comprehensive Functionality VERIFIED: All 6 core features operational (20+ ingredients, 51+ fastfood items, 19+ secret items, 5+ restaurants). Minor: Restaurant name case sensitivity only works with exact match 'McDonald's' - variations like 'McDonalds', 'mcdonalds' don't work. CRITICAL USER ISSUES RESOLVED: Both reported problems are COMPLETELY FIXED - 'hackthemenu content is limited' (now 51+ items) and 'AI recipe is not generating' (now working without errors)."
 
+  - task: "Snippet Media Upload and Display - Complete SnippetCard Components"
+    implemented: true
+    working: false
+    file: "models_extension.py, App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to complete the display of images and videos in all SnippetCard components in the frontend. Previous work shows CreateSnippetPage already has image/video upload functionality, but SnippetCard components need updating to display the media."
+      - working: "NA"
+        agent: "main"
+        comment: "IMPLEMENTATION COMPLETED: 1) Updated second SnippetCard component (line 3291) in App.js to properly display images and videos with conditional rendering, proper styling, and video duration indicators. 2) Fixed backend SnippetCreate model in models_extension.py to accept main_image and video_url fields that frontend sends. 3) Backend restarted successfully. Both SnippetCard components now have consistent image/video display functionality."
+
 frontend:
   - task: "Create traditional restaurant registration UI"
     implemented: true
