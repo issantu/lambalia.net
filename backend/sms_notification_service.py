@@ -20,6 +20,7 @@ class SMSNotificationService:
         self.auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
         self.twilio_phone = os.environ.get('TWILIO_PHONE_NUMBER')
         self.helpdesk_number = os.environ.get('HELPDESK_PHONE', '+1-800-LAMBALIA')
+        self.helpdesk_email = os.environ.get('HELPDESK_EMAIL', 'helpdesk@lambalia.net')
         
         # Initialize Twilio client
         if self.account_sid and self.auth_token:
