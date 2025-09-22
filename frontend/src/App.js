@@ -4664,6 +4664,123 @@ const CreateSnippetPage = () => {
             />
           </div>
 
+          {/* Enhanced Media Upload Section */}
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border-2 border-dashed border-purple-200">
+            <h3 className="text-lg font-semibold text-purple-800 mb-4">📸 Add Beautiful Media</h3>
+            <p className="text-sm text-gray-600 mb-6">A picture is worth a thousand words! Show off your delicious creation.</p>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Image Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  🖼️ Recipe Photo (Recommended)
+                </label>
+                <div 
+                  className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all ${
+                    dragOver 
+                      ? 'border-green-400 bg-green-50' 
+                      : 'border-gray-300 hover:border-green-400 hover:bg-gray-50'
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  {imagePreviews.main_image ? (
+                    <div className="relative">
+                      <img 
+                        src={imagePreviews.main_image} 
+                        alt="Recipe preview" 
+                        className="w-full h-48 object-cover rounded-lg shadow-md"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImagePreviews(prev => ({ ...prev, main_image: null }));
+                          setMediaFiles(prev => ({ ...prev, main_image: null }));
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors"
+                      >
+                        ×
+                      </button>
+                      <div className="mt-3 text-sm text-green-600 font-medium">
+                        ✨ Perfect! Your recipe looks delicious!
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="text-4xl mb-3">📷</div>
+                      <p className="text-gray-600 mb-2">Drag & drop your recipe photo here</p>
+                      <p className="text-sm text-gray-500 mb-4">or click to browse (JPG, PNG, max 5MB)</p>
+                      <label className="btn-secondary px-4 py-2 rounded-lg cursor-pointer inline-block">
+                        Choose Photo
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Video Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  🎥 Cooking Video (Optional)
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 hover:bg-blue-50 transition-all">
+                  {mediaFiles.video_url ? (
+                    <div className="relative">
+                      <div className="bg-blue-100 p-4 rounded-lg">
+                        <div className="text-4xl mb-2">🎬</div>
+                        <p className="text-blue-800 font-medium">Video uploaded!</p>
+                        <p className="text-sm text-blue-600">Duration: {formData.video_duration}s</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMediaFiles(prev => ({ ...prev, video_url: null }));
+                          setFormData(prev => ({ ...prev, video_duration: '' }));
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="text-4xl mb-3">🎥</div>
+                      <p className="text-gray-600 mb-2">Add a short cooking video</p>
+                      <p className="text-sm text-gray-500 mb-4">Max 60 seconds, 50MB (MP4, MOV)</p>
+                      <label className="btn-secondary px-4 py-2 rounded-lg cursor-pointer inline-block">
+                        Choose Video
+                        <input
+                          type="file"
+                          accept="video/*"
+                          onChange={handleVideoUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Media Tips */}
+            <div className="mt-6 bg-white p-4 rounded-lg border border-purple-200">
+              <h4 className="font-medium text-purple-800 mb-2">💡 Media Tips for Great Snippets</h4>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• 📱 Take photos in good lighting - natural light works best</li>
+                <li>• 🍽️ Show the finished dish as the hero shot</li>
+                <li>• 🎬 Keep videos under 60 seconds and focus on key cooking steps</li>
+                <li>• ✨ Clean backgrounds and colorful ingredients make appetizing photos</li>
+              </ul>
+            </div>
+          </div>
+
           {/* Recipe Details */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
