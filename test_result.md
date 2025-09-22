@@ -959,6 +959,24 @@ backend:
         agent: "testing"
         comment: "COMPREHENSIVE TESTING PASSED: Profile Picture and Withdrawal functionality fully operational (15/15 tests passed, 100% success rate). ✅ Profile Photo Upload (PNG/JPEG): PUT /api/users/profile-photo accepts base64 data correctly ✅ Photo Validation: Proper rejection of invalid formats, missing data, empty data, non-image base64 ✅ Profile Data Retrieval: GET /api/users/me returns profile_photo field correctly ✅ Photo Persistence: 100% retrieval success rate across multiple attempts ✅ Base64 Integrity: No data corruption, exact character match ✅ Authentication Security: Unauthorized access properly rejected ✅ Frontend Integration: Profile photo upload UI working, withdrawal modal opening/closing successfully. Both user-reported issues resolved completely."
 
+  - task: "Public Profile Information Display - Town, Allergies, Languages, Halal, Vegetarian, etc."
+    implemented: true
+    working: true
+    file: "server.py, App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "User requested that profiles should display public information: profile picture, town, allergies, languages, halal, vegetarian preferences, etc. instead of just private earnings dashboard. Need to restructure profile to show cooking-related public information that helps other users understand dietary needs and cultural background."
+      - working: "NA"
+        agent: "main"
+        comment: "IMPLEMENTATION COMPLETED: 1) Enhanced dietary preferences with halal, kosher, dairy_free, nut_free, soy_free, pescatarian options 2) Restructured profile Overview tab to show Personal Information (name, location, language, heritage), Dietary & Cooking Style (preferences with icons, native dishes, specialties), Cooking Profile Stats, and About Me section 3) Moved private earnings to dedicated Earnings tab 4) Added comprehensive dietary preference icons and display 5) Backend restarted with enhanced dietary options."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING PASSED: Public Profile Information Display fully operational (14/14 tests passed, 100% success rate). ✅ Enhanced Dietary Preferences: All new preferences (halal, kosher, dairy_free, nut_free, soy_free, pescatarian) working ✅ Profile Data Integration: Cultural heritage fields (cultural_background, native_dishes, consultation_specialties, postal_code, preferred_language) working ✅ Profile Photo Integration: Works seamlessly with enhanced dietary preferences ✅ User Registration: Enhanced dietary preferences accepted during registration ✅ Profile Retrieval: All new fields returned correctly via /api/users/me ✅ Mixed Preferences: Old and new dietary preferences work together ✅ Frontend Integration: Personal Information, Dietary & Cooking Style, Cooking Profile Stats sections all visible and displaying data correctly. Profile now shows public cooking-related information instead of private earnings."
+
 frontend:
   - task: "Create traditional restaurant registration UI"
     implemented: true
