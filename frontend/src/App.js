@@ -3900,24 +3900,24 @@ const ContactPage = () => {
             <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl">
               <h3 className="font-semibold text-green-800 mb-3">💼 Business Partnerships</h3>
               <p className="text-sm text-gray-600 mb-2">Grocery chains, restaurant groups, cultural organizations</p>
-              <a href="mailto:partnerships@lambalia.com" className="text-green-600 font-medium">
-                partnerships@lambalia.com
+              <a href="mailto:issantu.tembe@lambalia.net" className="text-green-600 font-medium">
+                issantu.tembe@lambalia.net
               </a>
             </div>
 
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-xl">
               <h3 className="font-semibold text-orange-800 mb-3">🎯 Media & Press</h3>
               <p className="text-sm text-gray-600 mb-2">Press inquiries, interviews, feature stories</p>
-              <a href="mailto:press@lambalia.com" className="text-orange-600 font-medium">
-                press@lambalia.com
+              <a href="mailto:contact@lambalia.net" className="text-orange-600 font-medium">
+                contact@lambalia.net
               </a>
             </div>
 
             <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
               <h3 className="font-semibold text-purple-800 mb-3">🤝 Community Support</h3>
               <p className="text-sm text-gray-600 mb-2">User support, cultural authenticity, recipe verification</p>
-              <a href="mailto:support@lambalia.com" className="text-purple-600 font-medium">
-                support@lambalia.com
+              <a href="mailto:support@lambalia.net" className="text-purple-600 font-medium">
+                support@lambalia.net
               </a>
             </div>
 
@@ -3932,8 +3932,8 @@ const ContactPage = () => {
             <div className="bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-xl">
               <h3 className="font-semibold text-red-800 mb-3">🚨 Report Issues</h3>
               <p className="text-sm text-gray-600 mb-2">Technical problems, content concerns, fraud prevention</p>
-              <a href="mailto:security@lambalia.com" className="text-red-600 font-medium">
-                security@lambalia.com
+              <a href="mailto:helpdesk@lambalia.net" className="text-red-600 font-medium">
+                helpdesk@lambalia.net
               </a>
             </div>
 
