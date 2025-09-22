@@ -4747,6 +4747,48 @@ def main_ui_improvements():
     tester = LambaliaEnhancedAPITester()
     return tester.run_lambalia_ui_improvements_tests()
 
+def main_snippet_media_tests():
+    """Run focused snippet media upload and display tests"""
+    print("🎬 Lambalia Snippet Media Upload and Display Test Suite")
+    print("=" * 70)
+    tester = LambaliaEnhancedAPITester()
+    print(f"Testing against: {tester.base_url}")
+    print()
+    
+    # Basic setup tests
+    print("🔧 Setting up test environment...")
+    tester.test_health_check()
+    tester.test_user_registration()
+    tester.test_user_login()
+    tester.test_get_current_user()
+    
+    # Core snippet media tests
+    print("\n📸 Testing Snippet Media Upload and Display...")
+    tester.test_create_snippet_with_image_only()
+    tester.test_create_snippet_with_video_only()
+    tester.test_create_snippet_with_both_media()
+    tester.test_create_snippet_without_media()
+    
+    print("\n📋 Testing Snippet Retrieval with Media...")
+    tester.test_get_snippets_with_media_fields()
+    tester.test_get_user_snippets_playlist_with_media()
+    
+    print("\n🔍 Testing Data Integrity...")
+    tester.test_snippet_media_data_integrity()
+    tester.test_snippet_video_duration_handling()
+    
+    # Print summary
+    print("\n" + "=" * 70)
+    print(f"📊 Snippet Media Test Results: {tester.tests_passed}/{tester.tests_run} tests passed")
+    
+    if tester.tests_passed == tester.tests_run:
+        print("🎉 All snippet media tests passed! Media upload and display functionality is working correctly.")
+        return 0
+    else:
+        failed_count = tester.tests_run - tester.tests_passed
+        print(f"⚠️  {failed_count} snippet media tests failed. Check the issues above.")
+        return 1
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "--ui-improvements":
