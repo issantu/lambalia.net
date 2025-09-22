@@ -5013,6 +5013,20 @@ class LambaliaEnhancedAPITester:
         self.test_three_service_types()
         self.test_standalone_capability()
         
+        # Profile Photo Upload and Retrieval Tests
+        print("\n🖼️ Testing Profile Photo Upload and Retrieval...")
+        self.test_profile_photo_upload_valid_png()
+        self.test_profile_photo_upload_valid_jpeg()
+        self.test_profile_photo_upload_invalid_format()
+        self.test_profile_photo_upload_missing_data()
+        self.test_profile_photo_upload_empty_data()
+        self.test_profile_photo_upload_non_image_base64()
+        self.test_profile_data_retrieval_with_photo()
+        self.test_profile_photo_persistence()
+        self.test_profile_photo_base64_integrity()
+        self.test_profile_photo_overwrite()
+        self.test_profile_photo_unauthorized_access()
+        
         # Print summary
         print("\n" + "=" * 70)
         print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} tests passed")
