@@ -157,6 +157,282 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("Get Current User", success, details)
 
+    # ENHANCED DIETARY PREFERENCES AND PROFILE DATA TESTS
+
+    def test_enhanced_dietary_preferences_registration(self):
+        """Test user registration with enhanced dietary preferences"""
+        enhanced_user_data = {
+            "username": f"enhanced_user_{datetime.now().strftime('%H%M%S')}",
+            "email": f"enhanced_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Enhanced Test User",
+            "postal_code": "90210",
+            "preferred_language": "en",
+            "cultural_background": "Nigerian",
+            "native_dishes": "Jollof Rice, Egusi Soup, Suya",
+            "consultation_specialties": "West African cuisine, Traditional cooking methods",
+            "dietary_preferences": ["halal", "dairy_free", "nut_free"]
+        }
+
+        success, data = self.make_request('POST', 'auth/register', enhanced_user_data, 200)
+        
+        if success:
+            user_data = data.get('user', {})
+            dietary_prefs = user_data.get('dietary_preferences', [])
+            cultural_bg = user_data.get('cultural_background', '')
+            native_dishes = user_data.get('native_dishes', '')
+            details = f"- Dietary: {dietary_prefs}, Cultural: {cultural_bg}, Dishes: {native_dishes[:30]}..."
+            
+            # Store for later tests
+            self.enhanced_user_token = data.get('access_token')
+            self.enhanced_user_id = user_data.get('id')
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced Dietary Preferences Registration", success, details)
+
+    def test_all_new_dietary_preferences(self):
+        """Test registration with all new dietary preferences"""
+        all_prefs_user_data = {
+            "username": f"allprefs_user_{datetime.now().strftime('%H%M%S')}",
+            "email": f"allprefs_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "All Preferences User",
+            "postal_code": "10001",
+            "preferred_language": "es",
+            "cultural_background": "Lebanese",
+            "native_dishes": "Hummus, Tabbouleh, Kibbeh",
+            "consultation_specialties": "Middle Eastern cuisine, Vegetarian adaptations",
+            "dietary_preferences": ["halal", "kosher", "dairy_free", "nut_free", "soy_free", "pescatarian"]
+        }
+
+        success, data = self.make_request('POST', 'auth/register', all_prefs_user_data, 200)
+        
+        if success:
+            user_data = data.get('user', {})
+            dietary_prefs = user_data.get('dietary_preferences', [])
+            expected_prefs = ["halal", "kosher", "dairy_free", "nut_free", "soy_free", "pescatarian"]
+            all_prefs_saved = all(pref in dietary_prefs for pref in expected_prefs)
+            details = f"- {len(dietary_prefs)} preferences saved, All new prefs: {'✓' if all_prefs_saved else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("All New Dietary Preferences", success, details)
+
+    def test_mixed_dietary_preferences(self):
+        """Test registration with mix of old and new dietary preferences"""
+        mixed_prefs_user_data = {
+            "username": f"mixed_user_{datetime.now().strftime('%H%M%S')}",
+            "email": f"mixed_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Mixed Preferences User",
+            "postal_code": "33101",
+            "preferred_language": "fr",
+            "cultural_background": "Moroccan",
+            "native_dishes": "Tagine, Couscous, Pastilla",
+            "consultation_specialties": "North African cuisine, Spice blending",
+            "dietary_preferences": ["vegetarian", "gluten_free", "halal", "organic", "dairy_free"]
+        }
+
+        success, data = self.make_request('POST', 'auth/register', mixed_prefs_user_data, 200)
+        
+        if success:
+            user_data = data.get('user', {})
+            dietary_prefs = user_data.get('dietary_preferences', [])
+            has_old_prefs = any(pref in dietary_prefs for pref in ["vegetarian", "gluten_free", "organic"])
+            has_new_prefs = any(pref in dietary_prefs for pref in ["halal", "dairy_free"])
+            details = f"- {len(dietary_prefs)} prefs, Old: {'✓' if has_old_prefs else '✗'}, New: {'✓' if has_new_prefs else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Mixed Dietary Preferences", success, details)
+
+    def test_profile_data_integration(self):
+        """Test complete profile data integration with all fields"""
+        complete_profile_data = {
+            "username": f"complete_user_{datetime.now().strftime('%H%M%S')}",
+            "email": f"complete_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Complete Profile User",
+            "phone": "+1-555-0199",
+            "postal_code": "60601",
+            "preferred_language": "de",
+            "cultural_background": "Ethiopian",
+            "native_dishes": "Injera, Doro Wat, Kitfo, Shiro",
+            "consultation_specialties": "Ethiopian cuisine, Fermentation techniques, Spice preparation",
+            "dietary_preferences": ["halal", "gluten_free", "organic", "pescatarian"]
+        }
+
+        success, data = self.make_request('POST', 'auth/register', complete_profile_data, 200)
+        
+        if success:
+            user_data = data.get('user', {})
+            required_fields = ['full_name', 'phone', 'postal_code', 'preferred_language', 
+                             'cultural_background', 'native_dishes', 'consultation_specialties']
+            fields_present = sum(1 for field in required_fields if user_data.get(field))
+            details = f"- {fields_present}/{len(required_fields)} profile fields saved"
+        else:
+            details = ""
+            
+        return self.log_test("Profile Data Integration", success, details)
+
+    def test_profile_photo_with_dietary_preferences(self):
+        """Test profile photo integration with enhanced dietary preferences"""
+        if not hasattr(self, 'enhanced_user_token') or not self.enhanced_user_token:
+            return self.log_test("Profile Photo with Dietary Preferences", False, "- No enhanced user token available")
+
+        # Sample base64 profile photo
+        sample_profile_photo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+        
+        # Upload profile photo
+        photo_data = {"profile_photo": sample_profile_photo}
+        
+        # Temporarily switch to enhanced user token
+        original_token = self.token
+        self.token = self.enhanced_user_token
+        
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 200)
+        
+        if success:
+            # Get user profile to verify photo and dietary preferences
+            profile_success, profile_data = self.make_request('GET', 'users/me')
+            
+            if profile_success:
+                has_photo = bool(profile_data.get('profile_photo'))
+                dietary_prefs = profile_data.get('dietary_preferences', [])
+                has_enhanced_prefs = any(pref in dietary_prefs for pref in ["halal", "dairy_free", "nut_free"])
+                details = f"- Photo: {'✓' if has_photo else '✗'}, Enhanced prefs: {'✓' if has_enhanced_prefs else '✗'}"
+            else:
+                details = "- Failed to retrieve profile after photo upload"
+                success = False
+        else:
+            details = ""
+        
+        # Restore original token
+        self.token = original_token
+        
+        return self.log_test("Profile Photo with Dietary Preferences", success, details)
+
+    def test_user_profile_retrieval_with_all_fields(self):
+        """Test that user profile retrieval includes all new fields"""
+        if not hasattr(self, 'enhanced_user_token') or not self.enhanced_user_token:
+            return self.log_test("User Profile Retrieval All Fields", False, "- No enhanced user token available")
+
+        # Temporarily switch to enhanced user token
+        original_token = self.token
+        self.token = self.enhanced_user_token
+        
+        success, data = self.make_request('GET', 'users/me')
+        
+        if success:
+            # Check for all expected fields
+            expected_fields = {
+                'cultural_background': 'Nigerian',
+                'native_dishes': 'Jollof Rice',
+                'consultation_specialties': 'West African',
+                'postal_code': '90210',
+                'preferred_language': 'en'
+            }
+            
+            fields_correct = 0
+            for field, expected_value in expected_fields.items():
+                actual_value = data.get(field, '')
+                if expected_value.lower() in actual_value.lower():
+                    fields_correct += 1
+            
+            dietary_prefs = data.get('dietary_preferences', [])
+            has_enhanced_prefs = any(pref in dietary_prefs for pref in ["halal", "dairy_free", "nut_free"])
+            
+            details = f"- {fields_correct}/{len(expected_fields)} fields correct, Enhanced prefs: {'✓' if has_enhanced_prefs else '✗'}"
+        else:
+            details = ""
+        
+        # Restore original token
+        self.token = original_token
+        
+        return self.log_test("User Profile Retrieval All Fields", success, details)
+
+    def test_dietary_preferences_validation(self):
+        """Test validation of dietary preferences during registration"""
+        # Test with invalid dietary preference
+        invalid_prefs_data = {
+            "username": f"invalid_user_{datetime.now().strftime('%H%M%S')}",
+            "email": f"invalid_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Invalid Preferences User",
+            "dietary_preferences": ["invalid_preference", "halal", "vegetarian"]
+        }
+
+        success, data = self.make_request('POST', 'auth/register', invalid_prefs_data, 422)
+        
+        if success:  # Success means we got expected 422 validation error
+            details = "- Correctly rejected invalid dietary preference"
+        else:
+            # If it didn't fail, check if invalid preference was filtered out
+            if data and data.get('user'):
+                dietary_prefs = data.get('user', {}).get('dietary_preferences', [])
+                invalid_filtered = 'invalid_preference' not in dietary_prefs
+                details = f"- Invalid preference filtered: {'✓' if invalid_filtered else '✗'}"
+                success = invalid_filtered
+            else:
+                details = "- Unexpected response format"
+            
+        return self.log_test("Dietary Preferences Validation", success, details)
+
+    def test_empty_optional_fields(self):
+        """Test registration with empty optional profile fields"""
+        minimal_data = {
+            "username": f"minimal_user_{datetime.now().strftime('%H%M%S')}",
+            "email": f"minimal_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "dietary_preferences": ["vegan", "soy_free"]
+        }
+
+        success, data = self.make_request('POST', 'auth/register', minimal_data, 200)
+        
+        if success:
+            user_data = data.get('user', {})
+            dietary_prefs = user_data.get('dietary_preferences', [])
+            has_new_prefs = any(pref in dietary_prefs for pref in ["soy_free"])
+            optional_fields_handled = all(field in user_data for field in ['cultural_background', 'native_dishes'])
+            details = f"- New prefs: {'✓' if has_new_prefs else '✗'}, Optional fields: {'✓' if optional_fields_handled else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Empty Optional Fields", success, details)
+
+    def test_cultural_background_search(self):
+        """Test searching users by cultural background"""
+        # This tests the heritage data collection endpoint
+        success, data = self.make_request('GET', 'heritage/dishes-by-culture/Nigerian')
+        
+        if success:
+            contributors = data.get('total_contributors', 0)
+            dishes = data.get('dishes', [])
+            dishes_count = len(dishes)
+            details = f"- {contributors} Nigerian contributors, {dishes_count} dishes found"
+        else:
+            details = ""
+            
+        return self.log_test("Cultural Background Search", success, details)
+
+    def test_user_heritage_contributions(self):
+        """Test aggregated heritage contributions endpoint"""
+        success, data = self.make_request('GET', 'heritage/user-contributions')
+        
+        if success:
+            total_contributors = data.get('total_contributors', 0)
+            cultural_backgrounds = data.get('cultural_backgrounds', {})
+            native_dishes = data.get('top_native_dishes', {})
+            specialties = data.get('top_consultation_specialties', {})
+            
+            has_data = total_contributors > 0 and (cultural_backgrounds or native_dishes or specialties)
+            details = f"- {total_contributors} contributors, Backgrounds: {len(cultural_backgrounds)}, Dishes: {len(native_dishes)}"
+        else:
+            details = ""
+            
+        return self.log_test("User Heritage Contributions", success, details)
+
     # NEW ENHANCED FEATURES TESTS
 
     def test_get_reference_recipes(self):
