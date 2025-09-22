@@ -1030,6 +1030,7 @@ test_plan:
     - "Enhanced Smart Cooking Tool - SuperCook + HackTheMenu Integration - COMPLETED ✅"
     - "Snippet Media Upload and Display - Complete SnippetCard Components - COMPLETED ✅"
     - "Profile Picture Upload and Withdrawal Button Functionality - COMPLETED ✅"
+    - "Public Profile Information Display - Town, Allergies, Languages, Halal, Vegetarian, etc. - COMPLETED ✅"
   stuck_tasks: 
     - "Heritage Countries Expansion (needs 80+ countries, currently 60)"
     - "Some Lambalia Eats cuisine types (korean, vietnamese, latin_american, european) returning 500 errors"
