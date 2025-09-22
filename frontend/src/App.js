@@ -2642,6 +2642,61 @@ const ProfilePage = () => {
     setLoading(false);
   };
 
+  // Profile photo upload handler
+  const handleProfilePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file');
+        return;
+      }
+      
+      // Validate file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Image size should be less than 2MB');
+        return;
+      }
+
+      setProfilePhoto(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfilePhotoPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Upload profile photo to backend
+  const uploadProfilePhoto = async () => {
+    if (!profilePhoto) return;
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64Image = e.target.result;
+        
+        const response = await axios.put(`${API}/users/profile-photo`, {
+          profile_photo: base64Image
+        });
+        
+        if (response.status === 200) {
+          alert('Profile photo updated successfully!');
+          setProfilePhoto(null);
+          setProfilePhotoPreview(null);
+          // Refresh user data
+          window.location.reload();
+        }
+      };
+      reader.readAsDataURL(profilePhoto);
+    } catch (error) {
+      console.error('Failed to upload profile photo:', error);
+      alert('Failed to upload profile photo. Please try again.');
+    }
+  };
+
   const SnippetCard = ({ snippet, playlistIndex }) => (
     <div className="recipe-card overflow-hidden">
       {/* Beautiful Recipe Image */}
