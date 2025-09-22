@@ -4521,6 +4521,303 @@ class LambaliaEnhancedAPITester:
         
         return self.tests_passed == self.tests_run
 
+    # PROFILE PHOTO UPLOAD AND RETRIEVAL TESTS
+    
+    def test_profile_photo_upload_valid_png(self):
+        """Test profile photo upload with valid PNG base64 data"""
+        if not self.token:
+            return self.log_test("Profile Photo Upload (PNG)", False, "- No auth token available")
+
+        # Sample base64 PNG image data (1x1 pixel PNG)
+        sample_png_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+        
+        photo_data = {
+            "profile_photo": sample_png_base64
+        }
+
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 200)
+        
+        if success:
+            message = data.get('message', '')
+            user_data = data.get('user', {})
+            profile_photo = user_data.get('profile_photo', '')
+            has_photo = bool(profile_photo and profile_photo.startswith('data:image/'))
+            details = f"- Message: {message}, Photo stored: {'✓' if has_photo else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Profile Photo Upload (PNG)", success, details)
+
+    def test_profile_photo_upload_valid_jpeg(self):
+        """Test profile photo upload with valid JPEG base64 data"""
+        if not self.token:
+            return self.log_test("Profile Photo Upload (JPEG)", False, "- No auth token available")
+
+        # Sample base64 JPEG image data (minimal JPEG header)
+        sample_jpeg_base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A8A"
+        
+        photo_data = {
+            "profile_photo": sample_jpeg_base64
+        }
+
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 200)
+        
+        if success:
+            message = data.get('message', '')
+            user_data = data.get('user', {})
+            profile_photo = user_data.get('profile_photo', '')
+            has_photo = bool(profile_photo and profile_photo.startswith('data:image/'))
+            details = f"- Message: {message}, Photo stored: {'✓' if has_photo else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Profile Photo Upload (JPEG)", success, details)
+
+    def test_profile_photo_upload_invalid_format(self):
+        """Test profile photo upload with invalid format (should fail)"""
+        if not self.token:
+            return self.log_test("Profile Photo Upload (Invalid Format)", False, "- No auth token available")
+
+        # Invalid format - not base64 image data
+        photo_data = {
+            "profile_photo": "invalid_image_data"
+        }
+
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 400)
+        
+        if success:  # Success means we got expected 400 error
+            details = "- Correctly rejected invalid image format"
+        else:
+            details = "- Failed to validate image format"
+            
+        return self.log_test("Profile Photo Upload (Invalid Format)", success, details)
+
+    def test_profile_photo_upload_missing_data(self):
+        """Test profile photo upload with missing photo data (should fail)"""
+        if not self.token:
+            return self.log_test("Profile Photo Upload (Missing Data)", False, "- No auth token available")
+
+        # Missing profile_photo field
+        photo_data = {}
+
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 400)
+        
+        if success:  # Success means we got expected 400 error
+            details = "- Correctly rejected missing photo data"
+        else:
+            details = "- Failed to validate missing photo data"
+            
+        return self.log_test("Profile Photo Upload (Missing Data)", success, details)
+
+    def test_profile_photo_upload_empty_data(self):
+        """Test profile photo upload with empty photo data (should fail)"""
+        if not self.token:
+            return self.log_test("Profile Photo Upload (Empty Data)", False, "- No auth token available")
+
+        # Empty profile_photo field
+        photo_data = {
+            "profile_photo": ""
+        }
+
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 400)
+        
+        if success:  # Success means we got expected 400 error
+            details = "- Correctly rejected empty photo data"
+        else:
+            details = "- Failed to validate empty photo data"
+            
+        return self.log_test("Profile Photo Upload (Empty Data)", success, details)
+
+    def test_profile_photo_upload_non_image_base64(self):
+        """Test profile photo upload with non-image base64 data (should fail)"""
+        if not self.token:
+            return self.log_test("Profile Photo Upload (Non-Image Base64)", False, "- No auth token available")
+
+        # Valid base64 but not image data
+        photo_data = {
+            "profile_photo": "data:text/plain;base64,SGVsbG8gV29ybGQ="
+        }
+
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 400)
+        
+        if success:  # Success means we got expected 400 error
+            details = "- Correctly rejected non-image base64 data"
+        else:
+            details = "- Failed to validate non-image base64 data"
+            
+        return self.log_test("Profile Photo Upload (Non-Image Base64)", success, details)
+
+    def test_profile_data_retrieval_with_photo(self):
+        """Test GET /api/users/me returns profile_photo field"""
+        if not self.token:
+            return self.log_test("Profile Data Retrieval with Photo", False, "- No auth token available")
+
+        # First upload a photo
+        sample_png_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+        photo_data = {"profile_photo": sample_png_base64}
+        
+        upload_success, upload_data = self.make_request('PUT', 'users/profile-photo', photo_data, 200)
+        if not upload_success:
+            return self.log_test("Profile Data Retrieval with Photo", False, "- Failed to upload photo first")
+
+        # Now retrieve user profile
+        success, data = self.make_request('GET', 'users/me')
+        
+        if success:
+            profile_photo = data.get('profile_photo', '')
+            username = data.get('username', 'unknown')
+            email = data.get('email', 'unknown')
+            has_photo = bool(profile_photo and profile_photo.startswith('data:image/'))
+            photo_format = 'PNG' if 'png' in profile_photo else 'JPEG' if 'jpeg' in profile_photo else 'unknown'
+            details = f"- User: {username} ({email}), Photo: {'✓' if has_photo else '✗'}, Format: {photo_format}"
+        else:
+            details = ""
+            
+        return self.log_test("Profile Data Retrieval with Photo", success, details)
+
+    def test_profile_photo_persistence(self):
+        """Test that profile photo persists after upload"""
+        if not self.token:
+            return self.log_test("Profile Photo Persistence", False, "- No auth token available")
+
+        # Upload a photo
+        sample_jpeg_base64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A8A"
+        photo_data = {"profile_photo": sample_jpeg_base64}
+        
+        upload_success, upload_data = self.make_request('PUT', 'users/profile-photo', photo_data, 200)
+        if not upload_success:
+            return self.log_test("Profile Photo Persistence", False, "- Failed to upload photo")
+
+        # Retrieve profile multiple times to check persistence
+        retrieval_attempts = 3
+        successful_retrievals = 0
+        
+        for i in range(retrieval_attempts):
+            success, data = self.make_request('GET', 'users/me')
+            if success:
+                profile_photo = data.get('profile_photo', '')
+                if profile_photo and profile_photo.startswith('data:image/jpeg'):
+                    successful_retrievals += 1
+
+        persistence_rate = (successful_retrievals / retrieval_attempts) * 100
+        details = f"- {successful_retrievals}/{retrieval_attempts} retrievals successful ({persistence_rate:.0f}%)"
+        
+        return self.log_test("Profile Photo Persistence", successful_retrievals == retrieval_attempts, details)
+
+    def test_profile_photo_base64_integrity(self):
+        """Test that base64 encoding is handled correctly without corruption"""
+        if not self.token:
+            return self.log_test("Profile Photo Base64 Integrity", False, "- No auth token available")
+
+        # Use a specific base64 image that we can verify
+        original_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+        photo_data = {"profile_photo": original_base64}
+        
+        # Upload the photo
+        upload_success, upload_data = self.make_request('PUT', 'users/profile-photo', photo_data, 200)
+        if not upload_success:
+            return self.log_test("Profile Photo Base64 Integrity", False, "- Failed to upload photo")
+
+        # Retrieve and compare
+        success, data = self.make_request('GET', 'users/me')
+        
+        if success:
+            retrieved_photo = data.get('profile_photo', '')
+            integrity_check = retrieved_photo == original_base64
+            base64_length_original = len(original_base64)
+            base64_length_retrieved = len(retrieved_photo)
+            details = f"- Original: {base64_length_original} chars, Retrieved: {base64_length_retrieved} chars, Integrity: {'✓' if integrity_check else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Profile Photo Base64 Integrity", success and integrity_check, details)
+
+    def test_profile_photo_overwrite(self):
+        """Test that uploading a new photo overwrites the previous one"""
+        if not self.token:
+            return self.log_test("Profile Photo Overwrite", False, "- No auth token available")
+
+        # Upload first photo (PNG)
+        first_photo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+        photo_data1 = {"profile_photo": first_photo}
+        
+        upload1_success, upload1_data = self.make_request('PUT', 'users/profile-photo', photo_data1, 200)
+        if not upload1_success:
+            return self.log_test("Profile Photo Overwrite", False, "- Failed to upload first photo")
+
+        # Upload second photo (JPEG)
+        second_photo = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A8A"
+        photo_data2 = {"profile_photo": second_photo}
+        
+        upload2_success, upload2_data = self.make_request('PUT', 'users/profile-photo', photo_data2, 200)
+        if not upload2_success:
+            return self.log_test("Profile Photo Overwrite", False, "- Failed to upload second photo")
+
+        # Retrieve and verify it's the second photo
+        success, data = self.make_request('GET', 'users/me')
+        
+        if success:
+            current_photo = data.get('profile_photo', '')
+            is_second_photo = current_photo == second_photo
+            is_not_first_photo = current_photo != first_photo
+            overwrite_successful = is_second_photo and is_not_first_photo
+            photo_type = 'JPEG' if 'jpeg' in current_photo else 'PNG' if 'png' in current_photo else 'unknown'
+            details = f"- Current photo type: {photo_type}, Overwrite successful: {'✓' if overwrite_successful else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Profile Photo Overwrite", success and overwrite_successful, details)
+
+    def test_profile_photo_unauthorized_access(self):
+        """Test profile photo upload without authentication (should fail)"""
+        # Temporarily remove token
+        original_token = self.token
+        self.token = None
+
+        photo_data = {
+            "profile_photo": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+        }
+
+        success, data = self.make_request('PUT', 'users/profile-photo', photo_data, 401)
+        
+        # Restore token
+        self.token = original_token
+        
+        if success:  # Success means we got expected 401 error
+            details = "- Correctly rejected unauthorized access"
+        else:
+            details = "- Failed to enforce authentication"
+            
+        return self.log_test("Profile Photo Unauthorized Access", success, details)
+
+    def run_profile_photo_tests(self):
+        """Run all profile photo tests"""
+        print("\n🖼️ PROFILE PHOTO UPLOAD AND RETRIEVAL TESTS")
+        print("=" * 50)
+        
+        # Test valid uploads
+        self.test_profile_photo_upload_valid_png()
+        self.test_profile_photo_upload_valid_jpeg()
+        
+        # Test validation
+        self.test_profile_photo_upload_invalid_format()
+        self.test_profile_photo_upload_missing_data()
+        self.test_profile_photo_upload_empty_data()
+        self.test_profile_photo_upload_non_image_base64()
+        
+        # Test retrieval and persistence
+        self.test_profile_data_retrieval_with_photo()
+        self.test_profile_photo_persistence()
+        self.test_profile_photo_base64_integrity()
+        self.test_profile_photo_overwrite()
+        
+        # Test security
+        self.test_profile_photo_unauthorized_access()
+        
+        print(f"🖼️ Profile Photo Tests Success Rate: {(self.tests_passed / self.tests_run * 100):.1f}%")
+        
+        return self.tests_passed == self.tests_run
+
     def run_all_tests(self):
         """Run all API tests in sequence"""
         print("🚀 Starting Enhanced Lambalia Backend API Tests")
