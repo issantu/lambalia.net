@@ -3289,20 +3289,51 @@ const HomePage = () => {
   };
 
   const SnippetCard = ({ snippet }) => (
-    <div className="recipe-card">
+    <div className="recipe-card overflow-hidden">
+      {/* Beautiful Recipe Image */}
+      {snippet.main_image && (
+        <div className="relative">
+          <img 
+            src={snippet.main_image} 
+            alt={snippet.title}
+            className="w-full h-48 object-cover"
+          />
+          <div className="absolute top-3 right-3 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize shadow-lg">
+            {snippet.snippet_type.replace('_', ' ')}
+          </div>
+          {snippet.video_duration && (
+            <div className="absolute bottom-3 right-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+              <span>🎥</span>
+              <span>{snippet.video_duration}s</span>
+            </div>
+          )}
+        </div>
+      )}
+      
       <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <div>
+        {/* Header section - different layout if image is present */}
+        {snippet.main_image ? (
+          <div className="mb-3">
             <h3 className="text-lg font-semibold text-gray-800">{snippet.title}</h3>
             {snippet.title_local && (
               <p className="text-green-600 font-medium">{snippet.title_local}</p>
             )}
             <p className="text-sm text-gray-500">by @{snippet.author_username}</p>
           </div>
-          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize">
-            {snippet.snippet_type.replace('_', ' ')}
-          </span>
-        </div>
+        ) : (
+          <div className="flex items-start justify-between mb-3">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">{snippet.title}</h3>
+              {snippet.title_local && (
+                <p className="text-green-600 font-medium">{snippet.title_local}</p>
+              )}
+              <p className="text-sm text-gray-500">by @{snippet.author_username}</p>
+            </div>
+            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize">
+              {snippet.snippet_type.replace('_', ' ')}
+            </span>
+          </div>
+        )}
         
         <p className="text-gray-600 mb-3 line-clamp-2">{snippet.description}</p>
         
@@ -3312,6 +3343,12 @@ const HomePage = () => {
           <span>⭐ {'★'.repeat(snippet.difficulty_level)}</span>
           <span className="mx-2">•</span>
           <span>🍽️ {snippet.servings} servings</span>
+          {snippet.video_duration && !snippet.main_image && (
+            <>
+              <span className="mx-2">•</span>
+              <span>🎥 {snippet.video_duration}s</span>
+            </>
+          )}
         </div>
 
         {/* Communication Tools */}
@@ -3336,10 +3373,14 @@ const HomePage = () => {
             <span>💾 {snippet.saves_count}</span>
           </div>
           
-          {snippet.video_duration && (
-            <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
-              🎥 {snippet.video_duration}s video
-            </span>
+          {snippet.tags && snippet.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {snippet.tags.slice(0, 2).map((tag, index) => (
+                <span key={index} className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
+                  #{tag}
+                </span>
+              ))}
+            </div>
           )}
         </div>
       </div>
