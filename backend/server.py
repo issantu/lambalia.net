@@ -112,6 +112,12 @@ class DietaryPreference(str, Enum):
     KETO = "keto"
     PALEO = "paleo"
     ORGANIC = "organic"
+    HALAL = "halal"
+    KOSHER = "kosher"
+    DAIRY_FREE = "dairy_free"
+    NUT_FREE = "nut_free"
+    SOY_FREE = "soy_free"
+    PESCATARIAN = "pescatarian"
 
 class MessageType(str, Enum):
     TEXT = "text"
