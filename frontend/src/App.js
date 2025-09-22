@@ -2641,23 +2641,56 @@ const ProfilePage = () => {
 
   const SnippetCard = ({ snippet, playlistIndex }) => (
     <div className="recipe-card overflow-hidden">
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center space-x-3">
-            <span className="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">
-              {playlistIndex + 1}
-            </span>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">{snippet.title}</h3>
-              {snippet.title_local && (
-                <p className="text-green-600 font-medium">{snippet.title_local}</p>
-              )}
-            </div>
+      {/* Beautiful Recipe Image */}
+      {snippet.main_image && (
+        <div className="relative">
+          <img 
+            src={snippet.main_image} 
+            alt={snippet.title}
+            className="w-full h-48 object-cover"
+          />
+          <div className="absolute top-3 left-3 bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+            {playlistIndex + 1}
           </div>
-          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize">
+          <div className="absolute top-3 right-3 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize shadow-lg">
             {snippet.snippet_type.replace('_', ' ')}
-          </span>
+          </div>
+          {snippet.video_duration && (
+            <div className="absolute bottom-3 right-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+              <span>🎥</span>
+              <span>{snippet.video_duration}s</span>
+            </div>
+          )}
         </div>
+      )}
+      
+      <div className="p-6">
+        {/* Header section - different layout if image is present */}
+        {snippet.main_image ? (
+          <div className="mb-3">
+            <h3 className="text-lg font-semibold text-gray-800">{snippet.title}</h3>
+            {snippet.title_local && (
+              <p className="text-green-600 font-medium">{snippet.title_local}</p>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center space-x-3">
+              <span className="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">
+                {playlistIndex + 1}
+              </span>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">{snippet.title}</h3>
+                {snippet.title_local && (
+                  <p className="text-green-600 font-medium">{snippet.title_local}</p>
+                )}
+              </div>
+            </div>
+            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize">
+              {snippet.snippet_type.replace('_', ' ')}
+            </span>
+          </div>
+        )}
         
         <p className="text-gray-600 mb-3 line-clamp-2">{snippet.description}</p>
         
@@ -2667,7 +2700,7 @@ const ProfilePage = () => {
           <span>⭐ {'★'.repeat(snippet.difficulty_level)}</span>
           <span className="mx-2">•</span>
           <span>🍽️ {snippet.servings} servings</span>
-          {snippet.video_duration && (
+          {snippet.video_duration && !snippet.main_image && (
             <>
               <span className="mx-2">•</span>
               <span>🎥 {snippet.video_duration}s</span>
