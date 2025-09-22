@@ -2615,6 +2615,9 @@ const ProfilePage = () => {
   const [userSnippets, setUserSnippets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeProfileTab, setActiveProfileTab] = useState('overview');
+  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
   const [earnings, setEarnings] = useState({
     communication: 145.80,
     homeRestaurant: 890.50,
