@@ -156,6 +156,8 @@ class SnippetCreate(BaseModel):
     description: str
     snippet_type: SnippetType = SnippetType.QUICK_RECIPE
     reference_recipe_id: Optional[str] = None
+    main_image: Optional[str] = None  # base64 or URL
+    video_url: Optional[str] = None   # Short video of finished product
     ingredients: List[Dict[str, Any]]
     preparation_steps: List[Dict[str, str]]
     cooking_time_minutes: int
