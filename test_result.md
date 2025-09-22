@@ -921,6 +921,7 @@ test_plan:
     - "New Heritage Data Collection Endpoints - COMPLETED ✅"
     - "Heritage Recipe Creation with African/Caribbean - COMPLETED ✅"
     - "Enhanced Smart Cooking Tool - SuperCook + HackTheMenu Integration - COMPLETED ✅"
+    - "Snippet Media Upload and Display - Complete SnippetCard Components - READY FOR TESTING 🧪"
   stuck_tasks: 
     - "Heritage Countries Expansion (needs 80+ countries, currently 60)"
     - "Some Lambalia Eats cuisine types (korean, vietnamese, latin_american, european) returning 500 errors"
