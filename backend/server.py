@@ -5631,6 +5631,45 @@ async def update_user_profile(
         logger.error(f"Profile update error: {str(e)}")
         raise HTTPException(status_code=500, detail="Profile update failed")
 
+@api_router.put("/users/profile-photo")
+async def update_profile_photo(
+    photo_data: Dict[str, str],
+    current_user_id: str = Depends(get_current_user)
+):
+    """Update user profile photo"""
+    try:
+        profile_photo = photo_data.get("profile_photo")
+        if not profile_photo:
+            raise HTTPException(status_code=400, detail="Profile photo data is required")
+        
+        # Validate base64 image format
+        if not profile_photo.startswith("data:image/"):
+            raise HTTPException(status_code=400, detail="Invalid image format")
+        
+        # Update user profile photo
+        await db.users.update_one(
+            {"id": current_user_id},
+            {
+                "$set": {
+                    "profile_photo": profile_photo,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        # Get updated user data
+        updated_user = await db.users.find_one({"id": current_user_id})
+        
+        return {
+            "success": True,
+            "message": "Profile photo updated successfully",
+            "user": UserResponse(**updated_user)
+        }
+        
+    except Exception as e:
+        logger.error(f"Profile photo update error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Profile photo update failed")
+
 # ========================================
 # SNIPPET ENDPOINTS - Recipe Snippets
 # ========================================
