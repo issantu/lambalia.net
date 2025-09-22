@@ -4558,7 +4558,22 @@ const CreateSnippetPage = () => {
         preparation_steps: formData.preparation_steps.filter(step => step.description.trim())
       };
 
+      // Convert image to base64 if uploaded
+      if (mediaFiles.main_image) {
+        const base64Image = await fileToBase64(mediaFiles.main_image);
+        submitData.main_image = base64Image;
+      }
+
+      // Handle video upload (for now, we'll store as base64, but in production you'd upload to a video service)
+      if (mediaFiles.video_url) {
+        const base64Video = await fileToBase64(mediaFiles.video_url);
+        submitData.video_url = base64Video;
+      }
+
       await axios.post(`${API}/snippets`, submitData);
+      
+      // Success message
+      alert('🎉 Recipe snippet created successfully! Your beautiful dish photo makes it perfect!');
       navigate('/profile');
     } catch (error) {
       console.error('Failed to create snippet:', error);
