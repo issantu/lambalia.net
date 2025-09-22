@@ -2899,7 +2899,12 @@ const ProfilePage = () => {
             </div>
             <div className="text-center">
               <p className="text-xl font-bold">Total Monthly Earnings: ${totalEarnings.toFixed(2)}</p>
-              <button className="btn-secondary mt-3 px-6 py-2">💳 Withdraw Earnings</button>
+              <button 
+                onClick={() => setShowWithdrawalModal(true)}
+                className="btn-secondary mt-3 px-6 py-2 hover:bg-green-600 hover:text-white transition-colors"
+              >
+                💳 Withdraw Earnings
+              </button>
             </div>
           </div>
 
