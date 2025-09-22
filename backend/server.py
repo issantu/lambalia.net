@@ -5666,6 +5666,9 @@ async def update_profile_photo(
             "user": UserResponse(**updated_user)
         }
         
+    except HTTPException:
+        # Re-raise HTTPExceptions (validation errors) as-is
+        raise
     except Exception as e:
         logger.error(f"Profile photo update error: {str(e)}")
         raise HTTPException(status_code=500, detail="Profile photo update failed")
