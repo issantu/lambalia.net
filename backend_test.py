@@ -5108,6 +5108,19 @@ class LambaliaEnhancedAPITester:
         self.test_user_login()
         self.test_get_current_user()
         
+        # Enhanced Dietary Preferences and Profile Data tests
+        print("\n🥗 Testing Enhanced Dietary Preferences and Profile Data...")
+        self.test_enhanced_dietary_preferences_registration()
+        self.test_all_new_dietary_preferences()
+        self.test_mixed_dietary_preferences()
+        self.test_profile_data_integration()
+        self.test_profile_photo_with_dietary_preferences()
+        self.test_user_profile_retrieval_with_all_fields()
+        self.test_dietary_preferences_validation()
+        self.test_empty_optional_fields()
+        self.test_cultural_background_search()
+        self.test_user_heritage_contributions()
+        
         # Reference recipes tests
         print("\n📚 Testing Reference Recipes...")
         self.test_get_reference_recipes()
