@@ -3041,31 +3041,6 @@ const ProfilePage = () => {
             </div>
           )}
 
-          <div>
-                  <p className="text-sm opacity-90">Grocery Commissions</p>
-                  <p className="text-xs opacity-75">Ingredient sales</p>
-                </div>
-                <div className="revenue-amount">${earnings.groceryCommissions}</div>
-              </div>
-              <div className="revenue-item">
-                <div>
-                  <p className="text-sm opacity-90">Ad Revenue</p>
-                  <p className="text-xs opacity-75">Recipe page ads</p>
-                </div>
-                <div className="revenue-amount">${earnings.adRevenue}</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-bold">Total Monthly Earnings: ${totalEarnings.toFixed(2)}</p>
-              <button 
-                onClick={() => setShowWithdrawalModal(true)}
-                className="btn-secondary mt-3 px-6 py-2 hover:bg-green-600 hover:text-white transition-colors"
-              >
-                💳 Withdraw Earnings
-              </button>
-            </div>
-          </div>
-
           {/* Ad Placement */}
           <AdComponent placement="profile" />
         </>
