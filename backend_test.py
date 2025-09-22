@@ -237,6 +237,348 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("Create Snippet", success, details)
 
+    # SNIPPET MEDIA UPLOAD AND DISPLAY TESTS
+
+    def test_create_snippet_with_image_only(self):
+        """Test creating snippet with main_image (base64) only"""
+        if not self.token:
+            return self.log_test("Create Snippet with Image Only", False, "- No auth token available")
+
+        # Sample base64 image data (1x1 pixel PNG)
+        sample_image_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+
+        snippet_data = {
+            "title": "Delicious Homemade Pizza",
+            "description": "A simple homemade pizza recipe with fresh ingredients",
+            "snippet_type": "quick_recipe",
+            "main_image": sample_image_base64,
+            "ingredients": [
+                {"name": "pizza dough", "amount": "1", "unit": "piece"},
+                {"name": "tomato sauce", "amount": "100", "unit": "ml"},
+                {"name": "mozzarella cheese", "amount": "150", "unit": "g"}
+            ],
+            "preparation_steps": [
+                {"step_number": "1", "description": "Roll out the pizza dough"},
+                {"step_number": "2", "description": "Spread tomato sauce evenly"},
+                {"step_number": "3", "description": "Add mozzarella cheese and bake"}
+            ],
+            "cooking_time_minutes": 20,
+            "difficulty_level": 2,
+            "servings": 4,
+            "tags": ["pizza", "homemade", "italian"]
+        }
+
+        success, data = self.make_request('POST', 'snippets', snippet_data, 200)
+        
+        if success:
+            snippet_id = data.get('id')
+            main_image = data.get('main_image')
+            video_url = data.get('video_url')
+            details = f"- Snippet ID: {snippet_id}, Has image: {'✓' if main_image else '✗'}, Has video: {'✓' if video_url else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Create Snippet with Image Only", success, details)
+
+    def test_create_snippet_with_video_only(self):
+        """Test creating snippet with video_url (base64) only"""
+        if not self.token:
+            return self.log_test("Create Snippet with Video Only", False, "- No auth token available")
+
+        # Sample base64 video data (minimal MP4 header)
+        sample_video_base64 = "data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAr1tZGF0"
+
+        snippet_data = {
+            "title": "Quick Stir Fry Technique",
+            "description": "Learn the proper technique for making perfect stir fry",
+            "snippet_type": "cooking_tip",
+            "video_url": sample_video_base64,
+            "video_duration": 30,
+            "ingredients": [
+                {"name": "mixed vegetables", "amount": "200", "unit": "g"},
+                {"name": "soy sauce", "amount": "2", "unit": "tbsp"},
+                {"name": "garlic", "amount": "2", "unit": "cloves"}
+            ],
+            "preparation_steps": [
+                {"step_number": "1", "description": "Heat oil in wok until smoking"},
+                {"step_number": "2", "description": "Add garlic and stir quickly"},
+                {"step_number": "3", "description": "Add vegetables and toss continuously"}
+            ],
+            "cooking_time_minutes": 5,
+            "difficulty_level": 3,
+            "servings": 2,
+            "tags": ["stir-fry", "technique", "asian"]
+        }
+
+        success, data = self.make_request('POST', 'snippets', snippet_data, 200)
+        
+        if success:
+            snippet_id = data.get('id')
+            main_image = data.get('main_image')
+            video_url = data.get('video_url')
+            video_duration = data.get('video_duration')
+            details = f"- Snippet ID: {snippet_id}, Has image: {'✓' if main_image else '✗'}, Has video: {'✓' if video_url else '✗'}, Duration: {video_duration}s"
+        else:
+            details = ""
+            
+        return self.log_test("Create Snippet with Video Only", success, details)
+
+    def test_create_snippet_with_both_media(self):
+        """Test creating snippet with both main_image and video_url"""
+        if not self.token:
+            return self.log_test("Create Snippet with Both Media", False, "- No auth token available")
+
+        # Sample base64 data
+        sample_image_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=="
+        sample_video_base64 = "data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAr1tZGF0"
+
+        snippet_data = {
+            "title": "Perfect Chocolate Chip Cookies",
+            "description": "Step-by-step guide to making the perfect chocolate chip cookies",
+            "snippet_type": "quick_recipe",
+            "main_image": sample_image_base64,
+            "video_url": sample_video_base64,
+            "video_duration": 60,
+            "ingredients": [
+                {"name": "flour", "amount": "200", "unit": "g"},
+                {"name": "butter", "amount": "100", "unit": "g"},
+                {"name": "chocolate chips", "amount": "150", "unit": "g"},
+                {"name": "sugar", "amount": "100", "unit": "g"}
+            ],
+            "preparation_steps": [
+                {"step_number": "1", "description": "Cream butter and sugar together"},
+                {"step_number": "2", "description": "Mix in flour gradually"},
+                {"step_number": "3", "description": "Fold in chocolate chips"},
+                {"step_number": "4", "description": "Bake at 180°C for 12 minutes"}
+            ],
+            "cooking_time_minutes": 25,
+            "difficulty_level": 2,
+            "servings": 12,
+            "tags": ["cookies", "dessert", "baking", "chocolate"]
+        }
+
+        success, data = self.make_request('POST', 'snippets', snippet_data, 200)
+        
+        if success:
+            snippet_id = data.get('id')
+            main_image = data.get('main_image')
+            video_url = data.get('video_url')
+            video_duration = data.get('video_duration')
+            details = f"- Snippet ID: {snippet_id}, Has image: {'✓' if main_image else '✗'}, Has video: {'✓' if video_url else '✗'}, Duration: {video_duration}s"
+            
+            # Store this snippet ID for retrieval tests
+            self.media_snippet_id = snippet_id
+        else:
+            details = ""
+            
+        return self.log_test("Create Snippet with Both Media", success, details)
+
+    def test_create_snippet_without_media(self):
+        """Test creating snippet without any media (backward compatibility)"""
+        if not self.token:
+            return self.log_test("Create Snippet without Media", False, "- No auth token available")
+
+        snippet_data = {
+            "title": "Basic Scrambled Eggs",
+            "description": "Simple scrambled eggs recipe for beginners",
+            "snippet_type": "quick_recipe",
+            "ingredients": [
+                {"name": "eggs", "amount": "3", "unit": "pieces"},
+                {"name": "butter", "amount": "1", "unit": "tbsp"},
+                {"name": "salt", "amount": "1", "unit": "pinch"}
+            ],
+            "preparation_steps": [
+                {"step_number": "1", "description": "Crack eggs into bowl and whisk"},
+                {"step_number": "2", "description": "Heat butter in pan"},
+                {"step_number": "3", "description": "Pour eggs and stir gently"}
+            ],
+            "cooking_time_minutes": 5,
+            "difficulty_level": 1,
+            "servings": 1,
+            "tags": ["eggs", "breakfast", "simple"]
+        }
+
+        success, data = self.make_request('POST', 'snippets', snippet_data, 200)
+        
+        if success:
+            snippet_id = data.get('id')
+            main_image = data.get('main_image')
+            video_url = data.get('video_url')
+            details = f"- Snippet ID: {snippet_id}, Has image: {'✓' if main_image else '✗'}, Has video: {'✓' if video_url else '✗'} (backward compatibility)"
+        else:
+            details = ""
+            
+        return self.log_test("Create Snippet without Media", success, details)
+
+    def test_get_snippets_with_media_fields(self):
+        """Test GET /api/snippets returns snippets with media fields"""
+        success, data = self.make_request('GET', 'snippets')
+        
+        if success:
+            snippets_count = len(data) if isinstance(data, list) else 0
+            
+            if snippets_count > 0:
+                # Check if snippets have media fields
+                snippets_with_images = sum(1 for snippet in data if snippet.get('main_image'))
+                snippets_with_videos = sum(1 for snippet in data if snippet.get('video_url'))
+                snippets_with_duration = sum(1 for snippet in data if snippet.get('video_duration'))
+                
+                details = f"- Found {snippets_count} snippets, With images: {snippets_with_images}, With videos: {snippets_with_videos}, With duration: {snippets_with_duration}"
+                
+                # Check if media fields are properly serialized (not corrupted)
+                media_fields_valid = True
+                for snippet in data:
+                    if snippet.get('main_image') and not isinstance(snippet.get('main_image'), str):
+                        media_fields_valid = False
+                        break
+                    if snippet.get('video_url') and not isinstance(snippet.get('video_url'), str):
+                        media_fields_valid = False
+                        break
+                
+                details += f", Media serialization: {'✓' if media_fields_valid else '✗'}"
+            else:
+                details = f"- Found {snippets_count} snippets"
+        else:
+            details = ""
+            
+        return self.log_test("Get Snippets with Media Fields", success, details)
+
+    def test_get_user_snippets_playlist_with_media(self):
+        """Test GET /api/users/{user_id}/snippets/playlist returns snippets with media fields"""
+        if not self.user_id:
+            return self.log_test("Get User Snippets Playlist with Media", False, "- No user ID available")
+            
+        success, data = self.make_request('GET', f'users/{self.user_id}/snippets/playlist')
+        
+        if success:
+            snippets_count = len(data) if isinstance(data, list) else 0
+            
+            if snippets_count > 0:
+                # Check if snippets have media fields
+                snippets_with_images = sum(1 for snippet in data if snippet.get('main_image'))
+                snippets_with_videos = sum(1 for snippet in data if snippet.get('video_url'))
+                snippets_with_duration = sum(1 for snippet in data if snippet.get('video_duration'))
+                
+                details = f"- Found {snippets_count} user snippets, With images: {snippets_with_images}, With videos: {snippets_with_videos}, With duration: {snippets_with_duration}"
+                
+                # Verify media fields are properly returned and not corrupted
+                media_integrity_check = True
+                for snippet in data:
+                    main_image = snippet.get('main_image')
+                    video_url = snippet.get('video_url')
+                    
+                    # Check if base64 data is intact (starts with data: prefix)
+                    if main_image and not (main_image.startswith('data:image/') or main_image.startswith('http')):
+                        media_integrity_check = False
+                        break
+                    if video_url and not (video_url.startswith('data:video/') or video_url.startswith('http')):
+                        media_integrity_check = False
+                        break
+                
+                details += f", Media integrity: {'✓' if media_integrity_check else '✗'}"
+            else:
+                details = f"- Found {snippets_count} user snippets"
+        else:
+            details = ""
+            
+        return self.log_test("Get User Snippets Playlist with Media", success, details)
+
+    def test_snippet_media_data_integrity(self):
+        """Test that images and videos are stored without corruption"""
+        if not hasattr(self, 'media_snippet_id'):
+            return self.log_test("Snippet Media Data Integrity", False, "- No media snippet created to test")
+
+        # Get the specific snippet with media
+        success, data = self.make_request('GET', f'snippets')
+        
+        if not success:
+            return self.log_test("Snippet Media Data Integrity", False, "- Failed to retrieve snippets")
+
+        # Find our media snippet
+        media_snippet = None
+        for snippet in data:
+            if snippet.get('id') == self.media_snippet_id:
+                media_snippet = snippet
+                break
+
+        if not media_snippet:
+            return self.log_test("Snippet Media Data Integrity", False, "- Media snippet not found in results")
+
+        # Check data integrity
+        main_image = media_snippet.get('main_image')
+        video_url = media_snippet.get('video_url')
+        video_duration = media_snippet.get('video_duration')
+
+        integrity_checks = []
+        
+        # Check image integrity
+        if main_image:
+            image_valid = main_image.startswith('data:image/png;base64,')
+            integrity_checks.append(f"Image: {'✓' if image_valid else '✗'}")
+        
+        # Check video integrity
+        if video_url:
+            video_valid = video_url.startswith('data:video/mp4;base64,')
+            integrity_checks.append(f"Video: {'✓' if video_valid else '✗'}")
+        
+        # Check video duration
+        if video_duration:
+            duration_valid = isinstance(video_duration, int) and video_duration > 0
+            integrity_checks.append(f"Duration: {'✓' if duration_valid else '✗'}")
+
+        all_valid = all('✓' in check for check in integrity_checks)
+        details = f"- {', '.join(integrity_checks)}"
+        
+        return self.log_test("Snippet Media Data Integrity", all_valid, details)
+
+    def test_snippet_video_duration_handling(self):
+        """Test that video_duration is properly handled"""
+        if not self.token:
+            return self.log_test("Snippet Video Duration Handling", False, "- No auth token available")
+
+        # Test with various video durations
+        test_cases = [
+            {"duration": 30, "description": "30 seconds"},
+            {"duration": 120, "description": "2 minutes"},
+            {"duration": None, "description": "no duration"}
+        ]
+
+        successful_cases = 0
+        
+        for i, case in enumerate(test_cases):
+            snippet_data = {
+                "title": f"Duration Test {i+1}",
+                "description": f"Testing video duration: {case['description']}",
+                "snippet_type": "cooking_tip",
+                "video_url": "data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAr1tZGF0",
+                "ingredients": [{"name": "test ingredient", "amount": "1", "unit": "piece"}],
+                "preparation_steps": [{"step_number": "1", "description": "Test step"}],
+                "cooking_time_minutes": 5,
+                "difficulty_level": 1,
+                "servings": 1,
+                "tags": ["test"]
+            }
+            
+            if case["duration"] is not None:
+                snippet_data["video_duration"] = case["duration"]
+
+            success, data = self.make_request('POST', 'snippets', snippet_data, 200)
+            
+            if success:
+                returned_duration = data.get('video_duration')
+                if case["duration"] is None:
+                    # Should handle missing duration gracefully
+                    duration_handled_correctly = returned_duration is None or returned_duration == 0
+                else:
+                    # Should return the exact duration provided
+                    duration_handled_correctly = returned_duration == case["duration"]
+                
+                if duration_handled_correctly:
+                    successful_cases += 1
+
+        details = f"- {successful_cases}/{len(test_cases)} duration test cases handled correctly"
+        return self.log_test("Snippet Video Duration Handling", successful_cases == len(test_cases), details)
+
     def test_get_snippets(self):
         """Test getting all snippets"""
         success, data = self.make_request('GET', 'snippets')
