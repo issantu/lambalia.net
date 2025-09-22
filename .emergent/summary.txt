@@ -1,80 +1,77 @@
 <analysis>
-The AI engineer successfully transformed Lambalia into a sophisticated culinary social platform. Key developments within this trajectory include expanding the heritage recipe system to encompass global cuisines like Caribbean, and implementing a robust 2FA security system. A major UI/UX overhaul replaced cartoonish icons with professional SVG assets and introduced a monetized, AI-powered Smart Cooking Tool capable of generating culturally authentic recipes, refined to support African and Caribbean cuisines. A complex transaction verification system for Home Restaurants and Quick Eats was also established, featuring GPS/barcode verification and regulated service fees. The engineer diligently resolved UI layout issues, particularly with the Smart Cook button and language dropdown. The work concluded with the creation of training documents for Home Restaurant hosts, currently pending integration into the application's navigation.
+The previous AI engineer effectively transitioned the Lambalia application from an unstable, partially deployed state to a significantly enhanced and functional one. Initial efforts focused on resolving critical deployment blockers: missing environment variables, backend crashes, and translation service import errors. Once stable, the engineer systematically implemented a series of major feature enhancements as requested by the user. These included integrating a missing Local Offers and Demands menu, developing a comprehensive SMS notification and tipping system, and a complete overhaul of the AI Smart Cooking tool with SuperCook-style functionality and HackTheMenu content. Critical bugs, such as a JSX error and snippet creation failure due to incorrect FastAPI router configuration, were also successfully debugged and fixed. The engineer also addressed branding removal and updated contact information. The work is currently focused on enhancing recipe snippets with image/video upload and display, demonstrating an iterative, problem-solving approach.
 </analysis>
 
 <product_requirements>
-Lambalia is a social media platform for sharing diverse recipes, emphasizing local ingredients and cultural heritage. It supports user profiles, recipe sharing (with media/tags), community interaction, and monetization via paid snippets, AI-translated DMs, local grocery integration, ads, and a Home Restaurant Platform. It also includes traditional restaurants and local farmers. Key features added are an offer/demand system, charity membership, and Lambalia Eats for food delivery/pickup. The user specifically requested expanding the heritage system to include all global communities (e.g., Caribbean, Indian, Korean), integrating specialty ethnic grocery stores, improving cartoonish UI icons, adding a monetized (-3) cooking tool (like Paprika, Yummly) for ingredient-based recipe discovery to the top menu, implementing a comprehensive payment/verification system for Home Restaurant/Quick Eats (GPS, barcode, payment hold, regulated service fees, complete meal structure), and creating training documents for hosts emphasizing passion over profit.
+The Lambalia application, initially suffered from deployment issues including incorrect path routes, unwanted automated translations, and a missing Local Offers and Demands (LOD) menu item. The user also reported that the existing AI cooking tool was failing, had limited hackthemenu.com content, and couldn't generate AI recipes. Additionally, recipe snippet creation was broken.
+
+The following enhancements were requested:
+1.  **Trust & Security**: Implement SMS notifications for user registration, account changes, and all financial transactions. These SMS alerts must include a helpdesk contact.
+2.  **Service Quality & Monetization**: Develop a post-service system to send SMS/email prompts for ratings and tip options. Tips should be deducted from the user's last payment method and allocated to the servicer. The user dashboard needs to display regular earnings and tips separately for tax purposes.
+3.  **Branding**: Remove the Emergent badge from the website for clean branding.
+4.  **Enhanced AI Smart Cooking Tool**: Fix the current failing AI tool. Incorporate SuperCook-like features for ingredient-based recipe generation and HackTheMenu.com content, ensuring full data population and correct AI recipe generation.
+5.  **Snippet Media**: Enhance recipe snippet creation to allow users to upload a picture of the finished recipe (and optionally a short video) and ensure these media files are displayed when viewing snippets.
+6.  **Contact Information**: Update the Contact Us menu with specific professional  email addresses (issantu.tembe@lambalia.net, contact@lambalia.net, support@lambalia.net, helpdesk@lambalia.net).
 </product_requirements>
 
 <key_technical_concepts>
--   **FastAPI**: Python backend framework.
--   **React**: Frontend UI library.
--   **MongoDB**: NoSQL database.
--   **emergentintegrations**: Custom library for LLM/AI (used ).
--   **Pydantic**: Data validation.
--   **UUIDs**: Unique ID generation.
--   **JWT**: User authentication.
--   **Tailwind CSS**: Styling.
--   ****: QR code generation for 2FA.
--   ****: Geolocation functionality.
+-   **React.js**: Frontend UI development.
+-   **FastAPI**: Backend API framework.
+-   **MongoDB**: Persistent data storage.
+-   **i18next**: Frontend internationalization for translations.
+-   **Tailwind CSS**: Utility-first CSS framework for styling.
+-   **Twilio (via )**: SMS notifications.
+-   **Emergent LLM Key**: Utilized for AI translation and recipe generation.
+-   **FastAPI Routers**: Structuring API endpoints.
 </key_technical_concepts>
 
 <code_architecture>
 
--   : The main FastAPI application.
-    -   **Summary:** Acts as the central orchestrator, continuously updated to mount new API routers and initialize services.
-    -   **Changes:** Integrated global dishes API endpoint, 2FA security system, , and .
--   : Lists Python dependencies.
-    -   **Summary:** Ensures all necessary Python packages are installed.
-    -   **Changes:** Added  for 2FA functionality.
--   : **NEW** backend logic for the AI cooking tool.
-    -   **Summary:** Contains AI-powered recipe generation logic based on ingredients and cultural preferences.
-    -   **Changes:** Initial creation, import/usage fixes for  from , and AI prompt enhancements for African/Caribbean cuisines.
--   : **NEW** FastAPI routes for the smart cooking tool.
-    -   **Summary:** Exposes API endpoints for the  service.
-    -   **Changes:** Initial creation.
--   : **NEW** backend service for payment and transaction verification.
-    -   **Summary:** Implements logic for dynamic pricing, payment holds, GPS/barcode verification, and regulated service fees.
-    -   **Changes:** Initial creation.
--   : **NEW** FastAPI routes for transaction verification.
-    -   **Summary:** Provides API endpoints for managing the transaction lifecycle and verification.
-    -   **Changes:** Initial creation.
--   : Main React component.
-    -   **Summary:** Manages overall application layout, routing, and integrates various components.
-    -   **Changes:** Updated extensively to integrate , , adjust header navigation, replace emoji icons with professional ones (e.g., in  page), and iteratively fix layout issues with the Smart Cook button and language dropdown.
--   : Frontend component for language selection.
-    -   **Summary:** Provides functionality for users to switch between supported languages.
-    -   **Changes:** Iteratively modified to reduce and then expand the language list (to 12 languages) and make the dropdown compact and scrollable.
--   : **NEW** React component for professional SVG icons.
-    -   **Summary:** Houses a library of professional SVG icons used across the platform to enhance UI aesthetics.
-    -   **Changes:** Initial creation.
--   : **NEW** React component for the Smart Cooking Tool.
-    -   **Summary:** Provides the user interface for the AI-powered recipe generation feature.
-    -   **Changes:** Initial creation, then updated to include African and Caribbean cuisine options with explanatory text.
--   : **NEW** React component.
-    -   **Summary:** Frontend interface for the new transaction verification and payment system.
-    -   **Changes:** Initial creation.
--   : **NEW** React component.
-    -   **Summary:** Provides training content for users interested in hosting Home Restaurants.
-    -   **Changes:** Initial creation.
--   : **NEW** React component.
-    -   **Summary:** Provides training content for users interested in offering Quick Eats.
-    -   **Changes:** Initial creation.
+
+-   ****: Contains critical environment variables (, , , , Twilio credentials, , ).
+    -   *Changes*: Created, updated with MONGO_URL, DB_NAME, EMERGENT_LLM_KEY, Twilio credentials, HELPDESK_PHONE, and HELPDESK_EMAIL.
+-   ****: Stores  for frontend API calls.
+    -   *Changes*: Created and populated.
+-   ****: The main FastAPI application, managing routes and integrating services.
+    -   *Changes*: Fixed  import; integrated SMS, tip, rating, and enhanced cooking services; enhanced registration; added snippet models and API endpoints; crucially, fixed FastAPI router order for snippet registration.
+-   ****: Handles AI-powered text translation using  and .
+    -   *Changes*: Ensured correct import and initialization.
+-   ****: New service for sending Twilio SMS notifications for various user actions.
+    -   *Changes*: Created, updated SMS templates to use .
+-   ****: New service to manage post-service rating requests and tip processing.
+    -   *Changes*: Created.
+-   ****: New service for advanced AI cooking (SuperCook & HackTheMenu functionality).
+    -   *Changes*: Created, populated with data, fixed AI recipe generation and restaurant matching logic.
+-   ****: New file for API endpoints of the enhanced smart cooking tool.
+    -   *Changes*: Created.
+-   ****: Defines extended Pydantic models, including  and , which were integrated into .
+    -   *Changes*: Defined snippet-related data models.
+-   ****: Lists Python dependencies.
+    -   *Changes*: Added  and .
+-   ****: Main HTML entry point.
+    -   *Changes*: Removed Made with Emergent badge, updated page title and meta description.
+-   ****: Central React component for routing, auth, and many pages/components (Header, Footer, CreateSnippetPage, ContactPage, UserEarningsDashboard, SnippetCard).
+    -   *Changes*: Added  route and Header link; fixed registration phone mapping; enhanced  for earnings/tips; removed orphaned JSX; replaced  with ; updated Footer and ContactPage emails; currently being updated for image/video upload in  and display in .
+-   ****: Frontend i18n configuration.
+    -   *Changes*: Added translation keys for Local Offers.
+-   ****: New React component implementing the enhanced AI Smart Cooking Tool UI.
+    -   *Changes*: Created as a replacement for .
 </code_architecture>
 
 <pending_tasks>
--   Full integration of external third-party APIs (WhatsApp, Uber/DoorDash, specific grocery APIs).
--   Video snippet uploads.
--   Further frontend integration for the traditional restaurant marketplace system components.
--   Address the minor frontend UI state issue related to the registration form.
--   Complete the integration of  into the frontend.
--   Integrate  and  into the frontend navigation.
+-   Complete the display of images and videos in all  components in the frontend.
+-   Integrate actual Twilio credentials for the SMS notification system.
+-   Integrate with a live payment gateway for real tip processing.
+-   Perform comprehensive automated frontend testing.
+-   Conduct further deployment preparation (e.g., domain configuration, SSL setup).
 </pending_tasks>
 
 <current_work>
-The current work is focused on creating and integrating user training documents for Home Restaurant hosts and Quick Eats providers. The AI engineer has successfully created two new React components:  and . These documents are designed to guide users on how to effectively operate their services, emphasizing unique competitive advantages over traditional restaurants, particularly by focusing on passion for cooking rather than solely profit. The immediate next step is to integrate these components into the main  navigation, making them easily discoverable for users. This task follows the resolution of UI issues with the Smart Cook button and language dropdown, ensuring a professional and balanced navigation layout before adding new content.
+The AI engineer is actively working on enhancing the recipe snippet functionality in the frontend. This involves two primary parts:
+1.  **Snippet Creation Interface**: The  component in  has been updated to include UI elements that enable users to upload images and videos for their recipes. This includes media preview and proper handling within the form submission.
+2.  **Snippet Display**: The engineer is currently modifying the  component(s) found in . The goal is to ensure that the uploaded images and videos are correctly rendered and displayed when users view existing recipe snippets in various parts of the application, such as their profile or general listings. The trajectory concludes while the engineer is in the process of updating a  component for image display.
 </current_work>
 
 <optional_next_step>
-Integrate the newly created  and  components into the  navigation.
+Continue updating the remaining  components in  to correctly display images and videos for recipe snippets.
 </optional_next_step>
