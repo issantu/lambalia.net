@@ -2898,26 +2898,150 @@ const ProfilePage = () => {
       {/* Tab Content */}
       {activeProfileTab === 'overview' && (
         <>
-          {/* Revenue Dashboard */}
-          <div className="revenue-dashboard mb-8">
-            <h2 className="text-2xl font-bold mb-4">💰 Your Earnings Dashboard</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <div className="revenue-item">
-                <div>
-                  <p className="text-sm opacity-90">Communication Fees</p>
-                  <p className="text-xs opacity-75">Messages, calls, video</p>
-                </div>
-                <div className="revenue-amount">${earnings.communication}</div>
+          {/* Public Profile Information */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            
+            {/* Personal Information */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <span className="mr-2">👤</span> Personal Information
+              </h3>
+              
+              <div className="space-y-3">
+                {user.full_name && (
+                  <div className="flex items-center space-x-3">
+                    <span className="text-gray-500 min-w-0 w-20 text-sm">Name:</span>
+                    <span className="font-medium text-gray-800">{user.full_name}</span>
+                  </div>
+                )}
+                
+                {user.postal_code && (
+                  <div className="flex items-center space-x-3">
+                    <span className="text-gray-500 min-w-0 w-20 text-sm">📍 Location:</span>
+                    <span className="font-medium text-gray-800">{user.postal_code}</span>
+                  </div>
+                )}
+                
+                {user.preferred_language && (
+                  <div className="flex items-center space-x-3">
+                    <span className="text-gray-500 min-w-0 w-20 text-sm">🗣️ Language:</span>
+                    <span className="font-medium text-gray-800 capitalize">
+                      {user.preferred_language === 'en' ? 'English' : 
+                       user.preferred_language === 'es' ? 'Spanish' :
+                       user.preferred_language === 'fr' ? 'French' :
+                       user.preferred_language === 'ar' ? 'Arabic' :
+                       user.preferred_language === 'hi' ? 'Hindi' :
+                       user.preferred_language}
+                    </span>
+                  </div>
+                )}
+                
+                {user.cultural_background && (
+                  <div className="flex items-center space-x-3">
+                    <span className="text-gray-500 min-w-0 w-20 text-sm">🌍 Heritage:</span>
+                    <span className="font-medium text-gray-800">{user.cultural_background}</span>
+                  </div>
+                )}
               </div>
-              <div className="revenue-item">
-                <div>
-                  <p className="text-sm opacity-90">Home Restaurant</p>
-                  <p className="text-xs opacity-75">Dining experiences</p>
-                </div>
-                <div className="revenue-amount">${earnings.homeRestaurant}</div>
+            </div>
+
+            {/* Dietary Preferences & Cooking Style */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <span className="mr-2">🍽️</span> Dietary & Cooking Style
+              </h3>
+              
+              <div className="space-y-4">
+                {/* Dietary Preferences */}
+                {user.dietary_preferences && user.dietary_preferences.length > 0 && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">Dietary Preferences:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {user.dietary_preferences.map((pref, index) => {
+                        const preferenceIcons = {
+                          vegetarian: '🥬',
+                          vegan: '🌱',
+                          gluten_free: '🌾',
+                          keto: '🥑',
+                          paleo: '🥩',
+                          organic: '🌿',
+                          halal: '☪️',
+                          kosher: '✡️',
+                          dairy_free: '🥛',
+                          nut_free: '🥜',
+                          soy_free: '🫘',
+                          pescatarian: '🐟'
+                        };
+                        
+                        return (
+                          <span 
+                            key={index} 
+                            className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full flex items-center space-x-1"
+                          >
+                            <span>{preferenceIcons[pref] || '🍽️'}</span>
+                            <span className="capitalize">{pref.replace('_', ' ')}</span>
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Native Dishes */}
+                {user.native_dishes && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">Signature Dishes:</p>
+                    <p className="text-gray-800 font-medium">{user.native_dishes}</p>
+                  </div>
+                )}
+                
+                {/* Consultation Specialties */}
+                {user.consultation_specialties && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">Cooking Specialties:</p>
+                    <p className="text-gray-800 font-medium">{user.consultation_specialties}</p>
+                  </div>
+                )}
               </div>
-              <div className="revenue-item">
-                <div>
+            </div>
+          </div>
+
+          {/* Cooking Stats */}
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+              🏆 Cooking Profile Stats
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl font-bold text-green-600">{user.recipes_count || 0}</div>
+                <div className="text-sm text-gray-600">Recipes Shared</div>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl font-bold text-blue-600">{user.snippets_count || 0}</div>
+                <div className="text-sm text-gray-600">Cooking Tips</div>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl font-bold text-purple-600">{user.followers_count || 0}</div>
+                <div className="text-sm text-gray-600">Followers</div>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl font-bold text-orange-600">{user.following_count || 0}</div>
+                <div className="text-sm text-gray-600">Following</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bio Section */}
+          {user.bio && (
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <span className="mr-2">💭</span> About Me
+              </h3>
+              <p className="text-gray-700 leading-relaxed">{user.bio}</p>
+            </div>
+          )}
+
+          <div>
                   <p className="text-sm opacity-90">Grocery Commissions</p>
                   <p className="text-xs opacity-75">Ingredient sales</p>
                 </div>
