@@ -3091,7 +3091,49 @@ const ProfilePage = () => {
         </>
       )}
 
-      {activeProfileTab === 'earnings' && <UserEarningsDashboard />}
+      {activeProfileTab === 'earnings' && (
+        <>
+          {/* Quick Earnings Summary */}
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+              💰 Quick Earnings Overview
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <div className="bg-white rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-green-600">${earnings.communication}</div>
+                <div className="text-sm text-gray-600">Communication Fees</div>
+                <div className="text-xs text-gray-500">Messages, calls, video</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-blue-600">${earnings.homeRestaurant}</div>
+                <div className="text-sm text-gray-600">Home Restaurant</div>
+                <div className="text-xs text-gray-500">Dining experiences</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-purple-600">${earnings.groceryCommissions}</div>
+                <div className="text-sm text-gray-600">Grocery Commissions</div>
+                <div className="text-xs text-gray-500">Ingredient sales</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-orange-600">${earnings.adRevenue}</div>
+                <div className="text-sm text-gray-600">Ad Revenue</div>
+                <div className="text-xs text-gray-500">Recipe page ads</div>
+              </div>
+            </div>
+            <div className="text-center bg-white rounded-lg p-4">
+              <p className="text-xl font-bold text-gray-800">Total Monthly Earnings: ${totalEarnings.toFixed(2)}</p>
+              <button 
+                onClick={() => setShowWithdrawalModal(true)}
+                className="btn-secondary mt-3 px-6 py-2 hover:bg-green-600 hover:text-white transition-colors"
+              >
+                💳 Withdraw Earnings
+              </button>
+            </div>
+          </div>
+          
+          <UserEarningsDashboard />
+        </>
+      )}
 
       {/* Withdrawal Modal */}
       {showWithdrawalModal && (
