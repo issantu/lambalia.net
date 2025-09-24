@@ -5893,6 +5893,96 @@ async def get_snippet_by_id(snippet_id: str):
         raise HTTPException(status_code=500, detail="Failed to get snippet")
 
 # ========================================
+# GROCERY SEARCH ENDPOINTS
+# ========================================
+
+@api_router.post("/grocery/search")
+async def search_grocery_stores(
+    search_request: GrocerySearchRequest,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Search for grocery stores and ingredient availability based on user location"""
+    
+    # This is a mock implementation - in production, you'd integrate with actual grocery APIs
+    # like Instacart, Amazon Fresh, or regional grocery chains
+    
+    # Mock grocery stores data
+    mock_stores = [
+        {
+            "id": "store_1",
+            "name": "Fresh Market",
+            "chain": "Independent",
+            "address": "123 Main St",
+            "distance_km": 2.5,
+            "supports_delivery": True,
+            "estimated_total": 25.99,
+            "commission_rate": 0.05
+        },
+        {
+            "id": "store_2", 
+            "name": "Whole Foods",
+            "chain": "Whole Foods Market",
+            "address": "456 Oak Ave",
+            "distance_km": 4.2,
+            "supports_delivery": True,
+            "estimated_total": 32.50,
+            "commission_rate": 0.08
+        },
+        {
+            "id": "store_3",
+            "name": "Kroger",
+            "chain": "Kroger",
+            "address": "789 Pine St",
+            "distance_km": 3.1,
+            "supports_delivery": True,
+            "estimated_total": 22.75,
+            "commission_rate": 0.06
+        }
+    ]
+    
+    # Mock ingredient availability
+    mock_availability = {}
+    for ingredient in search_request.ingredients:
+        mock_availability[ingredient] = [
+            {
+                "store_id": "store_1",
+                "brand": "Generic",
+                "price": 2.99,
+                "in_stock": True,
+                "package_size": "1 lb"
+            },
+            {
+                "store_id": "store_2",
+                "brand": "Organic",
+                "price": 4.99,
+                "in_stock": True,
+                "package_size": "1 lb"
+            }
+        ]
+    
+    # Mock delivery options
+    delivery_options = [
+        {
+            "type": "pickup",
+            "fee": 0.0,
+            "time_estimate": "Ready in 2 hours"
+        },
+        {
+            "type": "delivery",
+            "fee": 5.99,
+            "time_estimate": "Delivered in 1-2 hours"
+        }
+    ]
+    
+    return GrocerySearchResponse(
+        stores=mock_stores,
+        ingredient_availability=mock_availability,
+        total_estimated_cost=25.99,
+        delivery_options=delivery_options,
+        recommended_store_id="store_1"
+    )
+
+# ========================================
 # APP INITIALIZATION AND ROUTERS
 # ========================================
 
