@@ -4493,6 +4493,17 @@ const CareersPage = () => {
       description: "Drive user acquisition in new cultural communities. Understand diaspora marketing and cultural sensitivity.",
       requirements: ["Global marketing experience", "Cultural community knowledge", "Digital marketing expertise", "Diaspora outreach"],
       whyCritical: "Growth depends on authentic cultural community adoption - generic marketing approaches fail with heritage communities."
+    },
+    {
+      id: 11,
+      title: "Community Outreach Agent (CORE Agent)",
+      department: "Community Outreach",
+      location: "Global Remote",
+      type: "Full-time/Part-time",
+      urgency: "High",
+      description: "Play a pivotal role in vulgarizing the Lambalia web app and calling others to adhere to the philosophy of Lambalia. Serve as a natural conduit for customer feedback and assess customers willing to become partners in the 'home restaurants' network. Build authentic relationships within cultural communities and promote the platform's mission of preserving and sharing heritage recipes.",
+      requirements: ["Excellent communication and interpersonal skills", "Passion for cultural food heritage", "Experience in community outreach or social advocacy", "Ability to work independently across time zones", "Multilingual capabilities preferred", "Understanding of home restaurant/food sharing concepts"],
+      whyCritical: "CORE Agents are essential for organic growth and community building - they bridge the gap between Lambalia's mission and real-world cultural communities, ensuring authentic adoption and valuable feedback loops."
     }
   ];
 
