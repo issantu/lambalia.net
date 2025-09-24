@@ -4379,6 +4379,112 @@ const ContactPage = () => {
   );
 };
 
+// Store Page Component
+const StorePage = () => {
+  const { t } = useTranslation();
+  
+  const storeCategories = [
+    {
+      id: 'cooking-wares',
+      name: 'Cooking Wares',
+      icon: '🍳',
+      description: 'Professional-grade cookware for home chefs',
+      items: ['Non-stick pans', 'Cast iron skillets', 'Stainless steel pots', 'Cutting boards', 'Knife sets', 'Measuring tools']
+    },
+    {
+      id: 'apparel',
+      name: 'Chef Apparel',
+      icon: '👨‍🍳',
+      description: 'Professional aprons and chef hats for home restaurants',
+      items: ['Lambalia branded aprons', 'Chef hats', 'Kitchen towels', 'Oven mitts', 'Non-slip shoes', 'Hair nets']
+    },
+    {
+      id: 'juicers',
+      name: 'Natural Juice Makers',
+      icon: '🥤',
+      description: 'High-quality juicers for natural beverage production',
+      items: ['Cold-press juicers', 'Centrifugal juicers', 'Citrus juicers', 'Smoothie blenders', 'Juice bottles', 'Strainers']
+    },
+    {
+      id: 'containers',
+      name: 'Delivery Containers',
+      icon: '📦',
+      description: 'Eco-friendly containers for food delivery services',
+      items: ['Biodegradable containers', 'Insulated food bags', 'Soup containers', 'Compartment trays', 'Napkins & utensils', 'Delivery bags']
+    },
+    {
+      id: 'renovation',
+      name: 'Kitchen Renovation',
+      icon: '🏠',
+      description: 'Complete kitchen and dining renovation services',
+      items: ['Kitchen design consultation', 'Home restaurant setup', 'Dining area renovation', 'Equipment installation', 'Permit assistance', 'Financing options']
+    }
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          🛒 Lambalia Store
+        </h1>
+        <p className="text-xl text-gray-600 mb-6">
+          Everything you need for your culinary journey - from professional cookware to kitchen renovations
+        </p>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+          <p className="text-green-800">
+            <strong>🎉 Special Launch Offer:</strong> 20% off all items for Lambalia community members. 
+            Free shipping on orders over $100. Support home chefs and restaurants worldwide!
+          </p>
+        </div>
+      </div>
+
+      {/* Store Categories Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {storeCategories.map((category) => (
+          <div key={category.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+            <div className="text-center mb-4">
+              <div className="text-4xl mb-2">{category.icon}</div>
+              <h3 className="text-xl font-semibold text-gray-800">{category.name}</h3>
+              <p className="text-gray-600 text-sm">{category.description}</p>
+            </div>
+            
+            <ul className="space-y-2 text-sm text-gray-700 mb-4">
+              {category.items.map((item, index) => (
+                <li key={index} className="flex items-center space-x-2">
+                  <span className="text-green-500">•</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <button className="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+              Browse {category.name}
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Coming Soon Banner */}
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 text-center">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">🚀 Coming Soon</h2>
+        <p className="text-gray-700 mb-4">
+          We're partnering with leading culinary equipment manufacturers to bring you the best products at competitive prices. 
+          Our store will officially launch in Q1 2025 with exclusive Lambalia community discounts.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <button className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+            📧 Get Notified When We Launch
+          </button>
+          <button className="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+            📞 Contact Our Equipment Specialists
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Careers Page Component
 const CareersPage = () => {
   const { t } = useTranslation();
