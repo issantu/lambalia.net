@@ -4699,15 +4699,16 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Support Links */}
+          {/* Store Links */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Support</h4>
+            <h4 className="text-lg font-semibold mb-4">🛒 Lambalia Store</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="mailto:support@lambalia.net" className="text-gray-400 hover:text-white">Help Center</a></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Community Guidelines</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
-              <li><a href="mailto:helpdesk@lambalia.net" className="text-gray-400 hover:text-white">Report Issue</a></li>
+              <li><Link to="/store/cooking-wares" className="text-gray-400 hover:text-white">Cooking Wares</Link></li>
+              <li><Link to="/store/apparel" className="text-gray-400 hover:text-white">Chef Aprons & Hats</Link></li>
+              <li><Link to="/store/juicers" className="text-gray-400 hover:text-white">Natural Juice Makers</Link></li>
+              <li><Link to="/store/containers" className="text-gray-400 hover:text-white">Delivery Containers</Link></li>
+              <li><Link to="/store/renovation" className="text-gray-400 hover:text-white">Kitchen Renovation</Link></li>
+              <li><a href="mailto:support@lambalia.net" className="text-gray-400 hover:text-white">Support Center</a></li>
             </ul>
           </div>
         </div>
