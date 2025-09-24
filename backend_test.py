@@ -5108,6 +5108,15 @@ class LambaliaEnhancedAPITester:
         self.test_user_login()
         self.test_get_current_user()
         
+        # REVIEW REQUEST SPECIFIC TESTS
+        print("\n🎯 Testing Review Request Specific Features...")
+        self.test_grocery_search_with_sample_ingredients()
+        self.test_grocery_search_delivery_options()
+        self.test_core_agent_career_posting()
+        self.test_store_functionality_routing()
+        self.test_enhanced_dietary_preferences_comprehensive()
+        self.test_user_registration_with_mixed_preferences()
+        
         # Enhanced Dietary Preferences and Profile Data tests
         print("\n🥗 Testing Enhanced Dietary Preferences and Profile Data...")
         self.test_enhanced_dietary_preferences_registration()
