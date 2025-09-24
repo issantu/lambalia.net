@@ -5854,6 +5854,16 @@ function App() {
               } 
             />
             <Route 
+              path="/store/*" 
+              element={
+                <>
+                  <Header />
+                  <StorePage />
+                  <Footer />
+                </>
+              } 
+            />
+            <Route 
               path="/admin/revenue" 
               element={
                 <ProtectedRoute>
