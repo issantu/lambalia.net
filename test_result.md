@@ -350,15 +350,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhanced Dietary Preferences System - TESTING COMPLETED ✅"
-    - "Profile Data Integration with Cultural Heritage Fields - TESTING COMPLETED ✅"
-    - "Profile Photo Integration with Enhanced Dietary Preferences - TESTING COMPLETED ✅"
-    - "Comprehensive Global Dishes Database Implementation - TESTING COMPLETED ✅"
-    - "Security Key & Two-Factor Authentication System - TESTING COMPLETED ✅"
-    - "Enhanced Authentication Security - TESTING COMPLETED ✅"
-    - "API Endpoints Integration - TESTING COMPLETED ✅"
-    - "Profile Photo Upload and Retrieval System - TESTING COMPLETED ✅"
-  stuck_tasks: []
+    - "Grocery Search Endpoint Implementation - TESTING COMPLETED ✅"
+    - "CORE Agent Career Posting Backend Support - TESTING COMPLETED ✅"
+    - "Store Functionality Backend Support - TESTING COMPLETED ✅"
+    - "Enhanced Dietary Preferences System - NEEDS ATTENTION ⚠️"
+  stuck_tasks:
+    - "Enhanced Dietary Preferences System"
   test_all: false
   test_priority: "high_first"
 
