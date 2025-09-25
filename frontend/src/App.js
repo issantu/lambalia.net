@@ -5119,7 +5119,7 @@ const CreateSnippetPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Local Name (Optional)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('forms.createSnippet.localTitle')}</label>
               <input
                 type="text"
                 name="title_local"
