@@ -253,7 +253,7 @@ const LoginPage = () => {
               type="submit"
               className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
             >
-              Enter Your Kitchen 👩‍🍳
+{t('auth.loginButton')}
             </button>
           </form>
         ) : (
