@@ -5523,7 +5523,7 @@ const GroceryPage = () => {
             type="text"
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
-            placeholder="Enter your postal code"
+            placeholder={t('forms.grocery.postalCodePlaceholder')}
             className="w-full md:w-64 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
           />
         </div>
