@@ -96,7 +96,7 @@ const resources = {
           subtitle: "Quick cooking tips from our community",
           viewAll: "View All Snippets",
           cookingTip: "Cooking Tip",
-          noSnippets: "No snippets available yet"
+          noSnippets: "No recipe snippets found. Be the first to share your traditional recipe snippet on Lambalia!"
         },
         communityStats: {
           title: "Join Our Global Culinary Community",
