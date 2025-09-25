@@ -1962,7 +1962,7 @@ const HomeRestaurantPage = () => {
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            🍽️ Browse Restaurants
+            🍽️ {t('restaurant.marketplace.browseRestaurants')}
           </button>
           <button
             onClick={() => setActiveTab('vendor')}
