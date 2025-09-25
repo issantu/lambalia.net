@@ -23,7 +23,7 @@ const QuickEatsTraining = () => {
         <AnimatedIcon name="Utensils" size={64} className="text-orange-500 mx-auto mb-4" />
         <h2 className="text-3xl font-bold text-gray-800 mb-4">{t('quickeats.welcomeTitle')}</h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          You're bringing authentic, homemade flavors to the fast-casual dining world. Your mission: deliver quality, culture, and care at the speed modern life demands.
+          {t('quickeats.welcomeSubtitle')}
         </p>
       </div>
 
