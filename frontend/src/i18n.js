@@ -268,6 +268,20 @@ const resources = {
           delivery: "Delivery Preference"
         },
         restaurant: {
+          marketplace: {
+            title: "Restaurant Marketplace",
+            subtitle: "Discover home kitchens and traditional restaurants offering unique dining experiences",
+            browseRestaurants: "Browse Restaurants",
+            becomePartner: "Become a Partner",
+            homeRestaurants: "Home Restaurants",
+            traditionalRestaurants: "Traditional Restaurants",
+            intimateDining: "Intimate dining in local homes",
+            specialOrders: "Special orders & custom meals",
+            available: "available",
+            specialOrdersCount: "special orders",
+            noHomeRestaurants: "No home restaurants available yet.",
+            specialOrdersTitle: "Special Orders from Traditional Restaurants"
+          },
           homeApplication: {
             title: "Home Restaurant Application",
             personalInfo: "Personal Information",
