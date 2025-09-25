@@ -1257,6 +1257,35 @@ const resources = {
           distance: "Distanza Massima",
           budget: "Preferenza di Budget",
           delivery: "Preferenza di Consegna"
+        },
+        restaurant: {
+          homeApplication: {
+            title: "Candidatura Ristorante Domestico",
+            personalInfo: "Informazioni Personali",
+            legalName: "Nome Legale",
+            phoneNumber: "Numero di Telefono",
+            homeAddress: "Indirizzo di Casa",
+            city: "Città",
+            state: "Stato",
+            postalCode: "Codice Postale",
+            country: "Paese",
+            kitchenDescription: "Descrizione della Cucina",
+            kitchenDescriptionPlaceholder: "Descrivi la tua cucina, attrezzature e spazio di cottura",
+            diningCapacity: "Capacità Sala da Pranzo",
+            cuisineSpecialties: "Specialità Culinarie",
+            cuisineSpecialtiesPlaceholder: "es., Italiana, Messicana, Vegana",
+            dietaryAccommodations: "Adattamenti Dietetici",
+            dietaryAccommodationsPlaceholder: "es., Senza glutine, Kosher, Halal",
+            foodHandlingExperience: "Hai esperienza nella manipolazione degli alimenti?",
+            yearsCookingExperience: "Anni di Esperienza Culinaria",
+            liabilityInsurance: "Hai un'assicurazione di responsabilità civile?",
+            emergencyContactName: "Nome Contatto di Emergenza",
+            emergencyContactPhone: "Telefono Contatto di Emergenza",
+            submitButton: "Invia Candidatura",
+            submitting: "Invio Candidatura...",
+            successMessage: "Candidatura inviata con successo! La esamineremo entro 3-5 giorni lavorativi.",
+            errorMessage: "Invio candidatura fallito. Riprova."
+          }
         }
       },
 
