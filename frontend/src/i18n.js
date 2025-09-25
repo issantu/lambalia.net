@@ -740,6 +740,20 @@ const resources = {
           delivery: "Préférence de Livraison"
         },
         restaurant: {
+          marketplace: {
+            title: "Marché des Restaurants",
+            subtitle: "Découvrez les cuisines domestiques et les restaurants traditionnels offrant des expériences culinaires uniques",
+            browseRestaurants: "Parcourir les Restaurants",
+            becomePartner: "Devenir Partenaire",
+            homeRestaurants: "Restaurants à Domicile",
+            traditionalRestaurants: "Restaurants Traditionnels",
+            intimateDining: "Repas intimes dans les foyers locaux",
+            specialOrders: "Commandes spéciales et repas personnalisés",
+            available: "disponible",
+            specialOrdersCount: "commandes spéciales",
+            noHomeRestaurants: "Aucun restaurant à domicile disponible pour le moment.",
+            specialOrdersTitle: "Commandes Spéciales des Restaurants Traditionnels"
+          },
           homeApplication: {
             title: "Candidature Restaurant à Domicile",
             personalInfo: "Informations Personnelles",
