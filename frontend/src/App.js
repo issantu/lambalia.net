@@ -393,7 +393,7 @@ const LoginPage = () => {
           
           {/* Monetization Preview */}
           <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
-            <h4 className="font-semibold text-gray-800 mb-2">💰 Monetize Your Cooking Skills</h4>
+            <h4 className="font-semibold text-gray-800 mb-2">💰 {t('home.features.monetize')}</h4>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="bg-white p-2 rounded">📱 Paid Consultations</div>
               <div className="bg-white p-2 rounded">🏠 Home Restaurant</div>
