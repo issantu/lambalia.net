@@ -5354,7 +5354,7 @@ const CreateSnippetPage = () => {
                 onClick={addIngredient}
                 className="btn-primary text-sm px-4 py-2 rounded-lg"
               >
-                + Add Ingredient
+                + {t('forms.grocery.addIngredient')}
               </button>
             </div>
             <div className="space-y-2">
