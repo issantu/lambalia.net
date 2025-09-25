@@ -668,6 +668,53 @@ const resources = {
         joinLambalia: "Lambalia Beitreten"
       },
 
+      // Forms
+      forms: {
+        createSnippet: {
+          title: "Rezept-Ausschnitt Erstellen",
+          recipeTitle: "Rezept-Titel",
+          recipeTitlePlaceholder: "Geben Sie den Rezeptnamen ein",
+          localTitle: "Lokaler Titel",
+          localTitlePlaceholder: "Rezeptname in Ihrer Lokalsprache (optional)",
+          description: "Beschreibung",
+          descriptionPlaceholder: "Beschreiben Sie Ihr Rezept",
+          snippetType: "Ausschnitt-Typ",
+          ingredients: "Zutaten",
+          ingredientName: "Zutat",
+          amount: "Menge",
+          unit: "Einheit",
+          addIngredient: "Zutat Hinzufügen",
+          preparationSteps: "Zubereitungsschritte",
+          addStep: "Schritt Hinzufügen",
+          cookingTime: "Kochzeit (Minuten)",
+          difficultyLevel: "Schwierigkeitsgrad",
+          servings: "Portionen",
+          tags: "Tags",
+          tagsPlaceholder: "Tags hinzufügen (Enter drücken)",
+          imageUpload: "Bild Hochladen",
+          videoUpload: "Video Hochladen",
+          submitButton: "Rezept-Ausschnitt Erstellen",
+          submitting: "Erstellen...",
+          dragDropImage: "Bild hier hineinziehen oder klicken zum Auswählen",
+          videoPlaceholder: "Kurzes Video Ihres fertigen Gerichts hochladen"
+        },
+        grocery: {
+          title: "Lokale Zutaten Finden",
+          subtitle: "Suchen Sie nach Zutaten in nahegelegenen Lebensmittelgeschäften und erhalten Sie Preisinformationen",
+          searchTitle: "Zutaten Suchen",
+          postalCode: "Ihre Postleitzahl",
+          postalCodePlaceholder: "Geben Sie Ihre Postleitzahl ein",
+          ingredientsLabel: "Zutaten",
+          ingredientPlaceholder: "z.B. Tomaten, Käse, Basilikum",
+          addIngredient: "Zutat Hinzufügen",
+          searchButton: "🔍 Geschäfte Suchen",
+          searching: "Suchen...",
+          distance: "Maximale Entfernung",
+          budget: "Budget-Präferenz",
+          delivery: "Lieferung-Präferenz"
+        }
+      },
+
       cuisines: {
         american: "Amerikanisch",
         mexican: "Mexikanisch",
