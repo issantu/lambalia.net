@@ -573,6 +573,53 @@ const resources = {
         }
       },
 
+      // Forms
+      forms: {
+        createSnippet: {
+          title: "Créer Extrait de Recette",
+          recipeTitle: "Titre de la Recette",
+          recipeTitlePlaceholder: "Entrez le nom de la recette",
+          localTitle: "Titre Local",
+          localTitlePlaceholder: "Nom de la recette dans votre langue locale (optionnel)",
+          description: "Description",
+          descriptionPlaceholder: "Décrivez votre recette",
+          snippetType: "Type d'Extrait",
+          ingredients: "Ingrédients",
+          ingredientName: "Ingrédient",
+          amount: "Quantité",
+          unit: "Unité",
+          addIngredient: "Ajouter Ingrédient",
+          preparationSteps: "Étapes de Préparation",
+          addStep: "Ajouter Étape",
+          cookingTime: "Temps de Cuisson (minutes)",
+          difficultyLevel: "Niveau de Difficulté",
+          servings: "Portions",
+          tags: "Étiquettes",
+          tagsPlaceholder: "Ajouter étiquettes (appuyez sur Entrée)",
+          imageUpload: "Télécharger Image",
+          videoUpload: "Télécharger Vidéo",
+          submitButton: "Créer Extrait de Recette",
+          submitting: "Création...",
+          dragDropImage: "Glissez et déposez une image ici ou cliquez pour sélectionner",
+          videoPlaceholder: "Téléchargez une courte vidéo de votre plat fini"
+        },
+        grocery: {
+          title: "Trouver Ingrédients Locaux",
+          subtitle: "Recherchez des ingrédients dans les magasins à proximité et obtenez des informations sur les prix",
+          searchTitle: "Rechercher Ingrédients",
+          postalCode: "Votre Code Postal",
+          postalCodePlaceholder: "Entrez votre code postal",
+          ingredientsLabel: "Ingrédients",
+          ingredientPlaceholder: "ex., tomates, fromage, basilic",
+          addIngredient: "Ajouter Ingrédient",
+          searchButton: "🔍 Rechercher Magasins",
+          searching: "Recherche...",
+          distance: "Distance Maximale",
+          budget: "Préférence de Budget",
+          delivery: "Préférence de Livraison"
+        }
+      },
+
       cuisines: {
         american: "Américaine",
         mexican: "Mexicaine",
