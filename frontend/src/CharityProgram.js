@@ -105,7 +105,7 @@ const CharityProgramPage = () => {
 
       {/* Premium Membership Tiers */}
       <div className="glass p-8 mb-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">🎖️ Premium Membership Tiers</h3>
+        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">{t('charity.overview.title')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
             <div className="text-center mb-4">
