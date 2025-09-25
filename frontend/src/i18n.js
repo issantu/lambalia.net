@@ -1136,11 +1136,7 @@ const resources = {
           distance: "Максимальное Расстояние",
           budget: "Предпочтение Бюджета",
           delivery: "Предпочтение Доставки"
-        }
-      },
-
-      // Forms
-      forms: {
+        },
         restaurant: {
           homeApplication: {
             title: "Заявка на Домашний Ресторан",
