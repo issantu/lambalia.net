@@ -1146,6 +1146,7 @@ const RevenueDashboard = () => {
 };
 const AdComponent = ({ placement = "feed" }) => {
   const [adContent, setAdContent] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Mock ad loading - in production, integrate with Google AdSense or similar
@@ -1154,19 +1155,22 @@ const AdComponent = ({ placement = "feed" }) => {
         title: "Premium Kitchen Tools",
         description: "Upgrade your cooking with professional-grade equipment",
         image: "🔪",
-        sponsor: "CookingPro"
+        sponsor: "CookingPro",
+        isTranslated: false
       },
       {
-        title: "Organic Ingredients Delivered",
+        title: "Organic Ingredients Delivered", 
         description: "Fresh, organic ingredients delivered to your door",
         image: "🥕",
-        sponsor: "FreshDirect"
+        sponsor: "FreshDirect",
+        isTranslated: false
       },
       {
         title: "home.cookingClasses.title",
-        description: "home.cookingClasses.description",
+        description: "home.cookingClasses.description", 
         image: "👨‍🍳",
-        sponsor: "MasterClass"
+        sponsor: "MasterClass",
+        isTranslated: true
       }
     ];
 
@@ -1181,8 +1185,12 @@ const AdComponent = ({ placement = "feed" }) => {
       <div className="flex items-center space-x-4">
         <div className="text-4xl">{adContent.image}</div>
         <div className="flex-1">
-          <h4 className="font-semibold text-gray-800">{adContent.title}</h4>
-          <p className="text-sm text-gray-600">{adContent.description}</p>
+          <h4 className="font-semibold text-gray-800">
+            {adContent.isTranslated ? t(adContent.title) : adContent.title}
+          </h4>
+          <p className="text-sm text-gray-600">
+            {adContent.isTranslated ? t(adContent.description) : adContent.description}
+          </p>
           <p className="text-xs text-gray-500">Sponsored by {adContent.sponsor}</p>
         </div>
         <button className="btn-secondary text-sm px-4 py-2">
