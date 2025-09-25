@@ -109,8 +109,8 @@ const CharityProgramPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
             <div className="text-center mb-4">
-              <h4 className="text-xl font-bold text-green-800">Community Helper</h4>
-              <p className="text-sm text-green-600">Entry Level</p>
+              <h4 className="text-xl font-bold text-green-800">{t('charity.tiers.communityHelper.title')}</h4>
+              <p className="text-sm text-green-600">{t('charity.tiers.communityHelper.price')}</p>
             </div>
             <div className="text-center mb-4">
               <p className="text-3xl font-bold text-green-600">FREE</p>
