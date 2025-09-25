@@ -820,6 +820,35 @@ const resources = {
           distance: "Maximale Entfernung",
           budget: "Budget-Präferenz",
           delivery: "Lieferung-Präferenz"
+        },
+        restaurant: {
+          homeApplication: {
+            title: "Heimrestaurant-Bewerbung",
+            personalInfo: "Persönliche Informationen",
+            legalName: "Rechtlicher Name",
+            phoneNumber: "Telefonnummer",
+            homeAddress: "Wohnadresse",
+            city: "Stadt",
+            state: "Bundesland",
+            postalCode: "Postleitzahl",
+            country: "Land",
+            kitchenDescription: "Küchenbeschreibung",
+            kitchenDescriptionPlaceholder: "Beschreiben Sie Ihre Küchenausstattung und den Kochbereich",
+            diningCapacity: "Essplatz-Kapazität",
+            cuisineSpecialties: "Küchen-Spezialitäten",
+            cuisineSpecialtiesPlaceholder: "z.B. Italienisch, Mexikanisch, Vegan",
+            dietaryAccommodations: "Diätische Anpassungen",
+            dietaryAccommodationsPlaceholder: "z.B. Glutenfrei, Koscher, Halal",
+            foodHandlingExperience: "Haben Sie Erfahrung im Umgang mit Lebensmitteln?",
+            yearsCookingExperience: "Jahre Kocherfahrung",
+            liabilityInsurance: "Haben Sie eine Haftpflichtversicherung?",
+            emergencyContactName: "Name des Notfallkontakts",
+            emergencyContactPhone: "Telefon des Notfallkontakts",
+            submitButton: "Bewerbung Einreichen",
+            submitting: "Bewerbung wird eingereicht...",
+            successMessage: "Bewerbung erfolgreich eingereicht! Wir werden sie in 3-5 Werktagen prüfen.",
+            errorMessage: "Bewerbung konnte nicht eingereicht werden. Bitte versuchen Sie es erneut."
+          }
         }
       },
 
