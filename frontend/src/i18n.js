@@ -266,6 +266,42 @@ const resources = {
           distance: "Max Distance",
           budget: "Budget Preference",
           delivery: "Delivery Preference"
+        },
+        restaurant: {
+          homeApplication: {
+            title: "Home Restaurant Application",
+            personalInfo: "Personal Information",
+            legalName: "Legal Name",
+            phoneNumber: "Phone Number",
+            homeAddress: "Home Address",
+            city: "City",
+            state: "State",
+            postalCode: "Postal Code",
+            country: "Country",
+            kitchenDescription: "Kitchen Description",
+            kitchenDescriptionPlaceholder: "Describe your kitchen setup, equipment, and cooking space",
+            diningCapacity: "Dining Capacity",
+            cuisineSpecialties: "Cuisine Specialties",
+            cuisineSpecialtiesPlaceholder: "e.g., Italian, Mexican, Vegan",
+            dietaryAccommodations: "Dietary Accommodations",
+            dietaryAccommodationsPlaceholder: "e.g., Gluten-free, Kosher, Halal",
+            foodHandlingExperience: "Do you have food handling experience?",
+            yearsCookingExperience: "Years of Cooking Experience",
+            liabilityInsurance: "Do you have liability insurance?",
+            emergencyContactName: "Emergency Contact Name",
+            emergencyContactPhone: "Emergency Contact Phone",
+            submitButton: "Submit Application",
+            submitting: "Submitting Application...",
+            successMessage: "Application submitted successfully! We will review it within 3-5 business days.",
+            errorMessage: "Failed to submit application. Please try again."
+          },
+          traditionalApplication: {
+            title: "Traditional Restaurant Application",
+            restaurantName: "Restaurant Name",
+            businessLicenseNumber: "Business License Number",
+            yearsInBusiness: "Years in Business",
+            successMessage: "Restaurant application submitted successfully! We will review it within 5-7 business days."
+          }
         }
       },
 
