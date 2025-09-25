@@ -1630,6 +1630,35 @@ const resources = {
           distance: "अधिकतम दूरी",
           budget: "बजट प्राथमिकता",
           delivery: "डिलीवरी प्राथमिकता"
+        },
+        restaurant: {
+          homeApplication: {
+            title: "होम रेस्टोरेंट आवेदन",
+            personalInfo: "व्यक्तिगत जानकारी",
+            legalName: "कानूनी नाम",
+            phoneNumber: "फोन नंबर",
+            homeAddress: "घर का पता",
+            city: "शहर",
+            state: "राज्य",
+            postalCode: "पिन कोड",
+            country: "देश",
+            kitchenDescription: "रसोई विवरण",
+            kitchenDescriptionPlaceholder: "अपनी रसोई, उपकरण और खाना पकाने की जगह का वर्णन करें",
+            diningCapacity: "भोजन क्षमता",
+            cuisineSpecialties: "पाक विशेषताएं",
+            cuisineSpecialtiesPlaceholder: "जैसे, इतालवी, मैक्सिकन, शाकाहारी",
+            dietaryAccommodations: "आहार अनुकूलन",
+            dietaryAccommodationsPlaceholder: "जैसे, ग्लूटेन-फ्री, कोशेर, हलाल",
+            foodHandlingExperience: "क्या आपके पास भोजन संभालने का अनुभव है?",
+            yearsCookingExperience: "खाना पकाने के अनुभव के वर्ष",
+            liabilityInsurance: "क्या आपके पास देयता बीमा है?",
+            emergencyContactName: "आपातकालीन संपर्क नाम",
+            emergencyContactPhone: "आपातकालीन संपर्क फोन",
+            submitButton: "आवेदन जमा करें",
+            submitting: "आवेदन जमा कर रहे हैं...",
+            successMessage: "आवेदन सफलतापूर्वक जमा किया गया! हम इसे 3-5 कार्य दिवसों में देखेंगे।",
+            errorMessage: "आवेदन जमा करने में विफल। कृपया पुनः प्रयास करें।"
+          }
         }
       },
 
