@@ -5511,7 +5511,7 @@ const GroceryPage = () => {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h2 className="text-3xl font-bold heading-gradient mb-4">{t('forms.grocery.title')}</h2>
-        <p className="text-gray-600">Search for ingredients at nearby grocery stores and get pricing information</p>
+        <p className="text-gray-600">{t('forms.grocery.subtitle')}</p>
       </div>
 
       <div className="glass p-8 mb-8">
