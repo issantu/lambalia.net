@@ -5456,6 +5456,7 @@ const GroceryPage = () => {
   const [searchResults, setSearchResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (user?.postal_code) {
