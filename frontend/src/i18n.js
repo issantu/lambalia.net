@@ -67,10 +67,15 @@ const resources = {
       home: {
         title: "Lambalia",
         subtitle: "Transform Your Kitchen Into a Global Culinary Experience",
+        welcomeMessage: "Welcome to Lambalia - Where Every Culture's Cuisine Finds Its Voice",
+        description: "Connect with passionate home chefs, discover authentic recipes, and turn your kitchen into a global culinary experience.",
         features: {
           recipes: "198+ Traditional Recipes",
           monetize: "Monetize Your Cooking",
-          restaurant: "Home Restaurant Platform"
+          restaurant: "Home Restaurant Platform",
+          communities: "80+ Cultural Communities",
+          heritageRecipes: "Heritage Recipes",
+          specialtyIngredients: "Specialty Ingredients"
         },
         actions: {
           browseName: "📚 Browse Templates",
@@ -80,6 +85,25 @@ const resources = {
           marketplaceName: "🌱🛒 Local Market",
           charityName: "🤝❤️ Give Back",
           eatsName: "🚚🍽️ Quick Eats"
+        },
+        cookingClasses: {
+          title: "Cooking Classes Online",
+          description: "Learn from master chefs around the world",
+          learnMore: "Learn More"
+        },
+        recipeSnippets: {
+          title: "Latest Recipe Snippets",
+          subtitle: "Quick cooking tips from our community",
+          viewAll: "View All Snippets",
+          cookingTip: "Cooking Tip",
+          noSnippets: "No snippets available yet"
+        },
+        communityStats: {
+          title: "Join Our Global Culinary Community",
+          activeChefs: "Active Home Chefs",
+          countriesServed: "Countries Served",
+          recipesShared: "Recipes Shared",
+          culturesRepresented: "Cultures Represented"
         }
       },
 
