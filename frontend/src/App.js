@@ -5530,7 +5530,7 @@ const GroceryPage = () => {
 
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
-            <label className="block text-sm font-medium text-gray-700">Ingredients</label>
+            <label className="block text-sm font-medium text-gray-700">{t('forms.grocery.ingredientsLabel')}</label>
             <button
               type="button"
               onClick={addIngredient}
