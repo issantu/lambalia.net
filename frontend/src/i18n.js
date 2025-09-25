@@ -838,6 +838,53 @@ const resources = {
         joinLambalia: "Junte-se ao Lambalia"
       },
 
+      // Forms
+      forms: {
+        createSnippet: {
+          title: "Criar Trecho de Receita",
+          recipeTitle: "Título da Receita",
+          recipeTitlePlaceholder: "Digite o nome da receita",
+          localTitle: "Título Local",
+          localTitlePlaceholder: "Nome da receita em seu idioma local (opcional)",
+          description: "Descrição",
+          descriptionPlaceholder: "Descreva sua receita",
+          snippetType: "Tipo de Trecho",
+          ingredients: "Ingredientes",
+          ingredientName: "Ingrediente",
+          amount: "Quantidade",
+          unit: "Unidade",
+          addIngredient: "Adicionar Ingrediente",
+          preparationSteps: "Passos de Preparação",
+          addStep: "Adicionar Passo",
+          cookingTime: "Tempo de Cozimento (minutos)",
+          difficultyLevel: "Nível de Dificuldade",
+          servings: "Porções",
+          tags: "Tags",
+          tagsPlaceholder: "Adicionar tags (pressione Enter)",
+          imageUpload: "Carregar Imagem",
+          videoUpload: "Carregar Vídeo",
+          submitButton: "Criar Trecho de Receita",
+          submitting: "Criando...",
+          dragDropImage: "Arraste e solte uma imagem aqui ou clique para selecionar",
+          videoPlaceholder: "Carregue um vídeo curto do seu prato finalizado"
+        },
+        grocery: {
+          title: "Encontrar Ingredientes Locais",
+          subtitle: "Procure ingredientes em mercearias próximas e obtenha informações de preços",
+          searchTitle: "Buscar Ingredientes",
+          postalCode: "Seu CEP",
+          postalCodePlaceholder: "Digite seu CEP",
+          ingredientsLabel: "Ingredientes",
+          ingredientPlaceholder: "ex: tomates, queijo, manjericão",
+          addIngredient: "Adicionar Ingrediente",
+          searchButton: "🔍 Buscar Lojas",
+          searching: "Buscando...",
+          distance: "Distância Máxima",
+          budget: "Preferência de Orçamento",
+          delivery: "Preferência de Entrega"
+        }
+      },
+
       cuisines: {
         american: "Americana",
         mexican: "Mexicana",
