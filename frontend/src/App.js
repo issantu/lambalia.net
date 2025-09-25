@@ -5515,7 +5515,7 @@ const GroceryPage = () => {
       </div>
 
       <div className="glass p-8 mb-8">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Ingredients</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">{t('forms.grocery.searchTitle')}</h3>
         
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">Your Postal Code</label>
