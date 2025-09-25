@@ -1892,7 +1892,7 @@ const HomeRestaurantPage = () => {
 
       {/* Traditional Restaurants & Special Orders Section */}
       <div>
-        <h3 className="text-2xl font-bold text-gray-800 mb-4">🍽️ Special Orders from Traditional Restaurants</h3>
+        <h3 className="text-2xl font-bold text-gray-800 mb-4">🍽️ {t('restaurant.marketplace.specialOrdersTitle')}</h3>
         {specialOrders.length === 0 ? (
           <div className="text-center py-8 glass">
             <p className="text-gray-500">No special orders available yet.</p>
