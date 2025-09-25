@@ -1363,7 +1363,7 @@ const HomeRestaurantApplicationForm = () => {
       };
 
       await axios.post(`${API}/vendor/apply`, submitData);
-      alert('Application submitted successfully! We will review it within 3-5 business days.');
+      alert(t('forms.restaurant.homeApplication.successMessage'));
     } catch (error) {
       console.error('Failed to submit application:', error);
       alert('Failed to submit application. Please try again.');
@@ -1603,7 +1603,7 @@ const TraditionalRestaurantApplicationForm = () => {
       };
 
       await axios.post(`${API}/vendor/apply`, submitData);
-      alert('Application submitted successfully! We will review it within 3-5 business days.');
+      alert(t('forms.restaurant.homeApplication.successMessage'));
     } catch (error) {
       console.error('Failed to submit application:', error);
       alert('Failed to submit application. Please try again.');
