@@ -5144,7 +5144,7 @@ const CreateSnippetPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Snippet Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('forms.createSnippet.snippetType')}</label>
               <select
                 name="snippet_type"
                 value={formData.snippet_type}
