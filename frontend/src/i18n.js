@@ -1519,6 +1519,20 @@ const resources = {
           delivery: "تفضيل التوصيل"
         },
         restaurant: {
+          marketplace: {
+            title: "سوق المطاعم",
+            subtitle: "اكتشف المطابخ المنزلية والمطاعم التقليدية التي تقدم تجارب طبخ فريدة",
+            browseRestaurants: "تصفح المطاعم",
+            becomePartner: "كن شريكاً",
+            homeRestaurants: "المطاعم المنزلية",
+            traditionalRestaurants: "المطاعم التقليدية",
+            intimateDining: "وجبات حميمة في المنازل المحلية",
+            specialOrders: "طلبات خاصة ووجبات مخصصة",
+            available: "متاح",
+            specialOrdersCount: "طلبات خاصة",
+            noHomeRestaurants: "لا توجد مطاعم منزلية متاحة بعد.",
+            specialOrdersTitle: "الطلبات الخاصة من المطاعم التقليدية"
+          },
           homeApplication: {
             title: "طلب مطعم منزلي",
             personalInfo: "المعلومات الشخصية",
