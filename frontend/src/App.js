@@ -1863,7 +1863,7 @@ const HomeRestaurantPage = () => {
             <p className="font-bold text-green-600">{homeRestaurants.length} {t('restaurant.marketplace.available')}</p>
           </div>
           <div className="glass p-4 text-center">
-            <h3 className="font-semibold mb-2">🍽️ Traditional Restaurants</h3>
+            <h3 className="font-semibold mb-2">🍽️ {t('restaurant.marketplace.traditionalRestaurants')}</h3>
             <p className="text-sm text-gray-600">Special orders & custom meals</p>
             <p className="font-bold text-blue-600">{specialOrders.length} special orders</p>
           </div>
