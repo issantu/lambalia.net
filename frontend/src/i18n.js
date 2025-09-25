@@ -301,10 +301,15 @@ const resources = {
       home: {
         title: "Lambalia",
         subtitle: "Transforma Tu Cocina en una Experiencia Culinaria Global",
+        welcomeMessage: "Bienvenido a Lambalia - Donde Cada Cocina Cultural Encuentra Su Voz",
+        description: "Conecta con chefs caseros apasionados, descubre recetas auténticas y convierte tu cocina en una experiencia culinaria global.",
         features: {
           recipes: "198+ Recetas Tradicionales",
           monetize: "Monetiza Tu Cocina",
-          restaurant: "Plataforma de Restaurante Casero"
+          restaurant: "Plataforma de Restaurante Casero",
+          communities: "80+ Comunidades Culturales",
+          heritageRecipes: "Recetas Patrimoniales",
+          specialtyIngredients: "Ingredientes Especiales"
         },
         actions: {
           browseName: "📚 Explorar Plantillas",
@@ -314,6 +319,25 @@ const resources = {
           marketplaceName: "🌱🛒 Mercado Local",
           charityName: "🤝❤️ Retribuir",
           eatsName: "🚚🍽️ Comida Rápida"
+        },
+        cookingClasses: {
+          title: "Clases de Cocina en Línea",
+          description: "Aprende de chefs maestros de todo el mundo",
+          learnMore: "Saber Más"
+        },
+        recipeSnippets: {
+          title: "Últimos Consejos de Recetas",
+          subtitle: "Consejos rápidos de cocina de nuestra comunidad",
+          viewAll: "Ver Todos los Consejos",
+          cookingTip: "Consejo de Cocina",
+          noSnippets: "No hay consejos disponibles aún"
+        },
+        communityStats: {
+          title: "Únete a Nuestra Comunidad Culinaria Global",
+          activeChefs: "Chefs Caseros Activos",
+          countriesServed: "Países Atendidos",
+          recipesShared: "Recetas Compartidas",
+          culturesRepresented: "Culturas Representadas"
         }
       },
 
