@@ -752,56 +752,6 @@ const resources = {
           distance: "Distance Maximale",
           budget: "Préférence de Budget",
           delivery: "Préférence de Livraison"
-        },
-        restaurant: {
-          marketplace: {
-            title: "Marché des Restaurants",
-            subtitle: "Découvrez les cuisines domestiques et les restaurants traditionnels offrant des expériences culinaires uniques",
-            browseRestaurants: "Parcourir les Restaurants",
-            becomePartner: "Devenir Partenaire",
-            homeRestaurants: "Restaurants à Domicile",
-            traditionalRestaurants: "Restaurants Traditionnels",
-            intimateDining: "Repas intimes dans les foyers locaux",
-            specialOrders: "Commandes spéciales et repas personnalisés",
-            available: "disponible",
-            specialOrdersCount: "commandes spéciales",
-            noHomeRestaurants: "Aucun restaurant à domicile disponible pour le moment.",
-            specialOrdersTitle: "Commandes Spéciales des Restaurants Traditionnels"
-          },
-          homeApplication: {
-            title: "Candidature Restaurant à Domicile",
-            personalInfo: "Informations Personnelles",
-            legalName: "Nom Légal",
-            phoneNumber: "Numéro de Téléphone",
-            homeAddress: "Adresse du Domicile",
-            city: "Ville",
-            state: "État",
-            postalCode: "Code Postal",
-            country: "Pays",
-            kitchenDescription: "Description de la Cuisine",
-            kitchenDescriptionPlaceholder: "Décrivez votre cuisine, équipements et espace de cuisson",
-            diningCapacity: "Capacité de Salle à Manger",
-            cuisineSpecialties: "Spécialités Culinaires",
-            cuisineSpecialtiesPlaceholder: "ex., Italienne, Mexicaine, Végétalienne",
-            dietaryAccommodations: "Adaptations Alimentaires",
-            dietaryAccommodationsPlaceholder: "ex., Sans gluten, Casher, Halal",
-            foodHandlingExperience: "Avez-vous de l'expérience en manipulation des aliments ?",
-            yearsCookingExperience: "Années d'Expérience en Cuisine",
-            liabilityInsurance: "Avez-vous une assurance responsabilité ?",
-            emergencyContactName: "Nom du Contact d'Urgence",
-            emergencyContactPhone: "Téléphone du Contact d'Urgence",
-            submitButton: "Soumettre la Candidature",
-            submitting: "Soumission de la Candidature...",
-            successMessage: "Candidature soumise avec succès ! Nous l'examinerons dans 3-5 jours ouvrables.",
-            errorMessage: "Échec de la soumission de candidature. Veuillez réessayer."
-          },
-          traditionalApplication: {
-            title: "Candidature Restaurant Traditionnel",
-            restaurantName: "Nom du Restaurant",
-            businessLicenseNumber: "Numéro de Licence Commerciale",
-            yearsInBusiness: "Années d'Activité",
-            successMessage: "Candidature de restaurant soumise avec succès ! Nous l'examinerons dans 5-7 jours ouvrables."
-          }
         }
       },
 
