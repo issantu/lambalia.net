@@ -4876,6 +4876,7 @@ const CreateSnippetPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
