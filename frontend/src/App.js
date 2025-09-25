@@ -1366,7 +1366,7 @@ const HomeRestaurantApplicationForm = () => {
       alert(t('forms.restaurant.homeApplication.successMessage'));
     } catch (error) {
       console.error('Failed to submit application:', error);
-      alert('Failed to submit application. Please try again.');
+      alert(t('forms.restaurant.homeApplication.errorMessage'));
     }
     setSubmitting(false);
   };
@@ -1606,7 +1606,7 @@ const TraditionalRestaurantApplicationForm = () => {
       alert(t('forms.restaurant.homeApplication.successMessage'));
     } catch (error) {
       console.error('Failed to submit application:', error);
-      alert('Failed to submit application. Please try again.');
+      alert(t('forms.restaurant.homeApplication.errorMessage'));
     }
     setSubmitting(false);
   };
