@@ -1163,8 +1163,8 @@ const AdComponent = ({ placement = "feed" }) => {
         sponsor: "FreshDirect"
       },
       {
-        title: "Cooking Classes Online",
-        description: "Learn from master chefs around the world",
+        title: "home.cookingClasses.title",
+        description: "home.cookingClasses.description",
         image: "👨‍🍳",
         sponsor: "MasterClass"
       }
