@@ -135,10 +135,10 @@ const CharityProgramPage = () => {
               </div>
             </div>
             <div className="border-t pt-4">
-              <p className="text-xs text-gray-600"><strong>Requirements:</strong></p>
-              <p className="text-xs text-gray-600">• 4 hours monthly volunteering</p>
-              <p className="text-xs text-gray-600">• 2 charity activities</p>
-              <p className="text-xs text-gray-600">• 5 lbs food donated monthly</p>
+              <p className="text-xs text-gray-600"><strong>{t('charity.tiers.communityHelper.requirements')}</strong></p>
+              <p className="text-xs text-gray-600">• {t('charity.tiers.communityHelper.req1')}</p>
+              <p className="text-xs text-gray-600">• {t('charity.tiers.communityHelper.req2')}</p>
+              <p className="text-xs text-gray-600">• {t('charity.tiers.communityHelper.req3')}</p>
             </div>
           </div>
 
