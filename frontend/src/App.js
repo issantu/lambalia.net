@@ -1858,7 +1858,7 @@ const HomeRestaurantPage = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
           <div className="glass p-4 text-center">
-            <h3 className="font-semibold mb-2">🏠 Home Restaurants</h3>
+            <h3 className="font-semibold mb-2">🏠 {t('restaurant.marketplace.homeRestaurants')}</h3>
             <p className="text-sm text-gray-600">Intimate dining in local homes</p>
             <p className="font-bold text-green-600">{homeRestaurants.length} available</p>
           </div>
