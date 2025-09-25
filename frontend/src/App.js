@@ -1879,7 +1879,7 @@ const HomeRestaurantPage = () => {
           </div>
         ) : homeRestaurants.length === 0 ? (
           <div className="text-center py-8 glass">
-            <p className="text-gray-500">No home restaurants available yet.</p>
+            <p className="text-gray-500">{t('restaurant.marketplace.noHomeRestaurants')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
