@@ -606,6 +606,57 @@ const resources = {
         healthy: "Saludable",
         vegan: "Vegana",
         desserts: "Postres"
+      },
+
+      restaurant: {
+        marketplace: {
+          title: "Mercado de Restaurantes",
+          subtitle: "Descubre cocinas caseras y restaurantes tradicionales que ofrecen experiencias culinarias únicas",
+          browseRestaurants: "Explorar Restaurantes",
+          becomePartner: "Convertirse en Socio",
+          homeRestaurants: "Restaurantes Caseros",
+          traditionalRestaurants: "Restaurantes Tradicionales",
+          intimateDining: "Comidas íntimas en hogares locales",
+          specialOrders: "Pedidos especiales y comidas personalizadas",
+          available: "disponible",
+          specialOrdersCount: "pedidos especiales",
+          noHomeRestaurants: "No hay restaurantes caseros disponibles aún.",
+          specialOrdersTitle: "Pedidos Especiales de Restaurantes Tradicionales"
+        },
+        homeApplication: {
+          title: "Solicitud de Restaurante Casero",
+          personalInfo: "Información Personal",
+          legalName: "Nombre Legal",
+          phoneNumber: "Número de Teléfono",
+          homeAddress: "Dirección del Domicilio",
+          city: "Ciudad",
+          state: "Estado",
+          postalCode: "Código Postal",
+          country: "País",
+          kitchenDescription: "Descripción de la Cocina",
+          kitchenDescriptionPlaceholder: "Describe tu cocina, equipos y espacio de cocción",
+          diningCapacity: "Capacidad del Comedor",
+          cuisineSpecialties: "Especialidades Culinarias",
+          cuisineSpecialtiesPlaceholder: "ej., Italiana, Mexicana, Vegana",
+          dietaryAccommodations: "Adaptaciones Dietéticas",
+          dietaryAccommodationsPlaceholder: "ej., Sin gluten, Kosher, Halal",
+          foodHandlingExperience: "¿Tienes experiencia en manipulación de alimentos?",
+          yearsCookingExperience: "Años de Experiencia Cocinando",
+          liabilityInsurance: "¿Tienes seguro de responsabilidad civil?",
+          emergencyContactName: "Nombre de Contacto de Emergencia",
+          emergencyContactPhone: "Teléfono de Contacto de Emergencia",
+          submitButton: "Enviar Solicitud",
+          submitting: "Enviando Solicitud...",
+          successMessage: "¡Solicitud enviada exitosamente! La revisaremos en 3-5 días hábiles.",
+          errorMessage: "Error al enviar la solicitud. Por favor, inténtalo de nuevo."
+        },
+        traditionalApplication: {
+          title: "Solicitud de Restaurante Tradicional",
+          restaurantName: "Nombre del Restaurante",
+          businessLicenseNumber: "Número de Licencia Comercial",
+          yearsInBusiness: "Años en el Negocio",
+          successMessage: "¡Solicitud de restaurante enviada exitosamente! La revisaremos en 5-7 días hábiles."
+        }
       }
     }
   },
