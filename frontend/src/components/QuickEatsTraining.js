@@ -1,6 +1,7 @@
 // Quick Eats Provider Training Guide
 import React, { useState } from 'react';
 import { Icon, AnimatedIcon } from './ProfessionalIcons';
+import { useTranslation } from 'react-i18next';
 
 const QuickEatsTraining = () => {
   const [activeSection, setActiveSection] = useState('introduction');
