@@ -438,8 +438,8 @@ const resources = {
 
       home: {
         title: "Lambalia", 
-        subtitle: "Transformez Votre Cuisine en une Expérience Culinaire Mondiale",
-        welcomeMessage: "Bienvenue à Lambalia - Où Chaque Cuisine Culturelle Trouve Sa Voix",
+        subtitle: "Goûtez au Patrimoine du Monde",
+        welcomeMessage: "Rejoignez notre communauté de chefs à domicile partageant des recettes authentiques du monde entier !",
         description: "Connectez-vous avec des chefs passionnés, découvrez des recettes authentiques et transformez votre cuisine en une expérience culinaire mondiale.",
         features: {
           recipes: "198+ Recettes Traditionnelles",
