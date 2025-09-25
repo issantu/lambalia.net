@@ -7,6 +7,7 @@ const API = `${BACKEND_URL}/api`;
 
 // Charity Program - Complete Community Impact System
 const CharityProgramPage = () => {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState('overview'); // 'overview', 'register', 'submit', 'dashboard', 'organizations'
   const [charityProgram, setCharityProgram] = useState(null);
   const [communityImpact, setCommunityImpact] = useState(null);
