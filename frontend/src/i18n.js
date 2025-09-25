@@ -762,46 +762,7 @@ const resources = {
     }
   },
 
-  ar: {
-    translation: {
-      nav: {
-        browse: "تصفح القوالب",
-        create: "إنشاء مقطع",
-        ingredients: "العثور على المكونات", 
-        restaurant: "فتح المطبخ",
-        marketplace: "السوق المحلي",
-        charity: "رد الجميل",
-        eats: "الطعام السريع",
-        profile: "الملف الشخصي"
-      },
-
-      auth: {
-        login: "تسجيل الدخول",
-        register: "التسجيل",
-        logout: "تسجيل الخروج",
-        email: "البريد الإلكتروني",
-        password: "كلمة المرور",
-        username: "اسم المستخدم",
-        fullName: "الاسم الكامل",
-        postalCode: "الرمز البريدي",
-        loginButton: "ادخل إلى مطبخك 👨‍🍳",
-        registerButton: "انضم للمجتمع",
-        joinLambalia: "انضم إلى لامباليا"
-      },
-
-      cuisines: {
-        american: "أمريكي",
-        mexican: "مكسيكي",
-        italian: "إيطالي",
-        chinese: "صيني",
-        indian: "هندي",
-        japanese: "ياباني", 
-        thai: "تايلاندي",
-        mediterranean: "متوسطي",
-        middleEastern: "شرق أوسطي"
-      }
-    }
-  },
+  // Duplicate Arabic section removed - see complete Arabic section below
 
   pt: {
     translation: {
