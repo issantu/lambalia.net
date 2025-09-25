@@ -222,6 +222,53 @@ const resources = {
       },
 
       // Cuisines
+      // Forms
+      forms: {
+        createSnippet: {
+          title: "Create Recipe Snippet",
+          recipeTitle: "Recipe Title",
+          recipeTitlePlaceholder: "Enter the recipe name",
+          localTitle: "Local Title",
+          localTitlePlaceholder: "Recipe name in your local language (optional)",
+          description: "Description",
+          descriptionPlaceholder: "Describe your recipe",
+          snippetType: "Snippet Type",
+          ingredients: "Ingredients",
+          ingredientName: "Ingredient",
+          amount: "Amount",
+          unit: "Unit",
+          addIngredient: "Add Ingredient",
+          preparationSteps: "Preparation Steps",
+          addStep: "Add Step",
+          cookingTime: "Cooking Time (minutes)",
+          difficultyLevel: "Difficulty Level",
+          servings: "Servings",
+          tags: "Tags",
+          tagsPlaceholder: "Add tags (press Enter)",
+          imageUpload: "Upload Image",
+          videoUpload: "Upload Video",
+          submitButton: "Create Recipe Snippet",
+          submitting: "Creating...",
+          dragDropImage: "Drag and drop an image here or click to select",
+          videoPlaceholder: "Upload a short video of your finished dish"
+        },
+        grocery: {
+          title: "Find Local Ingredients",
+          subtitle: "Search for ingredients at nearby grocery stores and get pricing information",
+          searchTitle: "Search Ingredients",
+          postalCode: "Your Postal Code",
+          postalCodePlaceholder: "Enter your postal code",
+          ingredientsLabel: "Ingredients",
+          ingredientPlaceholder: "e.g., tomatoes, cheese, basil",
+          addIngredient: "Add Ingredient",
+          searchButton: "🔍 Search Stores",
+          searching: "Searching...",
+          distance: "Max Distance",
+          budget: "Budget Preference",
+          delivery: "Delivery Preference"
+        }
+      },
+
       cuisines: {
         american: "American",
         mexican: "Mexican", 
