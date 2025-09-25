@@ -67,7 +67,7 @@ const resources = {
       home: {
         title: "Lambalia",
         subtitle: "Taste the World's Heritage",
-        welcomeMessage: "Welcome to Lambalia - Where Every Culture's Cuisine Finds Its Voice",
+        welcomeMessage: "Join our community of home chefs sharing authentic recipes from around the world!",
         description: "Connect with passionate home chefs, discover authentic recipes, and turn your kitchen into a global culinary experience.",
         features: {
           recipes: "198+ Traditional Recipes",
