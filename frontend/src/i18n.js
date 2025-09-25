@@ -439,10 +439,43 @@ const resources = {
       home: {
         title: "Lambalia", 
         subtitle: "Transformez Votre Cuisine en une Expérience Culinaire Mondiale",
+        welcomeMessage: "Bienvenue à Lambalia - Où Chaque Cuisine Culturelle Trouve Sa Voix",
+        description: "Connectez-vous avec des chefs passionnés, découvrez des recettes authentiques et transformez votre cuisine en une expérience culinaire mondiale.",
         features: {
           recipes: "198+ Recettes Traditionnelles",
           monetize: "Monétisez Votre Cuisine",
-          restaurant: "Plateforme de Restaurant à Domicile"
+          restaurant: "Plateforme de Restaurant à Domicile",
+          communities: "80+ Communautés Culturelles",
+          heritageRecipes: "Recettes Patrimoniales",
+          specialtyIngredients: "Ingrédients Spéciaux"
+        },
+        actions: {
+          browseName: "📚 Parcourir Modèles",
+          createName: "✨ Créer Extrait",
+          ingredientsName: "🛒 Trouver Ingrédients", 
+          restaurantName: "🏠👩‍🍳 Ouvrir Cuisine",
+          marketplaceName: "🌱🛒 Marché Local",
+          charityName: "🤝❤️ Donner en Retour",
+          eatsName: "🚚🍽️ Repas Rapides"
+        },
+        cookingClasses: {
+          title: "Cours de Cuisine en Ligne",
+          description: "Apprenez des chefs maîtres du monde entier",
+          learnMore: "En Savoir Plus"
+        },
+        recipeSnippets: {
+          title: "Dernières Recettes Rapides",
+          subtitle: "Conseils de cuisine rapides de notre communauté",
+          viewAll: "Voir Tous les Extraits",
+          cookingTip: "Conseil de Cuisine",
+          noSnippets: "Aucun extrait disponible pour le moment"
+        },
+        communityStats: {
+          title: "Rejoignez Notre Communauté Culinaire Mondiale",
+          activeChefs: "Chefs à Domicile Actifs",
+          countriesServed: "Pays Servis",
+          recipesShared: "Recettes Partagées",
+          culturesRepresented: "Cultures Représentées"
         }
       },
 
