@@ -5726,9 +5726,28 @@ def main_profile_photo_tests():
         print(f"⚠️  {failed_count} profile photo tests failed. Check the issues above.")
         return 1
 
+def main_translation_impact_tests():
+    """Main function for translation system impact tests"""
+    print("🌍 TRANSLATION SYSTEM IMPACT TESTING")
+    print("Testing that translation system updates haven't broken existing functionality")
+    print("=" * 80)
+    
+    tester = LambaliaEnhancedAPITester()
+    success = tester.run_translation_impact_tests()
+    
+    if success:
+        print(f"✅ Translation impact tests completed successfully!")
+        return 0
+    else:
+        failed_count = tester.tests_run - tester.tests_passed
+        print(f"⚠️  {failed_count} translation impact tests failed. Check the issues above.")
+        return 1
+
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) > 1 and sys.argv[1] == "--ui-improvements":
+    if len(sys.argv) > 1 and sys.argv[1] == "--translation-impact":
+        sys.exit(main_translation_impact_tests())
+    elif len(sys.argv) > 1 and sys.argv[1] == "--ui-improvements":
         sys.exit(main_ui_improvements())
     elif len(sys.argv) > 1 and sys.argv[1] == "--snippet-media":
         sys.exit(main_snippet_media_tests())
