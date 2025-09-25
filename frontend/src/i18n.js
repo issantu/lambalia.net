@@ -305,47 +305,6 @@ const resources = {
         }
       },
 
-      marketplace: {
-        title: "Local Marketplace",
-        tabs: {
-          browse: "Browse Local Farms",
-          sell: "Sell Your Products", 
-          charity: "Community Impact",
-          impact: "Impact Dashboard"
-        },
-        farmCard: {
-          acres: "acres",
-          availableProducts: "Available Products",
-          takingOrders: "Taking orders",
-          unavailable: "Currently unavailable",
-          farmDining: "Farm dining",
-          visitFarm: "Visit Farm"
-        },
-        productCard: {
-          from: "from",
-          away: "away",
-          available: "available",
-          inSeason: "In season",
-          addToCart: "Add to Cart"
-        }
-      },
-
-      charity: {
-        title: "Give Back - Community Food Sharing",
-        subtitle: "Transform food waste into community support",
-        sections: {
-          overview: "Overview",
-          register: "Register",
-          submit: "Submit Impact", 
-          dashboard: "Dashboard",
-          organizations: "Organizations"
-        },
-        howItWorks: "How It Works",
-        step1: "Grow excess tomatoes, peppers, herbs in your backyard",
-        step2: "Donate surplus to local food banks instead of throwing away",
-        step3: "Submit verification (photos, donation receipts)"
-      },
-
       quickeats: {
         title: "Lambalia Quick Eats Training",
         sections: {
