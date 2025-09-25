@@ -1139,6 +1139,39 @@ const resources = {
         }
       },
 
+      // Forms
+      forms: {
+        restaurant: {
+          homeApplication: {
+            title: "Заявка на Домашний Ресторан",
+            personalInfo: "Личная Информация",
+            legalName: "Юридическое Имя",
+            phoneNumber: "Номер Телефона",
+            homeAddress: "Домашний Адрес",
+            city: "Город",
+            state: "Область",
+            postalCode: "Почтовый Индекс",
+            country: "Страна",
+            kitchenDescription: "Описание Кухни",
+            kitchenDescriptionPlaceholder: "Опишите вашу кухню, оборудование и зону приготовления",
+            diningCapacity: "Вместимость Обеденной Зоны",
+            cuisineSpecialties: "Кулинарные Специальности",
+            cuisineSpecialtiesPlaceholder: "напр., Итальянская, Мексиканская, Веганская",
+            dietaryAccommodations: "Диетические Приспособления",
+            dietaryAccommodationsPlaceholder: "напр., Безглютеновая, Кошерная, Халяль",
+            foodHandlingExperience: "Есть ли у вас опыт обращения с продуктами?",
+            yearsCookingExperience: "Лет Кулинарного Опыта",
+            liabilityInsurance: "Есть ли у вас страхование ответственности?",
+            emergencyContactName: "Имя Контакта Экстренной Связи",
+            emergencyContactPhone: "Телефон Контакта Экстренной Связи",
+            submitButton: "Подать Заявку",
+            submitting: "Подача Заявки...",
+            successMessage: "Заявка успешно подана! Мы рассмотрим её в течение 3-5 рабочих дней.",
+            errorMessage: "Не удалось подать заявку. Пожалуйста, попробуйте снова."
+          }
+        }
+      },
+
       cuisines: {
         american: "Американская",
         mexican: "Мексиканская",
