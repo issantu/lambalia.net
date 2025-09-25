@@ -1440,6 +1440,35 @@ const resources = {
           distance: "أقصى مسافة",
           budget: "تفضيل الميزانية",
           delivery: "تفضيل التوصيل"
+        },
+        restaurant: {
+          homeApplication: {
+            title: "طلب مطعم منزلي",
+            personalInfo: "المعلومات الشخصية",
+            legalName: "الاسم القانوني",
+            phoneNumber: "رقم الهاتف",
+            homeAddress: "عنوان المنزل",
+            city: "المدينة",
+            state: "الولاية",
+            postalCode: "الرمز البريدي",
+            country: "البلد",
+            kitchenDescription: "وصف المطبخ",
+            kitchenDescriptionPlaceholder: "اوصف مطبخك والمعدات ومساحة الطبخ",
+            diningCapacity: "سعة منطقة الطعام",
+            cuisineSpecialties: "التخصصات الطبخية",
+            cuisineSpecialtiesPlaceholder: "مثل، إيطالية، مكسيكية، نباتية",
+            dietaryAccommodations: "التكيفات الغذائية",
+            dietaryAccommodationsPlaceholder: "مثل، خالي من الغلوتين، كوشير، حلال",
+            foodHandlingExperience: "هل لديك خبرة في التعامل مع الطعام؟",
+            yearsCookingExperience: "سنوات الخبرة في الطبخ",
+            liabilityInsurance: "هل لديك تأمين مسؤولية؟",
+            emergencyContactName: "اسم جهة الاتصال الطارئ",
+            emergencyContactPhone: "هاتف جهة الاتصال الطارئ",
+            submitButton: "إرسال الطلب",
+            submitting: "جاري إرسال الطلب...",
+            successMessage: "تم إرسال الطلب بنجاح! سنراجعه خلال 3-5 أيام عمل.",
+            errorMessage: "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى."
+          }
         }
       },
 
