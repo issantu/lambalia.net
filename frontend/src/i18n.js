@@ -388,6 +388,53 @@ const resources = {
         }
       },
 
+      // Forms
+      forms: {
+        createSnippet: {
+          title: "Crear Consejo de Receta",
+          recipeTitle: "Título de la Receta",
+          recipeTitlePlaceholder: "Ingresa el nombre de la receta",
+          localTitle: "Título Local",
+          localTitlePlaceholder: "Nombre de la receta en tu idioma local (opcional)",
+          description: "Descripción",
+          descriptionPlaceholder: "Describe tu receta",
+          snippetType: "Tipo de Consejo",
+          ingredients: "Ingredientes",
+          ingredientName: "Ingrediente",
+          amount: "Cantidad",
+          unit: "Unidad",
+          addIngredient: "Agregar Ingrediente",
+          preparationSteps: "Pasos de Preparación",
+          addStep: "Agregar Paso",
+          cookingTime: "Tiempo de Cocción (minutos)",
+          difficultyLevel: "Nivel de Dificultad",
+          servings: "Porciones",
+          tags: "Etiquetas",
+          tagsPlaceholder: "Agregar etiquetas (presiona Enter)",
+          imageUpload: "Subir Imagen",
+          videoUpload: "Subir Video",
+          submitButton: "Crear Consejo de Receta",
+          submitting: "Creando...",
+          dragDropImage: "Arrastra y suelta una imagen aquí o haz clic para seleccionar",
+          videoPlaceholder: "Sube un video corto de tu platillo terminado"
+        },
+        grocery: {
+          title: "Encontrar Ingredientes Locales",
+          subtitle: "Busca ingredientes en tiendas cercanas y obtén información de precios",
+          searchTitle: "Buscar Ingredientes",
+          postalCode: "Tu Código Postal",
+          postalCodePlaceholder: "Ingresa tu código postal",
+          ingredientsLabel: "Ingredientes",
+          ingredientPlaceholder: "ej., tomates, queso, albahaca",
+          addIngredient: "Agregar Ingrediente",
+          searchButton: "🔍 Buscar Tiendas",
+          searching: "Buscando...",
+          distance: "Distancia Máxima",
+          budget: "Preferencia de Presupuesto",
+          delivery: "Preferencia de Entrega"
+        }
+      },
+
       eats: {
         title: "🍽️ Lambalia Eats",
         subtitle: "Mercado de Comida en Tiempo Real",
