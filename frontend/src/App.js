@@ -1809,6 +1809,7 @@ const TraditionalRestaurantApplicationForm = () => {
 };
 
 const HomeRestaurantPage = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'home-restaurant', 'traditional-restaurant'
   const [restaurantType, setRestaurantType] = useState('home'); // 'home' or 'traditional'
