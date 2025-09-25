@@ -5375,6 +5375,105 @@ class LambaliaEnhancedAPITester:
         else:
             return self.log_test("User Registration with Mixed Preferences", False, "- Registration failed")
 
+    def run_translation_impact_tests(self):
+        """Run specific tests to verify translation system updates haven't broken existing functionality"""
+        print("🚀 Starting Translation System Impact Tests")
+        print(f"🌐 Testing against: {self.base_url}")
+        print("=" * 80)
+
+        # 1. Basic API Health Check
+        print("\n🏥 BASIC API HEALTH CHECK")
+        self.test_health_check()
+        self.test_get_countries()
+
+        # 2. User Authentication Tests
+        print("\n🔐 USER AUTHENTICATION TESTS")
+        self.test_user_registration()
+        self.test_user_login()
+        self.test_get_current_user()
+
+        # 3. Enhanced Dietary Preferences System (needs attention per test_result.md)
+        print("\n🥗 ENHANCED DIETARY PREFERENCES SYSTEM TESTS")
+        self.test_enhanced_dietary_preferences_comprehensive()
+        self.test_mixed_dietary_preferences_comprehensive()
+        self.test_profile_data_integration()
+
+        # 4. Recipe/Snippet Endpoints
+        print("\n📝 RECIPE/SNIPPET ENDPOINTS TESTS")
+        self.test_get_reference_recipes()
+        self.test_create_snippet()
+        self.test_get_snippets()
+
+        # 5. Restaurant/Marketplace Endpoints
+        print("\n🏪 RESTAURANT/MARKETPLACE ENDPOINTS TESTS")
+        self.test_traditional_restaurant_vendor_application()
+        self.test_get_traditional_restaurants()
+        self.test_create_special_order()
+
+        # 6. Grocery Search Functionality
+        print("\n🛒 GROCERY SEARCH FUNCTIONALITY TESTS")
+        self.test_grocery_search()
+        self.test_nearby_stores()
+
+        # 7. Database Connectivity Tests
+        print("\n💾 DATABASE CONNECTIVITY TESTS")
+        self.test_database_connectivity()
+        self.test_user_heritage_contributions()
+
+        # 8. Translation System Functionality (ensure it's working)
+        print("\n🌍 TRANSLATION SYSTEM FUNCTIONALITY TESTS")
+        self.test_single_text_translation()
+        self.test_supported_languages()
+
+        # Final Results
+        print("\n" + "=" * 80)
+        print(f"🎯 TRANSLATION IMPACT TEST RESULTS: {self.tests_passed}/{self.tests_run} tests passed")
+        success_rate = (self.tests_passed / self.tests_run * 100) if self.tests_run > 0 else 0
+        print(f"📊 Success Rate: {success_rate:.1f}%")
+        
+        if success_rate >= 90:
+            print("🎉 EXCELLENT: Translation updates haven't broken existing functionality!")
+        elif success_rate >= 75:
+            print("✅ GOOD: Most systems working well after translation updates")
+        elif success_rate >= 50:
+            print("⚠️ MODERATE: Some issues detected after translation updates")
+        else:
+            print("❌ CRITICAL: Translation updates may have broken existing functionality")
+        
+        return success_rate >= 75
+
+    def test_database_connectivity(self):
+        """Test MongoDB database connectivity and basic operations"""
+        # Test user creation (database write)
+        test_user_data = {
+            "username": f"db_test_{datetime.now().strftime('%H%M%S')}",
+            "email": f"db_test_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Database Test User"
+        }
+
+        success, data = self.make_request('POST', 'auth/register', test_user_data, 200)
+        
+        if not success:
+            return self.log_test("Database Connectivity", False, "- Failed to create user (database write)")
+
+        # Test user retrieval (database read)
+        temp_token = data.get('access_token')
+        original_token = self.token
+        self.token = temp_token
+        
+        read_success, read_data = self.make_request('GET', 'users/me')
+        self.token = original_token
+        
+        if read_success:
+            username_match = read_data.get('username') == test_user_data['username']
+            email_match = read_data.get('email') == test_user_data['email']
+            details = f"- Write: ✓, Read: ✓, Data integrity: {'✓' if username_match and email_match else '✗'}"
+        else:
+            details = "- Write: ✓, Read: ✗"
+            
+        return self.log_test("Database Connectivity", success and read_success and username_match and email_match, details)
+
     def run_all_tests(self):
         """Run all API tests in sequence"""
         print("🚀 Starting Enhanced Lambalia Backend API Tests")
