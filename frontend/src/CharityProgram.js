@@ -235,9 +235,9 @@ const CharityProgramPage = () => {
           onClick={() => setActiveSection('register')}
           className="btn-primary text-xl font-bold py-4 px-8 rounded-lg"
         >
-          Join Community Program 🌱
+          {t('charity.actions.joinProgram')}
         </button>
-        <p className="text-gray-600 mt-4">Start making a difference in your community today!</p>
+        <p className="text-gray-600 mt-4">{t('charity.cta')}</p>
       </div>
     </div>
   );
