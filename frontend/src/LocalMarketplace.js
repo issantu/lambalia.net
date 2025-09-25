@@ -7,6 +7,7 @@ const API = `${BACKEND_URL}/api`;
 
 // Enhanced Local Marketplace - Farm Ecosystem & Charity Integration
 const LocalMarketplacePage = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'sell', 'charity', 'impact'
   const [localFarms, setLocalFarms] = useState([]);
   const [farmProducts, setFarmProducts] = useState([]);
