@@ -1014,6 +1014,53 @@ const resources = {
         joinLambalia: "Unisciti a Lambalia"
       },
 
+      // Forms
+      forms: {
+        createSnippet: {
+          title: "Crea Frammento di Ricetta",
+          recipeTitle: "Titolo della Ricetta",
+          recipeTitlePlaceholder: "Inserisci il nome della ricetta",
+          localTitle: "Titolo Locale",
+          localTitlePlaceholder: "Nome della ricetta nella tua lingua locale (opzionale)",
+          description: "Descrizione",
+          descriptionPlaceholder: "Descrivi la tua ricetta",
+          snippetType: "Tipo di Frammento",
+          ingredients: "Ingredienti",
+          ingredientName: "Ingrediente",
+          amount: "Quantità",
+          unit: "Unità",
+          addIngredient: "Aggiungi Ingrediente",
+          preparationSteps: "Passi di Preparazione",
+          addStep: "Aggiungi Passo",
+          cookingTime: "Tempo di Cottura (minuti)",
+          difficultyLevel: "Livello di Difficoltà",
+          servings: "Porzioni",
+          tags: "Tag",
+          tagsPlaceholder: "Aggiungi tag (premi Invio)",
+          imageUpload: "Carica Immagine",
+          videoUpload: "Carica Video",
+          submitButton: "Crea Frammento di Ricetta",
+          submitting: "Creazione...",
+          dragDropImage: "Trascina e rilascia un'immagine qui o clicca per selezionare",
+          videoPlaceholder: "Carica un breve video del tuo piatto finito"
+        },
+        grocery: {
+          title: "Trova Ingredienti Locali",
+          subtitle: "Cerca ingredienti nei negozi di alimentari nelle vicinanze e ottieni informazioni sui prezzi",
+          searchTitle: "Cerca Ingredienti",
+          postalCode: "Il Tuo Codice Postale",
+          postalCodePlaceholder: "Inserisci il tuo codice postale",
+          ingredientsLabel: "Ingredienti",
+          ingredientPlaceholder: "es: pomodori, formaggio, basilico",
+          addIngredient: "Aggiungi Ingrediente",
+          searchButton: "🔍 Cerca Negozi",
+          searching: "Ricerca...",
+          distance: "Distanza Massima",
+          budget: "Preferenza di Budget",
+          delivery: "Preferenza di Consegna"
+        }
+      },
+
       cuisines: {
         american: "Americana",
         mexican: "Messicana",
