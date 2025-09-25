@@ -4,6 +4,7 @@ import { Icon, AnimatedIcon } from './ProfessionalIcons';
 import { useTranslation } from 'react-i18next';
 
 const QuickEatsTraining = () => {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState('introduction');
 
   const sections = [
