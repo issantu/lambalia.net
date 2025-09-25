@@ -305,6 +305,65 @@ const resources = {
         }
       },
 
+      marketplace: {
+        title: "Local Marketplace",
+        tabs: {
+          browse: "Browse Local Farms",
+          sell: "Sell Your Products", 
+          charity: "Community Impact",
+          impact: "Impact Dashboard"
+        },
+        farmCard: {
+          acres: "acres",
+          availableProducts: "Available Products",
+          takingOrders: "Taking orders",
+          unavailable: "Currently unavailable",
+          farmDining: "Farm dining",
+          visitFarm: "Visit Farm"
+        },
+        productCard: {
+          from: "from",
+          away: "away",
+          available: "available",
+          inSeason: "In season",
+          addToCart: "Add to Cart"
+        }
+      },
+
+      charity: {
+        title: "Give Back - Community Food Sharing",
+        subtitle: "Transform food waste into community support",
+        sections: {
+          overview: "Overview",
+          register: "Register",
+          submit: "Submit Impact", 
+          dashboard: "Dashboard",
+          organizations: "Organizations"
+        },
+        howItWorks: "How It Works",
+        step1: "Grow excess tomatoes, peppers, herbs in your backyard",
+        step2: "Donate surplus to local food banks instead of throwing away",
+        step3: "Submit verification (photos, donation receipts)"
+      },
+
+      quickeats: {
+        title: "Lambalia Quick Eats Training",
+        sections: {
+          introduction: "Your Quick Service Edge",
+          competition: "Fast Food Competition", 
+          advantages: "Why You Win",
+          efficiency: "Speed & Quality",
+          offerings: "Perfect Menu Items",
+          operations: "Smooth Operations",
+          success: "Building Success"
+        },
+        welcomeTitle: "Welcome, Quick Eats Provider!",
+        welcomeSubtitle: "You're bringing authentic, homemade flavors to the fast-casual dining world. Your mission: deliver quality, culture, and care at the speed modern life demands.",
+        uniquePosition: "Your Unique Position",
+        whatYouProvide: "What You Provide:",
+        whatFastFoodOffers: "What Fast Food Offers:"
+      },
+
       cuisines: {
         american: "American",
         mexican: "Mexican", 
