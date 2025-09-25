@@ -330,7 +330,7 @@ const resources = {
           subtitle: "Consejos rápidos de cocina de nuestra comunidad",
           viewAll: "Ver Todos los Consejos",
           cookingTip: "Consejo de Cocina",
-          noSnippets: "No hay consejos disponibles aún"
+          noSnippets: "No se encontraron consejos de recetas. ¡Sé el primero en compartir tu consejo de receta tradicional en Lambalia!"
         },
         communityStats: {
           title: "Únete a Nuestra Comunidad Culinaria Global",
