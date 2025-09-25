@@ -305,7 +305,7 @@ const resources = {
         description: "Conecta con chefs caseros apasionados, descubre recetas auténticas y convierte tu cocina en una experiencia culinaria global.",
         features: {
           recipes: "198+ Recetas Tradicionales",
-          monetize: "Monetiza Tu Cocina",
+          monetize: "Monetiza Tus Habilidades Culinarias",
           restaurant: "Plataforma de Restaurante Casero",
           communities: "80+ Comunidades Culturales",
           heritageRecipes: "Recetas Patrimoniales",
