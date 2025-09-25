@@ -464,11 +464,11 @@ const resources = {
           learnMore: "En Savoir Plus"
         },
         recipeSnippets: {
-          title: "Dernières Recettes Rapides",
+          title: "Dernières Recettes Rapides", 
           subtitle: "Conseils de cuisine rapides de notre communauté",
           viewAll: "Voir Tous les Extraits",
           cookingTip: "Conseil de Cuisine",
-          noSnippets: "Aucun extrait disponible pour le moment"
+          noSnippets: "Aucune recette rapide trouvée. Soyez le premier à partager votre recette traditionnelle sur Lambalia !"
         },
         communityStats: {
           title: "Rejoignez Notre Communauté Culinaire Mondiale",
