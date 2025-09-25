@@ -107,127 +107,12 @@ const resources = {
         }
       },
 
-      // Lambalia Eats
-      eats: {
-        title: "🍽️ Lambalia Eats",
-        subtitle: "Real-time Food Marketplace",
-        tabs: {
-          browse: "🛒 Browse Food",
-          request: "🍽️ Request Food", 
-          offer: "👩‍🍳 Offer Food",
-          orders: "📋 My Orders",
-          requests: "📤 Active Requests"
-        },
-        browse: {
-          title: "🍳 Available Food Near You",
-          refresh: "Refresh",
-          noOffers: "No food offers nearby",
-          noOffersMessage: "Be the first to post a delicious meal!",
-          findingFood: "Finding delicious food near you..."
-        },
-        request: {
-          title: "🍽️ Request Food",
-          subtitle: "Tell local cooks what you're craving!",
-          dishName: "What do you want to eat?",
-          dishPlaceholder: "e.g., Chicken Biryani, Fresh Pasta",
-          cuisineType: "Cuisine Type",
-          description: "Description",
-          descPlaceholder: "Describe how you'd like it prepared, any special preferences...",
-          maxPrice: "Max Price ($)",
-          maxWaitTime: "Max Wait Time (minutes)",
-          servicePrefs: "Service Preferences",
-          postButton: "Post Food Request 🍽️",
-          posting: "Posting Request... ⏳"
-        },
-        offer: {  
-          title: "👩‍🍳 Offer Food",
-          subtitle: "Share your delicious homemade meal with hungry neighbors!",
-          dishName: "Dish Name",
-          dishPlaceholder: "e.g., Grandma's Chicken Curry",
-          description: "Description", 
-          descPlaceholder: "Describe your dish, cooking method, what makes it special...",
-          quantity: "Quantity Available",
-          pricePerServing: "Price per Serving ($)",
-          deliveryFee: "Delivery Fee ($)",
-          readyAt: "Ready At",
-          availableUntil: "Available Until",
-          serviceOptions: "Service Options",
-          postButton: "Post Food Offer 👩‍🍳",
-          posting: "Posting Offer... ⏳"
-        },
-        orders: {
-          title: "📋 My Orders",
-          noOrders: "No orders yet",
-          noOrdersMessage: "Start by browsing available food or posting a request!",
-          role: "Role",
-          service: "Service", 
-          total: "Total",
-          tracking: "Tracking",
-          ordered: "Ordered"
-        },
-        stats: {
-          liveOrders: "live orders",
-          cooksOnline: "cooks online",
-          activeOffers: "Active Offers",
-          activeRequests: "Active Requests", 
-          ordersInProgress: "Orders in Progress",
-          availableCooks: "Available Cooks"
-        },
-        serviceTypes: {
-          pickup: "Pickup",
-          delivery: "Delivery",
-          dineIn: "Dine-in",
-          pickupDesc: "You pick up, pay meal only",
-          deliveryDesc: "Delivered to you, pay meal + delivery", 
-          dineInDesc: "Eat at cook's place"
-        },
-        orderNow: "Order Now",
-        details: "Details",
-        acceptRequest: "Accept Request"
-      },
-
-      // Local Marketplace
-      marketplace: {
-        title: "Local Harvest Marketplace",
-        subtitle: "Discover fresh, homegrown produce from your neighbors. From backyard tomatoes to small farm specialties.",
-        tabs: {
-          browse: "🛒 Browse Local",
-          sell: "🌱 Sell Produce", 
-          charity: "🤝 Give Back",
-          impact: "🌍 Our Impact"
-        },
-        search: "🔍 Search Local Growers",
-        allGrowers: "All Growers",
-        backyardGardeners: "Backyard Gardeners",
-        localFarms: "Local Farms",
-        organicGrowers: "Organic Growers",
-        hobbyFarmers: "Hobby Farmers"
-      },
-
-      // Charity Program
-      charity: {
-        title: "🤝 Community Food Sharing Program",
-        subtitle: "Transform food waste into community support while earning premium membership benefits",
-        tabs: {
-          overview: "🌟 Overview",
-          register: "📝 Register", 
-          submit: "📋 Submit Activity",
-          dashboard: "🎯 Dashboard",
-          organizations: "🏪 Organizations"
-        },
-        howItWorks: "🌱 How It Works",
-        premiumTiers: "🎖️ Premium Membership Tiers",
-        joinProgram: "Join Community Program 🌱",
-        startMakingDifference: "Start making a difference in your community today!"
-      },
-
-      // Cuisines
       // Forms
       forms: {
         createSnippet: {
           title: "Create Recipe Snippet",
           recipeTitle: "Recipe Title",
-          recipeTitlePlaceholder: "Enter the recipe name",
+          recipeTitlePlaceholder: "Enter recipe name",
           localTitle: "Local Title",
           localTitlePlaceholder: "Recipe name in your local language (optional)",
           description: "Description",
@@ -263,84 +148,178 @@ const resources = {
           addIngredient: "Add Ingredient",
           searchButton: "🔍 Search Stores",
           searching: "Searching...",
-          distance: "Max Distance",
+          distance: "Maximum Distance",
           budget: "Budget Preference",
           delivery: "Delivery Preference"
         },
-        restaurant: {
-          marketplace: {
-            title: "Restaurant Marketplace",
-            subtitle: "Discover home kitchens and traditional restaurants offering unique dining experiences",
-            browseRestaurants: "Browse Restaurants",
-            becomePartner: "Become a Partner",
-            homeRestaurants: "Home Restaurants",
-            traditionalRestaurants: "Traditional Restaurants",
-            intimateDining: "Intimate dining in local homes",
-            specialOrders: "Special orders & custom meals",
-            available: "available",
-            specialOrdersCount: "special orders",
-            noHomeRestaurants: "No home restaurants available yet.",
-            specialOrdersTitle: "Special Orders from Traditional Restaurants"
+        quickeats: {
+          title: "Lambalia Quick Eats Training",
+          sections: {
+            introduction: "Your Quick Service Advantage",
+            competition: "Fast Food Competition", 
+            advantages: "Why You Win",
+            efficiency: "Speed & Quality",
+            offerings: "Perfect Menu Items",
+            operations: "Seamless Operations",
+            success: "Building Success"
           },
-          homeApplication: {
-            title: "Home Restaurant Application",
-            personalInfo: "Personal Information",
-            legalName: "Legal Name",
-            phoneNumber: "Phone Number",
-            homeAddress: "Home Address",
-            city: "City",
-            state: "State",
-            postalCode: "Postal Code",
-            country: "Country",
-            kitchenDescription: "Kitchen Description",
-            kitchenDescriptionPlaceholder: "Describe your kitchen setup, equipment, and cooking space",
-            diningCapacity: "Dining Capacity",
-            cuisineSpecialties: "Cuisine Specialties",
-            cuisineSpecialtiesPlaceholder: "e.g., Italian, Mexican, Vegan",
-            dietaryAccommodations: "Dietary Accommodations",
-            dietaryAccommodationsPlaceholder: "e.g., Gluten-free, Kosher, Halal",
-            foodHandlingExperience: "Do you have food handling experience?",
-            yearsCookingExperience: "Years of Cooking Experience",
-            liabilityInsurance: "Do you have liability insurance?",
-            emergencyContactName: "Emergency Contact Name",
-            emergencyContactPhone: "Emergency Contact Phone",
-            submitButton: "Submit Application",
-            submitting: "Submitting Application...",
-            successMessage: "Application submitted successfully! We will review it within 3-5 business days.",
-            errorMessage: "Failed to submit application. Please try again."
-          },
-          traditionalApplication: {
-            title: "Traditional Restaurant Application",
-            restaurantName: "Restaurant Name",
-            businessLicenseNumber: "Business License Number",
-            yearsInBusiness: "Years in Business",
-            successMessage: "Restaurant application submitted successfully! We will review it within 5-7 business days."
-          }
+          welcomeTitle: "Welcome, Quick Eats Provider!",
+          welcomeSubtitle: "You're bringing authentic home flavors to the fast casual world. Your mission: deliver quality, culture, and care at the speed modern life demands.",
+          uniquePosition: "Your Unique Position",
+          whatYouProvide: "What You Provide:",
+          whatFastFoodOffers: "What Fast Food Offers:"
         }
       },
 
-      quickeats: {
-        title: "Lambalia Quick Eats Training",
-        sections: {
-          introduction: "Your Quick Service Edge",
-          competition: "Fast Food Competition", 
-          advantages: "Why You Win",
-          efficiency: "Speed & Quality",
-          offerings: "Perfect Menu Items",
-          operations: "Smooth Operations",
-          success: "Building Success"
+      // Restaurant
+      restaurant: {
+        marketplace: {
+          title: "Restaurant Marketplace",
+          subtitle: "Discover home kitchens and traditional restaurants offering unique culinary experiences",
+          browseRestaurants: "Browse Restaurants",
+          becomePartner: "Become Partner",
+          homeRestaurants: "Home Restaurants",
+          traditionalRestaurants: "Traditional Restaurants",
+          intimateDining: "Intimate dining in local homes",
+          specialOrders: "Special orders and custom meals",
+          available: "available",
+          specialOrdersCount: "special orders",
+          noHomeRestaurants: "No home restaurants available yet.",
+          specialOrdersTitle: "Special Orders from Traditional Restaurants"
         },
-        welcomeTitle: "Welcome, Quick Eats Provider!",
-        welcomeSubtitle: "You're bringing authentic, homemade flavors to the fast-casual dining world. Your mission: deliver quality, culture, and care at the speed modern life demands.",
-        uniquePosition: "Your Unique Position",
-        whatYouProvide: "What You Provide:",
-        whatFastFoodOffers: "What Fast Food Offers:"
+        homeApplication: {
+          title: "Home Restaurant Application",
+          personalInfo: "Personal Information",
+          legalName: "Legal Name",
+          phoneNumber: "Phone Number",
+          homeAddress: "Home Address",
+          city: "City",
+          state: "State",
+          postalCode: "Postal Code",
+          country: "Country",
+          kitchenDescription: "Kitchen Description",
+          kitchenDescriptionPlaceholder: "Describe your kitchen, equipment and cooking space",
+          diningCapacity: "Dining Capacity",
+          cuisineSpecialties: "Cuisine Specialties",
+          cuisineSpecialtiesPlaceholder: "e.g., Italian, Mexican, Vegan",
+          dietaryAccommodations: "Dietary Accommodations",
+          dietaryAccommodationsPlaceholder: "e.g., Gluten-free, Kosher, Halal",
+          foodHandlingExperience: "Do you have food handling experience?",
+          yearsCookingExperience: "Years of Cooking Experience",
+          liabilityInsurance: "Do you have liability insurance?",
+          emergencyContactName: "Emergency Contact Name",
+          emergencyContactPhone: "Emergency Contact Phone",
+          submitButton: "Submit Application",
+          submitting: "Submitting Application...",
+          successMessage: "Application submitted successfully! We'll review it within 3-5 business days.",
+          errorMessage: "Failed to submit application. Please try again."
+        },
+        traditionalApplication: {
+          title: "Traditional Restaurant Application",
+          restaurantName: "Restaurant Name",
+          businessLicenseNumber: "Business License Number",
+          yearsInBusiness: "Years in Business",
+          successMessage: "Restaurant application submitted successfully! We'll review it within 5-7 business days."
+        }
       },
 
+      // Eats
+      eats: {
+        title: "🍽️ Lambalia Eats",
+        subtitle: "Real-Time Food Marketplace",
+        tabs: {
+          browse: "🛒 Browse Food",
+          request: "🍽️ Request Food",
+          offer: "👩‍🍳 Offer Food", 
+          orders: "📋 My Orders",
+          requests: "📤 Active Requests"
+        },
+        browse: {
+          title: "🍳 Available Food Near You",
+          refresh: "Refresh",
+          noOffers: "No food offers nearby",
+          noOffersMessage: "Be the first to post a delicious meal!",
+          findingFood: "Finding delicious food near you..."
+        }
+      },
+
+      // Charity
+      charity: {
+        title: "🤝❤️ Give Back - Community Impact Program",
+        subtitle: "Transform your cooking into community support and earn premium benefits",
+        overview: {
+          title: "Community Impact Through Food",
+          description: "Join our community program where your culinary skills help feed those in need while earning premium platform benefits.",
+          impactStats: "Community Impact Statistics",
+          totalMeals: "Total Meals Provided",
+          activeVolunteers: "Active Volunteers",
+          partneredOrganizations: "Partner Organizations",
+          volunteersHours: "Volunteer Hours This Month"
+        },
+        tiers: {
+          communityHelper: {
+            title: "Community Helper",
+            price: "Free",
+            commission: "15% Commission Rate",
+            requirements: "Requirements:",
+            req1: "4 hours monthly volunteering",
+            req2: "2 charity activities", 
+            req3: "10 lbs food donated monthly"
+          },
+          gardenSupporter: {
+            title: "Garden Supporter", 
+            price: "Earned through Service",
+            commission: "12% Commission Rate",
+            requirements: "Requirements:",
+            req1: "8 hours monthly volunteering",
+            req2: "4 charity activities",
+            req3: "20 lbs food donated monthly"
+          },
+          communityChampion: {
+            title: "Community Champion",
+            price: "Elite Status",
+            commission: "10% Commission Rate",
+            requirements: "Requirements:",
+            req1: "12 hours monthly volunteering",
+            req2: "5 charity activities",
+            req3: "30 lbs food donated monthly"
+          }
+        },
+        benefits: {
+          premiumBadge: "Premium Community Badge",
+          reducedCommission: "Reduced Commission Rates",
+          prioritySupport: "Priority Customer Support",
+          featuredProfile: "Featured Profile Placement",
+          exclusiveEvents: "Exclusive Community Events",
+          advancedTools: "Advanced Marketing Tools",
+          directMessaging: "Direct Customer Messaging",
+          premiumPlacement: "Premium Product Placement",
+          localChampion: "Local Champion Badge"
+        },
+        registration: {
+          title: "Join Community Program",
+          hoursPerMonth: "Committed Hours Per Month",
+          charityTypes: "Preferred Charity Types",
+          locations: "Preferred Locations",
+          impactGoal: "Monthly Impact Goal",
+          submitButton: "Join Program 🌱",
+          submitting: "Joining Program..."
+        },
+        actions: {
+          joinProgram: "Join Community Program 🌱",
+          submitActivity: "Submit Activity",
+          viewDashboard: "View Dashboard", 
+          findOrganizations: "Find Organizations",
+          calculateImpact: "Calculate Impact"
+        },
+        cta: "Start making a difference in your community today!"
+      },
+
+      // Cuisines
       cuisines: {
         american: "American",
-        mexican: "Mexican", 
-        italian: "Italian",
+        mexican: "Mexican",
+        italian: "Italian", 
         chinese: "Chinese",
         indian: "Indian",
         japanese: "Japanese",
@@ -520,44 +499,6 @@ const resources = {
         }
       },
 
-      eats: {
-        title: "🍽️ Lambalia Eats",
-        subtitle: "Mercado de Comida en Tiempo Real",
-        tabs: {
-          browse: "🛒 Explorar Comida",
-          request: "🍽️ Solicitar Comida",
-          offer: "👩‍🍳 Ofrecer Comida", 
-          orders: "📋 Mis Pedidos",
-          requests: "📤 Solicitudes Activas"
-        },
-        browse: {
-          title: "🍳 Comida Disponible Cerca de Ti",
-          refresh: "Actualizar",
-          noOffers: "No hay ofertas de comida cerca",
-          noOffersMessage: "¡Sé el primero en publicar una comida deliciosa!",
-          findingFood: "Encontrando comida deliciosa cerca de ti..."
-        }
-      },
-
-      cuisines: {
-        american: "Americana",
-        mexican: "Mexicana",
-        italian: "Italiana", 
-        chinese: "China",
-        indian: "India",
-        japanese: "Japonesa",
-        thai: "Tailandesa",
-        mediterranean: "Mediterránea",
-        african: "Africana",
-        middleEastern: "Medio Oriente",
-        caribbean: "Caribeña",
-        fusion: "Fusión",
-        comfortFood: "Comida Reconfortante",
-        healthy: "Saludable",
-        vegan: "Vegana",
-        desserts: "Postres"
-      },
-
       restaurant: {
         marketplace: {
           title: "Mercado de Restaurantes",
@@ -607,6 +548,115 @@ const resources = {
           yearsInBusiness: "Años en el Negocio",
           successMessage: "¡Solicitud de restaurante enviada exitosamente! La revisaremos en 5-7 días hábiles."
         }
+      },
+
+      eats: {
+        title: "🍽️ Lambalia Eats",
+        subtitle: "Mercado de Comida en Tiempo Real",
+        tabs: {
+          browse: "🛒 Explorar Comida",
+          request: "🍽️ Solicitar Comida",
+          offer: "👩‍🍳 Ofrecer Comida", 
+          orders: "📋 Mis Pedidos",
+          requests: "📤 Solicitudes Activas"
+        },
+        browse: {
+          title: "🍳 Comida Disponible Cerca de Ti",
+          refresh: "Actualizar",
+          noOffers: "No hay ofertas de comida cerca",
+          noOffersMessage: "¡Sé el primero en publicar una comida deliciosa!",
+          findingFood: "Encontrando comida deliciosa cerca de ti..."
+        }
+      },
+
+      charity: {
+        title: "🤝❤️ Retribuir - Programa de Impacto Comunitario",
+        subtitle: "Transforma tu cocina en apoyo comunitario y gana beneficios premium",
+        overview: {
+          title: "Impacto Comunitario a Través de la Comida",
+          description: "Únete a nuestro programa comunitario donde tus habilidades culinarias ayudan a alimentar a quienes lo necesitan mientras obtienes beneficios premium en la plataforma.",
+          impactStats: "Estadísticas de Impacto Comunitario",
+          totalMeals: "Total de Comidas Proporcionadas",
+          activeVolunteers: "Voluntarios Activos",
+          partneredOrganizations: "Organizaciones Asociadas",
+          volunteersHours: "Horas de Voluntariado Este Mes"
+        },
+        tiers: {
+          communityHelper: {
+            title: "Ayudante Comunitario",
+            price: "Gratis",
+            commission: "Tasa de Comisión 15%",
+            requirements: "Requisitos:",
+            req1: "4 horas mensuales de voluntariado",
+            req2: "2 actividades benéficas", 
+            req3: "10 libras de comida donada mensualmente"
+          },
+          gardenSupporter: {
+            title: "Partidario del Jardín", 
+            price: "Ganado a Través del Servicio",
+            commission: "Tasa de Comisión 12%",
+            requirements: "Requisitos:",
+            req1: "8 horas mensuales de voluntariado",
+            req2: "4 actividades benéficas",
+            req3: "20 libras de comida donada mensualmente"
+          },
+          communityChampion: {
+            title: "Campeón Comunitario",
+            price: "Estado Elite",
+            commission: "Tasa de Comisión 10%",
+            requirements: "Requisitos:",
+            req1: "12 horas mensuales de voluntariado",
+            req2: "5 actividades benéficas",
+            req3: "30 libras de comida donada mensualmente"
+          }
+        },
+        benefits: {
+          premiumBadge: "Insignia Premium Comunitaria",
+          reducedCommission: "Tasas de Comisión Reducidas",
+          prioritySupport: "Soporte Prioritario al Cliente",
+          featuredProfile: "Colocación de Perfil Destacado",
+          exclusiveEvents: "Eventos Comunitarios Exclusivos",
+          advancedTools: "Herramientas de Marketing Avanzadas",
+          directMessaging: "Mensajería Directa al Cliente",
+          premiumPlacement: "Colocación Premium de Producto",
+          localChampion: "Insignia de Campeón Local"
+        },
+        registration: {
+          title: "Únete al Programa Comunitario",
+          hoursPerMonth: "Horas Comprometidas Por Mes",
+          charityTypes: "Tipos de Caridad Preferidos",
+          locations: "Ubicaciones Preferidas",
+          impactGoal: "Meta de Impacto Mensual",
+          submitButton: "Unirse al Programa 🌱",
+          submitting: "Uniéndose al Programa..."
+        },
+        actions: {
+          joinProgram: "Únete al Programa Comunitario 🌱",
+          submitActivity: "Enviar Actividad",
+          viewDashboard: "Ver Panel", 
+          findOrganizations: "Encontrar Organizaciones",
+          calculateImpact: "Calcular Impacto"
+        },
+        cta: "¡Comienza a hacer la diferencia en tu comunidad hoy!"
+      },
+
+      cuisines: {
+        american: "Americana",
+        mexican: "Mexicana",
+        italian: "Italiana", 
+        chinese: "China",
+        indian: "India",
+        japanese: "Japonesa",
+        thai: "Tailandesa",
+        mediterranean: "Mediterránea",
+        african: "Africana",
+        middleEastern: "Medio Oriente",
+        caribbean: "Caribeña",
+        fusion: "Fusión",
+        comfortFood: "Comida Reconfortante",
+        healthy: "Saludable",
+        vegan: "Vegana",
+        desserts: "Postres"
       }
     }
   },
@@ -753,14 +803,31 @@ const resources = {
           distance: "Distance Maximale",
           budget: "Préférence de Budget",
           delivery: "Préférence de Livraison"
+        },
+        quickeats: {
+          title: "Formation Lambalia Repas Rapides",
+          sections: {
+            introduction: "Votre Avantage Service Rapide",
+            competition: "Concurrence Restauration Rapide", 
+            advantages: "Pourquoi Vous Gagnez",
+            efficiency: "Vitesse et Qualité",
+            offerings: "Articles de Menu Parfaits",
+            operations: "Opérations Fluides",
+            success: "Construire le Succès"
+          },
+          welcomeTitle: "Bienvenue, Fournisseur de Repas Rapides!",
+          welcomeSubtitle: "Vous apportez des saveurs authentiques maison au monde de la restauration rapide. Votre mission: livrer qualité, culture et soin à la vitesse que la vie moderne exige.",
+          uniquePosition: "Votre Position Unique",
+          whatYouProvide: "Ce Que Vous Fournissez:",
+          whatFastFoodOffers: "Ce Que Offre la Restauration Rapide:"
         }
       },
 
       restaurant: {
         marketplace: {
           title: "Marché des Restaurants",
-          subtitle: "Découvrez les cuisines domestiques et les restaurants traditionnels offrant des expériences culinaires uniques",
-          browseRestaurants: "Parcourir les Restaurants",
+          subtitle: "Découvrez des cuisines maison et des restaurants traditionnels offrant des expériences culinaires uniques",
+          browseRestaurants: "Parcourir Restaurants",
           becomePartner: "Devenir Partenaire",
           homeRestaurants: "Restaurants à Domicile",
           traditionalRestaurants: "Restaurants Traditionnels",
@@ -783,35 +850,125 @@ const resources = {
           country: "Pays",
           kitchenDescription: "Description de la Cuisine",
           kitchenDescriptionPlaceholder: "Décrivez votre cuisine, équipements et espace de cuisson",
-          diningCapacity: "Capacité de Salle à Manger",
+          diningCapacity: "Capacité de Restauration",
           cuisineSpecialties: "Spécialités Culinaires",
           cuisineSpecialtiesPlaceholder: "ex., Italienne, Mexicaine, Végétalienne",
-          dietaryAccommodations: "Adaptations Alimentaires",
+          dietaryAccommodations: "Aménagements Diététiques",
           dietaryAccommodationsPlaceholder: "ex., Sans gluten, Casher, Halal",
-          foodHandlingExperience: "Avez-vous de l'expérience en manipulation des aliments ?",
-          yearsCookingExperience: "Années d'Expérience en Cuisine",
-          liabilityInsurance: "Avez-vous une assurance responsabilité ?",
+          foodHandlingExperience: "Avez-vous de l'expérience en manipulation d'aliments?",
+          yearsCookingExperience: "Années d'Expérience Culinaire",
+          liabilityInsurance: "Avez-vous une assurance responsabilité?",
           emergencyContactName: "Nom du Contact d'Urgence",
           emergencyContactPhone: "Téléphone du Contact d'Urgence",
-          submitButton: "Soumettre la Candidature",
-          submitting: "Soumission de la Candidature...",
-          successMessage: "Candidature soumise avec succès ! Nous l'examinerons dans 3-5 jours ouvrables.",
-          errorMessage: "Échec de la soumission de candidature. Veuillez réessayer."
+          submitButton: "Soumettre Candidature",
+          submitting: "Soumission Candidature...",
+          successMessage: "Candidature soumise avec succès! Nous l'examinerons dans 3-5 jours ouvrables.",
+          errorMessage: "Échec de soumission de candidature. Veuillez réessayer."
         },
         traditionalApplication: {
           title: "Candidature Restaurant Traditionnel",
           restaurantName: "Nom du Restaurant",
-          businessLicenseNumber: "Numéro de Licence Commerciale",
+          businessLicenseNumber: "Numéro de Licence d'Entreprise",
           yearsInBusiness: "Années d'Activité",
-          successMessage: "Candidature de restaurant soumise avec succès ! Nous l'examinerons dans 5-7 jours ouvrables."
+          successMessage: "Candidature de restaurant soumise avec succès! Nous l'examinerons dans 5-7 jours ouvrables."
         }
+      },
+
+      eats: {
+        title: "🍽️ Lambalia Eats",
+        subtitle: "Marché de Nourriture en Temps Réel",
+        tabs: {
+          browse: "🛒 Parcourir Nourriture",
+          request: "🍽️ Demander Nourriture",
+          offer: "👩‍🍳 Offrir Nourriture", 
+          orders: "📋 Mes Commandes",
+          requests: "📤 Demandes Actives"
+        },
+        browse: {
+          title: "🍳 Nourriture Disponible Près de Vous",
+          refresh: "Actualiser",
+          noOffers: "Aucune offre de nourriture à proximité",
+          noOffersMessage: "Soyez le premier à publier un repas délicieux!",
+          findingFood: "Trouver de la nourriture délicieuse près de vous..."
+        }
+      },
+
+      charity: {
+        title: "🤝❤️ Donner en Retour - Programme d'Impact Communautaire",
+        subtitle: "Transformez votre cuisine en soutien communautaire et gagnez des avantages premium",
+        overview: {
+          title: "Impact Communautaire par la Nourriture",
+          description: "Rejoignez notre programme communautaire où vos compétences culinaires aident à nourrir ceux dans le besoin tout en gagnant des avantages premium sur la plateforme.",
+          impactStats: "Statistiques d'Impact Communautaire",
+          totalMeals: "Total des Repas Fournis",
+          activeVolunteers: "Volontaires Actifs",
+          partneredOrganizations: "Organisations Partenaires",
+          volunteersHours: "Heures de Bénévolat Ce Mois"
+        },
+        tiers: {
+          communityHelper: {
+            title: "Aide Communautaire",
+            price: "Gratuit",
+            commission: "Taux de Commission 15%",
+            requirements: "Exigences:",
+            req1: "4 heures mensuelles de bénévolat",
+            req2: "2 activités caritatives", 
+            req3: "10 livres de nourriture donnée mensuellement"
+          },
+          gardenSupporter: {
+            title: "Soutien du Jardin", 
+            price: "Gagné par le Service",
+            commission: "Taux de Commission 12%",
+            requirements: "Exigences:",
+            req1: "8 heures mensuelles de bénévolat",
+            req2: "4 activités caritatives",
+            req3: "20 livres de nourriture donnée mensuellement"
+          },
+          communityChampion: {
+            title: "Champion Communautaire",
+            price: "Statut Elite",
+            commission: "Taux de Commission 10%",
+            requirements: "Exigences:",
+            req1: "12 heures mensuelles de bénévolat",
+            req2: "5 activités caritatives",
+            req3: "30 livres de nourriture donnée mensuellement"
+          }
+        },
+        benefits: {
+          premiumBadge: "Badge Premium Communautaire",
+          reducedCommission: "Taux de Commission Réduits",
+          prioritySupport: "Support Client Prioritaire",
+          featuredProfile: "Placement de Profil en Vedette",
+          exclusiveEvents: "Événements Communautaires Exclusifs",
+          advancedTools: "Outils Marketing Avancés",
+          directMessaging: "Messagerie Directe Client",
+          premiumPlacement: "Placement Premium de Produit",
+          localChampion: "Badge de Champion Local"
+        },
+        registration: {
+          title: "Rejoindre le Programme Communautaire",
+          hoursPerMonth: "Heures Engagées Par Mois",
+          charityTypes: "Types de Charité Préférés",
+          locations: "Emplacements Préférés",
+          impactGoal: "Objectif d'Impact Mensuel",
+          submitButton: "Rejoindre le Programme 🌱",
+          submitting: "Rejoindre le Programme..."
+        },
+        actions: {
+          joinProgram: "Rejoindre le Programme Communautaire 🌱",
+          submitActivity: "Soumettre Activité",
+          viewDashboard: "Voir Tableau de Bord", 
+          findOrganizations: "Trouver Organisations",
+          calculateImpact: "Calculer Impact"
+        },
+        cta: "Commencez à faire la différence dans votre communauté dès aujourd'hui!"
       },
 
       cuisines: {
         american: "Américaine",
         mexican: "Mexicaine",
-        italian: "Italienne",
-        chinese: "Chinoise", 
+        italian: "Italienne", 
+        chinese: "Chinoise",
         indian: "Indienne",
         japanese: "Japonaise",
         thai: "Thaïlandaise",
@@ -820,9 +977,9 @@ const resources = {
         middleEastern: "Moyen-Orient",
         caribbean: "Caribéenne",
         fusion: "Fusion",
-        comfortFood: "Cuisine Réconfortante",
-        healthy: "Sain",
-        vegan: "Végétalien",
+        comfortFood: "Nourriture Réconfortante",
+        healthy: "Saine",
+        vegan: "Végétalienne",
         desserts: "Desserts"
       }
     }
@@ -832,18 +989,19 @@ const resources = {
     translation: {
       nav: {
         browse: "Vorlagen Durchsuchen",
-        create: "Ausschnitt Erstellen",
+        create: "Snippet Erstellen", 
         ingredients: "Zutaten Finden",
         restaurant: "Küche Öffnen",
-        marketplace: "Lokaler Markt", 
+        marketplace: "Lokaler Markt",
         charity: "Zurückgeben",
         eats: "Schnelles Essen",
+        offers: "Lokale Angebote",
         profile: "Profil"
       },
 
       auth: {
         login: "Anmelden",
-        register: "Registrieren", 
+        register: "Registrieren",
         logout: "Abmelden",
         email: "E-Mail",
         password: "Passwort",
@@ -855,88 +1013,18 @@ const resources = {
         joinLambalia: "Lambalia Beitreten"
       },
 
-      // Forms
-      forms: {
-        createSnippet: {
-          title: "Rezept-Ausschnitt Erstellen",
-          recipeTitle: "Rezept-Titel",
-          recipeTitlePlaceholder: "Geben Sie den Rezeptnamen ein",
-          localTitle: "Lokaler Titel",
-          localTitlePlaceholder: "Rezeptname in Ihrer Lokalsprache (optional)",
-          description: "Beschreibung",
-          descriptionPlaceholder: "Beschreiben Sie Ihr Rezept",
-          snippetType: "Ausschnitt-Typ",
-          ingredients: "Zutaten",
-          ingredientName: "Zutat",
-          amount: "Menge",
-          unit: "Einheit",
-          addIngredient: "Zutat Hinzufügen",
-          preparationSteps: "Zubereitungsschritte",
-          addStep: "Schritt Hinzufügen",
-          cookingTime: "Kochzeit (Minuten)",
-          difficultyLevel: "Schwierigkeitsgrad",
-          servings: "Portionen",
-          tags: "Tags",
-          tagsPlaceholder: "Tags hinzufügen (Enter drücken)",
-          imageUpload: "Bild Hochladen",
-          videoUpload: "Video Hochladen",
-          submitButton: "Rezept-Ausschnitt Erstellen",
-          submitting: "Erstellen...",
-          dragDropImage: "Bild hier hineinziehen oder klicken zum Auswählen",
-          videoPlaceholder: "Kurzes Video Ihres fertigen Gerichts hochladen"
-        },
-        grocery: {
-          title: "Lokale Zutaten Finden",
-          subtitle: "Suchen Sie nach Zutaten in nahegelegenen Lebensmittelgeschäften und erhalten Sie Preisinformationen",
-          searchTitle: "Zutaten Suchen",
-          postalCode: "Ihre Postleitzahl",
-          postalCodePlaceholder: "Geben Sie Ihre Postleitzahl ein",
-          ingredientsLabel: "Zutaten",
-          ingredientPlaceholder: "z.B. Tomaten, Käse, Basilikum",
-          addIngredient: "Zutat Hinzufügen",
-          searchButton: "🔍 Geschäfte Suchen",
-          searching: "Suchen...",
-          distance: "Maximale Entfernung",
-          budget: "Budget-Präferenz",
-          delivery: "Lieferung-Präferenz"
-        },
-        restaurant: {
-          homeApplication: {
-            title: "Heimrestaurant-Bewerbung",
-            personalInfo: "Persönliche Informationen",
-            legalName: "Rechtlicher Name",
-            phoneNumber: "Telefonnummer",
-            homeAddress: "Wohnadresse",
-            city: "Stadt",
-            state: "Bundesland",
-            postalCode: "Postleitzahl",
-            country: "Land",
-            kitchenDescription: "Küchenbeschreibung",
-            kitchenDescriptionPlaceholder: "Beschreiben Sie Ihre Küchenausstattung und den Kochbereich",
-            diningCapacity: "Essplatz-Kapazität",
-            cuisineSpecialties: "Küchen-Spezialitäten",
-            cuisineSpecialtiesPlaceholder: "z.B. Italienisch, Mexikanisch, Vegan",
-            dietaryAccommodations: "Diätische Anpassungen",
-            dietaryAccommodationsPlaceholder: "z.B. Glutenfrei, Koscher, Halal",
-            foodHandlingExperience: "Haben Sie Erfahrung im Umgang mit Lebensmitteln?",
-            yearsCookingExperience: "Jahre Kocherfahrung",
-            liabilityInsurance: "Haben Sie eine Haftpflichtversicherung?",
-            emergencyContactName: "Name des Notfallkontakts",
-            emergencyContactPhone: "Telefon des Notfallkontakts",
-            submitButton: "Bewerbung Einreichen",
-            submitting: "Bewerbung wird eingereicht...",
-            successMessage: "Bewerbung erfolgreich eingereicht! Wir werden sie in 3-5 Werktagen prüfen.",
-            errorMessage: "Bewerbung konnte nicht eingereicht werden. Bitte versuchen Sie es erneut."
-          }
-        }
+      home: {
+        title: "Lambalia",
+        subtitle: "Schmecken Sie das Erbe der Welt",
+        description: "Verbinden Sie sich mit leidenschaftlichen Heimköchen, entdecken Sie authentische Rezepte und verwandeln Sie Ihre Küche in ein globales kulinarisches Erlebnis."
       },
 
       cuisines: {
         american: "Amerikanisch",
-        mexican: "Mexikanisch",
+        mexican: "Mexikanisch", 
         italian: "Italienisch",
         chinese: "Chinesisch",
-        indian: "Indisch", 
+        indian: "Indisch",
         japanese: "Japanisch",
         thai: "Thailändisch",
         mediterranean: "Mediterran",
@@ -944,88 +1032,6 @@ const resources = {
       }
     }
   },
-
-  zh: {
-    translation: {
-      nav: {
-        browse: "浏览模板",
-        create: "创建片段", 
-        ingredients: "寻找食材",
-        restaurant: "开放厨房",
-        marketplace: "本地市场",
-        charity: "回馈社会",
-        eats: "快餐",
-        profile: "个人资料"
-      },
-
-      auth: {
-        login: "登录",
-        register: "注册",
-        logout: "退出",
-        email: "邮箱",
-        password: "密码",
-        username: "用户名",
-        fullName: "全名",
-        postalCode: "邮政编码",
-        loginButton: "进入您的厨房 👨‍🍳",
-        registerButton: "加入社区",
-        joinLambalia: "加入 Lambalia"
-      },
-
-      cuisines: {
-        american: "美式",
-        mexican: "墨西哥菜",
-        italian: "意大利菜", 
-        chinese: "中华料理",
-        indian: "印度菜",
-        japanese: "日式料理",
-        thai: "泰式料理",
-        mediterranean: "地中海菜"
-      }
-    }
-  },
-
-  ja: {
-    translation: {
-      nav: {
-        browse: "テンプレートを見る",
-        create: "スニペット作成",
-        ingredients: "食材を探す",
-        restaurant: "キッチンを開く",
-        marketplace: "ローカルマーケット",
-        charity: "社会貢献",
-        eats: "クイック料理",
-        profile: "プロフィール"
-      },
-
-      auth: {
-        login: "ログイン", 
-        register: "登録",
-        logout: "ログアウト",
-        email: "メールアドレス",
-        password: "パスワード",
-        username: "ユーザー名",
-        fullName: "フルネーム",
-        postalCode: "郵便番号",
-        loginButton: "あなたのキッチンに入る 👨‍🍳",
-        registerButton: "コミュニティに参加",
-        joinLambalia: "Lambaliaに参加"
-      },
-
-      cuisines: {
-        american: "アメリカ料理",
-        mexican: "メキシコ料理",
-        italian: "イタリア料理",
-        chinese: "中華料理", 
-        indian: "インド料理",
-        japanese: "日本料理",
-        thai: "タイ料理",
-        mediterranean: "地中海料理"
-      }
-    }
-  },
-
-  // Duplicate Arabic section removed - see complete Arabic section below
 
   pt: {
     translation: {
@@ -1098,35 +1104,57 @@ const resources = {
           distance: "Distância Máxima",
           budget: "Preferência de Orçamento",
           delivery: "Preferência de Entrega"
+        }
+      },
+
+      restaurant: {
+        marketplace: {
+          title: "Mercado de Restaurantes",
+          subtitle: "Descubra cozinhas caseiras e restaurantes tradicionais que oferecem experiências culinárias únicas",
+          browseRestaurants: "Navegar Restaurantes",
+          becomePartner: "Tornar-se Parceiro",
+          homeRestaurants: "Restaurantes Caseiros",
+          traditionalRestaurants: "Restaurantes Tradicionais",
+          intimateDining: "Jantares íntimos em casas locais",
+          specialOrders: "Pedidos especiais e refeições personalizadas",
+          available: "disponível",
+          specialOrdersCount: "pedidos especiais",
+          noHomeRestaurants: "Nenhum restaurante caseiro disponível ainda.",
+          specialOrdersTitle: "Pedidos Especiais de Restaurantes Tradicionais"
         },
-        restaurant: {
-          homeApplication: {
-            title: "Candidatura Restaurante Domiciliar",
-            personalInfo: "Informações Pessoais",
-            legalName: "Nome Legal",
-            phoneNumber: "Número de Telefone",
-            homeAddress: "Endereço Residencial",
-            city: "Cidade",
-            state: "Estado",
-            postalCode: "CEP",
-            country: "País",
-            kitchenDescription: "Descrição da Cozinha",
-            kitchenDescriptionPlaceholder: "Descreva sua cozinha, equipamentos e espaço de cozimento",
-            diningCapacity: "Capacidade de Jantar",
-            cuisineSpecialties: "Especialidades Culinárias",
-            cuisineSpecialtiesPlaceholder: "ex., Italiana, Mexicana, Vegana",
-            dietaryAccommodations: "Acomodações Dietéticas",
-            dietaryAccommodationsPlaceholder: "ex., Sem glúten, Kosher, Halal",
-            foodHandlingExperience: "Você tem experiência em manuseio de alimentos?",
-            yearsCookingExperience: "Anos de Experiência Culinária",
-            liabilityInsurance: "Você tem seguro de responsabilidade civil?",
-            emergencyContactName: "Nome do Contato de Emergência",
-            emergencyContactPhone: "Telefone do Contato de Emergência",
-            submitButton: "Enviar Candidatura",
-            submitting: "Enviando Candidatura...",
-            successMessage: "Candidatura enviada com sucesso! Analisaremos em 3-5 dias úteis.",
-            errorMessage: "Falha ao enviar candidatura. Tente novamente."
-          }
+        homeApplication: {
+          title: "Candidatura Restaurante Domiciliar",
+          personalInfo: "Informações Pessoais",
+          legalName: "Nome Legal",
+          phoneNumber: "Número de Telefone",
+          homeAddress: "Endereço Residencial",
+          city: "Cidade",
+          state: "Estado",
+          postalCode: "CEP",
+          country: "País",
+          kitchenDescription: "Descrição da Cozinha",
+          kitchenDescriptionPlaceholder: "Descreva sua cozinha, equipamentos e espaço de cozimento",
+          diningCapacity: "Capacidade de Jantar",
+          cuisineSpecialties: "Especialidades Culinárias",
+          cuisineSpecialtiesPlaceholder: "ex., Italiana, Mexicana, Vegana",
+          dietaryAccommodations: "Acomodações Dietéticas",
+          dietaryAccommodationsPlaceholder: "ex., Sem glúten, Kosher, Halal",
+          foodHandlingExperience: "Você tem experiência em manuseio de alimentos?",
+          yearsCookingExperience: "Anos de Experiência Culinária",
+          liabilityInsurance: "Você tem seguro de responsabilidade civil?",
+          emergencyContactName: "Nome do Contato de Emergência",
+          emergencyContactPhone: "Telefone do Contato de Emergência",
+          submitButton: "Enviar Candidatura",
+          submitting: "Enviando Candidatura...",
+          successMessage: "Candidatura enviada com sucesso! Analisaremos em 3-5 dias úteis.",
+          errorMessage: "Falha ao enviar candidatura. Tente novamente."
+        },
+        traditionalApplication: {
+          title: "Candidatura Restaurante Tradicional",
+          restaurantName: "Nome do Restaurante",
+          businessLicenseNumber: "Número da Licença Comercial",
+          yearsInBusiness: "Anos em Atividade",
+          successMessage: "Candidatura de restaurante enviada com sucesso! Analisaremos em 5-7 dias úteis."
         }
       },
 
@@ -1215,35 +1243,57 @@ const resources = {
           distance: "Максимальное Расстояние",
           budget: "Предпочтение Бюджета",
           delivery: "Предпочтение Доставки"
+        }
+      },
+
+      restaurant: {
+        marketplace: {
+          title: "Рынок Ресторанов",
+          subtitle: "Откройте для себя домашние кухни и традиционные рестораны, предлагающие уникальные кулинарные впечатления",
+          browseRestaurants: "Просмотр Ресторанов",
+          becomePartner: "Стать Партнером",
+          homeRestaurants: "Домашние Рестораны",
+          traditionalRestaurants: "Традиционные Рестораны",
+          intimateDining: "Интимные обеды в местных домах",
+          specialOrders: "Специальные заказы и индивидуальные блюда",
+          available: "доступно",
+          specialOrdersCount: "специальные заказы",
+          noHomeRestaurants: "Домашних ресторанов пока нет.",
+          specialOrdersTitle: "Специальные Заказы от Традиционных Ресторанов"
         },
-        restaurant: {
-          homeApplication: {
-            title: "Заявка на Домашний Ресторан",
-            personalInfo: "Личная Информация",
-            legalName: "Юридическое Имя",
-            phoneNumber: "Номер Телефона",
-            homeAddress: "Домашний Адрес",
-            city: "Город",
-            state: "Область",
-            postalCode: "Почтовый Индекс",
-            country: "Страна",
-            kitchenDescription: "Описание Кухни",
-            kitchenDescriptionPlaceholder: "Опишите вашу кухню, оборудование и зону приготовления",
-            diningCapacity: "Вместимость Обеденной Зоны",
-            cuisineSpecialties: "Кулинарные Специальности",
-            cuisineSpecialtiesPlaceholder: "напр., Итальянская, Мексиканская, Веганская",
-            dietaryAccommodations: "Диетические Приспособления",
-            dietaryAccommodationsPlaceholder: "напр., Безглютеновая, Кошерная, Халяль",
-            foodHandlingExperience: "Есть ли у вас опыт обращения с продуктами?",
-            yearsCookingExperience: "Лет Кулинарного Опыта",
-            liabilityInsurance: "Есть ли у вас страхование ответственности?",
-            emergencyContactName: "Имя Контакта Экстренной Связи",
-            emergencyContactPhone: "Телефон Контакта Экстренной Связи",
-            submitButton: "Подать Заявку",
-            submitting: "Подача Заявки...",
-            successMessage: "Заявка успешно подана! Мы рассмотрим её в течение 3-5 рабочих дней.",
-            errorMessage: "Не удалось подать заявку. Пожалуйста, попробуйте снова."
-          }
+        homeApplication: {
+          title: "Заявка на Домашний Ресторан",
+          personalInfo: "Личная Информация",
+          legalName: "Юридическое Имя",
+          phoneNumber: "Номер Телефона",
+          homeAddress: "Домашний Адрес",
+          city: "Город",
+          state: "Область",
+          postalCode: "Почтовый Индекс",
+          country: "Страна",
+          kitchenDescription: "Описание Кухни",
+          kitchenDescriptionPlaceholder: "Опишите вашу кухню, оборудование и зону приготовления",
+          diningCapacity: "Вместимость Обеденной Зоны",
+          cuisineSpecialties: "Кулинарные Специальности",
+          cuisineSpecialtiesPlaceholder: "напр., Итальянская, Мексиканская, Веганская",
+          dietaryAccommodations: "Диетические Приспособления",
+          dietaryAccommodationsPlaceholder: "напр., Безглютеновая, Кошерная, Халяль",
+          foodHandlingExperience: "Есть ли у вас опыт обращения с продуктами?",
+          yearsCookingExperience: "Лет Кулинарного Опыта",
+          liabilityInsurance: "Есть ли у вас страхование ответственности?",
+          emergencyContactName: "Имя Контакта Экстренной Связи",
+          emergencyContactPhone: "Телефон Контакта Экстренной Связи",
+          submitButton: "Подать Заявку",
+          submitting: "Подача Заявки...",
+          successMessage: "Заявка успешно подана! Мы рассмотрим её в течение 3-5 рабочих дней.",
+          errorMessage: "Не удалось подать заявку. Пожалуйста, попробуйте снова."
+        },
+        traditionalApplication: {
+          title: "Заявка Традиционного Ресторана",
+          restaurantName: "Название Ресторана",
+          businessLicenseNumber: "Номер Бизнес-лицензии",
+          yearsInBusiness: "Лет в Бизнесе",
+          successMessage: "Заявка ресторана успешно подана! Мы рассмотрим её в течение 5-7 рабочих дней."
         }
       },
 
@@ -1332,35 +1382,57 @@ const resources = {
           distance: "Distanza Massima",
           budget: "Preferenza di Budget",
           delivery: "Preferenza di Consegna"
+        }
+      },
+
+      restaurant: {
+        marketplace: {
+          title: "Mercato Ristoranti",
+          subtitle: "Scopri cucine casalinghe e ristoranti tradizionali che offrono esperienze culinarie uniche",
+          browseRestaurants: "Sfoglia Ristoranti",
+          becomePartner: "Diventa Partner",
+          homeRestaurants: "Ristoranti Casalinghi",
+          traditionalRestaurants: "Ristoranti Tradizionali",
+          intimateDining: "Cene intime in case locali",
+          specialOrders: "Ordini speciali e pasti personalizzati",
+          available: "disponibile",
+          specialOrdersCount: "ordini speciali",
+          noHomeRestaurants: "Nessun ristorante casalingo disponibile ancora.",
+          specialOrdersTitle: "Ordini Speciali da Ristoranti Tradizionali"
         },
-        restaurant: {
-          homeApplication: {
-            title: "Candidatura Ristorante Domestico",
-            personalInfo: "Informazioni Personali",
-            legalName: "Nome Legale",
-            phoneNumber: "Numero di Telefono",
-            homeAddress: "Indirizzo di Casa",
-            city: "Città",
-            state: "Stato",
-            postalCode: "Codice Postale",
-            country: "Paese",
-            kitchenDescription: "Descrizione della Cucina",
-            kitchenDescriptionPlaceholder: "Descrivi la tua cucina, attrezzature e spazio di cottura",
-            diningCapacity: "Capacità Sala da Pranzo",
-            cuisineSpecialties: "Specialità Culinarie",
-            cuisineSpecialtiesPlaceholder: "es., Italiana, Messicana, Vegana",
-            dietaryAccommodations: "Adattamenti Dietetici",
-            dietaryAccommodationsPlaceholder: "es., Senza glutine, Kosher, Halal",
-            foodHandlingExperience: "Hai esperienza nella manipolazione degli alimenti?",
-            yearsCookingExperience: "Anni di Esperienza Culinaria",
-            liabilityInsurance: "Hai un'assicurazione di responsabilità civile?",
-            emergencyContactName: "Nome Contatto di Emergenza",
-            emergencyContactPhone: "Telefono Contatto di Emergenza",
-            submitButton: "Invia Candidatura",
-            submitting: "Invio Candidatura...",
-            successMessage: "Candidatura inviata con successo! La esamineremo entro 3-5 giorni lavorativi.",
-            errorMessage: "Invio candidatura fallito. Riprova."
-          }
+        homeApplication: {
+          title: "Candidatura Ristorante Domestico",
+          personalInfo: "Informazioni Personali",
+          legalName: "Nome Legale",
+          phoneNumber: "Numero di Telefono",
+          homeAddress: "Indirizzo di Casa",
+          city: "Città",
+          state: "Stato",
+          postalCode: "Codice Postale",
+          country: "Paese",
+          kitchenDescription: "Descrizione della Cucina",
+          kitchenDescriptionPlaceholder: "Descrivi la tua cucina, attrezzature e spazio di cottura",
+          diningCapacity: "Capacità Sala da Pranzo",
+          cuisineSpecialties: "Specialità Culinarie",
+          cuisineSpecialtiesPlaceholder: "es., Italiana, Messicana, Vegana",
+          dietaryAccommodations: "Adattamenti Dietetici",
+          dietaryAccommodationsPlaceholder: "es., Senza glutine, Kosher, Halal",
+          foodHandlingExperience: "Hai esperienza nella manipolazione degli alimenti?",
+          yearsCookingExperience: "Anni di Esperienza Culinaria",
+          liabilityInsurance: "Hai un'assicurazione di responsabilità civile?",
+          emergencyContactName: "Nome Contatto di Emergenza",
+          emergencyContactPhone: "Telefono Contatto di Emergenza",
+          submitButton: "Invia Candidatura",
+          submitting: "Invio Candidatura...",
+          successMessage: "Candidatura inviata con successo! La esamineremo entro 3-5 giorni lavorativi.",
+          errorMessage: "Invio candidatura fallito. Riprova."
+        },
+        traditionalApplication: {
+          title: "Candidatura Ristorante Tradizionale",
+          restaurantName: "Nome Ristorante",
+          businessLicenseNumber: "Numero Licenza Commerciale",
+          yearsInBusiness: "Anni di Attività",
+          successMessage: "Candidatura ristorante inviata con successo! La esamineremo entro 5-7 giorni lavorativi."
         }
       },
 
@@ -1399,9 +1471,9 @@ const resources = {
         edit: "تعديل",
         delete: "حذف",
         search: "بحث",
-        filter: "تصفية",
+        filter: "فلترة",
         sort: "ترتيب",
-        back: "رجوع",
+        back: "عودة",
         next: "التالي",
         previous: "السابق",
         close: "إغلاق",
@@ -1429,21 +1501,21 @@ const resources = {
         loginButton: "ادخل إلى مطبخك 👨‍🍳",
         registerButton: "انضم للمجتمع",
         joinLambalia: "انضم إلى لامباليا",
-        welcomeMessage: "انضم إلى مجتمعنا من الطهاة المنزليين الذين يشاركون الوصفات الأصيلة من جميع أنحاء العالم!"
+        welcomeMessage: "انضم لمجتمعنا من الطهاة المنزليين الذين يشاركون الوصفات الأصيلة من جميع أنحاء العالم!"
       },
 
       home: {
         title: "لامباليا",
-        subtitle: "حوّل مطبخك إلى تجربة طهي عالمية",
-        welcomeMessage: "مرحباً بك في لامباليا - حيث تجد كل مطبخ ثقافي صوته",
-        description: "تواصل مع الطهاة المنزليين الشغوفين، واكتشف الوصفات الأصيلة، وحوّل مطبخك إلى تجربة طهي عالمية.",
+        subtitle: "تذوق تراث العالم",
+        welcomeMessage: "انضم لمجتمعنا من الطهاة المنزليين الذين يشاركون الوصفات الأصيلة من جميع أنحاء العالم!",
+        description: "تواصل مع الطهاة المنزليين المتحمسين، اكتشف الوصفات الأصيلة، وحول مطبخك إلى تجربة طهي عالمية.",
         features: {
           recipes: "198+ وصفة تقليدية",
           monetize: "استثمر مهاراتك في الطبخ",
           restaurant: "منصة المطعم المنزلي",
           communities: "80+ مجتمع ثقافي",
           heritageRecipes: "وصفات التراث",
-          specialtyIngredients: "مكونات خاصة"
+          specialtyIngredients: "المكونات المتخصصة"
         },
         actions: {
           browseName: "📚 تصفح القوالب",
@@ -1456,21 +1528,21 @@ const resources = {
         },
         cookingClasses: {
           title: "دروس الطبخ عبر الإنترنت",
-          description: "تعلم من أمهر الطهاة حول العالم",
+          description: "تعلم من الطهاة الخبراء حول العالم",
           learnMore: "اعرف المزيد"
         },
         recipeSnippets: {
           title: "أحدث مقاطع الوصفات",
           subtitle: "نصائح طبخ سريعة من مجتمعنا",
           viewAll: "عرض جميع المقاطع",
-          cookingTip: "نصيحة طبخ",
+          cookingTip: "نصيحة الطبخ",
           noSnippets: "لم يتم العثور على مقاطع وصفات. كن أول من يشارك مقطع وصفتك التقليدية على لامباليا!"
         },
         communityStats: {
-          title: "انضم إلى مجتمعنا الطهي العالمي",
+          title: "انضم لمجتمعنا العالمي للطبخ",
           activeChefs: "الطهاة المنزليون النشطون",
           countriesServed: "البلدان المخدومة",
-          recipesShared: "الوصفات المشتركة",
+          recipesShared: "الوصفات المشاركة",
           culturesRepresented: "الثقافات الممثلة"
         }
       },
@@ -1478,7 +1550,7 @@ const resources = {
       // Forms
       forms: {
         createSnippet: {
-          title: "إنشاء مقطع وصفة",
+          title: "إنشاء مقطع الوصفة",
           recipeTitle: "عنوان الوصفة",
           recipeTitlePlaceholder: "أدخل اسم الوصفة",
           localTitle: "العنوان المحلي",
@@ -1519,49 +1591,57 @@ const resources = {
           distance: "أقصى مسافة",
           budget: "تفضيل الميزانية",
           delivery: "تفضيل التوصيل"
+        }
+      },
+
+      restaurant: {
+        marketplace: {
+          title: "سوق المطاعم",
+          subtitle: "اكتشف المطابخ المنزلية والمطاعم التقليدية التي تقدم تجارب طبخ فريدة",
+          browseRestaurants: "تصفح المطاعم",
+          becomePartner: "كن شريكاً",
+          homeRestaurants: "المطاعم المنزلية",
+          traditionalRestaurants: "المطاعم التقليدية",
+          intimateDining: "وجبات حميمة في المنازل المحلية",
+          specialOrders: "طلبات خاصة ووجبات مخصصة",
+          available: "متاح",
+          specialOrdersCount: "طلبات خاصة",
+          noHomeRestaurants: "لا توجد مطاعم منزلية متاحة بعد.",
+          specialOrdersTitle: "الطلبات الخاصة من المطاعم التقليدية"
         },
-        restaurant: {
-          marketplace: {
-            title: "سوق المطاعم",
-            subtitle: "اكتشف المطابخ المنزلية والمطاعم التقليدية التي تقدم تجارب طبخ فريدة",
-            browseRestaurants: "تصفح المطاعم",
-            becomePartner: "كن شريكاً",
-            homeRestaurants: "المطاعم المنزلية",
-            traditionalRestaurants: "المطاعم التقليدية",
-            intimateDining: "وجبات حميمة في المنازل المحلية",
-            specialOrders: "طلبات خاصة ووجبات مخصصة",
-            available: "متاح",
-            specialOrdersCount: "طلبات خاصة",
-            noHomeRestaurants: "لا توجد مطاعم منزلية متاحة بعد.",
-            specialOrdersTitle: "الطلبات الخاصة من المطاعم التقليدية"
-          },
-          homeApplication: {
-            title: "طلب مطعم منزلي",
-            personalInfo: "المعلومات الشخصية",
-            legalName: "الاسم القانوني",
-            phoneNumber: "رقم الهاتف",
-            homeAddress: "عنوان المنزل",
-            city: "المدينة",
-            state: "الولاية",
-            postalCode: "الرمز البريدي",
-            country: "البلد",
-            kitchenDescription: "وصف المطبخ",
-            kitchenDescriptionPlaceholder: "اوصف مطبخك والمعدات ومساحة الطبخ",
-            diningCapacity: "سعة منطقة الطعام",
-            cuisineSpecialties: "التخصصات الطبخية",
-            cuisineSpecialtiesPlaceholder: "مثل، إيطالية، مكسيكية، نباتية",
-            dietaryAccommodations: "التكيفات الغذائية",
-            dietaryAccommodationsPlaceholder: "مثل، خالي من الغلوتين، كوشير، حلال",
-            foodHandlingExperience: "هل لديك خبرة في التعامل مع الطعام؟",
-            yearsCookingExperience: "سنوات الخبرة في الطبخ",
-            liabilityInsurance: "هل لديك تأمين مسؤولية؟",
-            emergencyContactName: "اسم جهة الاتصال الطارئ",
-            emergencyContactPhone: "هاتف جهة الاتصال الطارئ",
-            submitButton: "إرسال الطلب",
-            submitting: "جاري إرسال الطلب...",
-            successMessage: "تم إرسال الطلب بنجاح! سنراجعه خلال 3-5 أيام عمل.",
-            errorMessage: "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى."
-          }
+        homeApplication: {
+          title: "طلب مطعم منزلي",
+          personalInfo: "المعلومات الشخصية",
+          legalName: "الاسم القانوني",
+          phoneNumber: "رقم الهاتف",
+          homeAddress: "عنوان المنزل",
+          city: "المدينة",
+          state: "الولاية",
+          postalCode: "الرمز البريدي",
+          country: "البلد",
+          kitchenDescription: "وصف المطبخ",
+          kitchenDescriptionPlaceholder: "اوصف مطبخك والمعدات ومساحة الطبخ",
+          diningCapacity: "سعة منطقة الطعام",
+          cuisineSpecialties: "التخصصات الطبخية",
+          cuisineSpecialtiesPlaceholder: "مثل، إيطالية، مكسيكية، نباتية",
+          dietaryAccommodations: "التكيفات الغذائية",
+          dietaryAccommodationsPlaceholder: "مثل، خالي من الغلوتين، كوشير، حلال",
+          foodHandlingExperience: "هل لديك خبرة في التعامل مع الطعام؟",
+          yearsCookingExperience: "سنوات الخبرة في الطبخ",
+          liabilityInsurance: "هل لديك تأمين مسؤولية؟",
+          emergencyContactName: "اسم جهة الاتصال الطارئ",
+          emergencyContactPhone: "هاتف جهة الاتصال الطارئ",
+          submitButton: "إرسال الطلب",
+          submitting: "جاري إرسال الطلب...",
+          successMessage: "تم إرسال الطلب بنجاح! سنراجعه خلال 3-5 أيام عمل.",
+          errorMessage: "فشل في إرسال الطلب. يرجى المحاولة مرة أخرى."
+        },
+        traditionalApplication: {
+          title: "طلب مطعم تقليدي",
+          restaurantName: "اسم المطعم",
+          businessLicenseNumber: "رقم رخصة العمل",
+          yearsInBusiness: "سنوات العمل",
+          successMessage: "تم إرسال طلب المطعم بنجاح! سنراجعه خلال 5-7 أيام عمل."
         }
       },
 
@@ -1723,35 +1803,57 @@ const resources = {
           distance: "अधिकतम दूरी",
           budget: "बजट प्राथमिकता",
           delivery: "डिलीवरी प्राथमिकता"
+        }
+      },
+
+      restaurant: {
+        marketplace: {
+          title: "रेस्टोरेंट बाजार",
+          subtitle: "घरेलू रसोई और पारंपरिक रेस्टोरेंट खोजें जो अनोखे पाक अनुभव प्रदान करते हैं",
+          browseRestaurants: "रेस्टोरेंट ब्राउज़ करें",
+          becomePartner: "साझीदार बनें",
+          homeRestaurants: "होम रेस्टोरेंट",
+          traditionalRestaurants: "पारंपरिक रेस्टोरेंट",
+          intimateDining: "स्थानीय घरों में अंतरंग भोजन",
+          specialOrders: "विशेष ऑर्डर और कस्टम भोजन",
+          available: "उपलब्ध",
+          specialOrdersCount: "विशेष ऑर्डर",
+          noHomeRestaurants: "अभी तक कोई होम रेस्टोरेंट उपलब्ध नहीं।",
+          specialOrdersTitle: "पारंपरिक रेस्टोरेंट से विशेष ऑर्डर"
         },
-        restaurant: {
-          homeApplication: {
-            title: "होम रेस्टोरेंट आवेदन",
-            personalInfo: "व्यक्तिगत जानकारी",
-            legalName: "कानूनी नाम",
-            phoneNumber: "फोन नंबर",
-            homeAddress: "घर का पता",
-            city: "शहर",
-            state: "राज्य",
-            postalCode: "पिन कोड",
-            country: "देश",
-            kitchenDescription: "रसोई विवरण",
-            kitchenDescriptionPlaceholder: "अपनी रसोई, उपकरण और खाना पकाने की जगह का वर्णन करें",
-            diningCapacity: "भोजन क्षमता",
-            cuisineSpecialties: "पाक विशेषताएं",
-            cuisineSpecialtiesPlaceholder: "जैसे, इतालवी, मैक्सिकन, शाकाहारी",
-            dietaryAccommodations: "आहार अनुकूलन",
-            dietaryAccommodationsPlaceholder: "जैसे, ग्लूटेन-फ्री, कोशेर, हलाल",
-            foodHandlingExperience: "क्या आपके पास भोजन संभालने का अनुभव है?",
-            yearsCookingExperience: "खाना पकाने के अनुभव के वर्ष",
-            liabilityInsurance: "क्या आपके पास देयता बीमा है?",
-            emergencyContactName: "आपातकालीन संपर्क नाम",
-            emergencyContactPhone: "आपातकालीन संपर्क फोन",
-            submitButton: "आवेदन जमा करें",
-            submitting: "आवेदन जमा कर रहे हैं...",
-            successMessage: "आवेदन सफलतापूर्वक जमा किया गया! हम इसे 3-5 कार्य दिवसों में देखेंगे।",
-            errorMessage: "आवेदन जमा करने में विफल। कृपया पुनः प्रयास करें।"
-          }
+        homeApplication: {
+          title: "होम रेस्टोरेंट आवेदन",
+          personalInfo: "व्यक्तिगत जानकारी",
+          legalName: "कानूनी नाम",
+          phoneNumber: "फोन नंबर",
+          homeAddress: "घर का पता",
+          city: "शहर",
+          state: "राज्य",
+          postalCode: "पिन कोड",
+          country: "देश",
+          kitchenDescription: "रसोई विवरण",
+          kitchenDescriptionPlaceholder: "अपनी रसोई, उपकरण और खाना पकाने की जगह का वर्णन करें",
+          diningCapacity: "भोजन क्षमता",
+          cuisineSpecialties: "पाक विशेषताएं",
+          cuisineSpecialtiesPlaceholder: "जैसे, इतालवी, मैक्सिकन, शाकाहारी",
+          dietaryAccommodations: "आहार अनुकूलन",
+          dietaryAccommodationsPlaceholder: "जैसे, ग्लूटेन-फ्री, कोशेर, हलाल",
+          foodHandlingExperience: "क्या आपके पास भोजन संभालने का अनुभव है?",
+          yearsCookingExperience: "खाना पकाने के अनुभव के वर्ष",
+          liabilityInsurance: "क्या आपके पास देयता बीमा है?",
+          emergencyContactName: "आपातकालीन संपर्क नाम",
+          emergencyContactPhone: "आपातकालीन संपर्क फोन",
+          submitButton: "आवेदन जमा करें",
+          submitting: "आवेदन जमा कर रहे हैं...",
+          successMessage: "आवेदन सफलतापूर्वक जमा किया गया! हम इसे 3-5 कार्य दिवसों में देखेंगे।",
+          errorMessage: "आवेदन जमा करने में विफल। कृपया पुनः प्रयास करें।"
+        },
+        traditionalApplication: {
+          title: "पारंपरिक रेस्टोरेंट आवेदन",
+          restaurantName: "रेस्टोरेंट का नाम",
+          businessLicenseNumber: "व्यावसायिक लाइसेंस नंबर",
+          yearsInBusiness: "व्यवसाय के वर्ष",
+          successMessage: "रेस्टोरेंट आवेदन सफलतापूर्वक जमा किया गया! हम इसे 5-7 कार्य दिवसों में देखेंगे।"
         }
       },
 
