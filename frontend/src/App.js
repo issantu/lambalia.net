@@ -1853,7 +1853,7 @@ const HomeRestaurantPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold heading-gradient mb-4">Restaurant Marketplace</h2>
+        <h2 className="text-3xl font-bold heading-gradient mb-4">{t('restaurant.marketplace.title')}</h2>
         <p className="text-gray-600 mb-6">Discover home kitchens and traditional restaurants offering unique dining experiences</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
