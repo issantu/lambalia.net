@@ -3777,7 +3777,7 @@ const HomePage = () => {
         </div>
       ) : snippets.length === 0 ? (
         <div className="text-center py-12 glass">
-          <p className="text-gray-500 text-lg">No recipe snippets found. Be the first to share your traditional recipe snippet on Lambalia!</p>
+          <p className="text-gray-500 text-lg">{t('home.recipeSnippets.noSnippets')}</p>
         </div>
       ) : (
         <div>
