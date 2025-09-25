@@ -522,6 +522,23 @@ const resources = {
             yearsInBusiness: "Años en el Negocio",
             successMessage: "¡Solicitud de restaurante enviada exitosamente! La revisaremos en 5-7 días hábiles."
           }
+        },
+        quickeats: {
+          title: "Entrenamiento Lambalia Comida Rápida",
+          sections: {
+            introduction: "Tu Ventaja de Servicio Rápido",
+            competition: "Competencia de Comida Rápida", 
+            advantages: "Por Qué Ganas Tú",
+            efficiency: "Velocidad y Calidad",
+            offerings: "Elementos de Menú Perfectos",
+            operations: "Operaciones Sin Problemas",
+            success: "Construyendo el Éxito"
+          },
+          welcomeTitle: "¡Bienvenido, Proveedor de Comida Rápida!",
+          welcomeSubtitle: "Estás trayendo sabores auténticos caseros al mundo de la comida casual rápida. Tu misión: entregar calidad, cultura y cuidado a la velocidad que la vida moderna demanda.",
+          uniquePosition: "Tu Posición Única",
+          whatYouProvide: "Lo Que Tú Proporcionas:",
+          whatFastFoodOffers: "Lo Que Ofrece la Comida Rápida:"
         }
       },
 
