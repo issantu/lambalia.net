@@ -5093,7 +5093,7 @@ const CreateSnippetPage = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="glass p-8">
-        <h2 className="text-3xl font-bold heading-gradient mb-6">Create Recipe Snippet</h2>
+        <h2 className="text-3xl font-bold heading-gradient mb-6">{t('forms.createSnippet.title')}</h2>
         
         {/* Monetization Info */}
         <div className="bg-gradient-to-r from-green-100 to-blue-100 p-4 rounded-lg mb-6">
