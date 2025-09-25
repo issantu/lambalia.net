@@ -1186,7 +1186,7 @@ const AdComponent = ({ placement = "feed" }) => {
           <p className="text-xs text-gray-500">Sponsored by {adContent.sponsor}</p>
         </div>
         <button className="btn-secondary text-sm px-4 py-2">
-          Learn More
+          {t('home.cookingClasses.learnMore')}
         </button>
       </div>
     </div>
