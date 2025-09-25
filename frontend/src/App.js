@@ -1558,6 +1558,7 @@ const HomeRestaurantApplicationForm = () => {
 
 // Traditional Restaurant Application Form
 const TraditionalRestaurantApplicationForm = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     legal_name: '',
     phone_number: '',
