@@ -71,7 +71,7 @@ const resources = {
         description: "Connect with passionate home chefs, discover authentic recipes, and turn your kitchen into a global culinary experience.",
         features: {
           recipes: "198+ Traditional Recipes",
-          monetize: "Monetize Your Cooking",
+          monetize: "Monetize Your Cooking Skills",
           restaurant: "Home Restaurant Platform",
           communities: "80+ Cultural Communities",
           heritageRecipes: "Heritage Recipes",
