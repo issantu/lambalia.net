@@ -188,14 +188,16 @@ const LoginPage = () => {
 
       <div className="max-w-md w-full auth-form rounded-xl shadow-2xl p-8 z-10 relative">
         <div className="text-center mb-8">
-          <div className="logo-shine">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
-              alt="Lambalia - Global Heritage Recipes" 
-              className="w-40 h-40 mx-auto mb-4 drop-shadow-lg"
-            />
-          </div>
-          <h1 className="text-4xl font-bold heading-gradient">Lambalia</h1>
+          <Link to="/" className="block">
+            <div className="logo-shine">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_lambalia-recipes/artifacts/qzs71f09_2.png" 
+                alt="Lambalia - Global Heritage Recipes" 
+                className="w-40 h-40 mx-auto mb-4 drop-shadow-lg cursor-pointer hover:scale-105 transition-transform"
+              />
+            </div>
+            <h1 className="text-4xl font-bold heading-gradient hover:text-green-600 transition-colors cursor-pointer">Lambalia</h1>
+          </Link>
           <p className="text-gray-600 mt-2 font-medium">{t('home.subtitle')}</p>
           <div className="mt-4 text-sm text-gray-500">
             <p>🌍 {t('home.features.communities')} • 🥄 {t('home.features.heritageRecipes')} • 🛒 {t('home.features.specialtyIngredients')}</p>
