@@ -66,7 +66,7 @@ const resources = {
       // Home
       home: {
         title: "Lambalia",
-        subtitle: "Transform Your Kitchen Into a Global Culinary Experience",
+        subtitle: "Taste the World's Heritage",
         welcomeMessage: "Welcome to Lambalia - Where Every Culture's Cuisine Finds Its Voice",
         description: "Connect with passionate home chefs, discover authentic recipes, and turn your kitchen into a global culinary experience.",
         features: {
