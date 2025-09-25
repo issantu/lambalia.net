@@ -217,7 +217,7 @@ const LoginPage = () => {
             }`}
             onClick={() => setIsLogin(false)}
           >
-            Join Lambalia
+            {t('auth.joinLambalia')}
           </button>
         </div>
 
@@ -3948,7 +3948,7 @@ const AboutPage = () => {
           </p>
           <div className="flex justify-center space-x-4">
             <Link to="/register" className="btn-primary px-6 py-3 rounded-lg">
-              Join Lambalia
+              {t('auth.joinLambalia')}
             </Link>
             <Link to="/careers" className="btn-secondary px-6 py-3 rounded-lg">
               Work With Us
