@@ -502,6 +502,20 @@ const resources = {
           delivery: "Preferencia de Entrega"
         },
         restaurant: {
+          marketplace: {
+            title: "Mercado de Restaurantes",
+            subtitle: "Descubre cocinas caseras y restaurantes tradicionales que ofrecen experiencias culinarias únicas",
+            browseRestaurants: "Explorar Restaurantes",
+            becomePartner: "Convertirse en Socio",
+            homeRestaurants: "Restaurantes Caseros",
+            traditionalRestaurants: "Restaurantes Tradicionales",
+            intimateDining: "Comidas íntimas en hogares locales",
+            specialOrders: "Pedidos especiales y comidas personalizadas",
+            available: "disponible",
+            specialOrdersCount: "pedidos especiales",
+            noHomeRestaurants: "No hay restaurantes caseros disponibles aún.",
+            specialOrdersTitle: "Pedidos Especiales de Restaurantes Tradicionales"
+          },
           homeApplication: {
             title: "Solicitud de Restaurante Casero",
             personalInfo: "Información Personal",
