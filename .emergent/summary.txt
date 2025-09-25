@@ -1,17 +1,21 @@
 <analysis>
-The previous AI engineer effectively transitioned the Lambalia application from an unstable, partially deployed state to a significantly enhanced and functional one. Initial efforts focused on resolving critical deployment blockers: missing environment variables, backend crashes, and translation service import errors. Once stable, the engineer systematically implemented a series of major feature enhancements as requested by the user. These included integrating a missing Local Offers and Demands menu, developing a comprehensive SMS notification and tipping system, and a complete overhaul of the AI Smart Cooking tool with SuperCook-style functionality and HackTheMenu content. Critical bugs, such as a JSX error and snippet creation failure due to incorrect FastAPI router configuration, were also successfully debugged and fixed. The engineer also addressed branding removal and updated contact information. The work is currently focused on enhancing recipe snippets with image/video upload and display, demonstrating an iterative, problem-solving approach.
+The previous AI engineer effectively enhanced the Lambalia application, initially stabilizing it from deployment issues. Key achievements include implementing image/video uploads for recipe snippets, adding user profile pictures, and fixing the earnings withdrawal button. A significant focus was on achieving universal translation, systematically converting hard-coded UI text into  keys and applying them across numerous frontend components. This expanded language support to nine languages (English, Spanish, French, German, Portuguese, Russian, Italian, Arabic, Hindi). A critical bug, where translation keys (with dots) displayed instead of actual translated content, was traced to inconsistent  structure (e.g.,  keys incorrectly nested). The engineer has successfully fixed this for French and is currently addressing the same structural correction for Spanish, demonstrating a methodical approach to bug resolution.
 </analysis>
 
 <product_requirements>
-The Lambalia application, initially suffered from deployment issues including incorrect path routes, unwanted automated translations, and a missing Local Offers and Demands (LOD) menu item. The user also reported that the existing AI cooking tool was failing, had limited hackthemenu.com content, and couldn't generate AI recipes. Additionally, recipe snippet creation was broken.
+The Lambalia application needed to resolve deployment issues, address unwanted automatic translations, and add a Local Offers and Demands menu. The AI cooking tool required fixing, content expansion (SuperCook-like, HackTheMenu.com), and recipe generation capabilities. Recipe snippet creation was broken.
 
-The following enhancements were requested:
-1.  **Trust & Security**: Implement SMS notifications for user registration, account changes, and all financial transactions. These SMS alerts must include a helpdesk contact.
-2.  **Service Quality & Monetization**: Develop a post-service system to send SMS/email prompts for ratings and tip options. Tips should be deducted from the user's last payment method and allocated to the servicer. The user dashboard needs to display regular earnings and tips separately for tax purposes.
-3.  **Branding**: Remove the Emergent badge from the website for clean branding.
-4.  **Enhanced AI Smart Cooking Tool**: Fix the current failing AI tool. Incorporate SuperCook-like features for ingredient-based recipe generation and HackTheMenu.com content, ensuring full data population and correct AI recipe generation.
-5.  **Snippet Media**: Enhance recipe snippet creation to allow users to upload a picture of the finished recipe (and optionally a short video) and ensure these media files are displayed when viewing snippets.
-6.  **Contact Information**: Update the Contact Us menu with specific professional  email addresses (issantu.tembe@lambalia.net, contact@lambalia.net, support@lambalia.net, helpdesk@lambalia.net).
+The user explicitly requested and the engineer has implemented or is implementing:
+1.  **Trust & Security**: SMS notifications for user registration, account changes, and financial transactions, including a helpdesk contact.
+2.  **Service Quality & Monetization**: A post-service system for ratings and tip options, with tips allocated to the servicer and user dashboard displaying separate earnings/tips.
+3.  **Branding**: Removal of the Emergent badge and updated contact information with  professional emails.
+4.  **Enhanced AI Smart Cooking Tool**: Fixed the AI tool, incorporating ingredient-based recipe generation and HackTheMenu content.
+5.  **Snippet Media**: Enabled image/video upload for recipe snippets and their display.
+6.  **Contact Information**: Updated Contact Us with specific  email addresses.
+7.  **Profile Enhancements**: Added profile picture functionality, enabled earnings withdrawal, and displayed comprehensive public profile information (location, dietary preferences, cultural background).
+8.  **New Sections**: Added Community Outreach Agent job to Careers and a Store section.
+9.  **Bug Fix**: Fixed the Find Ingredients tool backend integration.
+10. **Universal Translation**: Expanded translation coverage beyond menus to all core content and forms across multiple languages (English, Spanish, French, German, Portuguese, Russian, Italian, Arabic, Hindi).
 </product_requirements>
 
 <key_technical_concepts>
@@ -19,47 +23,37 @@ The following enhancements were requested:
 -   **FastAPI**: Backend API framework.
 -   **MongoDB**: Persistent data storage.
 -   **i18next**: Frontend internationalization for translations.
--   **Tailwind CSS**: Utility-first CSS framework for styling.
+-   **Tailwind CSS**: Utility-first CSS framework.
 -   **Twilio (via )**: SMS notifications.
--   **Emergent LLM Key**: Utilized for AI translation and recipe generation.
--   **FastAPI Routers**: Structuring API endpoints.
+-   **Emergent LLM Key**: AI translation and recipe generation.
+-   **Pydantic**: Data validation for API models.
 </key_technical_concepts>
 
 <code_architecture>
 
-
--   ****: Contains critical environment variables (, , , , Twilio credentials, , ).
-    -   *Changes*: Created, updated with MONGO_URL, DB_NAME, EMERGENT_LLM_KEY, Twilio credentials, HELPDESK_PHONE, and HELPDESK_EMAIL.
--   ****: Stores  for frontend API calls.
+-   ****: Stores , , , Twilio credentials, , .
     -   *Changes*: Created and populated.
--   ****: The main FastAPI application, managing routes and integrating services.
-    -   *Changes*: Fixed  import; integrated SMS, tip, rating, and enhanced cooking services; enhanced registration; added snippet models and API endpoints; crucially, fixed FastAPI router order for snippet registration.
--   ****: Handles AI-powered text translation using  and .
-    -   *Changes*: Ensured correct import and initialization.
--   ****: New service for sending Twilio SMS notifications for various user actions.
-    -   *Changes*: Created, updated SMS templates to use .
--   ****: New service to manage post-service rating requests and tip processing.
-    -   *Changes*: Created.
--   ****: New service for advanced AI cooking (SuperCook & HackTheMenu functionality).
-    -   *Changes*: Created, populated with data, fixed AI recipe generation and restaurant matching logic.
--   ****: New file for API endpoints of the enhanced smart cooking tool.
-    -   *Changes*: Created.
--   ****: Defines extended Pydantic models, including  and , which were integrated into .
-    -   *Changes*: Defined snippet-related data models.
--   ****: Lists Python dependencies.
-    -   *Changes*: Added  and .
--   ****: Main HTML entry point.
-    -   *Changes*: Removed Made with Emergent badge, updated page title and meta description.
--   ****: Central React component for routing, auth, and many pages/components (Header, Footer, CreateSnippetPage, ContactPage, UserEarningsDashboard, SnippetCard).
-    -   *Changes*: Added  route and Header link; fixed registration phone mapping; enhanced  for earnings/tips; removed orphaned JSX; replaced  with ; updated Footer and ContactPage emails; currently being updated for image/video upload in  and display in .
--   ****: Frontend i18n configuration.
-    -   *Changes*: Added translation keys for Local Offers.
--   ****: New React component implementing the enhanced AI Smart Cooking Tool UI.
-    -   *Changes*: Created as a replacement for .
+-   ****: Stores .
+    -   *Changes*: Created and populated.
+-   ****: Main FastAPI application.
+    -   *Changes*: Integrated new services, fixed imports/router order, added  endpoint, integrated  endpoint.
+-   ****: Defines Pydantic models.
+    -   *Changes*: Added snippet-related models, updated  for media fields, updated  for profile photo and dietary/cultural fields.
+-   ****: Central React component for routing and core UI.
+    -   *Changes*: Integrated , added ,  updated for media upload,  updated for media display,  enhanced with profile photo upload, withdrawal button, public info display;  updated for CORE Agent job;  updated with Store link; logo/Lambalia made hyperlinks;  added to , , , , , , ; extensive hard-coded text replaced with  calls.
+-   ****: i18next configuration.
+    -   *Changes*: Expanded translation keys for comprehensive content, forms, and general UI; added French, Spanish, German, Portuguese, Russian, Italian, Arabic, and Hindi language sections; fixed structural issues where  keys were incorrectly nested under  for French and Spanish, causing translation display bugs.
+-   ****: Marketplace component.
+    -   *Changes*: Added  hook and updated key labels to use  for translation.
+-   ****: Charity program component.
+    -   *Changes*: Identified as needing translation.
+-   ****: Quick Eats Training component.
+    -   *Changes*: Added  hook and updated key labels to use  for translation.
 </code_architecture>
 
 <pending_tasks>
--   Complete the display of images and videos in all  components in the frontend.
+-   Complete translations for  (Give Back) and other minor hardcoded strings across the application.
+-   Address the structural translation issue for Portuguese, Russian, Italian, Arabic, Hindi by moving the  section to the root level in  (similar to French and Spanish fixes).
 -   Integrate actual Twilio credentials for the SMS notification system.
 -   Integrate with a live payment gateway for real tip processing.
 -   Perform comprehensive automated frontend testing.
@@ -67,11 +61,11 @@ The following enhancements were requested:
 </pending_tasks>
 
 <current_work>
-The AI engineer is actively working on enhancing the recipe snippet functionality in the frontend. This involves two primary parts:
-1.  **Snippet Creation Interface**: The  component in  has been updated to include UI elements that enable users to upload images and videos for their recipes. This includes media preview and proper handling within the form submission.
-2.  **Snippet Display**: The engineer is currently modifying the  component(s) found in . The goal is to ensure that the uploaded images and videos are correctly rendered and displayed when users view existing recipe snippets in various parts of the application, such as their profile or general listings. The trajectory concludes while the engineer is in the process of updating a  component for image display.
+The AI engineer is actively working on resolving a critical translation bug where translation keys (e.g., ) were appearing directly in the UI instead of the translated text, particularly on the Open Kitchen (restaurant) page. This dots issue was identified as a structural inconsistency in the  file: the  related translation keys for French and Spanish were incorrectly nested under a  object, while the application expected them at the root level of the language's  object.
+
+The engineer successfully fixed this for French by moving the  section from  to  and removing the redundant nested entry. Immediately before this summary, the engineer identified the *same* problem in the Spanish translation. The engineer has just added the  section to the root level of the Spanish translation object and is now poised to remove the old, incorrectly nested  section from the Spanish translation in . This is the final step to rectify the dots issue for the Spanish Open Kitchen page.
 </current_work>
 
 <optional_next_step>
-Continue updating the remaining  components in  to correctly display images and videos for recipe snippets.
+Remove the duplicate  section nested under  from the Spanish translation in .
 </optional_next_step>
