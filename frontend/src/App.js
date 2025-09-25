@@ -1318,6 +1318,7 @@ const SpecialOrderCard = ({ order }) => (
 
 // Home Restaurant Application Form
 const HomeRestaurantApplicationForm = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     legal_name: '',
     phone_number: '',
