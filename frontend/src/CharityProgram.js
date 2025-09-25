@@ -114,7 +114,7 @@ const CharityProgramPage = () => {
             </div>
             <div className="text-center mb-4">
               <p className="text-3xl font-bold text-green-600">FREE</p>
-              <p className="text-sm text-gray-600">Through Charity Work</p>
+              <p className="text-sm text-gray-600">{t('charity.tiers.communityHelper.commission')}</p>
             </div>
             <div className="space-y-2 mb-4">
               <div className="flex items-center space-x-2">
