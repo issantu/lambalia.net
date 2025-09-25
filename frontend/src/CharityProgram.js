@@ -54,9 +54,9 @@ const CharityProgramPage = () => {
   const ProgramOverview = () => (
     <div className="space-y-8">
       <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold heading-gradient mb-4">🤝 Community Food Sharing Program</h2>
+        <h2 className="text-4xl font-bold heading-gradient mb-4">{t('charity.title')}</h2>
         <p className="text-xl text-gray-600 mb-6">
-          Transform food waste into community support while earning premium membership benefits
+          {t('charity.subtitle')}
         </p>
         <div className="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg max-w-4xl mx-auto">
           <p className="text-lg text-gray-700">
