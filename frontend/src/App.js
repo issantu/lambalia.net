@@ -514,7 +514,7 @@ const Header = () => {
                 <div className="flex items-center space-x-2">
                   <Link to="/login" className="text-sm text-gray-700 hover:text-green-600 flex items-center space-x-1">
                     <Icon name="Lock" size={12} />
-                    <span>{t('auth.login')}</span>
+                    <span>Login</span>
                   </Link>
                   <Link to="/register" className="btn-primary px-3 py-1.5 rounded-md text-sm flex items-center space-x-1.5">
                     <Icon name="Profile" size={12} className="text-white" />
