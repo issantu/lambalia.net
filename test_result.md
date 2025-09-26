@@ -353,10 +353,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Grocery Search Endpoint Implementation - TESTING COMPLETED ✅"
-    - "CORE Agent Career Posting Backend Support - TESTING COMPLETED ✅"
-    - "Store Functionality Backend Support - TESTING COMPLETED ✅"
-    - "Enhanced Dietary Preferences System - NEEDS ATTENTION ⚠️"
+    - "Translation System Impact Testing - COMPLETED ✅"
+    - "Enhanced Dietary Preferences System - CRITICAL ISSUE ❌"
+    - "Reference Recipes Endpoint - NEEDS INVESTIGATION ⚠️"
+    - "Special Order Creation - VENDOR APPROVAL ISSUE ⚠️"
   stuck_tasks:
     - "Enhanced Dietary Preferences System"
   test_all: false
