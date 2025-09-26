@@ -1363,10 +1363,10 @@ const HomeRestaurantApplicationForm = () => {
       };
 
       await axios.post(`${API}/vendor/apply`, submitData);
-      alert(t('forms.restaurant.homeApplication.successMessage'));
+      alert(t('restaurant.homeApplication.successMessage'));
     } catch (error) {
       console.error('Failed to submit application:', error);
-      alert(t('forms.restaurant.homeApplication.errorMessage'));
+      alert(t('restaurant.homeApplication.errorMessage'));
     }
     setSubmitting(false);
   };
