@@ -167,6 +167,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "REVIEW REQUEST TESTING IDENTIFIED ISSUES: Enhanced dietary preferences system has validation problems in comprehensive testing scenarios. ✅ Basic dietary preferences working in existing tests ❌ Comprehensive new preferences test failed (all new prefs stored: ✗, profile data: ✗, retrieval: ✗) ❌ Mixed preferences registration failed (old prefs: ✗, new prefs: ✗, profile fields: ✗). The dietary preferences enum is implemented correctly in server.py but the registration process is not properly storing the new preferences (halal, kosher, dairy_free, nut_free, soy_free, pescatarian) in some test scenarios. This needs investigation and fixing."
+      - working: false
+        agent: "testing"
+        comment: "TRANSLATION SYSTEM IMPACT TESTING COMPLETED: Comprehensive testing of backend API endpoints after translation system updates shows mixed results (15/20 tests passed, 75% success rate). ✅ WORKING SYSTEMS: Basic API health check, user authentication (registration/login), database connectivity, translation functionality, snippet creation/retrieval, traditional restaurant applications, grocery search, user heritage contributions. ❌ FAILING SYSTEMS: Enhanced dietary preferences comprehensive testing (new preferences not storing properly), reference recipes endpoint (404 Not Found), special order creation (403 User not approved vendor), nearby stores endpoint (404 Not Found). CRITICAL FINDING: Enhanced dietary preferences system continues to fail comprehensive testing - the new dietary preferences (halal, kosher, dairy_free, nut_free, soy_free, pescatarian) are not being properly stored during user registration. Translation system updates have NOT broken existing core functionality, but the dietary preferences issue persists and needs immediate attention."
 
   - task: "Profile Data Integration with Cultural Heritage Fields"
     implemented: true
