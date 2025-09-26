@@ -55,6 +55,7 @@ const resources = {
         username: "Username",
         fullName: "Full Name",
         postalCode: "Postal Code",
+        phoneNumber: "Phone Number",
         forgotPassword: "Forgot Password?",
         rememberMe: "Remember Me",
         loginButton: "Enter Your Kitchen 👨‍🍳",
