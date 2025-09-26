@@ -832,6 +832,7 @@ const resources = {
           subtitle: "Découvrez des cuisines maison et des restaurants traditionnels offrant des expériences culinaires uniques",
           browseRestaurants: "Parcourir Restaurants",
           becomePartner: "Devenir Partenaire",
+          chooseRestaurantType: "Choisissez votre type de restaurant et commencez à gagner avec Lambalia",
           homeRestaurants: "Restaurants à Domicile",
           traditionalRestaurants: "Restaurants Traditionnels",
           intimateDining: "Repas intimes dans les foyers locaux",
