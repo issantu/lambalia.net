@@ -466,7 +466,7 @@ const Header = () => {
               <Link to="/local-offers" className="nav-link text-gray-700 hover:text-purple-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
                 <Icon name="Search" size={14} className="text-gray-600" />
                 <span className="hidden xl:inline">{t('nav.offers')}</span>
-                <span className="xl:hidden">Offers</span>
+                <span className="xl:hidden">{t('nav.offers')}</span>
               </Link>
               
               <Link to="/charity-program" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
