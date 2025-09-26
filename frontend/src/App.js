@@ -1911,8 +1911,8 @@ const HomeRestaurantPage = () => {
   const VendorApplicationTab = () => (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold heading-gradient mb-4">Become a Restaurant Partner</h2>
-        <p className="text-gray-600 mb-6">Choose your restaurant type and start earning with Lambalia</p>
+        <h2 className="text-3xl font-bold heading-gradient mb-4">{t('restaurant.marketplace.becomePartner')}</h2>
+        <p className="text-gray-600 mb-6">{t('restaurant.marketplace.chooseRestaurantType')}</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div 
