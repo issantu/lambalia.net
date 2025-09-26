@@ -191,6 +191,22 @@ const resources = {
         },
         homeApplication: {
           title: "Home Restaurant Application",
+          homeRestaurantOption: "Home Restaurant",
+          traditionalRestaurantOption: "Traditional Restaurant",
+          homeFeatures: {
+            feature1: "Host 2-8 guests in your dining room",
+            feature2: "Share authentic home-cooked meals", 
+            feature3: "Flexible scheduling",
+            feature4: "$30-80 per person"
+          },
+          traditionalFeatures: {
+            feature1: "Create special order proposals",
+            feature2: "Showcase signature dishes",
+            feature3: "Delivery & pickup options",
+            feature4: "$50-200 per person"
+          },
+          monthlyPotentialHome: "Monthly potential: $500-2000+",
+          monthlyPotentialTraditional: "Additional revenue stream",
           personalInfo: "Personal Information",
           legalName: "Legal Name",
           phoneNumber: "Phone Number",
