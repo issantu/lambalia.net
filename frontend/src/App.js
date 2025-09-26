@@ -272,7 +272,7 @@ const LoginPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.fullName')}</label>
               <input
                 type="text"
                 name="full_name"
