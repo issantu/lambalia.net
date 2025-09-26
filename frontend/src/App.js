@@ -211,7 +211,7 @@ const LoginPage = () => {
             }`}
             onClick={() => setIsLogin(true)}
           >
-            Login
+            {t('auth.login')}
           </button>
           <button
             className={`flex-1 py-3 px-4 rounded-r-lg font-medium transition-all ${
