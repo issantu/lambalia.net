@@ -1620,7 +1620,7 @@ const TraditionalRestaurantApplicationForm = () => {
         {/* Personal Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{t('forms.restaurant.homeApplication.legalName')} *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('restaurant.homeApplication.legalName')} *</label>
             <input
               type="text"
               name="legal_name"
