@@ -1373,7 +1373,7 @@ const HomeRestaurantApplicationForm = () => {
 
   return (
     <div className="glass p-8">
-      <h3 className="text-2xl font-bold heading-gradient mb-6">{t('forms.restaurant.homeApplication.title')}</h3>
+      <h3 className="text-2xl font-bold heading-gradient mb-6">{t('restaurant.homeApplication.title')}</h3>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Personal Information */}
