@@ -179,6 +179,7 @@ const resources = {
           subtitle: "Discover home kitchens and traditional restaurants offering unique culinary experiences",
           browseRestaurants: "Browse Restaurants",
           becomePartner: "Become Partner",
+          chooseRestaurantType: "Choose your restaurant type and start earning with Lambalia",
           homeRestaurants: "Home Restaurants",
           traditionalRestaurants: "Traditional Restaurants",
           intimateDining: "Intimate dining in local homes",
