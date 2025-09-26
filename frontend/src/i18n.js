@@ -860,6 +860,22 @@ const resources = {
         },
         homeApplication: {
           title: "Candidature Restaurant à Domicile",
+          homeRestaurantOption: "Restaurant à Domicile",
+          traditionalRestaurantOption: "Restaurant Traditionnel",
+          homeFeatures: {
+            feature1: "Accueillez 2-8 invités dans votre salle à manger",
+            feature2: "Partagez des repas authentiques faits maison", 
+            feature3: "Horaires flexibles",
+            feature4: "30-80€ par personne"
+          },
+          traditionalFeatures: {
+            feature1: "Créez des propositions de commandes spéciales",
+            feature2: "Présentez vos plats signature",
+            feature3: "Options de livraison et de retrait",
+            feature4: "50-200€ par personne"
+          },
+          monthlyPotentialHome: "Potentiel mensuel: 500-2000€+",
+          monthlyPotentialTraditional: "Source de revenus supplémentaire",
           personalInfo: "Informations Personnelles",
           legalName: "Nom Légal",
           phoneNumber: "Numéro de Téléphone",
