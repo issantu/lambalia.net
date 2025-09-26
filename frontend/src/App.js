@@ -1919,14 +1919,14 @@ const HomeRestaurantPage = () => {
             className={`glass p-6 cursor-pointer transition-all ${restaurantType === 'home' ? 'ring-2 ring-green-500' : ''}`}
             onClick={() => setRestaurantType('home')}
           >
-            <h3 className="text-xl font-semibold mb-3">🏠 Home Restaurant</h3>
+            <h3 className="text-xl font-semibold mb-3">🏠 {t('restaurant.homeApplication.homeRestaurantOption')}</h3>
             <ul className="text-sm space-y-2 text-left">
-              <li>• Host 2-8 guests in your dining room</li>
-              <li>• Share authentic home-cooked meals</li>
-              <li>• Flexible scheduling</li>
-              <li>• $30-80 per person</li>
+              <li>• {t('restaurant.homeApplication.homeFeatures.feature1')}</li>
+              <li>• {t('restaurant.homeApplication.homeFeatures.feature2')}</li>
+              <li>• {t('restaurant.homeApplication.homeFeatures.feature3')}</li>
+              <li>• {t('restaurant.homeApplication.homeFeatures.feature4')}</li>
             </ul>
-            <div className="mt-4 text-green-600 font-semibold">Monthly potential: $500-2000+</div>
+            <div className="mt-4 text-green-600 font-semibold">{t('restaurant.homeApplication.monthlyPotentialHome')}</div>
           </div>
 
           <div 
