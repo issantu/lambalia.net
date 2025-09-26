@@ -1390,7 +1390,7 @@ const HomeRestaurantApplicationForm = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{t('forms.restaurant.homeApplication.phoneNumber')} *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('restaurant.homeApplication.phoneNumber')} *</label>
             <input
               type="tel"
               name="phone_number"
