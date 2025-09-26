@@ -1404,7 +1404,7 @@ const HomeRestaurantApplicationForm = () => {
 
         {/* Address */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">{t('forms.restaurant.homeApplication.homeAddress')} *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t('restaurant.homeApplication.homeAddress')} *</label>
           <input
             type="text"
             name="address"
