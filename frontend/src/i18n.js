@@ -385,6 +385,7 @@ const resources = {
         username: "Nombre de Usuario",
         fullName: "Nombre Completo",
         postalCode: "Código Postal",
+        phoneNumber: "Número de Teléfono",
         forgotPassword: "¿Olvidaste tu contraseña?",
         rememberMe: "Recordarme",
         loginButton: "Entra a Tu Cocina 👨‍🍳",
