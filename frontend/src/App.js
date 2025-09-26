@@ -283,7 +283,7 @@ const LoginPage = () => {
             </div>
             <div>
                <label className="block text-xs font-medium text-gray-700 mb-1">
-               Phone Number
+               {t('forms.createSnippet.phoneNumber')}
                </label>
                <input
                type="tel"
