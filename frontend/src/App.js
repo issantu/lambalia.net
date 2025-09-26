@@ -307,7 +307,7 @@ const LoginPage = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.postalCode')}</label>
               <input
                 type="text"
                 name="postal_code"
