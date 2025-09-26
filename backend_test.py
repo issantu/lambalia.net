@@ -5333,6 +5333,45 @@ class LambaliaEnhancedAPITester:
         else:
             return self.log_test("Enhanced Dietary Preferences Comprehensive", False, "- Registration failed")
 
+    def test_mixed_dietary_preferences_comprehensive(self):
+        """Comprehensive test for mixed old and new dietary preferences"""
+        mixed_user_data = {
+            "username": f"mixed_comprehensive_{datetime.now().strftime('%H%M%S')}",
+            "email": f"mixed_comprehensive_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Mixed Comprehensive User",
+            "postal_code": "90210",
+            "preferred_language": "es",
+            "cultural_background": "Mexican",
+            "native_dishes": "Tacos, Mole, Pozole",
+            "consultation_specialties": "Mexican cuisine, Spice blending",
+            "dietary_preferences": ["vegetarian", "gluten_free", "halal", "organic", "dairy_free", "nut_free"]
+        }
+
+        success, data = self.make_request('POST', 'auth/register', mixed_user_data, 200)
+        
+        if success:
+            user_data = data.get('user', {})
+            dietary_prefs = user_data.get('dietary_preferences', [])
+            
+            # Check old preferences
+            old_prefs = ["vegetarian", "gluten_free", "organic"]
+            old_prefs_stored = all(pref in dietary_prefs for pref in old_prefs)
+            
+            # Check new preferences
+            new_prefs = ["halal", "dairy_free", "nut_free"]
+            new_prefs_stored = all(pref in dietary_prefs for pref in new_prefs)
+            
+            # Check profile fields
+            profile_fields = ['cultural_background', 'native_dishes', 'consultation_specialties', 'preferred_language']
+            profile_fields_stored = all(user_data.get(field) for field in profile_fields)
+            
+            details = f"- Old prefs: {'✓' if old_prefs_stored else '✗'}, New prefs: {'✓' if new_prefs_stored else '✗'}, Profile fields: {'✓' if profile_fields_stored else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Mixed Dietary Preferences Comprehensive", success and old_prefs_stored and new_prefs_stored and profile_fields_stored, details)
+
     def test_user_registration_with_mixed_preferences(self):
         """Test user registration with mixed dietary preferences as mentioned in review"""
         mixed_preferences_data = {
