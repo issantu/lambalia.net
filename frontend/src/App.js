@@ -1933,14 +1933,14 @@ const HomeRestaurantPage = () => {
             className={`glass p-6 cursor-pointer transition-all ${restaurantType === 'traditional' ? 'ring-2 ring-blue-500' : ''}`}
             onClick={() => setRestaurantType('traditional')}
           >
-            <h3 className="text-xl font-semibold mb-3">🍽️ Traditional Restaurant</h3>
+            <h3 className="text-xl font-semibold mb-3">🍽️ {t('restaurant.homeApplication.traditionalRestaurantOption')}</h3>
             <ul className="text-sm space-y-2 text-left">
-              <li>• Create special order proposals</li>
-              <li>• Showcase signature dishes</li>
-              <li>• Delivery & pickup options</li>
-              <li>• $50-200 per person</li>
+              <li>• {t('restaurant.homeApplication.traditionalFeatures.feature1')}</li>
+              <li>• {t('restaurant.homeApplication.traditionalFeatures.feature2')}</li>
+              <li>• {t('restaurant.homeApplication.traditionalFeatures.feature3')}</li>
+              <li>• {t('restaurant.homeApplication.traditionalFeatures.feature4')}</li>
             </ul>
-            <div className="mt-4 text-blue-600 font-semibold">Additional revenue stream</div>
+            <div className="mt-4 text-blue-600 font-semibold">{t('restaurant.homeApplication.monthlyPotentialTraditional')}</div>
           </div>
         </div>
       </div>
