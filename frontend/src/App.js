@@ -478,7 +478,7 @@ const Header = () => {
               <Link to="/lambalia-eats" className="nav-link text-gray-700 hover:text-orange-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
                 <Icon name="Utensils" size={14} className="text-gray-600" />
                 <span className="hidden xl:inline">{t('nav.eats')}</span>
-                <span className="xl:hidden">Eats</span>
+                <span className="xl:hidden">{t('nav.eats')}</span>
               </Link>
             </nav>
 
