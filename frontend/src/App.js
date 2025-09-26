@@ -1697,7 +1697,7 @@ const TraditionalRestaurantApplicationForm = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{t('forms.restaurant.homeApplication.city')} *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('restaurant.homeApplication.city')} *</label>
             <input
               type="text"
               name="city"
