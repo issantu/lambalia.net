@@ -1078,7 +1078,18 @@ const resources = {
           available: "disponible",
           inSeason: "De saison",
           addToCart: "Ajouter au Panier",
-          kmAway: "km de distance"
+          kmAway: "km de distance",
+          enterPostalCode: "Entrez votre code postal",
+          allGrowers: "Tous les Producteurs",
+          backyardGardeners: "Jardiniers Domestiques",
+          localFarms: "Fermes Locales",
+          organicGrowers: "Producteurs Biologiques", 
+          hobbyFarmers: "Fermiers Amateurs",
+          within10km: "Dans les 10km",
+          within25km: "Dans les 25km",
+          within50km: "Dans les 50km",
+          within100km: "Dans les 100km",
+          searchLocalGrowers: "🔍 Rechercher Producteurs Locaux"
         },
         charity: {
           title: "🤝 Programme de Partage Alimentaire Communautaire",
