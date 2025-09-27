@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Enhanced Local Marketplace - Farm Ecosystem & Charity Integration
+// Enhanced Local Marketplace - Farm Ecosystem & Charity Integration (v2.1)
 const LocalMarketplacePage = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'sell', 'charity', 'impact'
