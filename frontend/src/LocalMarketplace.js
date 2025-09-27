@@ -803,9 +803,9 @@ const LocalMarketplacePage = () => {
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold heading-gradient mb-4">Local Harvest Marketplace</h2>
+            <h2 className="text-3xl font-bold heading-gradient mb-4">{t('marketplace.title')}</h2>
             <p className="text-gray-600 mb-6">
-              Discover fresh, homegrown produce from your neighbors. From backyard tomatoes to small farm specialties.
+              {t('marketplace.subtitle')}
             </p>
             
             {/* Search Filters */}
