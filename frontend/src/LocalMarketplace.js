@@ -162,11 +162,9 @@ const LocalMarketplacePage = () => {
       </div>
       
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-600">
-          {product.quantity_available ? `${product.quantity_available} available` : 'In season'}
-        </span>
+        <span>{t('marketplace.browse.available', {count: product.quantity_available}) || (product.quantity_available ? `${product.quantity_available} ${t('marketplace.browse.available')}` : t('marketplace.browse.inSeason'))}</span>
         <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-          Add to Cart
+          {t('marketplace.browse.addToCart')}
         </button>
       </div>
     </div>
