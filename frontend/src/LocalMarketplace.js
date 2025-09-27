@@ -763,7 +763,7 @@ const LocalMarketplacePage = () => {
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            🛒 Browse Local
+            🛒 {t('marketplace.tabs.browse')}
           </button>
           <button
             onClick={() => setActiveTab('sell')}
@@ -773,7 +773,7 @@ const LocalMarketplacePage = () => {
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            🌱 Sell Produce
+            🌱 {t('marketplace.tabs.sell')}
           </button>
           <button
             onClick={() => setActiveTab('charity')}
@@ -783,7 +783,7 @@ const LocalMarketplacePage = () => {
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            🤝 Give Back
+            🤝 {t('marketplace.tabs.charity')}
           </button>
           <button
             onClick={() => setActiveTab('impact')}
@@ -793,7 +793,7 @@ const LocalMarketplacePage = () => {
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            🌍 Our Impact
+            🌍 {t('marketplace.tabs.impact')}
           </button>
         </div>
       </div>
