@@ -985,6 +985,54 @@ const resources = {
         }
       },
 
+      // Local Marketplace
+      marketplace: {
+        title: "🌱🛒 Marché Agricole Local",
+        subtitle: "Connectez-vous avec les fermes locales et les producteurs alimentaires durables",
+        tabs: {
+          browse: "Parcourir Produits",
+          sell: "Vendre Produits", 
+          charity: "Tableau de Charité",
+          impact: "Impact Communautaire"
+        },
+        browse: {
+          title: "Produits de Fermes Locales",
+          filters: "Filtres",
+          vendorType: "Type de Vendeur",
+          certifications: "Certifications",
+          maxDistance: "Distance Maximale",
+          seasonalProducts: "Produits de Saison",
+          localFarms: "Fermes Locales",
+          noFarms: "Aucune ferme locale trouvée dans votre région",
+          noProducts: "Aucun produit disponible",
+          available: "disponible",
+          inSeason: "De saison",
+          addToCart: "Ajouter au Panier",
+          kmAway: "km de distance"
+        },
+        charity: {
+          title: "🤝 Programme de Partage Alimentaire Communautaire",
+          subtitle: "Transformez le gaspillage alimentaire en soutien communautaire",
+          free: "GRATUIT",
+          premiumMembership: "Adhésion Premium",
+          howItWorks: "💡 Comment Ça Marche",
+          step1: "Cultivez des tomates, poivrons, herbes en excès dans votre jardin",
+          step2: "Donnez les surplus aux banques alimentaires locales au lieu de les jeter",
+          step3: "Soumettez une vérification (photos, reçus de don)",
+          step4: "Gagnez une adhésion premium + taux de commission réduits",
+          commissionRate: "Taux de Commission",
+          monthlyVolunteering: "Bénévolat Mensuel",
+          foodDonation: "Don Alimentaire",
+          required: "Requis",
+          monthlyMinimum: "Minimum mensuel",
+          savings: "économies",
+          enrolled: "✅ Vous êtes Inscrit!",
+          thisMonthImpact: "Impact de ce Mois:",
+          communityRank: "Rang Communautaire:",
+          joinProgram: "Rejoindre le Programme Communautaire 🌱"
+        }
+      },
+
       charity: {
         title: "🤝❤️ Donner en Retour - Programme d'Impact Communautaire",
         subtitle: "Transformez votre cuisine en soutien communautaire et gagnez des avantages premium",
