@@ -2866,11 +2866,11 @@ const ProfilePage = () => {
             {user.bio && <p className="text-gray-700 mt-2">{user.bio}</p>}
             
             <div className="flex items-center space-x-6 mt-4 text-sm text-gray-600">
-              <span><strong>{user.recipes_count || 0}</strong> Recipes</span>
-              <span><strong>{user.snippets_count || 0}</strong> Snippets</span>
-              <span><strong>{user.followers_count}</strong> Followers</span>
-              <span><strong>{user.following_count}</strong> Following</span>
-              <span><strong className="text-green-600">${user.credits || 0}</strong> Credits</span>
+              <span><strong>{user.recipes_count || 0}</strong> {t('profile.recipes')}</span>
+              <span><strong>{user.snippets_count || 0}</strong> {t('profile.snippets')}</span>
+              <span><strong>{user.followers_count}</strong> {t('profile.followers')}</span>
+              <span><strong>{user.following_count}</strong> {t('profile.following')}</span>
+              <span><strong className="text-green-600">${user.credits || 0}</strong> {t('profile.credits')}</span>
             </div>
           </div>
 
