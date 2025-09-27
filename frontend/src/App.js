@@ -2888,10 +2888,10 @@ const ProfilePage = () => {
       <div className="bg-white rounded-lg shadow-lg mb-8">
         <div className="flex flex-wrap justify-center border-b">
           {[
-            { id: 'overview', title: 'Overview', icon: 'Profile' },
-            { id: 'vendor-hub', title: 'Become a Vendor', icon: 'Restaurant' },
-            { id: 'snippets', title: 'My Snippets', icon: 'Recipe' },
-            { id: 'earnings', title: 'Earnings', icon: 'Dollar' }
+            { id: 'overview', title: t('profile.overview'), icon: 'Profile' },
+            { id: 'vendor-hub', title: t('profile.becomeVendor'), icon: 'Restaurant' },
+            { id: 'snippets', title: t('profile.mySnippets'), icon: 'Recipe' },
+            { id: 'earnings', title: t('profile.earnings'), icon: 'Dollar' }
           ].map((tab) => (
             <button
               key={tab.id}
