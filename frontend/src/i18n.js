@@ -20,6 +20,23 @@ const resources = {
         profile: "Profile"
       },
       
+      // Browse Templates
+      browseTemplates: {
+        title: "Traditional Recipe Templates",
+        subtitle: "Choose from {count} countries with hundreds of authentic recipes",
+        searchPlaceholder: "Search recipes or ingredients...",
+        allCountries: "All Countries (80+)",
+        keyIngredients: "Key Ingredients:",
+        culturalNote: "Cultural Note:",
+        featured: "Featured",
+        useTemplate: "Use This Template",
+        difficulty: "Difficulty",
+        estimatedTime: "Estimated Time",
+        servingSize: "Serving Size",
+        recipes: "recipes",
+        moreIngredients: "more"
+      },
+
       // Common
       common: {
         loading: "Loading...",
