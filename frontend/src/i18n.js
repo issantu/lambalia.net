@@ -458,7 +458,13 @@ const resources = {
         specialties: "Specialties",
         languages: "Languages",
         about: "About Me",
-        contactInfo: "Contact Information"
+        contactInfo: "Contact Information",
+        currentEarnings: "Current Earnings",
+        totalTips: "Total Tips",
+        withdrawalHistory: "Withdrawal History",
+        accountSettings: "Account Settings",
+        notificationSettings: "Notification Settings",
+        privacySettings: "Privacy Settings"
       },
 
       // Footer
