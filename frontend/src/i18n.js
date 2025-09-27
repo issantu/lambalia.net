@@ -391,24 +391,49 @@ const resources = {
 
       // Local Marketplace
       marketplace: {
-        title: "🌱🛒 Local Farm Marketplace",
-        subtitle: "Connect with local farms and sustainable food producers",
+        title: "🌱🛒 Mercado Local de Granjas",
+        subtitle: "Conéctate con granjas locales y productores de alimentos sostenibles",
         tabs: {
-          browse: "Browse Products",
-          sell: "Sell Products", 
-          charity: "Charity Dashboard",
-          impact: "Community Impact"
+          browse: "Explorar Productos",
+          sell: "Vender Productos", 
+          charity: "Panel de Caridad",
+          impact: "Impacto Comunitario"
         },
         browse: {
-          title: "Local Farm Products",
-          filters: "Filters",
-          vendorType: "Vendor Type",
-          certifications: "Certifications",
-          maxDistance: "Maximum Distance",
-          seasonalProducts: "Seasonal Products",
-          localFarms: "Local Farms",
-          noFarms: "No local farms found in your area",
-          noProducts: "No products available"
+          title: "Productos de Granjas Locales",
+          filters: "Filtros",
+          vendorType: "Tipo de Vendedor",
+          certifications: "Certificaciones",
+          maxDistance: "Distancia Máxima",
+          seasonalProducts: "Productos de Temporada",
+          localFarms: "Granjas Locales",
+          noFarms: "No se encontraron granjas locales en tu área",
+          noProducts: "No hay productos disponibles",
+          available: "disponible",
+          inSeason: "En temporada",
+          addToCart: "Añadir al Carrito",
+          kmAway: "km de distancia"
+        },
+        charity: {
+          title: "🤝 Programa de Intercambio de Alimentos Comunitarios",
+          subtitle: "Transforma el desperdicio de alimentos en apoyo comunitario",
+          free: "GRATIS",
+          premiumMembership: "Membresía Premium",
+          howItWorks: "💡 Cómo Funciona",
+          step1: "Cultiva tomates, pimientos, hierbas en exceso en tu patio trasero",
+          step2: "Dona el excedente a bancos de alimentos locales en lugar de tirarlo",
+          step3: "Envía verificación (fotos, recibos de donación)",
+          step4: "Gana membresía premium + tasas de comisión reducidas",
+          commissionRate: "Tasa de Comisión",
+          monthlyVolunteering: "Voluntariado Mensual",
+          foodDonation: "Donación de Alimentos",
+          required: "Requerido",
+          monthlyMinimum: "Mínimo mensual",
+          savings: "ahorro",
+          enrolled: "✅ ¡Estás Inscrito!",
+          thisMonthImpact: "Impacto de Este Mes:",
+          communityRank: "Rango Comunitario:",
+          joinProgram: "Unirse al Programa Comunitario 🌱"
         }
       },
 
