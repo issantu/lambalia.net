@@ -150,7 +150,7 @@ const LocalMarketplacePage = () => {
       </div>
       
       <div className="flex items-center text-xs text-gray-500 mb-2">
-        <span>{product.distance_km}km away</span>
+        <span>{product.distance_km}{t('marketplace.browse.kmAway')}</span>
         <span className="mx-2">•</span>
         <span>{product.growing_method}</span>
         {product.certifications.length > 0 && (
