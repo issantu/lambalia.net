@@ -2626,6 +2626,7 @@ const VendorApplicationModal = ({ type, onClose }) => {
 // Enhanced Profile Page with Monetization Features and Vendor Conversion Hub
 const ProfilePage = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [userSnippets, setUserSnippets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeProfileTab, setActiveProfileTab] = useState('overview');
