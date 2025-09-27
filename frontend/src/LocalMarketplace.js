@@ -174,12 +174,12 @@ const LocalMarketplacePage = () => {
     <div className="glass p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-xl font-bold text-gray-800">🤝 Community Food Sharing Program</h3>
-          <p className="text-gray-600">Transform food waste into community support</p>
+          <h3 className="text-xl font-bold text-gray-800">{t('marketplace.charity.title')}</h3>
+          <p className="text-gray-600">{t('marketplace.charity.subtitle')}</p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-green-600">FREE</p>
-          <p className="text-sm text-gray-500">Premium Membership</p>
+          <p className="text-2xl font-bold text-green-600">{t('marketplace.charity.free')}</p>
+          <p className="text-sm text-gray-500">{t('marketplace.charity.premiumMembership')}</p>
         </div>
       </div>
 
