@@ -813,7 +813,7 @@ const LocalMarketplacePage = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <input
                   type="text"
-                  placeholder="Enter postal code"
+                  placeholder={t('marketplace.browse.enterPostalCode')}
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -823,28 +823,28 @@ const LocalMarketplacePage = () => {
                   onChange={(e) => setFilters({...filters, vendor_type: e.target.value})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
-                  <option value="">All Growers</option>
-                  <option value="backyard_gardener">Backyard Gardeners</option>
-                  <option value="local_farm">Local Farms</option>
-                  <option value="organic_grower">Organic Growers</option>
-                  <option value="hobby_farmer">Hobby Farmers</option>
+                  <option value="">{t('marketplace.browse.allGrowers')}</option>
+                  <option value="backyard_gardener">{t('marketplace.browse.backyardGardeners')}</option>
+                  <option value="local_farm">{t('marketplace.browse.localFarms')}</option>
+                  <option value="organic_grower">{t('marketplace.browse.organicGrowers')}</option>
+                  <option value="hobby_farmer">{t('marketplace.browse.hobbyFarmers')}</option>
                 </select>
                 <select
                   value={filters.max_distance}
                   onChange={(e) => setFilters({...filters, max_distance: parseInt(e.target.value)})}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
-                  <option value={10}>Within 10km</option>
-                  <option value={25}>Within 25km</option>
-                  <option value={50}>Within 50km</option>
-                  <option value={100}>Within 100km</option>
+                  <option value={10}>{t('marketplace.browse.within10km')}</option>
+                  <option value={25}>{t('marketplace.browse.within25km')}</option>
+                  <option value={50}>{t('marketplace.browse.within50km')}</option>
+                  <option value={100}>{t('marketplace.browse.within100km')}</option>
                 </select>
               </div>
               <button
                 onClick={fetchLocalFarms}
                 className="btn-primary px-6 py-2 rounded-lg"
               >
-                🔍 Search Local Growers
+                {t('marketplace.browse.searchLocalGrowers')}
               </button>
             </div>
           </div>
