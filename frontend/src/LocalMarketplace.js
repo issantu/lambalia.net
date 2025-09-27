@@ -208,18 +208,18 @@ const LocalMarketplacePage = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div className="text-center p-3 bg-white rounded-lg">
           <p className="text-2xl font-bold text-green-600">14%</p>
-          <p className="text-sm text-gray-600">Commission Rate</p>
-          <p className="text-xs text-gray-500">(1% savings)</p>
+          <p className="text-sm text-gray-600">{t('marketplace.charity.commissionRate')}</p>
+          <p className="text-xs text-gray-500">(1% {t('marketplace.charity.savings')})</p>
         </div>
         <div className="text-center p-3 bg-white rounded-lg">
           <p className="text-2xl font-bold text-blue-600">4hrs</p>
-          <p className="text-sm text-gray-600">Monthly Volunteering</p>
-          <p className="text-xs text-gray-500">Required</p>
+          <p className="text-sm text-gray-600">{t('marketplace.charity.monthlyVolunteering')}</p>
+          <p className="text-xs text-gray-500">{t('marketplace.charity.required')}</p>
         </div>
         <div className="text-center p-3 bg-white rounded-lg">
           <p className="text-2xl font-bold text-purple-600">5lbs</p>
-          <p className="text-sm text-gray-600">Food Donation</p>
-          <p className="text-xs text-gray-500">Monthly minimum</p>
+          <p className="text-sm text-gray-600">{t('marketplace.charity.foodDonation')}</p>
+          <p className="text-xs text-gray-500">{t('marketplace.charity.monthlyMinimum')}</p>
         </div>
       </div>
 
