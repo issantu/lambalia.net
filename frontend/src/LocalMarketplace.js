@@ -184,23 +184,23 @@ const LocalMarketplacePage = () => {
       </div>
 
       <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg mb-4">
-        <h4 className="font-semibold text-gray-800 mb-2">💡 How It Works</h4>
+        <h4 className="font-semibold text-gray-800 mb-2">{t('marketplace.charity.howItWorks')}</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           <div className="flex items-start space-x-2">
             <span className="text-green-600">1.</span>
-            <span>Grow excess tomatoes, peppers, herbs in your backyard</span>
+            <span>{t('marketplace.charity.step1')}</span>
           </div>
           <div className="flex items-start space-x-2">
             <span className="text-green-600">2.</span>
-            <span>Donate surplus to local food banks instead of throwing away</span>
+            <span>{t('marketplace.charity.step2')}</span>
           </div>
           <div className="flex items-start space-x-2">
             <span className="text-green-600">3.</span>
-            <span>Submit verification (photos, donation receipts)</span>
+            <span>{t('marketplace.charity.step3')}</span>
           </div>
           <div className="flex items-start space-x-2">
             <span className="text-green-600">4.</span>
-            <span>Earn premium membership + reduced commission rates</span>
+            <span>{t('marketplace.charity.step4')}</span>
           </div>
         </div>
       </div>
