@@ -798,6 +798,23 @@ const resources = {
         offers: "Offres Locales",
         profile: "Profil"
       },
+
+      // Browse Templates
+      browseTemplates: {
+        title: "Modèles de Recettes Traditionnelles",
+        subtitle: "Choisissez parmi {count} pays avec des centaines de recettes authentiques",
+        searchPlaceholder: "Rechercher recettes ou ingrédients...",
+        allCountries: "Tous les Pays (80+)",
+        keyIngredients: "Ingrédients Clés:",
+        culturalNote: "Note Culturelle:",
+        featured: "En Vedette",
+        useTemplate: "Utiliser ce Modèle",
+        difficulty: "Difficulté",
+        estimatedTime: "Temps Estimé",
+        servingSize: "Taille de Portion",
+        recipes: "recettes",
+        moreIngredients: "de plus"
+      },
       
       common: {
         loading: "Chargement...",
