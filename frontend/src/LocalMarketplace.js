@@ -242,7 +242,7 @@ const LocalMarketplacePage = () => {
           onClick={() => handleRegisterCharity()}
           className="w-full btn-primary py-3 rounded-lg text-lg font-medium"
         >
-          Join Community Program 🌱
+          {t('marketplace.charity.joinProgram')}
         </button>
       )}
     </div>
