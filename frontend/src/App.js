@@ -2876,7 +2876,7 @@ const ProfilePage = () => {
 
           {/* Communication Tools in Profile */}
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-2">Connect with me:</p>
+            <p className="text-sm text-gray-600 mb-2">{t('profile.connectWithMe')}</p>
             <CommunicationTools 
               recipientId={user.id} 
               recipientName={user.username}
