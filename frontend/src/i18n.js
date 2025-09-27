@@ -412,7 +412,18 @@ const resources = {
           available: "available",
           inSeason: "In season",
           addToCart: "Add to Cart",
-          kmAway: "km away"
+          kmAway: "km away",
+          enterPostalCode: "Enter postal code",
+          allGrowers: "All Growers",
+          backyardGardeners: "Backyard Gardeners",
+          localFarms: "Local Farms",
+          organicGrowers: "Organic Growers",
+          hobbyFarmers: "Hobby Farmers",
+          within10km: "Within 10km",
+          within25km: "Within 25km", 
+          within50km: "Within 50km",
+          within100km: "Within 100km",
+          searchLocalGrowers: "🔍 Search Local Growers"
         },
         charity: {
           title: "🤝 Community Food Sharing Program",
