@@ -3350,8 +3350,8 @@ const RecipeTemplatesPage = () => {
         
         <div className="flex justify-between items-center">
           <div className="text-sm text-gray-500">
-            <span className="capitalize">{recipe.country_id.replace('_', ' ')}</span>
-            {recipe.is_featured && (
+            <span className="capitalize">{recipe?.country_id ? recipe.country_id.replace('_', ' ') : 'Unknown'}</span>
+            {recipe?.is_featured && (
               <span className="ml-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
                 Featured
               </span>
