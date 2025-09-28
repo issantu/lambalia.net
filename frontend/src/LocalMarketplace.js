@@ -803,7 +803,9 @@ const LocalMarketplacePage = () => {
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold heading-gradient mb-4">{t('marketplace.title')}</h2>
+            <h2 className="text-3xl font-bold heading-gradient mb-4">
+              {t('marketplace.title')} DEBUG-2024
+            </h2>
             <p className="text-gray-600 mb-6">
               {t('marketplace.subtitle')}
             </p>
