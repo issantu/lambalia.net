@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Enhanced Local Marketplace - Farm Ecosystem & Charity Integration
+// Enhanced Local Marketplace - Farm Ecosystem & Charity Integration  
 const LocalMarketplacePage = () => {
   const { t, i18n } = useTranslation();
   
-  // Force English as default if no language is explicitly selected
+  // Debug language detection
   useEffect(() => {
-    if (!localStorage.getItem('i18nextLng') || localStorage.getItem('i18nextLng') === 'es') {
-      i18n.changeLanguage('en');
-    }
+    console.log('Current language:', i18n.language);
+    console.log('Detected languages:', i18n.languages);
+    console.log('localStorage language:', localStorage.getItem('i18nextLng'));
   }, [i18n]);
   
   const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'sell', 'charity', 'impact'
