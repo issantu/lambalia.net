@@ -5,14 +5,9 @@ import { useTranslation } from 'react-i18next';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Enhanced Local Marketplace - Farm Ecosystem & Charity Integration (v2.1)
+// Enhanced Local Marketplace - Farm Ecosystem & Charity Integration
 const LocalMarketplacePage = () => {
   const { t } = useTranslation();
-  
-  // Debug: Check what translation is being loaded
-  console.log('Marketplace title translation:', t('marketplace.title'));
-  console.log('Current language:', t('nav.marketplace'));
-  
   const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'sell', 'charity', 'impact'
   const [localFarms, setLocalFarms] = useState([]);
   const [farmProducts, setFarmProducts] = useState([]);
