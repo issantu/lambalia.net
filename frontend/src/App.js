@@ -3243,10 +3243,20 @@ const RecipeTemplatesPage = () => {
         axios.get(`${API}/countries`),
         axios.get(`${API}/native-recipes`)
       ]);
-      setCountries(countriesResponse.data);
-      setNativeRecipes(nativeResponse.data.native_recipes);
+      
+      // Handle countries data
+      const countriesData = Array.isArray(countriesResponse.data) ? countriesResponse.data : countriesResponse.data.countries || [];
+      setCountries(countriesData);
+      
+      // Handle native recipes data
+      const nativeData = nativeResponse.data.recipes || nativeResponse.data.native_recipes || {};
+      setNativeRecipes(nativeData);
+      
     } catch (error) {
       console.error('Failed to fetch initial data:', error);
+      // Set defaults to prevent crashes
+      setCountries([]);
+      setNativeRecipes({});
     }
   };
 
