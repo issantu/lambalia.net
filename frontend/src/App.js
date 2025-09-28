@@ -3263,19 +3263,32 @@ const RecipeTemplatesPage = () => {
   const fetchReferenceRecipes = async () => {
     setLoading(true);
     try {
-      let url = `${API}/reference-recipes?featured_only=true&limit=50`;
+      let url = `${API}/reference-recipes`;
       
       if (searchQuery) {
-        url = `${API}/reference-recipes/search?q=${encodeURIComponent(searchQuery)}&limit=30`;
-      } else {
-        if (selectedCountry) url += `&country_id=${selectedCountry}`;
+        url = `${API}/recipes/search?query=${encodeURIComponent(searchQuery)}&limit=30`;
+        if (selectedCountry) url += `&country=${selectedCountry}`;
         if (selectedCategory) url += `&category=${selectedCategory}`;
       }
       
       const response = await axios.get(url);
-      setReferenceRecipes(response.data);
+      
+      // Handle different response structures
+      let recipesData = [];
+      if (response.data.results) {
+        recipesData = response.data.results;
+      } else if (response.data.recipes) {
+        recipesData = Array.isArray(response.data.recipes) ? response.data.recipes : [];
+      } else if (response.data.featured_recipes) {
+        recipesData = response.data.featured_recipes;
+      } else if (Array.isArray(response.data)) {
+        recipesData = response.data;
+      }
+      
+      setReferenceRecipes(recipesData);
     } catch (error) {
       console.error('Failed to fetch reference recipes:', error);
+      setReferenceRecipes([]); // Prevent crashes
     }
     setLoading(false);
   };
