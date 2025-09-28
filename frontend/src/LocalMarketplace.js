@@ -7,7 +7,15 @@ const API = `${BACKEND_URL}/api`;
 
 // Enhanced Local Marketplace - Farm Ecosystem & Charity Integration
 const LocalMarketplacePage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  
+  // Force English as default if no language is explicitly selected
+  useEffect(() => {
+    if (!localStorage.getItem('i18nextLng') || localStorage.getItem('i18nextLng') === 'es') {
+      i18n.changeLanguage('en');
+    }
+  }, [i18n]);
+  
   const [activeTab, setActiveTab] = useState('browse'); // 'browse', 'sell', 'charity', 'impact'
   const [localFarms, setLocalFarms] = useState([]);
   const [farmProducts, setFarmProducts] = useState([]);
