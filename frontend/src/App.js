@@ -3298,11 +3298,11 @@ const RecipeTemplatesPage = () => {
       <div className="p-6">
         <div className="flex items-start justify-between mb-3">
           <div>
-            <h3 className="text-xl font-semibold text-gray-800">{recipe.name_english}</h3>
-            {recipe.name_local !== recipe.name_english && (
+            <h3 className="text-xl font-semibold text-gray-800">{recipe?.name_english || recipe?.name || 'Unnamed Recipe'}</h3>
+            {recipe?.name_local && recipe.name_local !== recipe.name_english && (
               <p className="text-lg text-green-600 font-medium">{recipe.name_local}</p>
             )}
-            {recipe.local_language && recipe.local_language !== 'English' && (
+            {recipe?.local_language && recipe.local_language !== 'English' && (
               <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1">
                 {recipe.local_language}
               </span>
@@ -3310,41 +3310,41 @@ const RecipeTemplatesPage = () => {
           </div>
           <div className="flex flex-col items-end space-y-1">
             <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full capitalize">
-              {recipe.category}
+              {recipe?.category || 'Traditional'}
             </span>
             <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
-              {recipe.popularity_score}/100
+              {recipe?.popularity_score || 85}/100
             </span>
           </div>
         </div>
         
-        <p className="text-gray-600 mb-3 line-clamp-3">{recipe.description}</p>
+        <p className="text-gray-600 mb-3 line-clamp-3">{recipe?.description || 'Traditional heritage recipe'}</p>
         
         <div className="flex items-center text-sm text-gray-500 mb-3">
-          <span>⭐ {'★'.repeat(recipe.difficulty_level)}</span>
+          <span>⭐ {'★'.repeat(recipe?.difficulty_level || 3)}</span>
           <span className="mx-2">•</span>
-          <span>🕒 {recipe.estimated_time} min</span>
+          <span>🕒 {recipe?.estimated_time || 60} min</span>
           <span className="mx-2">•</span>
-          <span>🍽️ {recipe.serving_size}</span>
+          <span>🍽️ {recipe?.serving_size || '4-6 servings'}</span>
         </div>
         
         <div className="mb-3">
           <h4 className="font-medium text-gray-800 mb-2">Key Ingredients:</h4>
           <div className="flex flex-wrap gap-1">
-            {recipe.key_ingredients.slice(0, 4).map((ingredient, index) => (
+            {(recipe?.key_ingredients || []).slice(0, 4).map((ingredient, index) => (
               <span key={index} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
                 {ingredient}
               </span>
             ))}
-            {recipe.key_ingredients.length > 4 && (
-              <span className="text-gray-400 text-xs">+{recipe.key_ingredients.length - 4} more</span>
+            {(recipe?.key_ingredients?.length || 0) > 4 && (
+              <span className="text-gray-400 text-xs">+{(recipe?.key_ingredients?.length || 0) - 4} more</span>
             )}
           </div>
         </div>
         
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
           <p className="text-sm text-yellow-800">
-            <strong>Cultural Note:</strong> {recipe.cultural_significance}
+            <strong>Cultural Note:</strong> {recipe?.cultural_significance || 'Traditional heritage dish with cultural importance'}
           </p>
         </div>
         
