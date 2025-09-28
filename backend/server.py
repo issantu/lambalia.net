@@ -5986,6 +5986,62 @@ async def search_grocery_stores(
 # APP INITIALIZATION AND ROUTERS
 # ========================================
 
+@api_router.get("/native-recipes")
+async def get_native_recipes():
+    """Get native recipes by country for browse templates page"""
+    try:
+        # Get native recipes data from the imported module
+        native_recipes = get_native_recipes_json()
+        return {
+            "success": True,
+            "recipes": native_recipes,
+            "countries": list(native_recipes.keys()) if native_recipes else [],
+            "total_count": sum(len(recipes) for recipes in native_recipes.values()) if native_recipes else 0
+        }
+    except Exception as e:
+        logger.error(f"Failed to fetch native recipes: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch native recipes: {str(e)}")
+
+@api_router.get("/reference-recipes") 
+async def get_reference_recipes():
+    """Get comprehensive reference recipes for browse templates page"""
+    try:
+        # Get featured recipes and comprehensive recipe database
+        featured_recipes = get_featured_recipes()
+        all_countries = get_all_countries_with_recipes()
+        
+        return {
+            "success": True,
+            "featured_recipes": featured_recipes,
+            "countries": all_countries,
+            "recipes": COMPREHENSIVE_REFERENCE_RECIPES,
+            "total_count": len(COMPREHENSIVE_REFERENCE_RECIPES)
+        }
+    except Exception as e:
+        logger.error(f"Failed to fetch reference recipes: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch reference recipes: {str(e)}")
+
+@api_router.get("/recipes/search")
+async def search_recipes_endpoint(
+    query: str = "",
+    country: str = "",
+    category: str = "",
+    limit: int = 20
+):
+    """Search recipes with filters"""
+    try:
+        results = search_recipes(query=query, country=country, category=category, limit=limit)
+        return {
+            "success": True,
+            "results": results,
+            "query": query,
+            "filters": {"country": country, "category": category},
+            "count": len(results)
+        }
+    except Exception as e:
+        logger.error(f"Failed to search recipes: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to search recipes: {str(e)}")
+
 # Include main API router (must be after all route definitions)
 app.include_router(api_router, prefix="/api")
 
