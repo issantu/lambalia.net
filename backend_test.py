@@ -921,6 +921,387 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("Grocery Search", success, details)
 
+    # REAL GROCERY API INTEGRATION TESTS - OPEN FOOD FACTS
+
+    def test_grocery_search_common_ingredients(self):
+        """Test grocery search with common ingredients"""
+        if not self.token:
+            return self.log_test("Grocery Search - Common Ingredients", False, "- No auth token available")
+
+        search_data = {
+            "ingredients": ["tomatoes", "pasta", "cheese"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0,
+            "budget_preference": "medium",
+            "delivery_preference": "either"
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            stores = data.get('stores', [])
+            ingredient_availability = data.get('ingredient_availability', {})
+            delivery_options = data.get('delivery_options', [])
+            
+            # Validate response structure
+            has_stores = len(stores) > 0
+            has_ingredients = len(ingredient_availability) > 0
+            has_delivery = len(delivery_options) > 0
+            
+            # Check for real product data
+            real_data_indicators = []
+            for ingredient, products in ingredient_availability.items():
+                for product in products:
+                    if product.get('product_name') and product.get('barcode'):
+                        real_data_indicators.append(True)
+                        break
+            
+            has_real_data = len(real_data_indicators) > 0
+            
+            details = f"- Stores: {len(stores)}, Ingredients: {len(ingredient_availability)}, Delivery: {len(delivery_options)}, Real data: {'✓' if has_real_data else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Grocery Search - Common Ingredients", success, details)
+
+    def test_grocery_search_international_ingredients(self):
+        """Test grocery search with international ingredients"""
+        if not self.token:
+            return self.log_test("Grocery Search - International Ingredients", False, "- No auth token available")
+
+        search_data = {
+            "ingredients": ["soy sauce", "coconut milk", "garam masala"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0,
+            "budget_preference": "medium",
+            "delivery_preference": "either"
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            stores = data.get('stores', [])
+            ingredient_availability = data.get('ingredient_availability', {})
+            
+            # Check if international ingredients are found
+            international_found = 0
+            for ingredient in ["soy sauce", "coconut milk", "garam masala"]:
+                if ingredient in ingredient_availability and len(ingredient_availability[ingredient]) > 0:
+                    international_found += 1
+            
+            # Validate pricing is reasonable
+            reasonable_pricing = True
+            for ingredient, products in ingredient_availability.items():
+                for product in products:
+                    price = product.get('price', 0)
+                    if price <= 0 or price > 50:  # Unreasonable price range
+                        reasonable_pricing = False
+                        break
+            
+            details = f"- Stores: {len(stores)}, Intl ingredients found: {international_found}/3, Reasonable pricing: {'✓' if reasonable_pricing else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Grocery Search - International Ingredients", success, details)
+
+    def test_grocery_search_single_ingredient(self):
+        """Test grocery search with single ingredient"""
+        if not self.token:
+            return self.log_test("Grocery Search - Single Ingredient", False, "- No auth token available")
+
+        search_data = {
+            "ingredients": ["chicken"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0,
+            "budget_preference": "medium",
+            "delivery_preference": "either"
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            stores = data.get('stores', [])
+            ingredient_availability = data.get('ingredient_availability', {})
+            
+            # Check chicken products
+            chicken_products = ingredient_availability.get('chicken', [])
+            has_chicken_data = len(chicken_products) > 0
+            
+            # Check for nutrition grades and brand information
+            has_nutrition_grades = False
+            has_brand_info = False
+            
+            for product in chicken_products:
+                if product.get('nutrition_grade') and product.get('nutrition_grade') != 'N/A':
+                    has_nutrition_grades = True
+                if product.get('brand') and product.get('brand') != 'Generic':
+                    has_brand_info = True
+            
+            details = f"- Stores: {len(stores)}, Chicken products: {len(chicken_products)}, Nutrition grades: {'✓' if has_nutrition_grades else '✗'}, Brands: {'✓' if has_brand_info else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Grocery Search - Single Ingredient", success, details)
+
+    def test_ingredient_suggestions_autocomplete(self):
+        """Test ingredient suggestions with partial queries"""
+        if not self.token:
+            return self.log_test("Ingredient Suggestions - Autocomplete", False, "- No auth token available")
+
+        test_queries = ["tom", "chic", "gar"]
+        successful_queries = 0
+        total_suggestions = 0
+        
+        for query in test_queries:
+            success, data = self.make_request('GET', f'grocery/ingredients/suggestions?query={query}')
+            
+            if success:
+                suggestions = data.get('suggestions', [])
+                if len(suggestions) > 0:
+                    successful_queries += 1
+                    total_suggestions += len(suggestions)
+        
+        details = f"- {successful_queries}/{len(test_queries)} queries successful, {total_suggestions} total suggestions"
+        return self.log_test("Ingredient Suggestions - Autocomplete", successful_queries > 0, details)
+
+    def test_ingredient_suggestions_short_queries(self):
+        """Test ingredient suggestions with short queries"""
+        if not self.token:
+            return self.log_test("Ingredient Suggestions - Short Queries", False, "- No auth token available")
+
+        # Test with very short query
+        success, data = self.make_request('GET', 'grocery/ingredients/suggestions?query=a')
+        
+        if success:
+            suggestions = data.get('suggestions', [])
+            query = data.get('query', '')
+            count = data.get('count', 0)
+            
+            # Short queries should return fewer or no results
+            appropriate_response = len(suggestions) <= 5  # Should limit results for short queries
+            
+            details = f"- Query: '{query}', Suggestions: {len(suggestions)}, Count: {count}, Appropriate: {'✓' if appropriate_response else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Ingredient Suggestions - Short Queries", success, details)
+
+    def test_ingredient_suggestions_nonexistent(self):
+        """Test ingredient suggestions with non-existent ingredients"""
+        if not self.token:
+            return self.log_test("Ingredient Suggestions - Non-existent", False, "- No auth token available")
+
+        success, data = self.make_request('GET', 'grocery/ingredients/suggestions?query=xyzzz')
+        
+        if success:
+            suggestions = data.get('suggestions', [])
+            query = data.get('query', '')
+            count = data.get('count', 0)
+            
+            # Should handle non-existent ingredients gracefully
+            graceful_handling = len(suggestions) == 0 or count == 0
+            
+            details = f"- Query: '{query}', Suggestions: {len(suggestions)}, Graceful handling: {'✓' if graceful_handling else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Ingredient Suggestions - Non-existent", success, details)
+
+    def test_open_food_facts_integration_validation(self):
+        """Test Open Food Facts integration validation"""
+        if not self.token:
+            return self.log_test("Open Food Facts Integration", False, "- No auth token available")
+
+        # Test with a common product that should have good data
+        search_data = {
+            "ingredients": ["coca cola", "nutella", "oreo"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            ingredient_availability = data.get('ingredient_availability', {})
+            
+            validation_checks = {
+                'real_product_names': False,
+                'brand_information': False,
+                'nutrition_grades': False,
+                'product_barcodes': False,
+                'ingredient_text': False
+            }
+            
+            for ingredient, products in ingredient_availability.items():
+                for product in products:
+                    # Check for real product names (not just generic)
+                    product_name = product.get('product_name', '')
+                    if product_name and len(product_name) > 5 and 'generic' not in product_name.lower():
+                        validation_checks['real_product_names'] = True
+                    
+                    # Check for brand information
+                    brand = product.get('brand', '')
+                    if brand and brand != 'Generic' and len(brand) > 2:
+                        validation_checks['brand_information'] = True
+                    
+                    # Check for nutrition grades
+                    nutrition_grade = product.get('nutrition_grade', '')
+                    if nutrition_grade and nutrition_grade != 'N/A' and nutrition_grade in ['A', 'B', 'C', 'D', 'E']:
+                        validation_checks['nutrition_grades'] = True
+                    
+                    # Check for barcodes
+                    barcode = product.get('barcode', '')
+                    if barcode and len(barcode) >= 8:  # Valid barcode length
+                        validation_checks['product_barcodes'] = True
+                    
+                    # Check for ingredient text parsing (if available)
+                    if 'ingredients' in product or 'ingredient_text' in product:
+                        validation_checks['ingredient_text'] = True
+            
+            passed_checks = sum(validation_checks.values())
+            total_checks = len(validation_checks)
+            
+            details = f"- {passed_checks}/{total_checks} validation checks passed: {', '.join([k for k, v in validation_checks.items() if v])}"
+        else:
+            details = ""
+            
+        return self.log_test("Open Food Facts Integration", success and passed_checks >= 3, details)
+
+    def test_grocery_error_handling_invalid_ingredients(self):
+        """Test error handling with invalid ingredients"""
+        if not self.token:
+            return self.log_test("Grocery Error Handling - Invalid Ingredients", False, "- No auth token available")
+
+        # Test with empty ingredients
+        search_data = {
+            "ingredients": [],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 400)
+        
+        if success:  # Success means we got expected 400 error
+            details = "- Correctly rejected empty ingredients list"
+        else:
+            # If it didn't fail with 400, check if it handled gracefully
+            success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+            if success:
+                stores = data.get('stores', [])
+                fallback_provided = len(stores) > 0
+                details = f"- Graceful fallback: {'✓' if fallback_provided else '✗'}"
+            else:
+                details = "- Failed to handle empty ingredients"
+            
+        return self.log_test("Grocery Error Handling - Invalid Ingredients", success, details)
+
+    def test_grocery_fallback_responses(self):
+        """Test fallback responses when API is unavailable"""
+        if not self.token:
+            return self.log_test("Grocery Fallback Responses", False, "- No auth token available")
+
+        # Test with unusual ingredients that might not be in Open Food Facts
+        search_data = {
+            "ingredients": ["extremely_rare_ingredient_xyz", "nonexistent_product_abc"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            stores = data.get('stores', [])
+            delivery_options = data.get('delivery_options', [])
+            
+            # Should provide fallback stores and delivery options even if ingredients not found
+            has_fallback_stores = len(stores) > 0
+            has_fallback_delivery = len(delivery_options) > 0
+            
+            # Check if fallback is indicated
+            fallback_indicated = False
+            for store in stores:
+                if 'fallback' in store.get('id', '').lower() or store.get('data_source') == 'fallback':
+                    fallback_indicated = True
+                    break
+            
+            details = f"- Fallback stores: {'✓' if has_fallback_stores else '✗'}, Delivery options: {'✓' if has_fallback_delivery else '✗'}, Indicated: {'✓' if fallback_indicated else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Grocery Fallback Responses", success, details)
+
+    def test_grocery_authentication_required(self):
+        """Test that grocery endpoints require authentication"""
+        # Temporarily remove token
+        original_token = self.token
+        self.token = None
+        
+        # Test grocery search without auth
+        search_data = {
+            "ingredients": ["tomatoes"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0
+        }
+        
+        success, data = self.make_request('POST', 'grocery/search', search_data, 401)
+        auth_required_search = success  # Success means we got expected 401
+        
+        # Test ingredient suggestions without auth
+        success, data = self.make_request('GET', 'grocery/ingredients/suggestions?query=tom', None, 401)
+        auth_required_suggestions = success  # Success means we got expected 401
+        
+        # Restore token
+        self.token = original_token
+        
+        details = f"- Search auth required: {'✓' if auth_required_search else '✗'}, Suggestions auth required: {'✓' if auth_required_suggestions else '✗'}"
+        return self.log_test("Grocery Authentication Required", auth_required_search and auth_required_suggestions, details)
+
+    def test_grocery_response_structure_validation(self):
+        """Test that grocery responses have correct structure"""
+        if not self.token:
+            return self.log_test("Grocery Response Structure", False, "- No auth token available")
+
+        search_data = {
+            "ingredients": ["pasta", "tomatoes"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            # Validate required fields in response
+            required_fields = ['stores', 'ingredient_availability', 'delivery_options', 'total_estimated_cost']
+            fields_present = sum(1 for field in required_fields if field in data)
+            
+            # Validate store structure
+            stores = data.get('stores', [])
+            valid_store_structure = True
+            if stores:
+                first_store = stores[0]
+                store_required_fields = ['id', 'name', 'distance_km', 'estimated_total']
+                store_fields_present = sum(1 for field in store_required_fields if field in first_store)
+                valid_store_structure = store_fields_present >= 3
+            
+            # Validate ingredient availability structure
+            ingredient_availability = data.get('ingredient_availability', {})
+            valid_ingredient_structure = True
+            if ingredient_availability:
+                for ingredient, products in ingredient_availability.items():
+                    if products and len(products) > 0:
+                        first_product = products[0]
+                        product_required_fields = ['price', 'in_stock', 'product_name']
+                        product_fields_present = sum(1 for field in product_required_fields if field in first_product)
+                        if product_fields_present < 2:
+                            valid_ingredient_structure = False
+                            break
+            
+            details = f"- Required fields: {fields_present}/{len(required_fields)}, Store structure: {'✓' if valid_store_structure else '✗'}, Ingredient structure: {'✓' if valid_ingredient_structure else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Grocery Response Structure", success and fields_present >= 3, details)
+
     def test_nearby_stores(self):
         """Test getting nearby grocery stores"""
         if not self.token:
