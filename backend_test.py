@@ -433,6 +433,369 @@ class LambaliaEnhancedAPITester:
             
         return self.log_test("User Heritage Contributions", success, details)
 
+    # ENHANCED AFRICAN CUISINE DATABASE TESTS
+
+    def test_enhanced_african_cuisine_native_recipes(self):
+        """Test GET /api/native-recipes endpoint for expanded African dishes"""
+        success, data = self.make_request('GET', 'native-recipes')
+        
+        if success:
+            total_recipes = data.get('total_count', 0) if isinstance(data, dict) else len(data) if isinstance(data, list) else 0
+            countries = data.get('countries', []) if isinstance(data, dict) else []
+            recipes = data.get('recipes', []) if isinstance(data, dict) else data if isinstance(data, list) else []
+            
+            # Check for new African countries
+            new_african_countries = ['Senegal', 'Mali', 'Tanzania', 'Cameroon', 'Ivory Coast', 'Zambia', 'Zimbabwe', 'Botswana', 'Tunisia', 'Algeria', 'Egypt', 'Sudan']
+            found_new_countries = []
+            
+            for country in countries:
+                country_name = country.get('name', '') if isinstance(country, dict) else str(country)
+                for new_country in new_african_countries:
+                    if new_country.lower() in country_name.lower():
+                        found_new_countries.append(new_country)
+            
+            details = f"- Total recipes: {total_recipes}, Countries: {len(countries)}, New African countries found: {len(found_new_countries)}/12 ({', '.join(found_new_countries[:5])}{'...' if len(found_new_countries) > 5 else ''})"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced African Cuisine - Native Recipes", success, details)
+
+    def test_enhanced_african_cuisine_reference_recipes(self):
+        """Test GET /api/reference-recipes endpoint for template browsing"""
+        success, data = self.make_request('GET', 'reference-recipes')
+        
+        if success:
+            recipes_count = len(data) if isinstance(data, list) else 0
+            african_recipes = []
+            
+            # Look for African recipes in the response
+            if isinstance(data, list):
+                for recipe in data:
+                    country = recipe.get('country_id', '').lower()
+                    name = recipe.get('name_english', '').lower()
+                    if any(african_country in country or african_country in name for african_country in ['nigeria', 'ghana', 'kenya', 'ethiopia', 'senegal', 'mali', 'tanzania', 'cameroon']):
+                        african_recipes.append(recipe)
+            
+            # Check for authentic traditional dishes with proper details
+            complete_recipes = 0
+            for recipe in african_recipes[:5]:  # Check first 5 African recipes
+                if (recipe.get('name_english') and recipe.get('key_ingredients') and 
+                    recipe.get('cultural_significance') and recipe.get('difficulty_level')):
+                    complete_recipes += 1
+            
+            details = f"- Total recipes: {recipes_count}, African recipes: {len(african_recipes)}, Complete details: {complete_recipes}/{min(5, len(african_recipes))}"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced African Cuisine - Reference Recipes", success, details)
+
+    def test_enhanced_african_cuisine_countries_endpoint(self):
+        """Test GET /api/countries endpoint to verify increased country count"""
+        success, data = self.make_request('GET', 'countries')
+        
+        if success:
+            countries_count = len(data) if isinstance(data, list) else 0
+            
+            # Check for specific new African countries
+            new_african_countries = ['Senegal', 'Mali', 'Tanzania', 'Cameroon', 'Ivory Coast', 'Zambia', 'Zimbabwe', 'Botswana', 'Tunisia', 'Algeria', 'Egypt', 'Sudan']
+            found_countries = []
+            
+            for country in data:
+                country_name = country.get('name', '') if isinstance(country, dict) else str(country)
+                for new_country in new_african_countries:
+                    if new_country.lower() in country_name.lower():
+                        found_countries.append(new_country)
+            
+            # Verify increased from 6 to 18+ countries
+            meets_target = countries_count >= 18
+            
+            details = f"- Total countries: {countries_count}, Target 18+: {'✓' if meets_target else '✗'}, New African countries: {len(found_countries)}/12"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced African Cuisine - Countries Count", success, details)
+
+    def test_enhanced_african_cuisine_authentic_dishes(self):
+        """Test that each new African country has authentic traditional dishes with proper details"""
+        success, data = self.make_request('GET', 'native-recipes')
+        
+        if success:
+            countries = data.get('countries', []) if isinstance(data, dict) else []
+            recipes = data.get('recipes', []) if isinstance(data, dict) else data if isinstance(data, list) else []
+            
+            # Check specific new countries for authentic dishes
+            target_countries = ['Senegal', 'Mali', 'Tanzania', 'Cameroon']
+            country_dish_validation = {}
+            
+            for target_country in target_countries:
+                country_recipes = []
+                for recipe in recipes:
+                    country_id = recipe.get('country_id', '').lower()
+                    if target_country.lower() in country_id:
+                        country_recipes.append(recipe)
+                
+                # Validate dish authenticity
+                authentic_dishes = 0
+                for recipe in country_recipes[:3]:  # Check first 3 dishes per country
+                    has_name = bool(recipe.get('name_english'))
+                    has_ingredients = bool(recipe.get('key_ingredients'))
+                    has_cultural_significance = bool(recipe.get('cultural_significance'))
+                    has_proper_details = has_name and has_ingredients and has_cultural_significance
+                    
+                    if has_proper_details:
+                        authentic_dishes += 1
+                
+                country_dish_validation[target_country] = {
+                    'total_dishes': len(country_recipes),
+                    'authentic_dishes': authentic_dishes
+                }
+            
+            total_authentic = sum(v['authentic_dishes'] for v in country_dish_validation.values())
+            total_checked = sum(min(3, v['total_dishes']) for v in country_dish_validation.values())
+            
+            details = f"- Authentic dishes: {total_authentic}/{total_checked} checked, Countries validated: {len([k for k, v in country_dish_validation.items() if v['authentic_dishes'] > 0])}/4"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced African Cuisine - Authentic Dishes", success, details)
+
+    # ENHANCED GROCERY PAYMENT PROCESSING TESTS
+
+    def test_enhanced_grocery_payment_processing_search(self):
+        """Test POST /api/grocery/search endpoint with real ingredients for payment processing"""
+        if not self.token:
+            return self.log_test("Enhanced Grocery Payment Processing - Search", False, "- No auth token available")
+
+        search_data = {
+            "ingredients": ["tomatoes", "onions", "chicken"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0,
+            "budget_preference": "medium",
+            "delivery_preference": "either"
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            stores = data.get('stores', [])
+            ingredient_availability = data.get('ingredient_availability', {})
+            delivery_options = data.get('delivery_options', [])
+            total_cost = data.get('total_estimated_cost', 0)
+            
+            # Check for payment processing data
+            has_commission_rates = False
+            has_estimated_totals = False
+            
+            for store in stores:
+                if 'commission_rate' in store or 'commission' in store:
+                    has_commission_rates = True
+                if 'estimated_total' in store and store.get('estimated_total', 0) > 0:
+                    has_estimated_totals = True
+            
+            # Verify all requested ingredients are found
+            requested_ingredients = ["tomatoes", "onions", "chicken"]
+            found_ingredients = sum(1 for ingredient in requested_ingredients if ingredient in ingredient_availability)
+            
+            details = f"- Stores: {len(stores)}, Ingredients found: {found_ingredients}/3, Commission rates: {'✓' if has_commission_rates else '✗'}, Estimated totals: {'✓' if has_estimated_totals else '✗'}, Total cost: ${total_cost}"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced Grocery Payment Processing - Search", success, details)
+
+    def test_enhanced_grocery_payment_delivery_options(self):
+        """Test that delivery options are properly formatted for payment selection"""
+        if not self.token:
+            return self.log_test("Enhanced Grocery Payment - Delivery Options", False, "- No auth token available")
+
+        search_data = {
+            "ingredients": ["tomatoes", "onions", "chicken"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0,
+            "budget_preference": "medium",
+            "delivery_preference": "either"
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            delivery_options = data.get('delivery_options', [])
+            
+            # Validate delivery options structure for payment processing
+            properly_formatted = 0
+            payment_ready = 0
+            
+            for option in delivery_options:
+                # Check for required fields
+                has_required_fields = all(field in option for field in ['type', 'cost', 'estimated_time'])
+                if has_required_fields:
+                    properly_formatted += 1
+                
+                # Check for payment processing fields
+                has_payment_fields = any(field in option for field in ['payment_method', 'service_fee', 'tip_option'])
+                if has_payment_fields:
+                    payment_ready += 1
+            
+            details = f"- Delivery options: {len(delivery_options)}, Properly formatted: {properly_formatted}/{len(delivery_options)}, Payment ready: {payment_ready}/{len(delivery_options)}"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced Grocery Payment - Delivery Options", success, details)
+
+    def test_enhanced_grocery_commission_calculations(self):
+        """Test that grocery search returns proper commission rates and estimated totals for payment"""
+        if not self.token:
+            return self.log_test("Enhanced Grocery Payment - Commission Calculations", False, "- No auth token available")
+
+        search_data = {
+            "ingredients": ["pasta", "tomato sauce", "cheese"],
+            "user_postal_code": "10001",
+            "max_distance_km": 10.0,
+            "budget_preference": "medium",
+            "delivery_preference": "either"
+        }
+
+        success, data = self.make_request('POST', 'grocery/search', search_data, 200)
+        
+        if success:
+            stores = data.get('stores', [])
+            total_estimated_cost = data.get('total_estimated_cost', 0)
+            
+            # Validate commission and pricing data
+            stores_with_commission = 0
+            stores_with_totals = 0
+            reasonable_commissions = 0
+            
+            for store in stores:
+                # Check for commission data
+                commission_rate = store.get('commission_rate', 0)
+                if commission_rate > 0:
+                    stores_with_commission += 1
+                    # Reasonable commission rate (1-15%)
+                    if 0.01 <= commission_rate <= 0.15:
+                        reasonable_commissions += 1
+                
+                # Check for estimated totals
+                estimated_total = store.get('estimated_total', 0)
+                if estimated_total > 0:
+                    stores_with_totals += 1
+            
+            # Validate overall total
+            reasonable_total = 10 <= total_estimated_cost <= 100  # Reasonable range for 3 ingredients
+            
+            details = f"- Stores: {len(stores)}, With commission: {stores_with_commission}, With totals: {stores_with_totals}, Reasonable commissions: {reasonable_commissions}, Total: ${total_estimated_cost} {'✓' if reasonable_total else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Enhanced Grocery Payment - Commission Calculations", success, details)
+
+    # INTEGRATION VERIFICATION TESTS
+
+    def test_grocery_ingredient_suggestions_integration(self):
+        """Test ingredient suggestions endpoint: GET /api/grocery/ingredients/suggestions?query=tom"""
+        if not self.token:
+            return self.log_test("Grocery Ingredient Suggestions Integration", False, "- No auth token available")
+
+        success, data = self.make_request('GET', 'grocery/ingredients/suggestions?query=tom')
+        
+        if success:
+            suggestions = data.get('suggestions', [])
+            query = data.get('query', '')
+            count = data.get('count', 0)
+            
+            # Validate suggestions are relevant to "tom"
+            relevant_suggestions = 0
+            for suggestion in suggestions:
+                suggestion_name = suggestion.get('name', '').lower() if isinstance(suggestion, dict) else str(suggestion).lower()
+                if 'tom' in suggestion_name:
+                    relevant_suggestions += 1
+            
+            # Check for payment integration data
+            payment_integrated = False
+            for suggestion in suggestions[:3]:  # Check first 3 suggestions
+                if isinstance(suggestion, dict) and any(field in suggestion for field in ['price_range', 'availability', 'store_count']):
+                    payment_integrated = True
+                    break
+            
+            details = f"- Query: '{query}', Suggestions: {len(suggestions)}, Relevant: {relevant_suggestions}, Payment integrated: {'✓' if payment_integrated else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Grocery Ingredient Suggestions Integration", success, details)
+
+    def test_african_cuisine_data_serving_integration(self):
+        """Test that all African cuisine data is properly served to Browse Templates page"""
+        success, data = self.make_request('GET', 'reference-recipes')
+        
+        if success:
+            recipes = data if isinstance(data, list) else []
+            
+            # Check for African cuisine representation
+            african_recipes = []
+            african_countries = ['nigeria', 'ghana', 'kenya', 'ethiopia', 'senegal', 'mali', 'tanzania', 'cameroon', 'ivory coast', 'zambia', 'zimbabwe', 'botswana', 'tunisia', 'algeria', 'egypt', 'sudan']
+            
+            for recipe in recipes:
+                country_id = recipe.get('country_id', '').lower()
+                name = recipe.get('name_english', '').lower()
+                cultural_sig = recipe.get('cultural_significance', '').lower()
+                
+                if any(african_country in country_id or african_country in name or african_country in cultural_sig for african_country in african_countries):
+                    african_recipes.append(recipe)
+            
+            # Validate recipe completeness for Browse Templates
+            complete_for_templates = 0
+            for recipe in african_recipes[:10]:  # Check first 10 African recipes
+                required_fields = ['name_english', 'description', 'key_ingredients', 'difficulty_level', 'estimated_time', 'serving_size']
+                fields_present = sum(1 for field in required_fields if recipe.get(field))
+                if fields_present >= 5:  # At least 5/6 required fields
+                    complete_for_templates += 1
+            
+            details = f"- Total recipes: {len(recipes)}, African recipes: {len(african_recipes)}, Template-ready: {complete_for_templates}/{min(10, len(african_recipes))}"
+        else:
+            details = ""
+            
+        return self.log_test("African Cuisine Data Serving Integration", success, details)
+
+    def test_grocery_payment_data_structure_integration(self):
+        """Test that all grocery endpoints work with payment data structure"""
+        if not self.token:
+            return self.log_test("Grocery Payment Data Structure Integration", False, "- No auth token available")
+
+        # Test multiple grocery endpoints for payment integration
+        endpoints_to_test = [
+            ('grocery/search', 'POST', {"ingredients": ["bread"], "user_postal_code": "10001"}),
+            ('grocery/ingredients/suggestions?query=bread', 'GET', None)
+        ]
+        
+        successful_integrations = 0
+        payment_structure_found = 0
+        
+        for endpoint, method, data in endpoints_to_test:
+            success, response = self.make_request(method, endpoint, data)
+            
+            if success:
+                successful_integrations += 1
+                
+                # Check for payment-related data structure
+                has_payment_structure = False
+                
+                if 'stores' in response:
+                    for store in response['stores']:
+                        if any(field in store for field in ['commission_rate', 'estimated_total', 'payment_methods']):
+                            has_payment_structure = True
+                            break
+                
+                if 'delivery_options' in response:
+                    for option in response['delivery_options']:
+                        if any(field in option for field in ['cost', 'service_fee', 'payment_method']):
+                            has_payment_structure = True
+                            break
+                
+                if has_payment_structure:
+                    payment_structure_found += 1
+        
+        details = f"- Endpoints tested: {len(endpoints_to_test)}, Successful: {successful_integrations}, Payment structure: {payment_structure_found}"
+        return self.log_test("Grocery Payment Data Structure Integration", successful_integrations > 0, details)
+
     # NEW ENHANCED FEATURES TESTS
 
     def test_get_reference_recipes(self):
