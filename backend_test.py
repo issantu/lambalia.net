@@ -6262,6 +6262,55 @@ def main_translation_impact_tests():
         print(f"⚠️  {failed_count} translation impact tests failed. Check the issues above.")
         return 1
 
+def main_grocery_api_tests():
+    """Main function for grocery API tests"""
+    tester = LambaliaEnhancedAPITester()
+    
+    print("🛒 Starting Real Grocery API Integration Tests (Open Food Facts)")
+    print("=" * 60)
+    
+    # Basic API tests first
+    tester.test_health_check()
+    tester.test_user_registration()
+    tester.test_user_login()
+    
+    # Grocery Search Endpoint Testing
+    tester.test_grocery_search_common_ingredients()
+    tester.test_grocery_search_international_ingredients()
+    tester.test_grocery_search_single_ingredient()
+    
+    # Ingredient Suggestions Endpoint Testing
+    tester.test_ingredient_suggestions_autocomplete()
+    tester.test_ingredient_suggestions_short_queries()
+    tester.test_ingredient_suggestions_nonexistent()
+    
+    # Open Food Facts Integration Validation
+    tester.test_open_food_facts_integration_validation()
+    
+    # Error Handling and Fallback Testing
+    tester.test_grocery_error_handling_invalid_ingredients()
+    tester.test_grocery_fallback_responses()
+    tester.test_grocery_authentication_required()
+    tester.test_grocery_response_structure_validation()
+    
+    # Legacy grocery tests for compatibility
+    tester.test_grocery_search()
+    tester.test_nearby_stores()
+    tester.test_grocery_preferences()
+    
+    print("=" * 60)
+    grocery_tests_run = 14  # Count of grocery-specific tests
+    grocery_tests_passed = tester.tests_passed
+    print(f"🛒 Grocery API Tests: {grocery_tests_passed}/{tester.tests_run} passed ({(grocery_tests_passed/tester.tests_run*100):.1f}%)")
+    
+    if tester.tests_passed == tester.tests_run:
+        print("🎉 All grocery API tests passed!")
+        return 0
+    else:
+        failed_count = tester.tests_run - tester.tests_passed
+        print(f"⚠️  {failed_count} grocery API tests failed. Check the issues above.")
+        return 1
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "--translation-impact":
@@ -6272,5 +6321,7 @@ if __name__ == "__main__":
         sys.exit(main_snippet_media_tests())
     elif len(sys.argv) > 1 and sys.argv[1] == "--profile-photo":
         sys.exit(main_profile_photo_tests())
+    elif len(sys.argv) > 1 and sys.argv[1] == "--grocery-api":
+        sys.exit(main_grocery_api_tests())
     else:
         sys.exit(main())
