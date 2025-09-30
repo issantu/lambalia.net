@@ -5656,11 +5656,38 @@ const GroceryPage = () => {
                     {stores.map((item, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium">{item.brand}</span>
-                          <span className="font-semibold text-green-600">${item.price}</span>
+                          <div className="flex-1">
+                            <span className="text-sm font-medium">{item.brand}</span>
+                            {item.product_name && (
+                              <div className="text-xs text-gray-600 truncate mt-1" title={item.product_name}>
+                                📦 {item.product_name}
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <span className="font-semibold text-green-600">${item.price}</span>
+                            {item.nutrition_grade && item.nutrition_grade !== 'N/A' && (
+                              <div className="text-xs mt-1">
+                                <span className={`px-1 py-0.5 rounded text-white text-xs ${
+                                  item.nutrition_grade === 'A' ? 'bg-green-500' :
+                                  item.nutrition_grade === 'B' ? 'bg-yellow-500' :
+                                  item.nutrition_grade === 'C' ? 'bg-orange-500' :
+                                  item.nutrition_grade === 'D' ? 'bg-red-500' :
+                                  item.nutrition_grade === 'E' ? 'bg-red-700' : 'bg-gray-500'
+                                }`}>
+                                  {item.nutrition_grade}
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
-                          {item.package_size} • {item.in_stock ? '✅ In Stock' : '❌ Out of Stock'}
+                        <div className="text-xs text-gray-500 mt-2 flex items-center justify-between">
+                          <span>{item.package_size} • {item.in_stock ? '✅ In Stock' : '❌ Out of Stock'}</span>
+                          {item.barcode && (
+                            <span className="text-xs text-blue-600" title={`Barcode: ${item.barcode}`}>
+                              📊 {item.barcode.slice(-6)}
+                            </span>
+                          )}
                         </div>
                       </div>
                     ))}
