@@ -5902,86 +5902,77 @@ async def search_grocery_stores(
     search_request: GrocerySearchRequest,
     current_user_id: str = Depends(get_current_user)
 ):
-    """Search for grocery stores and ingredient availability based on user location"""
+    """Search for grocery stores and ingredient availability using Open Food Facts API"""
     
-    # This is a mock implementation - in production, you'd integrate with actual grocery APIs
-    # like Instacart, Amazon Fresh, or regional grocery chains
-    
-    # Mock grocery stores data
-    mock_stores = [
-        {
-            "id": "store_1",
-            "name": "Fresh Market",
-            "chain": "Independent",
-            "address": "123 Main St",
-            "distance_km": 2.5,
-            "supports_delivery": True,
-            "estimated_total": 25.99,
-            "commission_rate": 0.05
-        },
-        {
-            "id": "store_2", 
-            "name": "Whole Foods",
-            "chain": "Whole Foods Market",
-            "address": "456 Oak Ave",
-            "distance_km": 4.2,
-            "supports_delivery": True,
-            "estimated_total": 32.50,
-            "commission_rate": 0.08
-        },
-        {
-            "id": "store_3",
-            "name": "Kroger",
-            "chain": "Kroger",
-            "address": "789 Pine St",
-            "distance_km": 3.1,
-            "supports_delivery": True,
-            "estimated_total": 22.75,
-            "commission_rate": 0.06
-        }
-    ]
-    
-    # Mock ingredient availability
-    mock_availability = {}
-    for ingredient in search_request.ingredients:
-        mock_availability[ingredient] = [
-            {
-                "store_id": "store_1",
-                "brand": "Generic",
-                "price": 2.99,
-                "in_stock": True,
-                "package_size": "1 lb"
+    try:
+        # Get the grocery service
+        grocery_service = await get_grocery_service()
+        
+        # Use real grocery API to search for stores and ingredients
+        stores, ingredient_availability, delivery_options = await grocery_service.generate_grocery_stores_response(
+            ingredients=search_request.ingredients,
+            postal_code=search_request.user_postal_code,
+            max_distance_km=search_request.max_distance_km
+        )
+        
+        # Calculate total estimated cost from all ingredients
+        total_estimated_cost = 0.0
+        for ingredient_data in ingredient_availability.values():
+            if ingredient_data:
+                # Take the lowest price for each ingredient
+                min_price = min(item["price"] for item in ingredient_data)
+                total_estimated_cost += min_price
+        
+        total_estimated_cost = round(total_estimated_cost, 2)
+        
+        # Get recommended store (lowest estimated total)
+        recommended_store_id = stores[0]["id"] if stores else "real_store_generic"
+        if len(stores) > 1:
+            recommended_store_id = min(stores, key=lambda x: x["estimated_total"])["id"]
+        
+        logger.info(f"Grocery search completed for {len(search_request.ingredients)} ingredients")
+        logger.info(f"Found {len(stores)} stores with total cost: ${total_estimated_cost}")
+        
+        return GrocerySearchResponse(
+            stores=stores,
+            ingredient_availability=ingredient_availability,
+            total_estimated_cost=total_estimated_cost,
+            delivery_options=delivery_options,
+            recommended_store_id=recommended_store_id
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in grocery search: {str(e)}")
+        # Fallback to basic response if API fails
+        return GrocerySearchResponse(
+            stores=[{
+                "id": "fallback_store",
+                "name": "Local Grocery Store",
+                "chain": "Independent",
+                "address": "Please check local stores",
+                "distance_km": 5.0,
+                "supports_delivery": True,
+                "estimated_total": 25.00,
+                "commission_rate": 0.05,
+                "data_source": "fallback"
+            }],
+            ingredient_availability={
+                ingredient: [{
+                    "store_id": "fallback_store",
+                    "brand": "Generic",
+                    "price": 3.99,
+                    "in_stock": True,
+                    "package_size": "1 unit",
+                    "nutrition_grade": "N/A"
+                }] for ingredient in search_request.ingredients
             },
-            {
-                "store_id": "store_2",
-                "brand": "Organic",
-                "price": 4.99,
-                "in_stock": True,
-                "package_size": "1 lb"
-            }
-        ]
-    
-    # Mock delivery options
-    delivery_options = [
-        {
-            "type": "pickup",
-            "fee": 0.0,
-            "time_estimate": "Ready in 2 hours"
-        },
-        {
-            "type": "delivery",
-            "fee": 5.99,
-            "time_estimate": "Delivered in 1-2 hours"
-        }
-    ]
-    
-    return GrocerySearchResponse(
-        stores=mock_stores,
-        ingredient_availability=mock_availability,
-        total_estimated_cost=25.99,
-        delivery_options=delivery_options,
-        recommended_store_id="store_1"
-    )
+            total_estimated_cost=len(search_request.ingredients) * 3.99,
+            delivery_options=[
+                {"type": "pickup", "fee": 0.0, "time_estimate": "Available now"},
+                {"type": "delivery", "fee": 5.99, "time_estimate": "1-3 hours"}
+            ],
+            recommended_store_id="fallback_store"
+        )
 
 # ========================================
 # APP INITIALIZATION AND ROUTERS
