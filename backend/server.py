@@ -5986,17 +5986,217 @@ async def search_grocery_stores(
 # APP INITIALIZATION AND ROUTERS
 # ========================================
 
+# African Traditional Dishes Database (Wikipedia sourced)
+AFRICAN_CUISINE_DATABASE = {
+    "south_africa": {
+        "country": "South Africa",
+        "dishes": [
+            {
+                "name_english": "Biltong",
+                "name_local": "Biltong",
+                "description": "Dried, spiced meat traditionally made from beef, springbok, kudu, eland, chicken, or ostrich",
+                "key_ingredients": ["beef", "spices", "salt", "vinegar", "coriander"],
+                "category": "snack",
+                "difficulty_level": 3,
+                "estimated_time": 480,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Traditional preservation method for meat, essential part of South African heritage"
+            },
+            {
+                "name_english": "Boerewors",
+                "name_local": "Boerewors", 
+                "description": "Traditional South African sausage cooked on the braai (barbecue)",
+                "key_ingredients": ["beef", "pork", "lamb", "spices", "natural casing"],
+                "category": "main_dish",
+                "difficulty_level": 2,
+                "estimated_time": 45,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Iconic braai food, symbol of South African outdoor cooking culture"
+            },
+            {
+                "name_english": "Bobotie",
+                "name_local": "Bobotie",
+                "description": "Spiced mince meat dish topped with egg custard and baked until golden",
+                "key_ingredients": ["minced meat", "bread", "milk", "eggs", "curry powder", "almonds"],
+                "category": "main_dish", 
+                "difficulty_level": 3,
+                "estimated_time": 90,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "National dish of South Africa, reflects Cape Malay culinary influence"
+            }
+        ]
+    },
+    "nigeria": {
+        "country": "Nigeria",
+        "dishes": [
+            {
+                "name_english": "Jollof Rice",
+                "name_local": "Jollof Rice",
+                "description": "One-pot rice dish cooked in rich tomato sauce with spices and protein",
+                "key_ingredients": ["rice", "tomatoes", "onions", "peppers", "chicken stock", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 2,
+                "estimated_time": 60,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "Most popular West African dish, source of friendly rivalry between countries"
+            },
+            {
+                "name_english": "Ogbono Soup",
+                "name_local": "Ogbono Soup",
+                "description": "Thick soup made with ground ogbono seeds, meat, and vegetables", 
+                "key_ingredients": ["ogbono seeds", "meat", "fish", "vegetables", "palm oil", "seasonings"],
+                "category": "soup",
+                "difficulty_level": 3,
+                "estimated_time": 90,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Traditional Igbo soup, often served with fufu or pounded yam"
+            },
+            {
+                "name_english": "Suya",
+                "name_local": "Suya",
+                "description": "Spicy grilled meat skewers seasoned with ground peanuts and spices",
+                "key_ingredients": ["beef", "peanuts", "ginger", "garlic", "cayenne pepper", "onions"],
+                "category": "appetizer",
+                "difficulty_level": 2,
+                "estimated_time": 30,
+                "serving_size": "4-6 servings", 
+                "cultural_significance": "Popular street food originating from Northern Nigeria"
+            }
+        ]
+    },
+    "ghana": {
+        "country": "Ghana",
+        "dishes": [
+            {
+                "name_english": "Fufu with Light Soup",
+                "name_local": "Fufu",
+                "description": "Pounded cassava and plantain served with spicy tomato-based soup",
+                "key_ingredients": ["cassava", "plantain", "tomatoes", "meat", "fish", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 4,
+                "estimated_time": 120,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Staple food of Ghana, eaten by hand using pieces of fufu to scoop soup"
+            },
+            {
+                "name_english": "Banku and Tilapia",
+                "name_local": "Banku",
+                "description": "Fermented corn and cassava dough served with grilled tilapia and pepper sauce",
+                "key_ingredients": ["corn dough", "cassava dough", "tilapia", "tomatoes", "peppers", "onions"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 75,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Popular coastal dish reflecting Ghana's fishing traditions"
+            }
+        ]
+    },
+    "ethiopia": {
+        "country": "Ethiopia", 
+        "dishes": [
+            {
+                "name_english": "Injera with Doro Wat",
+                "name_local": "እንጀራ ከዶሮ ወጥ",
+                "description": "Spongy sourdough flatbread served with spicy chicken stew",
+                "key_ingredients": ["teff flour", "chicken", "berbere spice", "onions", "eggs", "butter"],
+                "category": "main_dish",
+                "difficulty_level": 4,
+                "estimated_time": 180,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "National dish of Ethiopia, centerpiece of traditional coffee ceremonies"
+            },
+            {
+                "name_english": "Shiro Wat",
+                "name_local": "ሽሮ ወጥ",
+                "description": "Spicy chickpea flour stew seasoned with berbere",
+                "key_ingredients": ["chickpea flour", "berbere", "onions", "garlic", "oil"],
+                "category": "main_dish",
+                "difficulty_level": 2,
+                "estimated_time": 45,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Popular vegetarian dish, often eaten during fasting periods"
+            }
+        ]
+    },
+    "kenya": {
+        "country": "Kenya",
+        "dishes": [
+            {
+                "name_english": "Ugali with Sukuma Wiki",
+                "name_local": "Ugali na Sukuma Wiki",
+                "description": "Cornmeal staple served with sautéed collard greens",
+                "key_ingredients": ["cornmeal", "collard greens", "onions", "tomatoes", "oil"],
+                "category": "main_dish",
+                "difficulty_level": 1,
+                "estimated_time": 30,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Most common meal in Kenya, affordable and nutritious staple"
+            },
+            {
+                "name_english": "Nyama Choma",
+                "name_local": "Nyama Choma",
+                "description": "Grilled meat (usually goat or beef) seasoned with salt and spices",
+                "key_ingredients": ["goat meat", "beef", "salt", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 2,
+                "estimated_time": 60,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Popular social food, often enjoyed with friends and family"
+            }
+        ]
+    },
+    "morocco": {
+        "country": "Morocco",
+        "dishes": [
+            {
+                "name_english": "Chicken Tagine",
+                "name_local": "طاجين الدجاج",
+                "description": "Slow-cooked chicken stew with vegetables in traditional tagine pot",
+                "key_ingredients": ["chicken", "olives", "preserved lemons", "onions", "ginger", "saffron"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 120,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Iconic Moroccan dish cooked in traditional conical clay pot"
+            },
+            {
+                "name_english": "Couscous with Seven Vegetables",
+                "name_local": "كسكس بسبعة خضار",
+                "description": "Steamed semolina served with seasonal vegetables and meat",
+                "key_ingredients": ["couscous", "carrots", "zucchini", "turnips", "chickpeas", "lamb", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 4,
+                "estimated_time": 150,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "Traditional Friday dish, symbol of Moroccan hospitality and family gathering"
+            }
+        ]
+    }
+}
+
 @api_router.get("/native-recipes")
 async def get_native_recipes():
     """Get native recipes by country for browse templates page"""
     try:
-        # Get native recipes data from the imported module
-        native_recipes = get_native_recipes_json()
+        # Combine existing recipes with African cuisine database
+        all_recipes = {}
+        
+        # Add African dishes
+        for country_code, country_data in AFRICAN_CUISINE_DATABASE.items():
+            all_recipes[country_code] = country_data["dishes"]
+            
+        # Add existing native recipes if available
+        try:
+            existing_recipes = get_native_recipes_json()
+            all_recipes.update(existing_recipes)
+        except:
+            pass  # If existing function fails, continue with African dishes only
+            
         return {
             "success": True,
-            "recipes": native_recipes,
-            "countries": list(native_recipes.keys()) if native_recipes else [],
-            "total_count": sum(len(recipes) for recipes in native_recipes.values()) if native_recipes else 0
+            "recipes": all_recipes,
+            "countries": [data["country"] for data in AFRICAN_CUISINE_DATABASE.values()],
+            "total_count": sum(len(dishes) for dishes in all_recipes.values())
         }
     except Exception as e:
         logger.error(f"Failed to fetch native recipes: {str(e)}")
@@ -6006,16 +6206,37 @@ async def get_native_recipes():
 async def get_reference_recipes():
     """Get comprehensive reference recipes for browse templates page"""
     try:
-        # Get featured recipes and comprehensive recipe database
-        featured_recipes = get_featured_recipes()
-        all_countries = get_all_countries_with_recipes()
+        # Create comprehensive recipe list from African database
+        all_recipes = []
+        featured_recipes = []
+        
+        for country_code, country_data in AFRICAN_CUISINE_DATABASE.items():
+            for dish in country_data["dishes"]:
+                recipe_data = {
+                    **dish,
+                    "country_id": country_code,
+                    "country": country_data["country"],
+                    "popularity_score": 85,
+                    "is_featured": dish["name_english"] in ["Jollof Rice", "Injera with Doro Wat", "Chicken Tagine", "Bobotie"]
+                }
+                all_recipes.append(recipe_data)
+                if recipe_data["is_featured"]:
+                    featured_recipes.append(recipe_data)
+        
+        # Add existing recipes if available
+        try:
+            existing_featured = get_featured_recipes()
+            featured_recipes.extend(existing_featured)
+            all_recipes.extend(COMPREHENSIVE_REFERENCE_RECIPES)
+        except:
+            pass  # Continue with African dishes only
         
         return {
             "success": True,
             "featured_recipes": featured_recipes,
-            "countries": all_countries,
-            "recipes": COMPREHENSIVE_REFERENCE_RECIPES,
-            "total_count": len(COMPREHENSIVE_REFERENCE_RECIPES)
+            "countries": [data["country"] for data in AFRICAN_CUISINE_DATABASE.values()],
+            "recipes": all_recipes,
+            "total_count": len(all_recipes)
         }
     except Exception as e:
         logger.error(f"Failed to fetch reference recipes: {str(e)}")
@@ -6030,7 +6251,38 @@ async def search_recipes_endpoint(
 ):
     """Search recipes with filters"""
     try:
-        results = search_recipes(query=query, country=country, category=category, limit=limit)
+        # Search in African cuisine database
+        results = []
+        
+        for country_code, country_data in AFRICAN_CUISINE_DATABASE.items():
+            if country and country.lower() not in country_data["country"].lower():
+                continue
+                
+            for dish in country_data["dishes"]:
+                # Text search in name and description
+                if query:
+                    search_text = f"{dish['name_english']} {dish['description']} {' '.join(dish['key_ingredients'])}".lower()
+                    if query.lower() not in search_text:
+                        continue
+                
+                # Category filter
+                if category and category.lower() != dish["category"].lower():
+                    continue
+                    
+                recipe_data = {
+                    **dish,
+                    "country_id": country_code,
+                    "country": country_data["country"],
+                    "popularity_score": 85
+                }
+                results.append(recipe_data)
+                
+                if len(results) >= limit:
+                    break
+            
+            if len(results) >= limit:
+                break
+        
         return {
             "success": True,
             "results": results,
