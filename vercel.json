@@ -1,36 +1,22 @@
 {
   "version": 2,
+  "name": "lambalia",
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/node",
+      "use": "@vercel/static-build",
       "config": {
-        "installCommand": "cd frontend && npm install",
-        "buildCommand": "cd frontend && npm run build",
-        "outputDirectory": "frontend/build"
-      }
-    },
-    {
-      "src": "backend/requirements.txt",
-      "use": "@vercel/python",
-      "config": {
-        "installCommand": "cd backend && pip install -r requirements.txt",
-        "buildCommand": "echo 'Backend build complete'",
-        "outputDirectory": "backend"
+        "distDir": "build"
       }
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "backend/server.py"
-    },
-    {
       "src": "/(.*)",
-      "dest": "frontend/build/index.html"
+      "dest": "/frontend/build/index.html"
     }
   ],
-  "env": {
-    "PYTHONPATH": "./backend"
-  }
+  "installCommand": "yarn install && cd frontend && yarn install",
+  "buildCommand": "cd frontend && yarn build",
+  "outputDirectory": "frontend/build"
 }
