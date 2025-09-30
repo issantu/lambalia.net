@@ -5564,6 +5564,23 @@ const GroceryPage = () => {
       <div className="mb-8">
         <h2 className="text-3xl font-bold heading-gradient mb-4">{t('forms.grocery.title')}</h2>
         <p className="text-gray-600">{t('forms.grocery.subtitle')}</p>
+        
+        {/* Real data indicator */}
+        <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <span className="text-blue-600 text-xl">🌐</span>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-blue-800">
+                Now with Real Grocery Data!
+              </h3>
+              <div className="mt-1 text-sm text-blue-700">
+                <p>Search powered by Open Food Facts database with 520K+ real products, nutrition grades, and authentic ingredient information.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="glass p-8 mb-8">
