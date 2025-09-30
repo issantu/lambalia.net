@@ -5593,14 +5593,45 @@ const GroceryPage = () => {
           </div>
           <div className="space-y-2">
             {ingredients.map((ingredient, index) => (
-              <div key={index} className="flex gap-2 items-center">
-                <input
-                  type="text"
-                  value={ingredient}
-                  onChange={(e) => updateIngredient(index, e.target.value)}
-                  placeholder="Enter ingredient name"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
-                />
+              <div key={index} className="flex gap-2 items-center relative">
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={ingredient}
+                    onChange={(e) => {
+                      updateIngredient(index, e.target.value);
+                      fetchIngredientSuggestions(e.target.value, index);
+                      setShowSuggestions(prev => ({ ...prev, [index]: true }));
+                    }}
+                    onFocus={() => {
+                      if (ingredient.length >= 2) {
+                        fetchIngredientSuggestions(ingredient, index);
+                        setShowSuggestions(prev => ({ ...prev, [index]: true }));
+                      }
+                    }}
+                    onBlur={() => {
+                      // Delay hiding suggestions to allow clicking on them
+                      setTimeout(() => setShowSuggestions(prev => ({ ...prev, [index]: false })), 200);
+                    }}
+                    placeholder="Enter ingredient name (e.g. tomatoes, chicken)"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                  />
+                  
+                  {/* Suggestions dropdown */}
+                  {showSuggestions[index] && suggestions[index] && suggestions[index].length > 0 && (
+                    <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto">
+                      {suggestions[index].map((suggestion, suggIndex) => (
+                        <div
+                          key={suggIndex}
+                          className="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm border-b border-gray-100 last:border-b-0"
+                          onMouseDown={() => selectSuggestion(index, suggestion)}
+                        >
+                          🥬 {suggestion}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 {ingredients.length > 1 && (
                   <button
                     type="button"
