@@ -5854,7 +5854,10 @@ You'll earn commission from this purchase!`);
                   <p className="font-semibold text-green-600 mt-2">
                     {option.fee === 0 ? 'Free' : `$${option.fee} fee`}
                   </p>
-                  <button className="w-full btn-primary mt-3 py-2 text-sm rounded-lg">
+                  <button 
+                    onClick={() => handleDeliverySelection(option)}
+                    className="w-full btn-primary mt-3 py-2 text-sm rounded-lg hover:bg-green-600 transition-colors"
+                  >
                     Select {option.type}
                   </button>
                 </div>
