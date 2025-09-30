@@ -5507,6 +5507,29 @@ const GroceryPage = () => {
     setIngredients(ingredients.filter((_, i) => i !== index));
   };
 
+  const fetchIngredientSuggestions = async (query, index) => {
+    if (query.length < 2) {
+      setSuggestions(prev => ({ ...prev, [index]: [] }));
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${API}/grocery/ingredients/suggestions`, {
+        params: { query }
+      });
+      setSuggestions(prev => ({ ...prev, [index]: response.data.suggestions || [] }));
+    } catch (error) {
+      console.error('Failed to fetch suggestions:', error);
+      setSuggestions(prev => ({ ...prev, [index]: [] }));
+    }
+  };
+
+  const selectSuggestion = (index, suggestion) => {
+    updateIngredient(index, suggestion);
+    setShowSuggestions(prev => ({ ...prev, [index]: false }));
+    setSuggestions(prev => ({ ...prev, [index]: [] }));
+  };
+
   const searchGroceryStores = async () => {
     if (!postalCode.trim()) {
       alert('Please enter your postal code');
