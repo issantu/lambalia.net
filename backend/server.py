@@ -5974,6 +5974,36 @@ async def search_grocery_stores(
             recommended_store_id="fallback_store"
         )
 
+@api_router.get("/grocery/ingredients/suggestions")
+async def get_ingredient_suggestions(
+    query: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    """Get ingredient suggestions for autocomplete using Open Food Facts API"""
+    
+    try:
+        if len(query) < 2:
+            return {"suggestions": []}
+        
+        # Get the grocery service
+        grocery_service = await get_grocery_service()
+        
+        # Get ingredient suggestions
+        suggestions = await grocery_service.get_ingredient_suggestions(query)
+        
+        logger.info(f"Found {len(suggestions)} ingredient suggestions for query: {query}")
+        
+        return {
+            "query": query,
+            "suggestions": suggestions,
+            "count": len(suggestions)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting ingredient suggestions: {str(e)}")
+        # Return empty suggestions on error
+        return {"suggestions": [], "query": query, "count": 0}
+
 # ========================================
 # APP INITIALIZATION AND ROUTERS
 # ========================================
