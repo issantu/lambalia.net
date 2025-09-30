@@ -5614,6 +5614,16 @@ const GroceryPage = () => {
                       💰 Best Value
                     </span>
                   )}
+                  {store.data_source === 'open_food_facts' && (
+                    <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full mb-2 inline-block ml-1">
+                      🌐 Live Data
+                    </span>
+                  )}
+                  {store.data_source === 'fallback' && (
+                    <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full mb-2 inline-block ml-1">
+                      🔄 Basic Info
+                    </span>
+                  )}
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h4 className="store-logo">{store.name}</h4>
