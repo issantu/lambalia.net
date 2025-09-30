@@ -10,7 +10,7 @@ import time
 
 class TranslationSystemTester:
     def __init__(self):
-        self.base_url = "https://cuisine-translator.preview.emergentagent.com"
+        self.base_url = "https://cuisine-finder-3.preview.emergentagent.com"
         self.api_url = f"{self.base_url}/api"
         
     def test_cultural_preservation_critical(self):
