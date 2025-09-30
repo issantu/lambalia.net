@@ -58,9 +58,13 @@ class GroceryAPIService:
             
             async with aiohttp.ClientSession() as session:
                 headers = {"User-Agent": self.user_agent}
-                url = f"{self.base_url}/products.json"
+                # Use the correct search endpoint
+                url = "https://world.openfoodfacts.org/cgi/search.pl"
                 params = {
-                    "search": query,
+                    "search_terms": query,
+                    "search_simple": "1",
+                    "action": "process",
+                    "json": "1",
                     "page_size": limit,
                     "fields": "code,product_name,brands,ingredients_text,nutrition_grades,categories,image_url,stores,countries_tags"
                 }
