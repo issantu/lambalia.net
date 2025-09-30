@@ -1,0 +1,18 @@
+{
+  "name": "lambalia",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "build": "cd frontend && yarn install && yarn build",
+    "start": "cd frontend && yarn start",
+    "dev": "cd frontend && yarn start",
+    "install-deps": "cd frontend && yarn install && cd ../backend && pip install -r requirements.txt"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "yarn": ">=1.22.0"
+  }
+}
