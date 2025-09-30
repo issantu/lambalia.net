@@ -5484,6 +5484,10 @@ const GroceryPage = () => {
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState({});
   const [showSuggestions, setShowSuggestions] = useState({});
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedStore, setSelectedStore] = useState(null);
+  const [selectedDeliveryOption, setSelectedDeliveryOption] = useState(null);
+  const [orderTotal, setOrderTotal] = useState(0);
   const { user } = useAuth();
   const { t } = useTranslation();
 
