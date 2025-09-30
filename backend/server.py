@@ -6193,6 +6193,330 @@ AFRICAN_CUISINE_DATABASE = {
                 "cultural_significance": "Traditional Friday dish, symbol of Moroccan hospitality and family gathering"
             }
         ]
+    },
+    "senegal": {
+        "country": "Senegal",
+        "dishes": [
+            {
+                "name_english": "Thieboudienne",
+                "name_local": "Thiéboudienne",
+                "description": "National dish of Senegal - fish and rice cooked with vegetables in a spicy tomato sauce",
+                "key_ingredients": ["rice", "fish", "tomatoes", "onions", "cabbage", "carrots", "yams"],
+                "category": "main_dish",
+                "difficulty_level": 4,
+                "estimated_time": 120,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "National dish of Senegal, symbol of communal dining and family unity"
+            },
+            {
+                "name_english": "Yassa Chicken",
+                "name_local": "Poulet Yassa",
+                "description": "Chicken marinated in lemon juice and onions, grilled and served with rice",
+                "key_ingredients": ["chicken", "onions", "lemon juice", "mustard", "oil", "rice"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 90,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Popular dish from Casamance region, represents Senegalese culinary tradition"
+            }
+        ]
+    },
+    "mali": {
+        "country": "Mali",
+        "dishes": [
+            {
+                "name_english": "Jollof Rice",
+                "name_local": "Riz au Gras",
+                "description": "Spiced rice dish cooked with meat, vegetables, and tomato sauce",
+                "key_ingredients": ["rice", "meat", "tomatoes", "onions", "spices", "vegetables"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 75,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "Celebratory dish served at festivals and special occasions"
+            },
+            {
+                "name_english": "Tigadèguèna",
+                "name_local": "Tigadèguèna",
+                "description": "Peanut stew with meat and vegetables served over rice or couscous",
+                "key_ingredients": ["peanuts", "meat", "vegetables", "onions", "tomatoes"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 90,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Traditional Malian stew representing hospitality and community"
+            }
+        ]
+    },
+    "tanzania": {
+        "country": "Tanzania",
+        "dishes": [
+            {
+                "name_english": "Ugali",
+                "name_local": "Ugali",
+                "description": "Staple food made from maize flour cooked with water to a porridge-like consistency",
+                "key_ingredients": ["maize flour", "water", "salt"],
+                "category": "side_dish",
+                "difficulty_level": 2,
+                "estimated_time": 30,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Most important staple food, eaten with hands and various stews"
+            },
+            {
+                "name_english": "Nyama Choma",
+                "name_local": "Nyama Choma",
+                "description": "Grilled meat, typically goat or beef, seasoned with spices",
+                "key_ingredients": ["meat", "spices", "salt", "oil"],
+                "category": "main_dish",
+                "difficulty_level": 2,
+                "estimated_time": 45,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Popular social dish, often shared during gatherings and celebrations"
+            }
+        ]
+    },
+    "cameroon": {
+        "country": "Cameroon",
+        "dishes": [
+            {
+                "name_english": "Ndole",
+                "name_local": "Ndolé",
+                "description": "National dish made with bitterleaf, groundnuts, fish, and meat",
+                "key_ingredients": ["bitterleaf", "groundnuts", "fish", "meat", "crayfish", "palm oil"],
+                "category": "main_dish",
+                "difficulty_level": 4,
+                "estimated_time": 120,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "National dish representing Cameroonian unity and culinary heritage"
+            },
+            {
+                "name_english": "Poulet DG",
+                "name_local": "Poulet DG",
+                "description": "Chicken prepared with plantains, vegetables, and spices",
+                "key_ingredients": ["chicken", "plantains", "vegetables", "spices", "oil"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 75,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Modern Cameroonian dish popular in urban areas"
+            }
+        ]
+    },
+    "ivory_coast": {
+        "country": "Ivory Coast",
+        "dishes": [
+            {
+                "name_english": "Attiéké",
+                "name_local": "Attiéké",
+                "description": "Grated cassava couscous served as a side dish with fish or meat",
+                "key_ingredients": ["cassava", "palm oil", "salt"],
+                "category": "side_dish",
+                "difficulty_level": 3,
+                "estimated_time": 60,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Traditional dish of the Akan people, symbol of Ivorian culinary identity"
+            },
+            {
+                "name_english": "Kedjenou",
+                "name_local": "Kédjénou",
+                "description": "Slow-cooked chicken or guinea fowl stew with vegetables in a sealed pot",
+                "key_ingredients": ["chicken", "vegetables", "onions", "tomatoes", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 90,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Traditional cooking method preserving authentic flavors and nutrients"
+            }
+        ]
+    },
+    "zambia": {
+        "country": "Zambia",
+        "dishes": [
+            {
+                "name_english": "Nshima",
+                "name_local": "Nshima",
+                "description": "Staple food made from ground maize, similar to polenta",
+                "key_ingredients": ["maize meal", "water"],
+                "category": "side_dish",
+                "difficulty_level": 2,
+                "estimated_time": 30,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Most important staple food, central to Zambian meals and culture"
+            },
+            {
+                "name_english": "Kapenta",
+                "name_local": "Kapenta",
+                "description": "Small dried fish, usually fried with tomatoes and onions",
+                "key_ingredients": ["dried kapenta fish", "tomatoes", "onions", "oil", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 2,
+                "estimated_time": 30,
+                "serving_size": "3-4 servings",
+                "cultural_significance": "Important protein source from Lake Kariba, part of traditional diet"
+            }
+        ]
+    },
+    "zimbabwe": {
+        "country": "Zimbabwe",
+        "dishes": [
+            {
+                "name_english": "Sadza",
+                "name_local": "Sadza",
+                "description": "Staple food made from maize meal, served with meat and vegetables",
+                "key_ingredients": ["maize meal", "water"],
+                "category": "side_dish",
+                "difficulty_level": 2,
+                "estimated_time": 25,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "National staple food, foundation of traditional Zimbabwean cuisine"
+            },
+            {
+                "name_english": "Bota",
+                "name_local": "Bota",
+                "description": "Porridge made from maize meal or other grains, eaten for breakfast",
+                "key_ingredients": ["maize meal", "water", "sugar", "milk"],
+                "category": "breakfast",
+                "difficulty_level": 1,
+                "estimated_time": 20,
+                "serving_size": "2-4 servings",
+                "cultural_significance": "Traditional breakfast food, nourishing start to the day"
+            }
+        ]
+    },
+    "botswana": {
+        "country": "Botswana",
+        "dishes": [
+            {
+                "name_english": "Seswaa",
+                "name_local": "Seswaa",
+                "description": "Traditional meat dish made by boiling and pounding beef until tender",
+                "key_ingredients": ["beef", "salt", "water"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 180,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "National dish of Botswana, served at celebrations and ceremonies"
+            },
+            {
+                "name_english": "Bogobe",
+                "name_local": "Bogobe",
+                "description": "Porridge made from sorghum, corn, or millet",
+                "key_ingredients": ["sorghum", "water", "salt"],
+                "category": "side_dish",
+                "difficulty_level": 2,
+                "estimated_time": 45,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Traditional staple food, important source of nutrition"
+            }
+        ]
+    },
+    "tunisia": {
+        "country": "Tunisia",
+        "dishes": [
+            {
+                "name_english": "Couscous",
+                "name_local": "Couscous",
+                "description": "Steamed semolina grains served with meat and vegetable stew",
+                "key_ingredients": ["couscous", "meat", "vegetables", "harissa", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 90,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "National dish, symbol of Maghreb cuisine and family traditions"
+            },
+            {
+                "name_english": "Brik",
+                "name_local": "Brik",
+                "description": "Thin pastry filled with egg, tuna, onions, and parsley, then deep fried",
+                "key_ingredients": ["phyllo pastry", "eggs", "tuna", "onions", "parsley"],
+                "category": "appetizer",
+                "difficulty_level": 3,
+                "estimated_time": 30,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Popular street food and appetizer, represents Tunisian culinary creativity"
+            }
+        ]
+    },
+    "algeria": {
+        "country": "Algeria",
+        "dishes": [
+            {
+                "name_english": "Chorba",
+                "name_local": "Chorba",
+                "description": "Traditional soup with lamb, vegetables, and legumes, often eaten during Ramadan",
+                "key_ingredients": ["lamb", "chickpeas", "lentils", "vegetables", "spices"],
+                "category": "soup",
+                "difficulty_level": 3,
+                "estimated_time": 90,
+                "serving_size": "6-8 servings",
+                "cultural_significance": "Traditional breaking-fast soup during Ramadan, symbol of hospitality"
+            },
+            {
+                "name_english": "Makroudh",
+                "name_local": "Makroudh",
+                "description": "Semolina pastry filled with dates and flavored with orange blossom water",
+                "key_ingredients": ["semolina", "dates", "orange blossom water", "honey"],
+                "category": "dessert",
+                "difficulty_level": 4,
+                "estimated_time": 120,
+                "serving_size": "8-10 servings",
+                "cultural_significance": "Traditional sweet served during celebrations and religious holidays"
+            }
+        ]
+    },
+    "egypt": {
+        "country": "Egypt",
+        "dishes": [
+            {
+                "name_english": "Koshari",
+                "name_local": "كشري",
+                "description": "National dish with rice, lentils, pasta topped with spiced tomato sauce and crispy onions",
+                "key_ingredients": ["rice", "lentils", "pasta", "tomatoes", "onions", "chickpeas"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 60,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "National dish of Egypt, represents Egyptian street food culture"
+            },
+            {
+                "name_english": "Ful Medames",
+                "name_local": "فول مدمس",
+                "description": "Traditional breakfast dish of slow-cooked fava beans served with bread",
+                "key_ingredients": ["fava beans", "garlic", "lemon juice", "olive oil", "cumin"],
+                "category": "breakfast",
+                "difficulty_level": 2,
+                "estimated_time": 45,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Ancient dish dating back to pharaonic times, breakfast staple"
+            }
+        ]
+    },
+    "sudan": {
+        "country": "Sudan",
+        "dishes": [
+            {
+                "name_english": "Aseeda",
+                "name_local": "عصيدة",
+                "description": "Traditional porridge made from wheat flour, served with meat stew or honey",
+                "key_ingredients": ["wheat flour", "water", "salt"],
+                "category": "main_dish",
+                "difficulty_level": 2,
+                "estimated_time": 40,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Traditional Sudanese comfort food, often served to guests"
+            },
+            {
+                "name_english": "Bamia",
+                "name_local": "بامية",
+                "description": "Okra stew with meat cooked in tomato sauce and spices",
+                "key_ingredients": ["okra", "meat", "tomatoes", "onions", "spices"],
+                "category": "main_dish",
+                "difficulty_level": 3,
+                "estimated_time": 75,
+                "serving_size": "4-6 servings",
+                "cultural_significance": "Popular family dish, represents home cooking traditions"
+            }
+        ]
     }
 }
 
