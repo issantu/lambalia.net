@@ -5882,6 +5882,109 @@ You'll earn commission from this purchase!`);
           </div>
         </div>
       )}
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-90vh overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Complete Your Order</h2>
+              <button 
+                onClick={() => setShowPaymentModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {/* Order Summary */}
+            <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+              <h3 className="font-medium mb-2">Order Summary</h3>
+              {selectedStore && (
+                <div className="text-sm space-y-1">
+                  <p><strong>Store:</strong> {selectedStore.name}</p>
+                  <p><strong>Address:</strong> {selectedStore.address}</p>
+                  <p><strong>Distance:</strong> {selectedStore.distance_km} km</p>
+                  <p><strong>Items Total:</strong> ${selectedStore.estimated_total}</p>
+                  {selectedDeliveryOption && (
+                    <>
+                      <p><strong>Delivery:</strong> {selectedDeliveryOption.type} ({selectedDeliveryOption.time_estimate})</p>
+                      <p><strong>Delivery Fee:</strong> ${selectedDeliveryOption.fee}</p>
+                    </>
+                  )}
+                  <div className="border-t pt-2 mt-2">
+                    <p><strong>Total:</strong> ${orderTotal.toFixed(2)}</p>
+                    <p className="text-green-600 text-xs">✨ You'll earn {((selectedStore.commission_rate || 0.05) * 100).toFixed(0)}% commission (${(orderTotal * (selectedStore.commission_rate || 0.05)).toFixed(2)})</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Ingredients List */}
+            <div className="mb-4">
+              <h4 className="font-medium mb-2">Ingredients to Order:</h4>
+              <div className="text-sm space-y-1">
+                {ingredients.filter(ing => ing.trim()).map((ingredient, index) => (
+                  <div key={index} className="flex justify-between">
+                    <span>🥬 {ingredient}</span>
+                    <span className="text-green-600">✓</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Payment Form */}
+            <div className="mb-4">
+              <h4 className="font-medium mb-2">Payment Information</h4>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Card Number"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="MM/YY"
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                  <input
+                    type="text"
+                    placeholder="CVV"
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Cardholder Name"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+            </div>
+
+            {/* Payment Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowPaymentModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={processPayment}
+                disabled={loading}
+                className="flex-1 btn-primary py-2 rounded-lg disabled:opacity-50"
+              >
+                {loading ? 'Processing... ⏳' : `Pay $${orderTotal.toFixed(2)} 💳`}
+              </button>
+            </div>
+            
+            <p className="text-xs text-gray-500 text-center mt-3">
+              🔒 Secure payment powered by Lambalia
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
