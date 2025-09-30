@@ -5482,6 +5482,8 @@ const GroceryPage = () => {
   const [postalCode, setPostalCode] = useState('');
   const [searchResults, setSearchResults] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState({});
+  const [showSuggestions, setShowSuggestions] = useState({});
   const { user } = useAuth();
   const { t } = useTranslation();
 
