@@ -5534,6 +5534,61 @@ const GroceryPage = () => {
     setSuggestions(prev => ({ ...prev, [index]: [] }));
   };
 
+  const handleOrderAndEarn = (store) => {
+    if (!user) {
+      alert('Please login to place an order');
+      return;
+    }
+    
+    setSelectedStore(store);
+    setOrderTotal(store.estimated_total);
+    setShowPaymentModal(true);
+  };
+
+  const handleDeliverySelection = (option) => {
+    if (!user) {
+      alert('Please login to select delivery options');
+      return;
+    }
+    
+    if (!selectedStore) {
+      // If no store selected, use the recommended store
+      const recommendedStore = searchResults.stores.find(s => s.id === searchResults.recommended_store_id) || searchResults.stores[0];
+      setSelectedStore(recommendedStore);
+    }
+    
+    setSelectedDeliveryOption(option);
+    const totalWithDelivery = (selectedStore?.estimated_total || searchResults.total_estimated_cost) + option.fee;
+    setOrderTotal(totalWithDelivery);
+    setShowPaymentModal(true);
+  };
+
+  const processPayment = async () => {
+    if (!selectedStore || !user) return;
+    
+    setLoading(true);
+    try {
+      // Simulate payment processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      alert(`Order placed successfully! 
+Store: ${selectedStore.name}
+Total: $${orderTotal.toFixed(2)}
+${selectedDeliveryOption ? `Delivery: ${selectedDeliveryOption.type} (${selectedDeliveryOption.time_estimate})` : ''}
+You'll earn commission from this purchase!`);
+      
+      setShowPaymentModal(false);
+      setSelectedStore(null);
+      setSelectedDeliveryOption(null);
+      setOrderTotal(0);
+      
+    } catch (error) {
+      console.error('Payment processing failed:', error);
+      alert('Payment processing failed. Please try again.');
+    }
+    setLoading(false);
+  };
+
   const searchGroceryStores = async () => {
     if (!postalCode.trim()) {
       alert('Please enter your postal code');
