@@ -6271,8 +6271,21 @@ class LambaliaEnhancedAPITester:
         self.test_user_login()
         self.test_get_current_user()
         
-        # REVIEW REQUEST SPECIFIC TESTS
-        print("\n🎯 Testing Review Request Specific Features...")
+        # REVIEW REQUEST SPECIFIC TESTS - ENHANCED AFRICAN CUISINE DATABASE AND PAYMENT PROCESSING
+        print("\n🎯 Testing Enhanced African Cuisine Database and Payment Processing Features...")
+        self.test_enhanced_african_cuisine_native_recipes()
+        self.test_enhanced_african_cuisine_reference_recipes()
+        self.test_enhanced_african_cuisine_countries_endpoint()
+        self.test_enhanced_african_cuisine_authentic_dishes()
+        self.test_enhanced_grocery_payment_processing_search()
+        self.test_enhanced_grocery_payment_delivery_options()
+        self.test_enhanced_grocery_commission_calculations()
+        self.test_grocery_ingredient_suggestions_integration()
+        self.test_african_cuisine_data_serving_integration()
+        self.test_grocery_payment_data_structure_integration()
+        
+        # PREVIOUS REVIEW REQUEST TESTS
+        print("\n🎯 Testing Previous Review Request Features...")
         self.test_grocery_search_with_sample_ingredients()
         self.test_grocery_search_delivery_options()
         self.test_core_agent_career_posting()
