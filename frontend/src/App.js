@@ -5775,7 +5775,10 @@ You'll earn commission from this purchase!`);
                         🚚 Delivery
                       </span>
                     )}
-                    <button className="btn-primary text-xs px-3 py-1 rounded">
+                    <button 
+                      onClick={() => handleOrderAndEarn(store)}
+                      className="btn-primary text-xs px-3 py-1 rounded hover:bg-green-600 transition-colors"
+                    >
                       💰 Order & Earn
                     </button>
                   </div>
