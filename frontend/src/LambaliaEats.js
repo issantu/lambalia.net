@@ -55,7 +55,10 @@ const LambaliaEatsApp = () => {
 
   const setupWebSocket = () => {
     const userId = `temp_user_${Math.random().toString(36).substr(2, 9)}`;
-    const ws = new WebSocket(`ws://localhost:8001/api/eats/ws/${userId}`);
+    // Use environment variable for WebSocket URL, converting HTTPS to WSS and HTTP to WS
+    const API = process.env.REACT_APP_BACKEND_URL;
+    const wsUrl = API ? API.replace('https://', 'wss://').replace('http://', 'ws://') : 'ws://localhost:8001';
+    const ws = new WebSocket(`${wsUrl}/api/eats/ws/${userId}`);
     
     ws.onopen = () => {
       console.log('Connected to Lambalia Eats real-time updates');
