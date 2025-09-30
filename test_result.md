@@ -369,7 +369,6 @@ backend:
 
 test_plan:
   current_focus:
-    - "Real Grocery API Integration - Open Food Facts - NEW IMPLEMENTATION 🚀"
     - "Enhanced Dietary Preferences System - CRITICAL ISSUE ❌"
     - "Reference Recipes Endpoint - NEEDS INVESTIGATION ⚠️"
     - "Special Order Creation - VENDOR APPROVAL ISSUE ⚠️"
