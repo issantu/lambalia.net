@@ -369,9 +369,9 @@ backend:
 
 test_plan:
   current_focus:
+    - "Browse Templates Frontend Fix - COMPLETED ✅"
+    - "Find Ingredients Functionality - VERIFIED WORKING ✅"
     - "Enhanced Dietary Preferences System - CRITICAL ISSUE ❌"
-    - "Reference Recipes Endpoint - NEEDS INVESTIGATION ⚠️"
-    - "Special Order Creation - VENDOR APPROVAL ISSUE ⚠️"
   stuck_tasks:
     - "Enhanced Dietary Preferences System"
   test_all: false
