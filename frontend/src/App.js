@@ -3238,24 +3238,32 @@ const RecipeTemplatesPage = () => {
   }, [selectedCountry, selectedCategory, searchQuery]);
 
   const fetchInitialData = async () => {
+    console.log('=== DEBUG: Starting fetchInitialData ===');
     try {
+      console.log('=== DEBUG: Making API calls to:', API);
       const [countriesResponse, nativeResponse] = await Promise.all([
         axios.get(`${API}/countries`),
         axios.get(`${API}/native-recipes`)
       ]);
       
+      console.log('=== DEBUG: Countries response:', countriesResponse.data);
+      console.log('=== DEBUG: Native recipes response keys:', Object.keys(nativeResponse.data));
+      
       // Handle countries data
       const countriesData = Array.isArray(countriesResponse.data) ? countriesResponse.data : countriesResponse.data.countries || [];
       setCountries(countriesData);
+      console.log('=== DEBUG: Set countries:', countriesData.length);
       
       // Handle native recipes data
       const nativeData = nativeResponse.data.recipes || nativeResponse.data.native_recipes || {};
       setNativeRecipes(nativeData);
+      console.log('=== DEBUG: Set native recipes:', Object.keys(nativeData).length);
       
       setLoading(false); // Ensure loading is set to false after initial data loads
+      console.log('=== DEBUG: Set loading to false ===');
       
     } catch (error) {
-      console.error('Failed to fetch initial data:', error);
+      console.error('=== DEBUG: Failed to fetch initial data:', error);
       // Set defaults to prevent crashes
       setCountries([]);
       setNativeRecipes({});
