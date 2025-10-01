@@ -3371,22 +3371,43 @@ const RecipeTemplatesPage = () => {
     </div>
   );
 
-  const CountryRecipesList = ({ countryName, recipes }) => (
-    <div key={countryName} className="bg-white rounded-lg p-4 mb-4 shadow-sm">
-      <h4 className="font-semibold text-gray-800 mb-2">{countryName} ({recipes.length - 1} recipes)</h4>
-      <div className="flex flex-wrap gap-2">
-        {recipes.filter(recipe => recipe !== 'Other').map((recipe, index) => (
-          <span 
-            key={index} 
-            className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
-            onClick={() => setSearchQuery(recipe)}
-          >
-            {recipe}
-          </span>
-        ))}
+  const CountryRecipesList = ({ countryName, recipes }) => {
+    // Handle both object-based recipes and string-based recipes
+    const getRecipeName = (recipe) => {
+      if (typeof recipe === 'string') {
+        return recipe;
+      } else if (recipe && typeof recipe === 'object') {
+        return recipe.name_english || recipe.name || 'Unknown Recipe';
+      }
+      return 'Unknown Recipe';
+    };
+
+    const getSearchQuery = (recipe) => {
+      if (typeof recipe === 'string') {
+        return recipe;
+      } else if (recipe && typeof recipe === 'object') {
+        return recipe.name_english || recipe.name || '';
+      }
+      return '';
+    };
+
+    return (
+      <div key={countryName} className="bg-white rounded-lg p-4 mb-4 shadow-sm">
+        <h4 className="font-semibold text-gray-800 mb-2">{countryName} ({recipes.length - 1} recipes)</h4>
+        <div className="flex flex-wrap gap-2">
+          {recipes.filter(recipe => getRecipeName(recipe) !== 'Other').map((recipe, index) => (
+            <span 
+              key={index} 
+              className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
+              onClick={() => setSearchQuery(getSearchQuery(recipe))}
+            >
+              {getRecipeName(recipe)}
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
