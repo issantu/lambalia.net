@@ -3379,39 +3379,80 @@ const RecipeTemplatesPage = () => {
     </div>
   );
 
+  // Add comprehensive error handling and safety functions
+  const renderSafeRecipeName = (recipe) => {
+    try {
+      if (typeof recipe === 'string') return recipe;
+      if (recipe && typeof recipe === 'object') {
+        return recipe.name_english || recipe.name_local || recipe.name || 'Unknown Recipe';
+      }
+      return 'Unknown Recipe';
+    } catch (error) {
+      console.error('Error rendering recipe name:', error);
+      return 'Error Loading Recipe';
+    }
+  };
+
   const CountryRecipesList = ({ countryName, recipes }) => {
     // Handle both object-based recipes and string-based recipes
     const getRecipeName = (recipe) => {
-      if (typeof recipe === 'string') {
-        return recipe;
-      } else if (recipe && typeof recipe === 'object') {
-        return recipe.name_english || recipe.name || 'Unknown Recipe';
+      try {
+        if (typeof recipe === 'string') {
+          return recipe;
+        } else if (recipe && typeof recipe === 'object') {
+          return recipe.name_english || recipe.name || 'Unknown Recipe';
+        }
+        return 'Unknown Recipe';
+      } catch (error) {
+        console.error('Error getting recipe name:', error);
+        return 'Error Loading Recipe';
       }
-      return 'Unknown Recipe';
     };
 
     const getSearchQuery = (recipe) => {
-      if (typeof recipe === 'string') {
-        return recipe;
-      } else if (recipe && typeof recipe === 'object') {
-        return recipe.name_english || recipe.name || '';
+      try {
+        if (typeof recipe === 'string') {
+          return recipe;
+        } else if (recipe && typeof recipe === 'object') {
+          return recipe.name_english || recipe.name || '';
+        }
+        return '';
+      } catch (error) {
+        console.error('Error getting search query:', error);
+        return '';
       }
-      return '';
     };
+
+    if (!Array.isArray(recipes) || recipes.length === 0) {
+      return (
+        <div key={countryName} className="bg-white rounded-lg p-4 mb-4 shadow-sm">
+          <h4 className="font-semibold text-gray-800 mb-2">{countryName} (0 recipes)</h4>
+          <p className="text-gray-500 text-sm">No recipes available</p>
+        </div>
+      );
+    }
 
     return (
       <div key={countryName} className="bg-white rounded-lg p-4 mb-4 shadow-sm">
-        <h4 className="font-semibold text-gray-800 mb-2">{countryName} ({recipes.filter(recipe => getRecipeName(recipe) !== 'Other').length} recipes)</h4>
+        <h4 className="font-semibold text-gray-800 mb-2">
+          {countryName} ({recipes.filter(recipe => getRecipeName(recipe) !== 'Other').length} recipes)
+        </h4>
         <div className="flex flex-wrap gap-2">
-          {recipes.filter(recipe => getRecipeName(recipe) !== 'Other').map((recipe, index) => (
-            <span 
-              key={index} 
-              className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
-              onClick={() => setSearchQuery(getSearchQuery(recipe))}
-            >
-              {getRecipeName(recipe)}
-            </span>
-          ))}
+          {recipes.filter(recipe => getRecipeName(recipe) !== 'Other').map((recipe, index) => {
+            const recipeName = getRecipeName(recipe);
+            const searchQuery = getSearchQuery(recipe);
+            
+            return (
+              <span 
+                key={`${countryName}-${index}`}
+                className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
+                onClick={() => setSearchQuery(searchQuery)}
+                title={`Search for ${recipeName}`}
+              >
+                {recipeName}
+              </span>
+            );
+          })}
         </div>
       </div>
     );
