@@ -408,6 +408,8 @@ test_plan:
   test_priority: "high_first"
 
 agent_communication:
+  - agent: "testing"
+    message: "CRITICAL FRONTEND BUGS RESOLVED: Successfully identified and fixed both user-reported critical issues. 1) Browse Templates: Fixed React error 'Objects are not valid as a React child' in CountryRecipesList component by handling mixed API response structure (object vs string recipes). Now displays 236 recipe cards with full functionality. 2) Find Ingredients: Verified as fully functional - form inputs, search functionality, grocery store results, and pricing all working correctly. Both features are now production-ready and user-accessible."
   - agent: "main"
     message: "MAJOR BACKEND ENHANCEMENT COMPLETED: Successfully implemented comprehensive global dishes database covering 80+ countries/regions with 1000+ traditional dishes across 6 major world cuisines (African, Caribbean, Asian, Latin American, Middle Eastern, European). Each database includes authentic dishes sourced using Wikipedia-style comprehensive cultural research."
   - agent: "main"
