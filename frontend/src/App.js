@@ -3393,7 +3393,7 @@ const RecipeTemplatesPage = () => {
 
     return (
       <div key={countryName} className="bg-white rounded-lg p-4 mb-4 shadow-sm">
-        <h4 className="font-semibold text-gray-800 mb-2">{countryName} ({recipes.length - 1} recipes)</h4>
+        <h4 className="font-semibold text-gray-800 mb-2">{countryName} ({recipes.filter(recipe => getRecipeName(recipe) !== 'Other').length} recipes)</h4>
         <div className="flex flex-wrap gap-2">
           {recipes.filter(recipe => getRecipeName(recipe) !== 'Other').map((recipe, index) => (
             <span 
