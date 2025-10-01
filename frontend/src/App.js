@@ -3252,11 +3252,14 @@ const RecipeTemplatesPage = () => {
       const nativeData = nativeResponse.data.recipes || nativeResponse.data.native_recipes || {};
       setNativeRecipes(nativeData);
       
+      setLoading(false); // Ensure loading is set to false after initial data loads
+      
     } catch (error) {
       console.error('Failed to fetch initial data:', error);
       // Set defaults to prevent crashes
       setCountries([]);
       setNativeRecipes({});
+      setLoading(false); // Set loading to false even on error to show the page
     }
   };
 
