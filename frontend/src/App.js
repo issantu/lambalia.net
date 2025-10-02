@@ -3946,7 +3946,6 @@ const HomePage = () => {
             <span className="text-sm font-medium">{t('home.actions.eatsName')}</span>
           </Link>
         </div>
-      </div>
 
       {/* Ad Placement */}
       <AdComponent placement="home-top" />
