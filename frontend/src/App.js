@@ -3801,9 +3801,89 @@ const HomePage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold heading-gradient mb-4">{t('home.title')}</h2>
-        <p className="text-gray-600 mb-6">{t('home.subtitle')}</p>
+      {/* Enhanced Revenue Generation CTA Section */}
+      <section className="mb-12">
+        <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 border border-green-100 shadow-xl">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-4">
+              🚀 Start Earning Today!
+            </h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Join thousands of food enthusiasts making money through our monetization features
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Grocery Commission Feature */}
+            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🛒</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Grocery Shopping</h3>
+                <p className="text-gray-600 text-sm mb-4">Earn up to 8% commission on every grocery order you place</p>
+                <Link 
+                  to="/grocery" 
+                  className="inline-block w-full bg-green-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-600 transition-colors"
+                >
+                  Start Shopping & Earning
+                </Link>
+              </div>
+            </div>
+
+            {/* Lambalia Eats Feature */}
+            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🍽️</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Quick Eats Market</h3>
+                <p className="text-gray-600 text-sm mb-4">Order from local restaurants and earn rewards on every purchase</p>
+                <Link 
+                  to="/eats" 
+                  className="inline-block w-full bg-blue-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+                >
+                  Browse & Order Now
+                </Link>
+              </div>
+            </div>
+
+            {/* Charity Program Feature */}
+            <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">❤️</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Charity Program</h3>
+                <p className="text-gray-600 text-sm mb-4">Make a difference while earning rewards through our charity partnerships</p>
+                <Link 
+                  to="/charity" 
+                  className="inline-block w-full bg-purple-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-600 transition-colors"
+                >
+                  Give & Earn
+                </Link>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center mt-8">
+            <p className="text-gray-600 text-sm">
+              💡 <strong>Pro Tip:</strong> Users typically earn $50-200 per month using these features
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold heading-gradient mb-4">{t('home.title')}</h1>
+        <p className="text-xl text-gray-600 mb-2">{t('home.subtitle')}</p>
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-r-lg inline-block">
+          <p className="text-yellow-800 font-medium">
+            🎯 <strong>New Domain:</strong> Welcome to lambalia.com - Your Food & Earning Hub!
+          </p>
+        </div>
+      </div>
         
         {/* External Ad - Revenue Generation */}
         <ExternalAdBanner placement="homepage_header" size="728x90" />
