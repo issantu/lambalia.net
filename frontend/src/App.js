@@ -5836,6 +5836,9 @@ You'll earn commission from this purchase!`);
                     <div className="text-right">
                       <p className="store-price text-xl">${store.estimated_total}</p>
                       <p className="text-xs text-gray-500">Est. total</p>
+                      <p className="text-xs text-green-600 font-medium">
+                        💰 Earn ${((store.commission_rate || 0.05) * store.estimated_total).toFixed(2)} commission
+                      </p>
                     </div>
                   </div>
                   
