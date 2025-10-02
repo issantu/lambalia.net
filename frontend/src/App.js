@@ -3885,10 +3885,10 @@ const HomePage = () => {
         </div>
       </div>
         
-        {/* External Ad - Revenue Generation */}
-        <ExternalAdBanner placement="homepage_header" size="728x90" />
+      {/* External Ad - Revenue Generation */}
+      <ExternalAdBanner placement="homepage_header" size="728x90" />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
           <Link
             to="/grocery"
             className="btn-primary text-center p-4 rounded-lg no-underline text-white flex flex-col items-center space-y-2"
