@@ -3888,14 +3888,14 @@ const HomePage = () => {
         {/* External Ad - Revenue Generation */}
         <ExternalAdBanner placement="homepage_header" size="728x90" />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
           <Link
-            to="/templates"
+            to="/grocery"
             className="btn-primary text-center p-4 rounded-lg no-underline text-white flex flex-col items-center space-y-2"
           >
-            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop&crop=center" 
-                 alt="Browse Heritage Recipes" className="w-12 h-12 rounded-lg object-cover" />
-            <span className="text-sm font-medium">{t('home.actions.browseName')}</span>
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=60&h=60&fit=crop&crop=center" 
+                 alt="Find Ingredients" className="w-12 h-12 rounded-lg object-cover" />
+            <span className="text-sm font-medium">{t('home.actions.groceryName')}</span>
           </Link>
           <Link
             to="/create-snippet"
