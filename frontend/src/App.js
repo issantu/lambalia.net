@@ -435,10 +435,7 @@ const Header = () => {
             
             {/* Main Navigation */}
             <nav className="hidden lg:flex items-center space-x-1">
-              <Link to="/templates" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
-                <Icon name="Browse" size={14} className="text-gray-600" />
-                <span>{t('nav.browse')}</span>
-              </Link>
+              {/* Browse Templates link removed - focusing on monetizing features */}
               
               <Link to="/create-snippet" className="nav-link text-gray-700 hover:text-green-600 px-2 py-1.5 rounded-md text-sm font-medium flex items-center space-x-1.5">
                 <Icon name="Create" size={14} className="text-gray-600" />
