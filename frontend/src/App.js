@@ -5850,9 +5850,9 @@ You'll earn commission from this purchase!`);
                     )}
                     <button 
                       onClick={() => handleOrderAndEarn(store)}
-                      className="btn-primary text-xs px-3 py-1 rounded hover:bg-green-600 transition-colors"
+                      className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
                     >
-                      💰 Order & Earn
+                      💰 Order & Earn ${((store.commission_rate || 0.05) * store.estimated_total).toFixed(2)}
                     </button>
                   </div>
                   
