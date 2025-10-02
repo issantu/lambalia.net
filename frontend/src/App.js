@@ -6107,18 +6107,6 @@ function App() {
               } 
             />
             <Route 
-              path="/templates" 
-              element={
-                <ProtectedRoute>
-                  <>
-                    <Header />
-                    <RecipeTemplatesPage />
-                    <Footer />
-                  </>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
               path="/create-snippet" 
               element={
                 <ProtectedRoute>
