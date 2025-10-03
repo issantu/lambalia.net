@@ -3881,6 +3881,7 @@ const HomePage = () => {
         <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-r-lg inline-block">
           <p className="text-yellow-800 font-medium">
             🎯 <strong>New Domain:</strong> Welcome to lambalia.com - Your Food & Earning Hub!
+            <br /><small>Version: December 29, 2024 - Latest Build</small>
           </p>
         </div>
       </div>
