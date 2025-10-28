@@ -8,26 +8,18 @@
       "config": {
         "distDir": "build"
       }
-    },
-    {
-      "src": "backend/server.py",
-      "use": "@vercel/python"
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "backend/server.py"
-    },
     {
       "src": "/(.*)",
       "dest": "/frontend/build/index.html"
     }
   ],
-  "installCommand": "cd frontend && yarn install && cd ../backend && pip install -r requirements.txt",
+  "installCommand": "cd frontend && yarn install",
   "buildCommand": "cd frontend && yarn build",
   "outputDirectory": "frontend/build",
   "env": {
-    "REACT_APP_BACKEND_URL": "https://lambalia.com"
+    "REACT_APP_BACKEND_URL": "https://api.lambalia.net"
   }
 }
