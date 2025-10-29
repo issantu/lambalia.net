@@ -1,24 +1,7 @@
 {
-  "version": 2,
-  "name": "lambalia",
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/build/index.html"
-    }
-  ],
-  "installCommand": "cd frontend && yarn install",
-  "buildCommand": "cd frontend && yarn build",
+  "buildCommand": "cd frontend && yarn install && yarn build",
   "outputDirectory": "frontend/build",
+  "installCommand": "cd frontend && yarn install",
   "env": {
     "REACT_APP_BACKEND_URL": "https://api.lambalia.net"
   }
