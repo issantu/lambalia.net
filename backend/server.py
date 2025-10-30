@@ -346,7 +346,7 @@ async def get_current_user_optional(credentials: HTTPAuthorizationCredentials = 
             return None
         
         return user_id
-    except (jwt.ExpiredSignatureError, jwt.JWTError):
+    except (ExpiredSignatureError, JWTError):
         return None
 
 # Security utilities for 2FA
