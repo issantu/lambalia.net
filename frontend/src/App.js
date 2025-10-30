@@ -5030,6 +5030,7 @@ const Footer = () => {
                 alt="Ish@ngo Technologies" 
                 className="h-8 w-auto rounded"
               />
+              <span className="text-white font-semibold">Ish@ngo Technologies</span>
             </div>
             <div className="text-gray-400 text-sm">
               <p>&copy; 2024 Lambalia by Ish@ngo Technologies. All rights reserved.</p>
