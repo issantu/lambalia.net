@@ -5026,7 +5026,7 @@ const Footer = () => {
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
               <span className="text-gray-400 text-sm">Powered by</span>
               <img 
-                src="https://customer-assets.emergentagent.com/job_cuisine-finder-3/artifacts/woumcsar_image.png" 
+                src="https://customer-assets.emergentagent.com/job_cuisine-finder-3/artifacts/tn7fwxw5_Logo_1.jpg" 
                 alt="Ish@ngo Technologies" 
                 className="w-8 h-8 rounded"
               />
