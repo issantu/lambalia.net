@@ -6265,6 +6265,7 @@ function App() {
               path="/lambalia-eats" 
               element={
                 <>
+                  <Header />
                   <LambaliaEatsApp />
                   <Footer />
                 </>
