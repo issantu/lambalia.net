@@ -6514,6 +6514,17 @@ class LambaliaEnhancedAPITester:
         self.test_user_login()
         self.test_get_current_user()
         
+        # 2FA EMAIL VERIFICATION SYSTEM TESTS (Option C)
+        print("\n📧 Testing 2FA Email Verification System (Option C)...")
+        self.test_2fa_registration_email_verification_flow()
+        self.test_2fa_email_verification_with_code()
+        self.test_2fa_login_unverified_user_rejection()
+        self.test_2fa_login_verified_user_normal_flow()
+        self.test_2fa_suspicious_login_detection()
+        self.test_2fa_verify_2fa_endpoint()
+        self.test_2fa_email_service_configuration()
+        self.test_2fa_email_verifications_collection()
+        
         # REVIEW REQUEST SPECIFIC TESTS - ENHANCED AFRICAN CUISINE DATABASE AND PAYMENT PROCESSING
         print("\n🎯 Testing Enhanced African Cuisine Database and Payment Processing Features...")
         self.test_enhanced_african_cuisine_native_recipes()
