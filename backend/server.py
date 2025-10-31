@@ -770,7 +770,7 @@ async def verify_2fa_login(email: str, code: str, request: Request):
 
 @api_router.post("/auth/login", response_model=LoginResponse)
 async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
-    """Enhanced login with 2FA support and security key verification"""
+    """Login with email verification check and suspicious activity monitoring"""
     
     # Get client info for logging
     ip_address = request.client.host if request.client else "unknown"
@@ -787,12 +787,108 @@ async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
         log_login_attempt(login_data.email, ip_address, user_agent, False, failed_reason="invalid_password")
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    # Check if user has 2FA enabled
-    security_profile = await db.user_security_profiles.find_one({"user_id": user_doc['id']})
+    # NEW REQUIREMENT: Check email verification (from registration)
+    if not user_doc.get('email_verified', False):
+        log_login_attempt(login_data.email, ip_address, user_agent, False, failed_reason="email_not_verified")
+        raise HTTPException(
+            status_code=403, 
+            detail="Please verify your email address. Check your inbox for the verification code."
+        )
     
-    if security_profile and security_profile.get('twofa_enabled', False):
-        # 2FA is required
-        if not login_data.twofa_code or not login_data.twofa_method:
+    # Check for suspicious activity patterns (future 2FA trigger points)
+    suspicious_activity = await detect_suspicious_login(user_doc, ip_address, user_agent)
+    
+    if suspicious_activity.get('requires_2fa', False):
+        # Only trigger 2FA for suspicious activities
+        session_id = str(uuid.uuid4())
+        
+        # Send 2FA code for suspicious login
+        verification_code = email_service.generate_verification_code()
+        email_sent = email_service.send_verification_email(
+            recipient_email=login_data.email,
+            verification_code=verification_code,
+            email_type="suspicious_login"
+        )
+        
+        if email_sent:
+            await email_service.store_verification_code(
+                email=login_data.email,
+                code=verification_code,
+                code_type="suspicious_login"
+            )
+            
+        return LoginResponse(
+            requires_2fa=True,
+            session_id=session_id,
+            message=f"Suspicious activity detected: {suspicious_activity['reason']}. Please check your email for verification code.",
+            twofa_methods=["email"]
+        )
+    
+    # Normal login - no 2FA required
+    user = UserProfile(**user_doc)
+    
+    # Update last login info
+    await db.users.update_one(
+        {"id": user.id},
+        {"$set": {
+            "last_login": datetime.utcnow(),
+            "last_ip": ip_address,
+            "last_user_agent": user_agent
+        }}
+    )
+    
+    # Generate JWT token
+    token = create_jwt_token(user.id)
+    
+    log_login_attempt(login_data.email, ip_address, user_agent, True, success_details="normal_login")
+    logger.info(f"User logged in successfully: {user.username} from {ip_address}")
+    
+    return LoginResponse(
+        access_token=token,
+        token_type="bearer", 
+        user=UserResponse(**user.dict()),
+        message="Login successful"
+    )
+
+async def detect_suspicious_login(user_doc: dict, ip_address: str, user_agent: str) -> dict:
+    """Detect suspicious login patterns that require 2FA"""
+    
+    suspicious_indicators = []
+    
+    # Check 1: New IP address
+    if user_doc.get('last_ip') and user_doc['last_ip'] != ip_address:
+        suspicious_indicators.append("new_ip_address")
+    
+    # Check 2: New device/browser
+    if user_doc.get('last_user_agent') and user_doc['last_user_agent'] != user_agent:
+        suspicious_indicators.append("new_device")
+    
+    # Check 3: Login after long period (more than 30 days)
+    last_login = user_doc.get('last_login')
+    if last_login:
+        days_since_last_login = (datetime.utcnow() - last_login).days
+        if days_since_last_login > 30:
+            suspicious_indicators.append("long_absence")
+    
+    # Check 4: Multiple failed attempts recently
+    recent_failed_attempts = await db.login_attempts.count_documents({
+        "email": user_doc['email'],
+        "success": False,
+        "timestamp": {"$gte": datetime.utcnow() - timedelta(hours=1)}
+    })
+    
+    if recent_failed_attempts >= 3:
+        suspicious_indicators.append("multiple_failed_attempts")
+    
+    # Determine if 2FA is required
+    high_risk_indicators = ["multiple_failed_attempts", "new_ip_address"]
+    requires_2fa = any(indicator in high_risk_indicators for indicator in suspicious_indicators)
+    
+    return {
+        "requires_2fa": requires_2fa,
+        "indicators": suspicious_indicators,
+        "reason": ", ".join(suspicious_indicators) if suspicious_indicators else "normal_login"
+    }
             # Return available 2FA methods
             available_methods = []
             if security_profile.get('totp_secret'):
