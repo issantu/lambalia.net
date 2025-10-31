@@ -890,34 +890,6 @@ async def detect_suspicious_login(user_doc: dict, ip_address: str, user_agent: s
         "indicators": suspicious_indicators,
         "reason": ", ".join(suspicious_indicators) if suspicious_indicators else "normal_login"
     }
-                "user_id": user_doc['id'],
-                "email": login_data.email,
-                "created_at": datetime.utcnow(),
-                "expires_at": datetime.utcnow() + timedelta(minutes=10)
-            })
-            
-            return LoginResponse(
-                success=False,
-                requires_2fa=True,
-                available_2fa_methods=available_methods,
-                session_id=session_id,
-                message="Two-factor authentication required"
-            )
-        
-        # Verify 2FA code
-        twofa_valid = False
-        
-        if login_data.twofa_method == SecurityKeyType.TOTP:
-            totp_secret = security_profile.get('totp_secret')
-            if totp_secret:
-                twofa_valid = verify_totp_code(totp_secret, login_data.twofa_code)
-        
-        elif login_data.twofa_method == SecurityKeyType.BACKUP_CODE:
-            backup_codes = security_profile.get('backup_codes', [])
-            used_codes = security_profile.get('backup_codes_used', [])
-            
-            if (login_data.twofa_code in backup_codes and 
-                login_data.twofa_code not in used_codes):
                 twofa_valid = True
                 # Mark backup code as used
                 await db.user_security_profiles.update_one(
