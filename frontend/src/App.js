@@ -194,7 +194,7 @@ const LoginPage = () => {
     consultation_specialties: '',
     cultural_background: ''
   });
-  const { login, register } = useAuth();
+  const { login, register, verify2FA } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
