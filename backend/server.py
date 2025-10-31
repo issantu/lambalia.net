@@ -21,6 +21,7 @@ from email import encoders
 import random
 import string
 import base64
+from enum import Enum
 
 # Import existing models and new marketplace models
 from models_extension import (
