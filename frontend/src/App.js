@@ -178,6 +178,9 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLogin, setIsLogin] = useState(true);
+  const [show2FA, setShow2FA] = useState(false);
+  const [twoFACode, setTwoFACode] = useState('');
+  const [sessionId, setSessionId] = useState('');
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     username: '',
