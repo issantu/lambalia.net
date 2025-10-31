@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 import jwt
 from jwt import PyJWTError as JWTError, ExpiredSignatureError
 import bcrypt
+import uuid
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
