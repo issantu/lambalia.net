@@ -3782,12 +3782,6 @@ const HomePage = () => {
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold heading-gradient mb-4">{t('home.title')}</h1>
         <p className="text-xl text-gray-600 mb-2">{t('home.subtitle')}</p>
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-r-lg inline-block">
-          <p className="text-yellow-800 font-medium">
-            🎯 <strong>New Domain:</strong> Welcome to lambalia.com - Your Food & Earning Hub!
-            <br /><small>Version: December 29, 2024 - Latest Build</small>
-          </p>
-        </div>
       </div>
         
       {/* External Ad - Revenue Generation */}
