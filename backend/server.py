@@ -626,6 +626,60 @@ async def register_user(user_data: UserRegistration):
         "verification_required": True
     }
 
+@api_router.post("/auth/verify-email")
+async def verify_email(email: str, code: str):
+    """Verify email address with the provided code and activate account"""
+    
+    # Verify the code
+    code_valid = await email_service.verify_code(
+        email=email,
+        code=code,
+        code_type="registration"
+    )
+    
+    if not code_valid:
+        raise HTTPException(status_code=400, detail="Invalid or expired verification code")
+    
+    # Get temporary user data
+    temp_user = await db.temp_users.find_one({"email": email})
+    if not temp_user:
+        raise HTTPException(status_code=404, detail="User registration not found")
+    
+    # Create the actual user account
+    user_dict = temp_user.copy()
+    user_dict['email_verified'] = True
+    user_dict['account_activated'] = True
+    user_dict['activated_at'] = datetime.utcnow()
+    del user_dict['_id']  # Remove temp ID
+    
+    user = UserProfile(**user_dict)
+    await db.users.insert_one(user.dict())
+    
+    # Send welcome SMS notification
+    try:
+        sms_service = await get_sms_service()
+        if user.phone:
+            await sms_service.send_registration_sms(
+                phone_number=user.phone,
+                user_name=user.full_name or user.username
+            )
+            logger.info(f"Welcome SMS sent to new user: {user.username}")
+    except Exception as e:
+        logger.warning(f"Failed to send welcome SMS to {user.username}: {str(e)}")
+    
+    # Remove temporary user data
+    await db.temp_users.delete_one({"email": email})
+    
+    # Generate JWT token
+    token = create_jwt_token(user.id)
+    
+    return {
+        "message": "Email verified successfully! Account activated.",
+        "access_token": token,
+        "token_type": "bearer",
+        "user": UserResponse(**user.dict())
+    }
+
 @api_router.post("/auth/login", response_model=LoginResponse)
 async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
     """Enhanced login with 2FA support and security key verification"""
