@@ -20,6 +20,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 import random
 import string
+import base64
 
 # Import existing models and new marketplace models
 from models_extension import (
