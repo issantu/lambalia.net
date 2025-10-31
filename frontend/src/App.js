@@ -203,6 +203,10 @@ const LoginPage = () => {
     const result = await login(email, password);
     if (result.success) {
       window.location.href = '/';
+    } else if (result.requires_2fa) {
+      setShow2FA(true);
+      setSessionId(result.session_id);
+      setError(result.message || 'Please enter the verification code sent to your email.');
     } else {
       setError(result.error);
     }
