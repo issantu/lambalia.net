@@ -890,41 +890,6 @@ async def detect_suspicious_login(user_doc: dict, ip_address: str, user_agent: s
         "indicators": suspicious_indicators,
         "reason": ", ".join(suspicious_indicators) if suspicious_indicators else "normal_login"
     }
-                twofa_valid = True
-                # Mark backup code as used
-                await db.user_security_profiles.update_one(
-                    {"user_id": user_doc['id']},
-                    {"$push": {"backup_codes_used": login_data.twofa_code}}
-                )
-        
-        elif login_data.twofa_method == SecurityKeyType.SMS:
-            # In production, implement SMS verification
-            twofa_valid = login_data.twofa_code == "123456"  # Placeholder
-        
-        if not twofa_valid:
-            log_login_attempt(login_data.email, ip_address, user_agent, False, 
-                            twofa_required=True, twofa_success=False, failed_reason="invalid_2fa")
-            raise HTTPException(status_code=401, detail="Invalid two-factor authentication code")
-        
-        # Clean up pending session
-        await db.pending_2fa_sessions.delete_many({"user_id": user_doc['id']})
-    
-    # Generate token
-    token = create_jwt_token(user_doc['id'])
-    
-    # Log successful login
-    log_login_attempt(login_data.email, ip_address, user_agent, True, 
-                     twofa_required=bool(security_profile and security_profile.get('twofa_enabled')), 
-                     twofa_success=True if security_profile and security_profile.get('twofa_enabled') else None)
-    
-    return LoginResponse(
-        success=True,
-        requires_2fa=False,
-        access_token=token,
-        token_type="bearer",
-        user=UserResponse(**user_doc),
-        message="Login successful"
-    )
 
 @api_router.post("/auth/setup-2fa", response_model=dict)
 async def setup_2fa(setup_request: Setup2FARequest, current_user_id: str = Depends(get_current_user)):
