@@ -231,6 +231,7 @@ const LoginPage = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
     
     // Map frontend field names to backend field names
     const registrationData = {
@@ -244,6 +245,28 @@ const LoginPage = () => {
     const result = await register(registrationData);
     if (result.success) {
       window.location.href = '/';
+    } else if (result.verification_required) {
+      // Show email verification form
+      setShowEmailVerification(true);
+      setPendingVerificationEmail(result.email);
+      setSuccessMessage(result.message || 'Please check your email for the verification code.');
+      setIsLogin(false); // Stay on the form view
+    } else {
+      setError(result.error);
+    }
+  };
+  
+  const handleEmailVerification = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMessage('');
+    
+    const result = await verifyEmail(pendingVerificationEmail, verificationCode);
+    if (result.success) {
+      setSuccessMessage('Email verified successfully! Redirecting...');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1500);
     } else {
       setError(result.error);
     }
