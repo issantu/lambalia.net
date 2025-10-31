@@ -13,11 +13,13 @@ from datetime import datetime, timedelta
 import jwt
 from jwt import PyJWTError as JWTError, ExpiredSignatureError
 import bcrypt
-import base64
-from enum import Enum
-import math
-import json
-import asyncio
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+import random
+import string
 
 # Import existing models and new marketplace models
 from models_extension import (
