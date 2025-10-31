@@ -311,34 +311,74 @@ const LoginPage = () => {
         )}
 
         {isLogin ? (
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.email')}</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.password')}</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
-            >
+          show2FA ? (
+            <form onSubmit={handle2FA} className="space-y-4">
+              <div className="text-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Security Verification Required</h3>
+                <p className="text-sm text-gray-600 mt-2">
+                  We've detected a login from a new location or device. Please enter the verification code sent to your email.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Verification Code</label>
+                <input
+                  type="text"
+                  value={twoFACode}
+                  onChange={(e) => setTwoFACode(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all text-center text-lg tracking-widest"
+                  placeholder="Enter 6-digit code"
+                  maxLength="6"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
+              >
+                Verify & Login
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShow2FA(false);
+                  setTwoFACode('');
+                  setError('');
+                }}
+                className="w-full bg-gray-200 hover:bg-gray-300 py-3 px-4 rounded-lg font-medium text-lg text-gray-700"
+              >
+                Back to Login
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.email')}</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.password')}</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
+              >
 {t('auth.loginButton')}
-            </button>
-          </form>
+              </button>
+            </form>
+          )
         ) : (
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
