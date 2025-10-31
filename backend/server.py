@@ -890,19 +890,6 @@ async def detect_suspicious_login(user_doc: dict, ip_address: str, user_agent: s
         "indicators": suspicious_indicators,
         "reason": ", ".join(suspicious_indicators) if suspicious_indicators else "normal_login"
     }
-            # Return available 2FA methods
-            available_methods = []
-            if security_profile.get('totp_secret'):
-                available_methods.append("totp")
-            if security_profile.get('phone_number'):
-                available_methods.append("sms")
-            if security_profile.get('backup_codes'):
-                available_methods.append("backup_code")
-            
-            session_id = str(uuid.uuid4())
-            # Store partial session (in production, use Redis or similar)
-            await db.pending_2fa_sessions.insert_one({
-                "session_id": session_id,
                 "user_id": user_doc['id'],
                 "email": login_data.email,
                 "created_at": datetime.utcnow(),
