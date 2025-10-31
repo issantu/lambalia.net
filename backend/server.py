@@ -86,6 +86,159 @@ from transaction_verification_api import create_transaction_verification_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+# Email Verification Service (Free SMTP-based 2FA)
+class EmailVerificationService:
+    def __init__(self):
+        self.smtp_server = "smtp.gmail.com"  # Using Gmail SMTP (free)
+        self.smtp_port = 587
+        self.sender_email = os.getenv("SMTP_EMAIL", "noreply.lambalia@gmail.com")
+        self.sender_password = os.getenv("SMTP_PASSWORD", "")
+        
+    def generate_verification_code(self, length=6):
+        """Generate random 6-digit verification code"""
+        return ''.join(random.choices(string.digits, k=length))
+    
+    def send_verification_email(self, recipient_email: str, verification_code: str, email_type: str = "registration"):
+        """Send verification email with code"""
+        try:
+            # Create message
+            message = MIMEMultipart("alternative")
+            message["Subject"] = f"Lambalia - {'Email Verification' if email_type == 'registration' else 'Login Verification'}"
+            message["From"] = f"Lambalia <{self.sender_email}>"
+            message["To"] = recipient_email
+            
+            # Create HTML content
+            if email_type == "registration":
+                html = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <h1 style="color: #22c55e;">🍽️ Welcome to Lambalia!</h1>
+                        </div>
+                        
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                            <h2 style="color: #333; margin-top: 0;">Verify Your Email Address</h2>
+                            <p>Thank you for joining Lambalia! Please verify your email address to activate your account.</p>
+                            
+                            <div style="text-align: center; margin: 30px 0;">
+                                <div style="background-color: #22c55e; color: white; font-size: 32px; font-weight: bold; padding: 15px 30px; border-radius: 8px; display: inline-block; letter-spacing: 5px;">
+                                    {verification_code}
+                                </div>
+                            </div>
+                            
+                            <p><strong>This code expires in 10 minutes.</strong></p>
+                            <p>If you didn't request this verification, please ignore this email.</p>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                            <p>© 2024 Lambalia by Ish@ngo Technologies. Your Food & Earning Hub.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                """
+            else:  # login verification
+                html = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <h1 style="color: #22c55e;">🔐 Lambalia Security</h1>
+                        </div>
+                        
+                        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                            <h2 style="color: #333; margin-top: 0;">Login Verification Code</h2>
+                            <p>Someone is trying to access your Lambalia account. Please use this code to complete login:</p>
+                            
+                            <div style="text-align: center; margin: 30px 0;">
+                                <div style="background-color: #3b82f6; color: white; font-size: 32px; font-weight: bold; padding: 15px 30px; border-radius: 8px; display: inline-block; letter-spacing: 5px;">
+                                    {verification_code}
+                                </div>
+                            </div>
+                            
+                            <p><strong>This code expires in 5 minutes.</strong></p>
+                            <p>If you didn't request this login, please secure your account immediately.</p>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                            <p>© 2024 Lambalia by Ish@ngo Technologies. Your Food & Earning Hub.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                """
+            
+            # Create HTML part
+            html_part = MIMEText(html, "html")
+            message.attach(html_part)
+            
+            # Send email
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls()
+                server.login(self.sender_email, self.sender_password)
+                server.send_message(message)
+                
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to send verification email: {str(e)}")
+            return False
+    
+    async def store_verification_code(self, email: str, code: str, code_type: str = "registration"):
+        """Store verification code in database"""
+        try:
+            verification_data = {
+                "email": email,
+                "code": code,
+                "type": code_type,
+                "created_at": datetime.utcnow(),
+                "expires_at": datetime.utcnow() + timedelta(minutes=10 if code_type == "registration" else 5),
+                "used": False
+            }
+            
+            # Remove any existing unused codes for this email and type
+            await db.email_verifications.delete_many({
+                "email": email,
+                "type": code_type,
+                "used": False
+            })
+            
+            # Insert new code
+            await db.email_verifications.insert_one(verification_data)
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to store verification code: {str(e)}")
+            return False
+    
+    async def verify_code(self, email: str, code: str, code_type: str = "registration"):
+        """Verify the provided code"""
+        try:
+            verification = await db.email_verifications.find_one({
+                "email": email,
+                "code": code,
+                "type": code_type,
+                "used": False,
+                "expires_at": {"$gt": datetime.utcnow()}
+            })
+            
+            if verification:
+                # Mark code as used
+                await db.email_verifications.update_one(
+                    {"_id": verification["_id"]},
+                    {"$set": {"used": True, "used_at": datetime.utcnow()}}
+                )
+                return True
+            
+            return False
+            
+        except Exception as e:
+            logger.error(f"Failed to verify code: {str(e)}")
+            return False
+
+# Initialize email service
+email_service = EmailVerificationService()
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
