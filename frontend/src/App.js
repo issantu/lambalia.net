@@ -336,6 +336,12 @@ const LoginPage = () => {
             {error}
           </div>
         )}
+        
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 success-message">
+            {successMessage}
+          </div>
+        )}
 
         {isLogin ? (
           show2FA ? (
@@ -406,6 +412,46 @@ const LoginPage = () => {
               </button>
             </form>
           )
+        ) : showEmailVerification ? (
+          <form onSubmit={handleEmailVerification} className="space-y-4">
+            <div className="text-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">📧 Verify Your Email</h3>
+              <p className="text-sm text-gray-600 mt-2">
+                We've sent a 6-digit verification code to <strong>{pendingVerificationEmail}</strong>. Please check your inbox and enter the code below.
+              </p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Verification Code</label>
+              <input
+                type="text"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all text-center text-lg tracking-widest"
+                placeholder="Enter 6-digit code"
+                maxLength="6"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
+            >
+              Verify Email & Activate Account
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setShowEmailVerification(false);
+                setVerificationCode('');
+                setError('');
+                setSuccessMessage('');
+                setIsLogin(false);
+              }}
+              className="w-full bg-gray-200 hover:bg-gray-300 py-3 px-4 rounded-lg font-medium text-lg text-gray-700"
+            >
+              Back to Registration
+            </button>
+          </form>
         ) : (
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
