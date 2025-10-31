@@ -48,6 +48,7 @@ const resources = {
         search: "Search",
         filter: "Filter",
         sort: "Sort",
+        welcome: "Welcome, {{name}}!",
         back: "Back",
         next: "Next",
         previous: "Previous",
