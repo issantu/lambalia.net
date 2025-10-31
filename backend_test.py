@@ -6446,7 +6446,7 @@ class LambaliaEnhancedAPITester:
             return self.log_test("2FA Verify 2FA Endpoint", True, details)
         else:
             # Check if endpoint exists but returns different error
-            if data.get('detail') and 'not found' not in data.get('detail', '').lower():
+            if data.get('detail') and 'not found' not in str(data.get('detail', '')).lower():
                 details = "- Endpoint exists but returned unexpected error"
                 return self.log_test("2FA Verify 2FA Endpoint", True, details)
             else:
