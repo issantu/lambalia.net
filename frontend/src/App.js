@@ -78,6 +78,18 @@ const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post(`${API}/auth/register`, userData);
+      
+      // Check if email verification is required (Option C 2FA)
+      if (response.data.verification_required) {
+        return { 
+          success: false, 
+          verification_required: true,
+          email: response.data.email,
+          message: response.data.message
+        };
+      }
+      
+      // Legacy: direct token response (backward compatibility)
       const { access_token, user } = response.data;
       
       localStorage.setItem('token', access_token);
@@ -89,6 +101,24 @@ const AuthProvider = ({ children }) => {
       return { 
         success: false, 
         error: error.response?.data?.detail || 'Registration failed' 
+      };
+    }
+  };
+  
+  const verifyEmail = async (email, code) => {
+    try {
+      const response = await axios.post(`${API}/auth/verify-email`, { email, code });
+      const { access_token, user } = response.data;
+      
+      localStorage.setItem('token', access_token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      setUser(user);
+      
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || 'Email verification failed' 
       };
     }
   };
