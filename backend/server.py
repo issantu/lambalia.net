@@ -680,6 +680,94 @@ async def verify_email(email: str, code: str):
         "user": UserResponse(**user.dict())
     }
 
+@api_router.post("/auth/login-2fa")
+async def login_with_2fa(email: str, password: str, request: Request):
+    """Step 1 of 2FA login - verify credentials and send 2FA code"""
+    
+    # Get client info
+    ip_address = request.client.host if request.client else "unknown"
+    
+    # Find user
+    user = await db.users.find_one({"email": email})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Verify password
+    if not verify_password(password, user['password_hash']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Generate 2FA code
+    verification_code = email_service.generate_verification_code()
+    
+    # Send 2FA email
+    email_sent = email_service.send_verification_email(
+        recipient_email=email,
+        verification_code=verification_code,
+        email_type="login"
+    )
+    
+    if not email_sent:
+        raise HTTPException(status_code=500, detail="Failed to send 2FA code")
+    
+    # Store 2FA code
+    code_stored = await email_service.store_verification_code(
+        email=email,
+        code=verification_code,
+        code_type="login"
+    )
+    
+    if not code_stored:
+        raise HTTPException(status_code=500, detail="Failed to store 2FA code")
+    
+    logger.info(f"2FA code sent for login: {email} from {ip_address}")
+    
+    return {
+        "message": "2FA code sent to your email",
+        "email": email,
+        "requires_2fa": True
+    }
+
+@api_router.post("/auth/verify-2fa", response_model=LoginResponse)
+async def verify_2fa_login(email: str, code: str, request: Request):
+    """Step 2 of 2FA login - verify 2FA code and complete login"""
+    
+    # Verify 2FA code
+    code_valid = await email_service.verify_code(
+        email=email,
+        code=code,
+        code_type="login"
+    )
+    
+    if not code_valid:
+        raise HTTPException(status_code=400, detail="Invalid or expired 2FA code")
+    
+    # Get user
+    user_dict = await db.users.find_one({"email": email})
+    if not user_dict:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user = UserProfile(**user_dict)
+    
+    # Update last login
+    await db.users.update_one(
+        {"id": user.id},
+        {"$set": {"last_login": datetime.utcnow()}}
+    )
+    
+    # Generate JWT token
+    token = create_jwt_token(user.id)
+    
+    # Get client info for logging
+    ip_address = request.client.host if request.client else "unknown"
+    logger.info(f"User logged in with 2FA: {user.username} from {ip_address}")
+    
+    return LoginResponse(
+        access_token=token,
+        token_type="bearer", 
+        user=UserResponse(**user.dict()),
+        message="Login successful with 2FA verification"
+    )
+
 @api_router.post("/auth/login", response_model=LoginResponse)
 async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
     """Enhanced login with 2FA support and security key verification"""
