@@ -638,52 +638,8 @@ const CommunicationTools = ({ recipientId, recipientName }) => {
 
 // Ad Component - External Revenue Generation
 const ExternalAdBanner = ({ placement = "header", size = "728x90" }) => {
-  const [adContent, setAdContent] = useState(null);
-  
-  useEffect(() => {
-    // Simulate ad loading - in production would integrate with Google AdSense, Facebook Audience Network
-    const loadAd = async () => {
-      try {
-        // This would be actual ad network integration
-        const adResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/ads/external-placements`);
-        const adData = await adResponse.json();
-        
-        // Select appropriate ad based on placement
-        const placementAd = adData.ad_placements?.google_adsense?.ad_units?.find(
-          unit => unit.placement === placement
-        ) || {
-          placement: placement,
-          size: size,
-          category: "cultural_food",
-          estimated_cpm: "$2.00"
-        };
-        
-        setAdContent(placementAd);
-      } catch (error) {
-        console.log('Ad loading error:', error);
-      }
-    };
-    
-    loadAd();
-  }, [placement, size]);
-
-  if (!adContent) return null;
-
-  return (
-    <div className={`external-ad-container bg-gray-50 border border-gray-200 rounded-lg p-4 text-center ${
-      size === '728x90' ? 'h-24' : size === '300x250' ? 'h-64 w-80' : 'h-16'
-    } mx-auto mb-4`}>
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="text-xs text-gray-500 mb-1">Advertisement</div>
-        <div className="text-sm text-gray-600">
-          🍴 Authentic Cultural Ingredients & Cookware
-        </div>
-        <div className="text-xs text-gray-400 mt-1">
-          Revenue: ~{adContent.estimated_cpm} CPM | {adContent.category}
-        </div>
-      </div>
-    </div>
-  );
+  // Temporarily disabled to fix deployment issues
+  return null;
 };
 
 // Enhanced User Earnings Dashboard Component with Tips Separation
