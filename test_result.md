@@ -351,7 +351,7 @@ frontend:
         agent: "main"
         comment: "Need to update frontend registration form to use new global dishes API endpoints and provide comprehensive dish selection from all world cuisines instead of just African dishes."
 
-  - task: "2FA Security Interface Integration"
+  - task: "2FA Security Interface Integration - Email Verification"
     implemented: false
     working: false
     file: "App.js"
@@ -361,7 +361,7 @@ frontend:
     status_history:
       - working: "NA"
         agent: "main"
-        comment: "Need to implement frontend interfaces for 2FA setup, login flow enhancement, QR code display for TOTP setup, backup code management, and security settings dashboard."
+        comment: "Backend 2FA 'Option C' fully implemented with email verification for registration and conditional 2FA for suspicious logins. SMTP configured with noreply.lambalia@gmail.com. Now need to implement frontend: 1) Email verification form after registration, 2) Call /auth/verify-email endpoint, 3) Handle 2FA code input for suspicious logins, 4) Update registration flow to show verification step."
 
   - task: "Enhanced Login Flow UI"
     implemented: false
