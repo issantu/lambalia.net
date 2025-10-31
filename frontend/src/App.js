@@ -60,6 +60,18 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(`${API}/auth/login`, { email, password });
+      
+      // Check if 2FA is required for suspicious login
+      if (response.data.requires_2fa) {
+        return {
+          success: false,
+          requires_2fa: true,
+          session_id: response.data.session_id,
+          message: response.data.message,
+          email: email
+        };
+      }
+      
       const { access_token, user } = response.data;
       
       localStorage.setItem('token', access_token);
@@ -71,6 +83,24 @@ const AuthProvider = ({ children }) => {
       return { 
         success: false, 
         error: error.response?.data?.detail || 'Login failed' 
+      };
+    }
+  };
+  
+  const verify2FA = async (email, code) => {
+    try {
+      const response = await axios.post(`${API}/auth/verify-2fa`, { email, code });
+      const { access_token, user } = response.data;
+      
+      localStorage.setItem('token', access_token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      setUser(user);
+      
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || '2FA verification failed' 
       };
     }
   };
