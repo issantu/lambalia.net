@@ -6322,7 +6322,7 @@ class LambaliaEnhancedAPITester:
             return self.log_test("2FA Email Verification with Code", True, details)
         else:
             # Check if it's a different error (like 404 - endpoint not found)
-            if data.get('detail') and 'not found' not in data.get('detail', '').lower():
+            if data.get('detail') and 'not found' not in str(data.get('detail', '')).lower():
                 details = "- Endpoint exists but returned unexpected error"
                 return self.log_test("2FA Email Verification with Code", True, details)
             else:
