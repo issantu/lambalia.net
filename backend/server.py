@@ -578,39 +578,53 @@ async def get_current_user_profile(current_user_id: str = Depends(get_current_us
     
     return UserResponse(**user)
 
-@api_router.post("/auth/register", response_model=TokenResponse)
+@api_router.post("/auth/register")
 async def register_user(user_data: UserRegistration):
+    # Check if user already exists
     existing_user = await db.users.find_one({"$or": [{"email": user_data.email}, {"username": user_data.username}]})
     if existing_user:
         raise HTTPException(status_code=400, detail="User already exists")
     
-    user_dict = user_data.dict()
-    user_dict['password_hash'] = hash_password(user_data.password)
-    del user_dict['password']
+    # Generate verification code
+    verification_code = email_service.generate_verification_code()
     
-    user = UserProfile(**user_dict)
-    await db.users.insert_one(user.dict())
-    
-    # Send welcome SMS notification
-    try:
-        sms_service = await get_sms_service()
-        if user.phone:
-            await sms_service.send_registration_sms(
-                phone_number=user.phone,
-                user_name=user.full_name or user.username
-            )
-            logger.info(f"Welcome SMS sent to new user: {user.username}")
-    except Exception as e:
-        logger.warning(f"Failed to send welcome SMS to {user.username}: {str(e)}")
-        # Don't fail registration if SMS fails
-    
-    token = create_jwt_token(user.id)
-    
-    return TokenResponse(
-        access_token=token,
-        token_type="bearer",
-        user=UserResponse(**user.dict())
+    # Send verification email
+    email_sent = email_service.send_verification_email(
+        recipient_email=user_data.email,
+        verification_code=verification_code,
+        email_type="registration"
     )
+    
+    if not email_sent:
+        raise HTTPException(status_code=500, detail="Failed to send verification email")
+    
+    # Store verification code in database
+    code_stored = await email_service.store_verification_code(
+        email=user_data.email,
+        code=verification_code,
+        code_type="registration"
+    )
+    
+    if not code_stored:
+        raise HTTPException(status_code=500, detail="Failed to store verification code")
+    
+    # Store user data temporarily (not activated yet)
+    temp_user_dict = user_data.dict()
+    temp_user_dict['password_hash'] = hash_password(user_data.password)
+    del temp_user_dict['password']
+    temp_user_dict['email_verified'] = False
+    temp_user_dict['account_activated'] = False
+    temp_user_dict['created_at'] = datetime.utcnow()
+    
+    # Store in temporary users collection
+    await db.temp_users.delete_many({"email": user_data.email})  # Remove any existing temp user
+    await db.temp_users.insert_one(temp_user_dict)
+    
+    return {
+        "message": "Registration initiated. Please check your email for verification code.",
+        "email": user_data.email,
+        "verification_required": True
+    }
 
 @api_router.post("/auth/login", response_model=LoginResponse)
 async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
