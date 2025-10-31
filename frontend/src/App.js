@@ -1101,60 +1101,8 @@ const RevenueDashboard = () => {
   );
 };
 const AdComponent = ({ placement = "feed" }) => {
-  const [adContent, setAdContent] = useState(null);
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    // Mock ad loading - in production, integrate with Google AdSense or similar
-    const mockAds = [
-      {
-        title: "Premium Kitchen Tools",
-        description: "Upgrade your cooking with professional-grade equipment",
-        image: "🔪",
-        sponsor: "CookingPro",
-        isTranslated: false
-      },
-      {
-        title: "Organic Ingredients Delivered", 
-        description: "Fresh, organic ingredients delivered to your door",
-        image: "🥕",
-        sponsor: "FreshDirect",
-        isTranslated: false
-      },
-      {
-        title: "home.cookingClasses.title",
-        description: "home.cookingClasses.description", 
-        image: "👨‍🍳",
-        sponsor: "MasterClass",
-        isTranslated: true
-      }
-    ];
-
-    const randomAd = mockAds[Math.floor(Math.random() * mockAds.length)];
-    setAdContent(randomAd);
-  }, []);
-
-  if (!adContent) return null;
-
-  return (
-    <div className="ad-container">
-      <div className="flex items-center space-x-4">
-        <div className="text-4xl">{adContent.image}</div>
-        <div className="flex-1">
-          <h4 className="font-semibold text-gray-800">
-            {adContent.isTranslated ? t(adContent.title) : adContent.title}
-          </h4>
-          <p className="text-sm text-gray-600">
-            {adContent.isTranslated ? t(adContent.description) : adContent.description}
-          </p>
-          <p className="text-xs text-gray-500">Sponsored by {adContent.sponsor}</p>
-        </div>
-        <button className="btn-secondary text-sm px-4 py-2">
-          {t('home.cookingClasses.learnMore')}
-        </button>
-      </div>
-    </div>
-  );
+  // Temporarily disabled to fix deployment issues
+  return null;
 };
 
 // Home Restaurant Feature Component
