@@ -212,6 +212,18 @@ const LoginPage = () => {
     }
   };
 
+  const handle2FA = async (e) => {
+    e.preventDefault();
+    setError('');
+    
+    const result = await verify2FA(email, twoFACode);
+    if (result.success) {
+      window.location.href = '/';
+    } else {
+      setError(result.error);
+    }
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
