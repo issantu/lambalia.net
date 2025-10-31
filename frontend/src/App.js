@@ -163,6 +163,8 @@ const AuthProvider = ({ children }) => {
     user,
     login,
     register,
+    verifyEmail,
+    verify2FA,
     logout,
     loading
   };
