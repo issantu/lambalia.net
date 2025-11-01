@@ -6559,19 +6559,16 @@ class LambaliaEnhancedAPITester:
         if not reg_success or not reg_data.get('verification_required'):
             return self.log_test("Resend Verification Rate Limiting", False, "- Failed to create user requiring verification")
         
-        # First resend should work
-        resend_data = {
-            "email": test_user_data["email"],
-            "code_type": "registration"
-        }
+        # First resend should work (using query parameters)
+        resend_endpoint = f'auth/resend-verification?email={test_user_data["email"]}&code_type=registration'
         
-        first_success, first_data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        first_success, first_data = self.make_request('POST', resend_endpoint, None, 200)
         
         if not first_success:
             return self.log_test("Resend Verification Rate Limiting", False, "- First resend failed")
         
         # Immediate second resend should be rate limited (429 error)
-        second_success, second_data = self.make_request('POST', 'auth/resend-verification', resend_data, 429)
+        second_success, second_data = self.make_request('POST', resend_endpoint, None, 429)
         
         if second_success:
             error_message = second_data.get('detail', '')
