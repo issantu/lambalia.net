@@ -6599,13 +6599,10 @@ class LambaliaEnhancedAPITester:
         if not reg_success:
             return self.log_test("Resend Suspicious Login Code", False, "- Failed to register user")
         
-        # Test resending with suspicious_login code type
-        resend_data = {
-            "email": test_user_data["email"],
-            "code_type": "suspicious_login"
-        }
+        # Test resending with suspicious_login code type (using query parameters)
+        resend_endpoint = f'auth/resend-verification?email={test_user_data["email"]}&code_type=suspicious_login'
         
-        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        success, data = self.make_request('POST', resend_endpoint, None, 200)
         
         if success:
             message = data.get('message', '')
