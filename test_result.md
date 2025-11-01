@@ -237,6 +237,18 @@ backend:
         agent: "testing"
         comment: "COMPREHENSIVE TESTING PASSED: Enterprise-grade 2FA system fully functional (11/12 tests passed, 92% success rate). ✅ 2FA Status Management working ✅ TOTP Setup with QR Code Generation working (Google Authenticator compatible) ✅ Backup Codes Generation working (10 codes generated) ✅ SMS 2FA Setup working ✅ Enhanced Login Flow working (with and without 2FA) ✅ Legacy Login Compatibility maintained ✅ 2FA Disable functionality working ✅ Session Management secure ✅ All security endpoints accessible and properly secured. Minor: TOTP verification returns expected validation error with test codes (production behavior). System provides enterprise-grade security features as required."
 
+  - task: "Resend Verification Code Feature for 2FA System"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING COMPLETED: Resend verification code feature fully functional and production-ready. ✅ Registration Verification Code Resend working (POST /api/auth/resend-verification with code_type=registration) ✅ Rate Limiting working correctly (60 second cooldown prevents spam) ✅ Multiple Code Types supported (registration, suspicious_login) ✅ Error Handling working (404 for non-existent emails, proper validation) ✅ SMTP Service Integration confirmed (emails being sent via noreply.lambalia@gmail.com) ✅ Database Storage working (new codes replace old ones in email_verifications collection) ✅ Security Features working (rate limiting, code expiration, proper authentication). All test scenarios passed successfully - users can now resend verification codes when needed without compromising security."
+
   - task: "Global Heritage Recipes Integration"
     implemented: true
     working: true
