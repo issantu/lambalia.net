@@ -439,6 +439,22 @@ const LoginPage = () => {
                   We've detected a login from a new location or device. Please enter the verification code sent to <strong>{email}</strong>.
                 </p>
               </div>
+              
+              {/* Email Deliverability Notice for 2FA */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                <div className="flex items-start">
+                  <span className="text-blue-500 text-xl mr-2">💡</span>
+                  <div className="text-sm text-blue-800">
+                    <p className="font-medium mb-1">Can't find the email?</p>
+                    <ul className="list-disc list-inside space-y-1 text-xs">
+                      <li><strong>Check your spam/junk folder</strong> - especially for Hotmail/Outlook users</li>
+                      <li>Wait 1-2 minutes for the email to arrive</li>
+                      <li>Click "Resend Security Code" below if needed</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Verification Code</label>
                 <input
