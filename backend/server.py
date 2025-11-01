@@ -681,6 +681,64 @@ async def verify_email(email: str, code: str):
         "user": UserResponse(**user.dict())
     }
 
+@api_router.post("/auth/resend-verification")
+async def resend_verification_code(email: str, code_type: str = "registration"):
+    """Resend verification code to user's email"""
+    
+    # Check if user exists in temp_users (for registration) or users (for 2FA)
+    if code_type == "registration":
+        user = await db.temp_users.find_one({"email": email})
+        if not user:
+            raise HTTPException(status_code=404, detail="Registration not found. Please register again.")
+    else:
+        user = await db.users.find_one({"email": email})
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check for recent code requests (rate limiting)
+    recent_code = await db.email_verifications.find_one({
+        "email": email,
+        "type": code_type,
+        "created_at": {"$gte": datetime.utcnow() - timedelta(minutes=1)}
+    })
+    
+    if recent_code:
+        raise HTTPException(
+            status_code=429, 
+            detail="Please wait 60 seconds before requesting a new code"
+        )
+    
+    # Generate new verification code
+    verification_code = email_service.generate_verification_code()
+    
+    # Send verification email
+    email_sent = email_service.send_verification_email(
+        recipient_email=email,
+        verification_code=verification_code,
+        email_type=code_type
+    )
+    
+    if not email_sent:
+        raise HTTPException(status_code=500, detail="Failed to send verification email")
+    
+    # Store verification code
+    code_stored = await email_service.store_verification_code(
+        email=email,
+        code=verification_code,
+        code_type=code_type
+    )
+    
+    if not code_stored:
+        raise HTTPException(status_code=500, detail="Failed to store verification code")
+    
+    logger.info(f"Verification code resent for {email} (type: {code_type})")
+    
+    return {
+        "message": "Verification code has been resent to your email",
+        "email": email,
+        "code_type": code_type
+    }
+
 @api_router.post("/auth/login-2fa")
 async def login_with_2fa(email: str, password: str, request: Request):
     """Step 1 of 2FA login - verify credentials and send 2FA code"""
