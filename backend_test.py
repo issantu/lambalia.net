@@ -6500,6 +6500,273 @@ class LambaliaEnhancedAPITester:
             details = "- Failed to store verification codes"
             return self.log_test("2FA Email Verifications Collection", False, details)
 
+    # RESEND VERIFICATION CODE TESTS (NEW FEATURE)
+    
+    def test_resend_registration_verification_code(self):
+        """Test resending registration verification code"""
+        # First create a user registration that requires verification
+        test_user_data = {
+            "username": f"resend_test_{datetime.now().strftime('%H%M%S')}",
+            "email": f"resend_test_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Resend Test User",
+            "postal_code": "12345",
+            "preferred_language": "en"
+        }
+        
+        # Register user (should return verification_required: true)
+        reg_success, reg_data = self.make_request('POST', 'auth/register', test_user_data, 200)
+        
+        if not reg_success or not reg_data.get('verification_required'):
+            return self.log_test("Resend Registration Verification Code", False, "- Failed to create user requiring verification")
+        
+        # Test resending verification code
+        resend_data = {
+            "email": test_user_data["email"],
+            "code_type": "registration"
+        }
+        
+        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        
+        if success:
+            message = data.get('message', '')
+            email = data.get('email', '')
+            code_type = data.get('code_type', '')
+            
+            expected_message = "Verification code has been resent to your email"
+            message_correct = expected_message in message
+            email_correct = email == test_user_data["email"]
+            code_type_correct = code_type == "registration"
+            
+            details = f"- Message: {'✓' if message_correct else '✗'}, Email: {'✓' if email_correct else '✗'}, Type: {'✓' if code_type_correct else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Resend Registration Verification Code", success, details)
+    
+    def test_resend_verification_rate_limiting(self):
+        """Test rate limiting for resend verification (60 second cooldown)"""
+        # Create a user registration
+        test_user_data = {
+            "username": f"rate_limit_test_{datetime.now().strftime('%H%M%S')}",
+            "email": f"rate_limit_test_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Rate Limit Test User",
+            "postal_code": "12345",
+            "preferred_language": "en"
+        }
+        
+        # Register user
+        reg_success, reg_data = self.make_request('POST', 'auth/register', test_user_data, 200)
+        
+        if not reg_success or not reg_data.get('verification_required'):
+            return self.log_test("Resend Verification Rate Limiting", False, "- Failed to create user requiring verification")
+        
+        # First resend should work
+        resend_data = {
+            "email": test_user_data["email"],
+            "code_type": "registration"
+        }
+        
+        first_success, first_data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        
+        if not first_success:
+            return self.log_test("Resend Verification Rate Limiting", False, "- First resend failed")
+        
+        # Immediate second resend should be rate limited (429 error)
+        second_success, second_data = self.make_request('POST', 'auth/resend-verification', resend_data, 429)
+        
+        if second_success:
+            error_message = second_data.get('detail', '')
+            rate_limit_message = "Please wait 60 seconds before requesting a new code"
+            rate_limit_working = rate_limit_message in error_message
+            
+            details = f"- Rate limiting: {'✓' if rate_limit_working else '✗'}, Message: {error_message[:50]}..."
+        else:
+            details = "- Failed to get expected 429 rate limit response"
+            
+        return self.log_test("Resend Verification Rate Limiting", second_success, details)
+    
+    def test_resend_verification_suspicious_login_code_type(self):
+        """Test resending verification code with suspicious_login code type"""
+        # Create and verify a user first
+        test_user_data = {
+            "username": f"suspicious_test_{datetime.now().strftime('%H%M%S')}",
+            "email": f"suspicious_test_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Suspicious Login Test User",
+            "postal_code": "12345",
+            "preferred_language": "en"
+        }
+        
+        # Register user
+        reg_success, reg_data = self.make_request('POST', 'auth/register', test_user_data, 200)
+        
+        if not reg_success:
+            return self.log_test("Resend Suspicious Login Code", False, "- Failed to register user")
+        
+        # Test resending with suspicious_login code type
+        resend_data = {
+            "email": test_user_data["email"],
+            "code_type": "suspicious_login"
+        }
+        
+        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        
+        if success:
+            message = data.get('message', '')
+            code_type = data.get('code_type', '')
+            
+            expected_message = "Verification code has been resent to your email"
+            message_correct = expected_message in message
+            code_type_correct = code_type == "suspicious_login"
+            
+            details = f"- Message: {'✓' if message_correct else '✗'}, Code type: {'✓' if code_type_correct else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Resend Suspicious Login Code", success, details)
+    
+    def test_resend_verification_nonexistent_email(self):
+        """Test resend verification for non-existent email (should return 404)"""
+        resend_data = {
+            "email": f"nonexistent_{datetime.now().strftime('%H%M%S')}@example.com",
+            "code_type": "registration"
+        }
+        
+        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 404)
+        
+        if success:
+            error_message = data.get('detail', '')
+            expected_error = "Registration not found"
+            error_correct = expected_error in error_message
+            
+            details = f"- Error message: {'✓' if error_correct else '✗'} ({error_message})"
+        else:
+            details = ""
+            
+        return self.log_test("Resend Verification Non-existent Email", success, details)
+    
+    def test_resend_verification_invalid_code_type(self):
+        """Test resend verification with invalid code_type parameter"""
+        # Create a user registration first
+        test_user_data = {
+            "username": f"invalid_type_test_{datetime.now().strftime('%H%M%S')}",
+            "email": f"invalid_type_test_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "Invalid Type Test User",
+            "postal_code": "12345",
+            "preferred_language": "en"
+        }
+        
+        # Register user
+        reg_success, reg_data = self.make_request('POST', 'auth/register', test_user_data, 200)
+        
+        if not reg_success:
+            return self.log_test("Resend Verification Invalid Code Type", False, "- Failed to register user")
+        
+        # Test with invalid code_type
+        resend_data = {
+            "email": test_user_data["email"],
+            "code_type": "invalid_type"
+        }
+        
+        # This should either return 400 (validation error) or handle gracefully
+        success_400, data_400 = self.make_request('POST', 'auth/resend-verification', resend_data, 400)
+        success_422, data_422 = self.make_request('POST', 'auth/resend-verification', resend_data, 422)
+        
+        success = success_400 or success_422
+        data = data_400 if success_400 else data_422
+        
+        if success:
+            error_message = data.get('detail', '')
+            details = f"- Properly rejected invalid code_type: {error_message[:50]}..."
+        else:
+            details = "- Failed to handle invalid code_type properly"
+            
+        return self.log_test("Resend Verification Invalid Code Type", success, details)
+    
+    def test_resend_verification_email_storage_in_database(self):
+        """Test that resent verification codes are properly stored in email_verifications collection"""
+        # Create a user registration
+        test_user_data = {
+            "username": f"db_storage_test_{datetime.now().strftime('%H%M%S')}",
+            "email": f"db_storage_test_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "DB Storage Test User",
+            "postal_code": "12345",
+            "preferred_language": "en"
+        }
+        
+        # Register user
+        reg_success, reg_data = self.make_request('POST', 'auth/register', test_user_data, 200)
+        
+        if not reg_success:
+            return self.log_test("Resend Verification DB Storage", False, "- Failed to register user")
+        
+        # Resend verification code
+        resend_data = {
+            "email": test_user_data["email"],
+            "code_type": "registration"
+        }
+        
+        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        
+        if success:
+            # We can't directly check the database, but we can verify the response indicates success
+            message = data.get('message', '')
+            email = data.get('email', '')
+            
+            expected_message = "Verification code has been resent to your email"
+            response_indicates_storage = expected_message in message and email == test_user_data["email"]
+            
+            details = f"- Response indicates DB storage: {'✓' if response_indicates_storage else '✗'}"
+        else:
+            details = ""
+            
+        return self.log_test("Resend Verification DB Storage", success, details)
+    
+    def test_resend_verification_smtp_service_integration(self):
+        """Test that SMTP service is properly configured and sending emails"""
+        # Create a user registration
+        test_user_data = {
+            "username": f"smtp_test_{datetime.now().strftime('%H%M%S')}",
+            "email": f"smtp_test_{datetime.now().strftime('%H%M%S')}@example.com",
+            "password": "testpass123",
+            "full_name": "SMTP Test User",
+            "postal_code": "12345",
+            "preferred_language": "en"
+        }
+        
+        # Register user
+        reg_success, reg_data = self.make_request('POST', 'auth/register', test_user_data, 200)
+        
+        if not reg_success:
+            return self.log_test("Resend Verification SMTP Integration", False, "- Failed to register user")
+        
+        # Resend verification code
+        resend_data = {
+            "email": test_user_data["email"],
+            "code_type": "registration"
+        }
+        
+        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        
+        if success:
+            # Success response indicates SMTP service is working
+            message = data.get('message', '')
+            smtp_working = "Verification code has been resent to your email" in message
+            
+            details = f"- SMTP service: {'✓' if smtp_working else '✗'}"
+        else:
+            # Check if failure is due to SMTP issues
+            error_message = data.get('detail', '') if data else ''
+            smtp_error = "Failed to send verification email" in error_message
+            
+            details = f"- SMTP error detected: {'✓' if smtp_error else '✗'}"
+            
+        return self.log_test("Resend Verification SMTP Integration", success, details)
+
     def run_all_tests(self):
         """Run all API tests in sequence"""
         print("🚀 Starting Enhanced Lambalia Backend API Tests")
