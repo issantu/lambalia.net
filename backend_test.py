@@ -6654,15 +6654,12 @@ class LambaliaEnhancedAPITester:
         if not reg_success:
             return self.log_test("Resend Verification Invalid Code Type", False, "- Failed to register user")
         
-        # Test with invalid code_type
-        resend_data = {
-            "email": test_user_data["email"],
-            "code_type": "invalid_type"
-        }
+        # Test with invalid code_type (using query parameters)
+        resend_endpoint = f'auth/resend-verification?email={test_user_data["email"]}&code_type=invalid_type'
         
         # This should either return 400 (validation error) or handle gracefully
-        success_400, data_400 = self.make_request('POST', 'auth/resend-verification', resend_data, 400)
-        success_422, data_422 = self.make_request('POST', 'auth/resend-verification', resend_data, 422)
+        success_400, data_400 = self.make_request('POST', resend_endpoint, None, 400)
+        success_422, data_422 = self.make_request('POST', resend_endpoint, None, 422)
         
         success = success_400 or success_422
         data = data_400 if success_400 else data_422
