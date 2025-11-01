@@ -22,12 +22,5 @@
   "background_color": "#ffffff",
   "orientation": "portrait",
   "scope": "/",
-  "categories": ["food", "lifestyle", "social"],
-  "screenshots": [
-    {
-      "src": "/lambalia-logo-v2.png",
-      "sizes": "1280x720",
-      "type": "image/png"
-    }
-  ]
+  "categories": ["food", "lifestyle", "social"]
 }
