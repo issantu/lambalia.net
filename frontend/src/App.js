@@ -89,7 +89,7 @@ const AuthProvider = ({ children }) => {
   
   const verify2FA = async (email, code) => {
     try {
-      const response = await axios.post(`${API}/auth/verify-2fa`, { email, code });
+      const response = await axios.post(`${API}/auth/verify-2fa?email=${encodeURIComponent(email)}&code=${encodeURIComponent(code)}`);
       const { access_token, user } = response.data;
       
       localStorage.setItem('token', access_token);
@@ -98,9 +98,22 @@ const AuthProvider = ({ children }) => {
       
       return { success: true, message: response.data.message };
     } catch (error) {
+      const errorDetail = error.response?.data?.detail;
+      let errorMessage = '2FA verification failed';
+      
+      // Handle different error formats
+      if (typeof errorDetail === 'string') {
+        errorMessage = errorDetail;
+      } else if (Array.isArray(errorDetail)) {
+        // FastAPI validation error format
+        errorMessage = errorDetail.map(err => err.msg).join(', ');
+      } else if (errorDetail && typeof errorDetail === 'object') {
+        errorMessage = errorDetail.msg || JSON.stringify(errorDetail);
+      }
+      
       return { 
         success: false, 
-        error: error.response?.data?.detail || '2FA verification failed' 
+        error: errorMessage
       };
     }
   };
