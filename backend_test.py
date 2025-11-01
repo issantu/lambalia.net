@@ -6525,6 +6525,16 @@ class LambaliaEnhancedAPITester:
         self.test_2fa_email_service_configuration()
         self.test_2fa_email_verifications_collection()
         
+        # RESEND VERIFICATION CODE TESTS (NEW FEATURE)
+        print("\n🔄 Testing Resend Verification Code Feature...")
+        self.test_resend_registration_verification_code()
+        self.test_resend_verification_rate_limiting()
+        self.test_resend_verification_suspicious_login_code_type()
+        self.test_resend_verification_nonexistent_email()
+        self.test_resend_verification_invalid_code_type()
+        self.test_resend_verification_email_storage_in_database()
+        self.test_resend_verification_smtp_service_integration()
+        
         # REVIEW REQUEST SPECIFIC TESTS - ENHANCED AFRICAN CUISINE DATABASE AND PAYMENT PROCESSING
         print("\n🎯 Testing Enhanced African Cuisine Database and Payment Processing Features...")
         self.test_enhanced_african_cuisine_native_recipes()
