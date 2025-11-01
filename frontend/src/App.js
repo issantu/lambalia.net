@@ -165,7 +165,7 @@ const AuthProvider = ({ children }) => {
   
   const verifyEmail = async (email, code) => {
     try {
-      const response = await axios.post(`${API}/auth/verify-email`, { email, code });
+      const response = await axios.post(`${API}/auth/verify-email?email=${encodeURIComponent(email)}&code=${encodeURIComponent(code)}`);
       const { access_token, user } = response.data;
       
       localStorage.setItem('token', access_token);
@@ -174,9 +174,22 @@ const AuthProvider = ({ children }) => {
       
       return { success: true, message: response.data.message };
     } catch (error) {
+      const errorDetail = error.response?.data?.detail;
+      let errorMessage = 'Email verification failed';
+      
+      // Handle different error formats
+      if (typeof errorDetail === 'string') {
+        errorMessage = errorDetail;
+      } else if (Array.isArray(errorDetail)) {
+        // FastAPI validation error format
+        errorMessage = errorDetail.map(err => err.msg).join(', ');
+      } else if (errorDetail && typeof errorDetail === 'object') {
+        errorMessage = errorDetail.msg || JSON.stringify(errorDetail);
+      }
+      
       return { 
         success: false, 
-        error: error.response?.data?.detail || 'Email verification failed' 
+        error: errorMessage
       };
     }
   };
