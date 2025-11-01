@@ -1,0 +1,33 @@
+{
+  "short_name": "Lambalia",
+  "name": "Lambalia - Global Heritage Recipes & Food Platform",
+  "description": "Discover authentic recipes from 80+ countries, connect with home chefs, find local ingredients, and monetize your cooking skills",
+  "icons": [
+    {
+      "src": "/lambalia-logo-v2.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lambalia-logo-v2.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#22c55e",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["food", "lifestyle", "social"],
+  "screenshots": [
+    {
+      "src": "/lambalia-logo-v2.png",
+      "sizes": "1280x720",
+      "type": "image/png"
+    }
+  ]
+}
