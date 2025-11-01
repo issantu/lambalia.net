@@ -6520,13 +6520,10 @@ class LambaliaEnhancedAPITester:
         if not reg_success or not reg_data.get('verification_required'):
             return self.log_test("Resend Registration Verification Code", False, "- Failed to create user requiring verification")
         
-        # Test resending verification code
-        resend_data = {
-            "email": test_user_data["email"],
-            "code_type": "registration"
-        }
+        # Test resending verification code (using query parameters)
+        resend_endpoint = f'auth/resend-verification?email={test_user_data["email"]}&code_type=registration'
         
-        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        success, data = self.make_request('POST', resend_endpoint, None, 200)
         
         if success:
             message = data.get('message', '')
