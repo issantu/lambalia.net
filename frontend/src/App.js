@@ -180,6 +180,7 @@ const AuthProvider = ({ children }) => {
     register,
     verifyEmail,
     verify2FA,
+    resendVerificationCode,
     logout,
     loading
   };
