@@ -395,9 +395,9 @@ const LoginPage = () => {
           show2FA ? (
             <form onSubmit={handle2FA} className="space-y-4">
               <div className="text-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Security Verification Required</h3>
+                <h3 className="text-lg font-semibold text-gray-800">🔐 Security Verification Required</h3>
                 <p className="text-sm text-gray-600 mt-2">
-                  We've detected a login from a new location or device. Please enter the verification code sent to your email.
+                  We've detected a login from a new location or device. Please enter the verification code sent to <strong>{email}</strong>.
                 </p>
               </div>
               <div>
@@ -412,6 +412,29 @@ const LoginPage = () => {
                   required
                 />
               </div>
+              
+              {/* Resend Code Button for 2FA */}
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => handleResendCode("suspicious_login")}
+                  disabled={resendCooldown > 0 || isResending}
+                  className={`text-sm font-medium ${
+                    resendCooldown > 0 || isResending
+                      ? 'text-gray-400 cursor-not-allowed'
+                      : 'text-blue-600 hover:text-blue-700 cursor-pointer'
+                  }`}
+                >
+                  {isResending ? (
+                    'Sending...'
+                  ) : resendCooldown > 0 ? (
+                    `Resend code in ${resendCooldown}s`
+                  ) : (
+                    '📨 Resend Security Code'
+                  )}
+                </button>
+              </div>
+              
               <button
                 type="submit"
                 className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
@@ -424,6 +447,7 @@ const LoginPage = () => {
                   setShow2FA(false);
                   setTwoFACode('');
                   setError('');
+                  setResendCooldown(0);
                 }}
                 className="w-full bg-gray-200 hover:bg-gray-300 py-3 px-4 rounded-lg font-medium text-lg text-gray-700"
               >
