@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import './i18n'; // Initialize i18n
 import LanguageSwitcher from './LanguageSwitcher';
+import PWAInstall from './PWAInstall';
 import './App.css';
 import LocalMarketplacePage from './LocalMarketplace';
 import LocalOffersAndDemands from './components/LocalOffersAndDemands';
