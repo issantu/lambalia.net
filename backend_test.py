@@ -6620,12 +6620,10 @@ class LambaliaEnhancedAPITester:
     
     def test_resend_verification_nonexistent_email(self):
         """Test resend verification for non-existent email (should return 404)"""
-        resend_data = {
-            "email": f"nonexistent_{datetime.now().strftime('%H%M%S')}@example.com",
-            "code_type": "registration"
-        }
+        nonexistent_email = f"nonexistent_{datetime.now().strftime('%H%M%S')}@example.com"
+        resend_endpoint = f'auth/resend-verification?email={nonexistent_email}&code_type=registration'
         
-        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 404)
+        success, data = self.make_request('POST', resend_endpoint, None, 404)
         
         if success:
             error_message = data.get('detail', '')
