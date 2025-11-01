@@ -104,6 +104,21 @@ const AuthProvider = ({ children }) => {
       };
     }
   };
+  
+  const resendVerificationCode = async (email, codeType = "registration") => {
+    try {
+      const response = await axios.post(`${API}/auth/resend-verification`, { email, code_type: codeType });
+      return { 
+        success: true, 
+        message: response.data.message 
+      };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || 'Failed to resend verification code' 
+      };
+    }
+  };
 
   const register = async (userData) => {
     try {
