@@ -6442,6 +6442,7 @@ function App() {
     <div className="App min-h-screen bg-gray-50">
       <AuthProvider>
         <BrowserRouter>
+          <PWAInstall />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route 
