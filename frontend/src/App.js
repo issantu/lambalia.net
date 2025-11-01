@@ -480,6 +480,29 @@ const LoginPage = () => {
                 required
               />
             </div>
+            
+            {/* Resend Code Button */}
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => handleResendCode("registration")}
+                disabled={resendCooldown > 0 || isResending}
+                className={`text-sm font-medium ${
+                  resendCooldown > 0 || isResending
+                    ? 'text-gray-400 cursor-not-allowed'
+                    : 'text-green-600 hover:text-green-700 cursor-pointer'
+                }`}
+              >
+                {isResending ? (
+                  'Sending...'
+                ) : resendCooldown > 0 ? (
+                  `Resend code in ${resendCooldown}s`
+                ) : (
+                  '📨 Resend Verification Code'
+                )}
+              </button>
+            </div>
+            
             <button
               type="submit"
               className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
@@ -494,6 +517,7 @@ const LoginPage = () => {
                 setError('');
                 setSuccessMessage('');
                 setIsLogin(false);
+                setResendCooldown(0);
               }}
               className="w-full bg-gray-200 hover:bg-gray-300 py-3 px-4 rounded-lg font-medium text-lg text-gray-700"
             >
