@@ -201,6 +201,8 @@ const LoginPage = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [pendingVerificationEmail, setPendingVerificationEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [isResending, setIsResending] = useState(false);
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     username: '',
@@ -214,7 +216,7 @@ const LoginPage = () => {
     consultation_specialties: '',
     cultural_background: ''
   });
-  const { login, register, verify2FA, verifyEmail } = useAuth();
+  const { login, register, verify2FA, verifyEmail, resendVerificationCode } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
