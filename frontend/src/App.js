@@ -289,6 +289,36 @@ const LoginPage = () => {
       setError(result.error);
     }
   };
+  
+  const handleResendCode = async (codeType = "registration") => {
+    if (resendCooldown > 0 || isResending) return;
+    
+    setIsResending(true);
+    setError('');
+    setSuccessMessage('');
+    
+    const emailToUse = codeType === "registration" ? pendingVerificationEmail : email;
+    const result = await resendVerificationCode(emailToUse, codeType);
+    
+    if (result.success) {
+      setSuccessMessage(result.message || 'Verification code has been resent!');
+      // Start 60 second cooldown
+      setResendCooldown(60);
+      const interval = setInterval(() => {
+        setResendCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      setError(result.error);
+    }
+    
+    setIsResending(false);
+  };
 
   const handleInputChange = (e) => {
     setFormData({
