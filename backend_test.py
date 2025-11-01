@@ -6690,13 +6690,10 @@ class LambaliaEnhancedAPITester:
         if not reg_success:
             return self.log_test("Resend Verification DB Storage", False, "- Failed to register user")
         
-        # Resend verification code
-        resend_data = {
-            "email": test_user_data["email"],
-            "code_type": "registration"
-        }
+        # Resend verification code (using query parameters)
+        resend_endpoint = f'auth/resend-verification?email={test_user_data["email"]}&code_type=registration'
         
-        success, data = self.make_request('POST', 'auth/resend-verification', resend_data, 200)
+        success, data = self.make_request('POST', resend_endpoint, None, 200)
         
         if success:
             # We can't directly check the database, but we can verify the response indicates success
