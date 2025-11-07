@@ -45,7 +45,7 @@ Lambalia offers five distinct monetization pathways:
 - **Recipe Royalties**: Passive income from recipe uploads
 - **Food Reviews**: Earn credits as a food lover (no cooking required)
 
-"You don't need to be a professional chef to succeed on Lambalia," added [Founder Name]. "Maria, a 58-year-old home cook from Lagos, Nigeria, started by selling five meals weekly. Within six months, she was earning $1,800 monthly – now her primary income source. Carlos from Mexico City earns $500 monthly purely from recipe consultations, without cooking a single meal."
+"You don't need to be a professional chef to succeed on Lambalia," added Issa Issantu. "Maria, a 58-year-old home cook from Lagos, Nigeria, started by selling five meals weekly. Within six months, she was earning $1,800 monthly – now her primary income source. Carlos from Mexico City earns $500 monthly purely from recipe consultations, without cooking a single meal."
 
 ## Bank-Level Security and Accessibility
 
