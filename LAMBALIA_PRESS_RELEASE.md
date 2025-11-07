@@ -108,7 +108,7 @@ Unlike traditional food delivery services, Lambalia focuses on authentic home co
 
 Home chefs keep 90% of earnings (only 10% platform commission). Users without cooking skills can join as food lovers, browsing recipes, ordering meals, and earning through reviews.
 
-"Maria, age 58, earns $1,800 monthly cooking Nigerian family recipes. This is real income for real people," said [Founder Name], CEO.
+"Maria, age 58, earns $1,800 monthly cooking Nigerian family recipes. This is real income for real people," said Issa Issantu, CEO.
 
 Available at lambalia.com, lambalia.app, and lambalia.net. Registration is free.
 
