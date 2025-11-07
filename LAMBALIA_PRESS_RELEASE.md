@@ -23,7 +23,7 @@ Media Kit: lambalia.com/press
 
 Unlike traditional food delivery services focused solely on restaurants, Lambalia champions home cooks and cultural authenticity. The platform features over 1,000 authentic recipes spanning Nigerian Jollof, Mexican Mole, Indian Biryani, Italian Carbonara, and dishes from 76 additional countries, creating a global culinary marketplace accessible from any smartphone.
 
-"Every day, grandmother's recipes disappear forever because they were never documented or shared beyond family circles," said [Founder Name], Founder and CEO of Lambalia. "We're not just another food delivery app – we're a cultural preservation movement with a sustainable business model. Lambalia empowers home cooks to earn meaningful income while ensuring their cultural heritage survives for future generations."
+"Every day, grandmother's recipes disappear forever because they were never documented or shared beyond family circles," said Issa Issantu, Founder and CEO of Lambalia. "We're not just another food delivery app – we're a cultural preservation movement with a sustainable business model. Lambalia empowers home cooks to earn meaningful income while ensuring their cultural heritage survives for future generations."
 
 ## Addressing Critical Market Gaps
 
