@@ -19,7 +19,7 @@ Media Kit: lambalia.com/press
 
 **Platform Connects 80+ Countries Through Authentic Home Cooking, Offering Secure Income Opportunities and Cultural Preservation**
 
-**[CITY, STATE] – September 26, 2025** – Lambalia, an innovative food technology platform, officially launches today, transforming home kitchens into profitable businesses while preserving cultural culinary heritage across 80 countries. The platform enables home chefs to monetize their cooking skills through multiple income streams, earning between $500 and $2,000 per month on a part-time basis, with no upfront investment required.
+**Chicago, IL – September 26, 2025** – Lambalia, an innovative food technology platform, officially launches today, transforming home kitchens into profitable businesses while preserving cultural culinary heritage across 80 countries. The platform enables home chefs to monetize their cooking skills through multiple income streams, earning between $500 and $2,000 per month on a part-time basis, with no upfront investment required.
 
 Unlike traditional food delivery services focused solely on restaurants, Lambalia champions home cooks and cultural authenticity. The platform features over 1,000 authentic recipes spanning Nigerian Jollof, Mexican Mole, Indian Biryani, Italian Carbonara, and dishes from 76 additional countries, creating a global culinary marketplace accessible from any smartphone.
 
