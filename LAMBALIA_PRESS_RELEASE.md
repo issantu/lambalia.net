@@ -102,7 +102,7 @@ Instagram: @lambalia | TikTok: @lambalia | LinkedIn: Lambalia
 
 ## Lambalia Launches Platform Enabling Home Chefs to Earn $500-$2,000 Monthly
 
-**[CITY] – [DATE, 2025]** – Lambalia launches today, empowering home chefs across 80+ countries to monetize cooking skills while preserving cultural traditions. The platform enables chefs to earn $500-$2,000 monthly part-time through meal sales, consultations, and recipe sharing.
+**[CITY] – September 26, 2025** – Lambalia launches today, empowering home chefs across 80+ countries to monetize cooking skills while preserving cultural traditions. The platform enables chefs to earn $500-$2,000 monthly part-time through meal sales, consultations, and recipe sharing.
 
 Unlike traditional food delivery services, Lambalia focuses on authentic home cooking. The platform features 1,000+ recipes from 80 countries, bank-level 2FA security, and functions as a Progressive Web App.
 
