@@ -40,7 +40,7 @@
 ## 🧪 Testing Your PWA on Saturday
 
 ### Pre-Deployment Testing (Preview):
-1. Open https://food-platform-2.preview.emergentagent.com on phone
+1. Open https://lambalia-2fa.preview.emergentagent.com on phone
 2. Test install functionality
 3. Check offline mode (enable airplane mode)
 4. Test 2FA with different emails
