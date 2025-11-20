@@ -87,6 +87,24 @@ from transaction_verification_system import TransactionVerificationService
 from transaction_verification_api import create_transaction_verification_router
 # from feedback_api import router as feedback_router
 
+# NEW: Compliance and Campaign System Imports
+from user_types_models import (
+    UserType, StateCategory, UserTypeProfile, StateRegulation,
+    UniversalDisclaimer, UserTypeChangeRequest, UserTypeResponse
+)
+from compliance_models import (
+    ChefTier, ComplianceStatus, DocumentType as ComplianceDocumentType,
+    ChefCompliance, ComplianceDocument, ChefComplianceRequest,
+    ChefComplianceResponse, ChefDashboardStats
+)
+from campaign_models import (
+    CampaignType, CampaignStatus, PromoCodeStatus, Campaign, PromoCode,
+    PromoCodeRedemption, CampaignRequest, CampaignResponse, PromoCodeResponse,
+    PromoCodeValidationRequest, PromoCodeValidationResponse, CampaignAnalytics
+)
+from state_compliance_service import state_compliance_service
+from remaining_states_data import REMAINING_STATES
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 # Email Verification Service (Free SMTP-based 2FA)
