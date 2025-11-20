@@ -389,27 +389,73 @@ const LoginPage = () => {
     setError('');
     setSuccessMessage('');
     
-    const emailToUse = codeType === "registration" ? pendingVerificationEmail : email;
-    const result = await resendVerificationCode(emailToUse, codeType);
-    
-    if (result.success) {
-      setSuccessMessage(result.message || 'Verification code has been resent!');
-      // Start 60 second cooldown
+    try {
+      const emailToUse = codeType === "registration" ? pendingVerificationEmail : email;
+      await axios.post(`${API}/auth/resend-verification`, null, {
+        params: { email: emailToUse, code_type: codeType }
+      });
+      
+      setSuccessMessage('Verification code has been resent to your email!');
       setResendCooldown(60);
-      const interval = setInterval(() => {
-        setResendCooldown(prev => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } else {
-      setError(result.error);
+    } catch (error) {
+      setError(error.response?.data?.detail || 'Failed to resend code');
     }
     
     setIsResending(false);
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMessage('');
+    
+    try {
+      await axios.post(`${API}/auth/forgot-password`, null, {
+        params: { email: resetEmail }
+      });
+      
+      setSuccessMessage('If an account exists, a reset code has been sent to your email.');
+      setShowForgotPassword(false);
+      setShowResetPassword(true);
+    } catch (error) {
+      setError(error.response?.data?.detail || 'Failed to send reset code');
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMessage('');
+    
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+    
+    try {
+      await axios.post(`${API}/auth/reset-password`, null, {
+        params: { 
+          email: resetEmail, 
+          code: resetCode, 
+          new_password: newPassword 
+        }
+      });
+      
+      setSuccessMessage('Password reset successful! You can now login with your new password.');
+      setShowResetPassword(false);
+      setResetEmail('');
+      setResetCode('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setIsLogin(true);
+    } catch (error) {
+      setError(error.response?.data?.detail || 'Failed to reset password');
+    }
   };
 
   const handleInputChange = (e) => {
