@@ -712,17 +712,6 @@ const LoginPage = () => {
                 required
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.postalCode')}</label>
-              <input
-                type="text"
-                name="postal_code"
-                value={formData.postal_code}
-                onChange={handleInputChange}
-                placeholder="For local grocery & delivery services"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
-              />
-            </div>
             
             {/* NEW: Native Dishes Question */}
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 rounded-lg border border-orange-200">
