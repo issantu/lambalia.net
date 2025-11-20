@@ -680,6 +680,49 @@ async def verify_email(email: str, code: str):
     user = UserProfile(**user_dict)
     await db.users.insert_one(user.dict())
     
+    # NEW: Create user type profile
+    try:
+        user_types_list = user_dict.get('user_types', ['food_enthusiast'])
+        state_code = user_dict.get('state_code', 'IL')  # Default to IL
+        zip_code = user_dict.get('zip_code', '')
+        
+        # Get state info
+        state_info = state_compliance_service.get_state_info(state_code) or {}
+        
+        user_type_profile = UserTypeProfile(
+            user_id=user.id,
+            user_types=[UserType(ut) for ut in user_types_list],
+            primary_type=UserType(user_dict.get('primary_type', 'food_enthusiast')),
+            state_code=state_code,
+            state_name=state_info.get('state_name', state_code),
+            state_category=StateCategory(state_info.get('category', 'moderate')),
+            zip_code=zip_code,
+            disclaimer_accepted=user_dict.get('disclaimer_accepted', False),
+            disclaimer_accepted_at=datetime.utcnow() if user_dict.get('disclaimer_accepted') else None,
+            compliance_status={ut: "pending" for ut in user_types_list if ut in ['home_chef', 'home_restaurant', 'farm_vendor']},
+            can_sell_packaged_foods='home_chef' in user_types_list,
+            can_serve_meals='home_restaurant' in user_types_list,
+            can_create_content='recipe_creator' in user_types_list,
+            can_review='food_reviewer' in user_types_list or 'food_enthusiast' in user_types_list
+        )
+        await db.user_type_profiles.insert_one(user_type_profile.dict())
+        
+        # If user is home chef or restaurant, create compliance profile
+        if 'home_chef' in user_types_list or 'home_restaurant' in user_types_list:
+            chef_compliance = ChefCompliance(
+                chef_id=user.id,
+                user_id=user.id,
+                state_code=state_code,
+                state_name=state_info.get('state_name', state_code),
+                zip_code=zip_code,
+                tier=ChefTier.PENDING,
+                daily_order_limit=None,  # Will be set after verification
+                compliance_status=ComplianceStatus.PENDING_REVIEW
+            )
+            await db.chef_compliance.insert_one(chef_compliance.dict())
+    except Exception as e:
+        logger.warning(f"Failed to create user type profile: {str(e)}")
+    
     # Send welcome SMS notification
     try:
         sms_service = await get_sms_service()
