@@ -873,22 +873,33 @@ const LoginPage = () => {
                   📍 Location Information (Required for food sellers)
                 </p>
                 <div className="space-y-3">
-                  <div>
+                  <div className="relative">
                     <label className="block text-xs font-medium text-gray-700 mb-1">State</label>
                     <select
                       name="state_code"
                       value={formData.state_code}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 appearance-none bg-white cursor-pointer"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`,
+                        backgroundPosition: 'right 0.5rem center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '1.5em 1.5em',
+                        paddingRight: '2.5rem'
+                      }}
+                      size="8"
                       required
                     >
-                      <option value="">Select your state</option>
+                      <option value="">-- Select your state --</option>
                       {states.map(state => (
                         <option key={state.code} value={state.code}>
-                          {state.name} {state.category === 'food_freedom' ? '✨ Food Freedom' : ''}
+                          {state.name} {state.category === 'food_freedom' ? '✨' : ''}
                         </option>
                       ))}
                     </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      💡 Scroll down to see all states. ✨ = Food Freedom state
+                    </p>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Zip Code</label>
