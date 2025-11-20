@@ -254,7 +254,13 @@ const LoginPage = () => {
     preferred_language: 'en',
     native_dishes: '',
     consultation_specialties: '',
-    cultural_background: ''
+    cultural_background: '',
+    // NEW: User types and compliance
+    user_types: ['food_enthusiast'],
+    primary_type: 'food_enthusiast',
+    state_code: '',
+    zip_code: '',
+    disclaimer_accepted: false
   });
   const { login, register, verify2FA, verifyEmail, resendVerificationCode } = useAuth();
 
