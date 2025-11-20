@@ -269,6 +269,19 @@ const LoginPage = () => {
     disclaimer_accepted: false
   });
   const { login, register, verify2FA, verifyEmail, resendVerificationCode } = useAuth();
+  
+  // Fetch states list on mount
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const response = await axios.get(`${API}/compliance/states`);
+        setStates(response.data.states || []);
+      } catch (error) {
+        console.error('Failed to fetch states:', error);
+      }
+    };
+    fetchStates();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
