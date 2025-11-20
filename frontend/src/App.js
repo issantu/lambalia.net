@@ -256,7 +256,6 @@ const LoginPage = () => {
     password: '',
     full_name: '',
     phone_number: '', 
-    postal_code: '',
     preferred_language: 'en',
     native_dishes: '',
     consultation_specialties: '',
