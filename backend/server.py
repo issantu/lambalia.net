@@ -806,6 +806,105 @@ async def resend_verification_code(email: str, code_type: str = "registration"):
         "code_type": code_type
     }
 
+@api_router.post("/auth/forgot-password")
+async def forgot_password(email: str):
+    """Request password reset - send reset code to email"""
+    
+    # Check if user exists
+    user = await db.users.find_one({"email": email})
+    if not user:
+        # Don't reveal if user exists or not (security)
+        return {
+            "message": "If an account exists with this email, a password reset code has been sent.",
+            "email": email
+        }
+    
+    # Generate reset code
+    reset_code = email_service.generate_verification_code()
+    
+    # Send reset email
+    email_sent = email_service.send_verification_email(
+        recipient_email=email,
+        verification_code=reset_code,
+        email_type="password_reset"
+    )
+    
+    if not email_sent:
+        raise HTTPException(status_code=500, detail="Failed to send reset email")
+    
+    # Store reset code (valid for 15 minutes)
+    code_stored = await email_service.store_verification_code(
+        email=email,
+        code=reset_code,
+        code_type="password_reset"
+    )
+    
+    if not code_stored:
+        raise HTTPException(status_code=500, detail="Failed to store reset code")
+    
+    logger.info(f"Password reset code sent to: {email}")
+    
+    return {
+        "message": "If an account exists with this email, a password reset code has been sent.",
+        "email": email
+    }
+
+@api_router.post("/auth/reset-password")
+async def reset_password(email: str, code: str, new_password: str):
+    """Reset password using verification code"""
+    
+    # Verify the reset code
+    verification = await db.email_verifications.find_one({
+        "email": email,
+        "code": code,
+        "type": "password_reset",
+        "used": False,
+        "expires_at": {"$gte": datetime.utcnow()}
+    })
+    
+    if not verification:
+        raise HTTPException(
+            status_code=400, 
+            detail="Invalid or expired reset code"
+        )
+    
+    # Find user
+    user = await db.users.find_one({"email": email})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Validate new password
+    if len(new_password) < 8:
+        raise HTTPException(
+            status_code=400, 
+            detail="Password must be at least 8 characters long"
+        )
+    
+    # Hash new password
+    new_password_hash = hash_password(new_password)
+    
+    # Update password
+    await db.users.update_one(
+        {"email": email},
+        {"$set": {
+            "password_hash": new_password_hash,
+            "last_password_change": datetime.utcnow()
+        }}
+    )
+    
+    # Mark verification code as used
+    await db.email_verifications.update_one(
+        {"_id": verification['_id']},
+        {"$set": {"used": True, "used_at": datetime.utcnow()}}
+    )
+    
+    logger.info(f"Password reset successful for: {email}")
+    
+    return {
+        "success": True,
+        "message": "Password has been reset successfully. You can now login with your new password."
+    }
+
 @api_router.post("/auth/login-2fa")
 async def login_with_2fa(email: str, password: str, request: Request):
     """Step 1 of 2FA login - verify credentials and send 2FA code"""
