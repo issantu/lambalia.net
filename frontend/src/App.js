@@ -634,8 +634,21 @@ const LoginPage = () => {
                 type="submit"
                 className="w-full btn-primary py-3 px-4 rounded-lg font-medium text-lg"
               >
-{t('auth.loginButton')}
+                {t('auth.loginButton')}
               </button>
+              
+              <div className="text-center mt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForgotPassword(true);
+                    setResetEmail(email);
+                  }}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  🔑 Forgot Password?
+                </button>
+              </div>
             </form>
           )
         ) : showEmailVerification ? (
