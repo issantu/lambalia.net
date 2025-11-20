@@ -6751,6 +6751,29 @@ const ProtectedRoute = ({ children }) => {
 };
 
 // Main App Component
+// Wrapper components to access user from context
+const ChefDashboardWrapper = () => {
+  const { user } = useAuth();
+  return (
+    <>
+      <Header />
+      <ChefDashboard user={user} />
+      <Footer />
+    </>
+  );
+};
+
+const UserProfileWrapper = () => {
+  const { user } = useAuth();
+  return (
+    <>
+      <Header />
+      <UserProfileExtended user={user} />
+      <Footer />
+    </>
+  );
+};
+
 function App() {
   return (
     <div className="App min-h-screen bg-gray-50">
