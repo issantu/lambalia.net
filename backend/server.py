@@ -5731,6 +5731,11 @@ async def add_team_member(
 # Keep all existing routes from previous implementation
 # (Reference recipes, snippets, grocery, etc.)
 
+# Include Compliance and Campaign router
+from compliance_campaign_api import create_compliance_campaign_router
+compliance_campaign_router = create_compliance_campaign_router(db, get_current_user, get_current_user_optional)
+app.include_router(compliance_campaign_router, prefix="/api")
+
 # Include Lambalia Eats router with proper prefix
 lambalia_eats_router = create_lambalia_eats_router(lambalia_eats_service, get_current_user, get_current_user_optional)
 app.include_router(lambalia_eats_router, prefix="/api")
