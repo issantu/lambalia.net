@@ -391,6 +391,12 @@ class UserRegistration(BaseModel):
     native_dishes: Optional[str] = None
     consultation_specialties: Optional[str] = None
     cultural_background: Optional[str] = None
+    # NEW: User Type and Compliance
+    user_types: List[str] = ["food_enthusiast"]  # Can select multiple
+    primary_type: str = "food_enthusiast"
+    state_code: Optional[str] = None  # Required for chefs/restaurants
+    zip_code: Optional[str] = None  # Required for campaigns
+    disclaimer_accepted: bool = False  # Mandatory for all users
 
 class UserLogin(BaseModel):
     email: EmailStr
