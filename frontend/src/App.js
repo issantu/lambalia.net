@@ -346,7 +346,25 @@ const LoginPage = () => {
     
     const result = await verifyEmail(pendingVerificationEmail, verificationCode);
     if (result.success) {
-      setSuccessMessage('Email verified successfully! Redirecting...');
+      setSuccessMessage('Email verified successfully!');
+      
+      // Check if user has promo codes (NEW)
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const promoResponse = await axios.get(`${API}/user/promo-codes`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (promoResponse.data.promo_codes && promoResponse.data.promo_codes.length > 0) {
+            setPromoCode(promoResponse.data.promo_codes[0].code);
+            setShowPromoCode(true);
+            return; // Don't redirect, show promo code modal instead
+          }
+        }
+      } catch (error) {
+        console.log('No promo codes available or not logged in yet');
+      }
+      
       setTimeout(() => {
         window.location.href = '/';
       }, 1500);
