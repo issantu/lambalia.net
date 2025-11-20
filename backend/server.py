@@ -914,7 +914,16 @@ async def enhanced_login(login_data: EnhancedUserLogin, request: Request):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     # NEW REQUIREMENT: Check email verification (from registration)
-    if not user_doc.get('email_verified', False):
+    # Grandfather clause: If user was created before the email verification system, auto-verify them
+    if 'email_verified' not in user_doc:
+        # Auto-verify legacy users (created before email verification was implemented)
+        await db.users.update_one(
+            {"id": user_doc['id']},
+            {"$set": {"email_verified": True, "account_activated": True}}
+        )
+        user_doc['email_verified'] = True
+        logger.info(f"Legacy user auto-verified: {login_data.email}")
+    elif not user_doc.get('email_verified', False):
         log_login_attempt(login_data.email, ip_address, user_agent, False, failed_reason="email_not_verified")
         raise HTTPException(
             status_code=403, 
