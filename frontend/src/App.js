@@ -6941,6 +6941,42 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/chef/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <ChefDashboard user={user} />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <AdminDashboard />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile/extended" 
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Header />
+                    <UserProfileExtended user={user} />
+                    <Footer />
+                  </>
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
