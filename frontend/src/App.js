@@ -965,6 +965,104 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      
+      {/* Disclaimer Modal */}
+      {showDisclaimerModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-2xl max-h-[80vh] overflow-y-auto p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">⚖️ Lambalia Platform Disclaimer</h2>
+            <div className="text-sm text-gray-700 space-y-3">
+              <p className="font-semibold text-red-700">IMPORTANT - PLEASE READ CAREFULLY</p>
+              
+              <p>By using Lambalia, you acknowledge and agree that:</p>
+              
+              <div className="space-y-2">
+                <div>
+                  <strong>1. Independent Transactions:</strong> All food sales, purchases, and services occur directly between independent users. Lambalia is a marketplace platform only and is not a party to any transaction.
+                </div>
+                
+                <div>
+                  <strong>2. Food Safety Responsibility:</strong> Food safety, quality, preparation standards, and compliance with all applicable health codes and food safety regulations are the sole responsibility of food providers (Home Chefs, Home Restaurants, Farm Vendors).
+                </div>
+                
+                <div>
+                  <strong>3. Legal Compliance:</strong> Users are solely responsible for compliance with all federal, state, and local laws, including but not limited to: cottage food laws and permits, commercial kitchen licensing, food handler certifications, business licenses, tax obligations, and zoning regulations.
+                </div>
+                
+                <div>
+                  <strong>4. No Guarantees:</strong> Lambalia makes no representations or warranties regarding food safety or quality, accuracy of user-provided information, compliance with applicable laws, or availability of products or services.
+                </div>
+                
+                <div>
+                  <strong>5. Assumption of Risk:</strong> Users acknowledge that consuming food prepared by others carries inherent risks, including but not limited to foodborne illness, allergic reactions, and food contamination.
+                </div>
+                
+                <div>
+                  <strong>6. Liability Release:</strong> You agree to release, indemnify, and hold harmless Lambalia, its officers, directors, employees, and agents from any and all claims, damages, liabilities, costs, and expenses (including attorney fees) arising from use of the platform, food transactions between users, food safety incidents, non-compliance with applicable laws, or user-generated content.
+                </div>
+                
+                <div>
+                  <strong>7. Dispute Resolution:</strong> Any disputes between users must be resolved directly between the parties. Lambalia is not responsible for mediating or resolving user disputes.
+                </div>
+              </div>
+              
+              <p className="font-semibold mt-4">BY CLICKING "I ACCEPT" OR USING THE PLATFORM, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THIS DISCLAIMER.</p>
+            </div>
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => {
+                  setFormData({...formData, disclaimer_accepted: true});
+                  setShowDisclaimerModal(false);
+                }}
+                className="flex-1 btn-primary py-3 rounded-lg font-medium"
+              >
+                I Accept
+              </button>
+              <button
+                onClick={() => setShowDisclaimerModal(false)}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 py-3 rounded-lg font-medium"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Promo Code Display Modal */}
+      {showPromoCode && promoCode && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-md w-full p-6 text-center">
+            <div className="mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-3xl">🎉</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Lambalia!</h2>
+              <p className="text-gray-600">You've received a special promo code!</p>
+            </div>
+            
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border-2 border-dashed border-green-300 mb-4">
+              <p className="text-sm text-gray-600 mb-2">Your Promo Code</p>
+              <div className="text-3xl font-bold text-green-600 tracking-wider mb-2">{promoCode}</div>
+              <p className="text-xs text-gray-500">Save this code! Use it at checkout for your free meal.</p>
+            </div>
+            
+            <p className="text-sm text-gray-600 mb-4">
+              This code can be used once at participating restaurants in your area. Check "My Codes" in your profile to view details.
+            </p>
+            
+            <button
+              onClick={() => {
+                setShowPromoCode(false);
+                window.location.href = '/';
+              }}
+              className="w-full btn-primary py-3 rounded-lg font-medium"
+            >
+              Start Exploring
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
