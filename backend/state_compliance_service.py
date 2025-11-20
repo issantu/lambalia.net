@@ -349,11 +349,11 @@ class StateComplianceService:
             },
         }
         
-        }
-        
         # Import and merge remaining states
         from remaining_states_data import REMAINING_STATES
-        self.states_data.update(REMAINING_STATES)
+        for state_code, state_data in REMAINING_STATES.items():
+            if state_code not in self.states_data:
+                self.states_data[state_code] = state_data
         
         return self.states_data
     
