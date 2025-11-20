@@ -879,9 +879,7 @@ const LoginPage = () => {
                       name="state_code"
                       value={formData.state_code}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 max-h-60 overflow-y-auto"
-                      style={{height: 'auto'}}
-                      size="1"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                       required
                     >
                       <option value="">Select your state</option>
