@@ -349,7 +349,13 @@ class StateComplianceService:
             },
         }
         
-        # Continue adding remaining states...
+        }
+        
+        # Import and merge remaining states
+        from remaining_states_data import REMAINING_STATES
+        self.states_data.update(REMAINING_STATES)
+        
+        return self.states_data
     
     def get_state_info(self, state_code: str) -> Optional[Dict[str, Any]]:
         """Get state compliance information"""
