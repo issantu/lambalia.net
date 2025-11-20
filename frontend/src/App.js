@@ -757,6 +757,177 @@ const LoginPage = () => {
               </p>
             </div>
             
+            {/* NEW: User Type Selection */}
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg border border-purple-200">
+              <label className="block text-sm font-medium text-purple-800 mb-2">
+                👤 How will you use Lambalia? (Select all that apply)
+              </label>
+              <div className="space-y-2">
+                <label className="flex items-center space-x-3 cursor-pointer hover:bg-white p-2 rounded transition">
+                  <input
+                    type="checkbox"
+                    checked={selectedUserTypes.includes('food_enthusiast')}
+                    onChange={(e) => {
+                      const newTypes = e.target.checked 
+                        ? [...selectedUserTypes, 'food_enthusiast']
+                        : selectedUserTypes.filter(t => t !== 'food_enthusiast');
+                      setSelectedUserTypes(newTypes);
+                      setFormData({...formData, user_types: newTypes, primary_type: newTypes[0] || 'food_enthusiast'});
+                    }}
+                    className="w-4 h-4 text-purple-600"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-800">🍽️ Food Enthusiast</span>
+                    <p className="text-xs text-gray-600">Browse, buy, and review food</p>
+                  </div>
+                </label>
+                
+                <label className="flex items-center space-x-3 cursor-pointer hover:bg-white p-2 rounded transition">
+                  <input
+                    type="checkbox"
+                    checked={selectedUserTypes.includes('home_chef')}
+                    onChange={(e) => {
+                      const newTypes = e.target.checked 
+                        ? [...selectedUserTypes, 'home_chef']
+                        : selectedUserTypes.filter(t => t !== 'home_chef');
+                      setSelectedUserTypes(newTypes);
+                      setFormData({...formData, user_types: newTypes, primary_type: newTypes[0] || 'food_enthusiast'});
+                    }}
+                    className="w-4 h-4 text-purple-600"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-800">👨‍🍳 Home Chef</span>
+                    <p className="text-xs text-gray-600">Sell packaged foods (cottage food) - State permit required</p>
+                  </div>
+                </label>
+                
+                <label className="flex items-center space-x-3 cursor-pointer hover:bg-white p-2 rounded transition">
+                  <input
+                    type="checkbox"
+                    checked={selectedUserTypes.includes('home_restaurant')}
+                    onChange={(e) => {
+                      const newTypes = e.target.checked 
+                        ? [...selectedUserTypes, 'home_restaurant']
+                        : selectedUserTypes.filter(t => t !== 'home_restaurant');
+                      setSelectedUserTypes(newTypes);
+                      setFormData({...formData, user_types: newTypes, primary_type: newTypes[0] || 'food_enthusiast'});
+                    }}
+                    className="w-4 h-4 text-purple-600"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-800">🏠 Home Restaurant</span>
+                    <p className="text-xs text-gray-600">Serve meals at home - License required (varies by state)</p>
+                  </div>
+                </label>
+                
+                <label className="flex items-center space-x-3 cursor-pointer hover:bg-white p-2 rounded transition">
+                  <input
+                    type="checkbox"
+                    checked={selectedUserTypes.includes('recipe_creator')}
+                    onChange={(e) => {
+                      const newTypes = e.target.checked 
+                        ? [...selectedUserTypes, 'recipe_creator']
+                        : selectedUserTypes.filter(t => t !== 'recipe_creator');
+                      setSelectedUserTypes(newTypes);
+                      setFormData({...formData, user_types: newTypes, primary_type: newTypes[0] || 'food_enthusiast'});
+                    }}
+                    className="w-4 h-4 text-purple-600"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-800">📝 Recipe Creator</span>
+                    <p className="text-xs text-gray-600">Share recipes and earn from views</p>
+                  </div>
+                </label>
+                
+                <label className="flex items-center space-x-3 cursor-pointer hover:bg-white p-2 rounded transition">
+                  <input
+                    type="checkbox"
+                    checked={selectedUserTypes.includes('food_reviewer')}
+                    onChange={(e) => {
+                      const newTypes = e.target.checked 
+                        ? [...selectedUserTypes, 'food_reviewer']
+                        : selectedUserTypes.filter(t => t !== 'food_reviewer');
+                      setSelectedUserTypes(newTypes);
+                      setFormData({...formData, user_types: newTypes, primary_type: newTypes[0] || 'food_enthusiast'});
+                    }}
+                    className="w-4 h-4 text-purple-600"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-800">⭐ Food Reviewer</span>
+                    <p className="text-xs text-gray-600">Write reviews and ratings</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            {/* State and Zip Code (Required for chefs/restaurants) */}
+            {(selectedUserTypes.includes('home_chef') || selectedUserTypes.includes('home_restaurant')) && (
+              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-300">
+                <p className="text-sm font-medium text-yellow-800 mb-3">
+                  📍 Location Information (Required for food sellers)
+                </p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">State</label>
+                    <select
+                      name="state_code"
+                      value={formData.state_code}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      required
+                    >
+                      <option value="">Select your state</option>
+                      {states.map(state => (
+                        <option key={state.code} value={state.code}>
+                          {state.name} {state.category === 'food_freedom' ? '✨ Food Freedom' : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Zip Code</label>
+                    <input
+                      type="text"
+                      name="zip_code"
+                      value={formData.zip_code}
+                      onChange={handleInputChange}
+                      placeholder="Enter zip code"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Universal Disclaimer */}
+            <div className="bg-red-50 p-4 rounded-lg border border-red-300">
+              <label className="flex items-start space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.disclaimer_accepted}
+                  onChange={(e) => setFormData({...formData, disclaimer_accepted: e.target.checked})}
+                  className="mt-1 w-4 h-4 text-red-600"
+                  required
+                />
+                <div>
+                  <span className="text-sm font-medium text-red-800">
+                    I accept the Lambalia Platform Disclaimer
+                  </span>
+                  <p className="text-xs text-red-700 mt-1">
+                    By checking this box, you acknowledge that you are solely responsible for food safety, legal compliance, and all transactions. 
+                    <button
+                      type="button"
+                      onClick={() => setShowDisclaimerModal(true)}
+                      className="text-red-900 underline ml-1 font-medium"
+                    >
+                      Read full disclaimer
+                    </button>
+                  </p>
+                </div>
+              </label>
+            </div>
+            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('auth.password')}</label>
               <input
