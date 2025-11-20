@@ -244,6 +244,12 @@ const LoginPage = () => {
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isResending, setIsResending] = useState(false);
   const { t } = useTranslation();
+  // NEW: User type and compliance states
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
+  const [states, setStates] = useState([]);
+  const [selectedUserTypes, setSelectedUserTypes] = useState(['food_enthusiast']);
+  const [showPromoCode, setShowPromoCode] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     email: '',
