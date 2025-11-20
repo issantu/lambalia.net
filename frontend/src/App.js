@@ -6945,11 +6945,7 @@ function App() {
               path="/chef/dashboard" 
               element={
                 <ProtectedRoute>
-                  <>
-                    <Header />
-                    <ChefDashboard user={user} />
-                    <Footer />
-                  </>
+                  <ChefDashboardWrapper />
                 </ProtectedRoute>
               } 
             />
@@ -6969,11 +6965,7 @@ function App() {
               path="/profile/extended" 
               element={
                 <ProtectedRoute>
-                  <>
-                    <Header />
-                    <UserProfileExtended user={user} />
-                    <Footer />
-                  </>
+                  <UserProfileWrapper />
                 </ProtectedRoute>
               } 
             />
