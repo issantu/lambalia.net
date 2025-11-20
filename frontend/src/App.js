@@ -16,6 +16,9 @@ import EnhancedSmartCooking from './components/EnhancedSmartCooking';
 import HomeRestaurantTraining from './components/HomeRestaurantTraining';
 import ChefMarket from './ChefMarket';
 import QuickEatsTraining from './components/QuickEatsTraining';
+import ChefDashboard from './components/ChefDashboard';
+import AdminDashboard from './components/AdminDashboard';
+import UserProfileExtended from './components/UserProfileExtended';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
